@@ -1,0 +1,15 @@
+{% extends "site_base.html" %}
+{% load i18n %}
+{% load url from future %}
+
+{% block title %} {{ block.super }} {% endblock %}
+
+{% block body_class %}appinstances{% endblock %}
+
+{% block body_outer %}
+    <style>
+    body.appinstances li#nav_appinstances a{color:white}
+</style>
+{% block body %}{% endblock body %}
+{% block sidebar %}{% endblock sidebar %}
+{% endblock body_outer %}

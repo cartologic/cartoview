@@ -1,0 +1,20 @@
+{% extends "app_manager/rest_api/base.html" %}
+{% load bootstrap %}
+{% block content_inner %}
+    {% if form %}
+        <form class="form-horizontal" role="form">
+            {{ form|bootstrap_horizontal }}
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <input type="button" class="btn btn-primary" value="Submit" />
+                </div>
+            </div>
+        </form>
+    {% endif %}
+
+{% endblock content_inner %}
+{% block scripts %}
+<script type="text/javascript">
+    var resource_uri = "{{ resource_uri }}";
+</script>
+{% endblock scripts %}

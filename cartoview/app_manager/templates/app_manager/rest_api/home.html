@@ -1,0 +1,8 @@
+{% extends "app_manager/rest_api/base.html" %}
+{% block content_inner %}
+    <ul>
+        {% for name in apis %}
+            <li><a href="{{ name }}">{{ name }}</a></li>
+        {% endfor %}
+    </ul>
+{% endblock content_inner %}

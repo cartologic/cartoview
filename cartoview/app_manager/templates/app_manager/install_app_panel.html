@@ -1,0 +1,21 @@
+{% load bootstrap_tags staticfiles%}
+{% load i18n %}
+
+<div id="ct-install" class="panel panel-primary" style="display:none; margin: 10px 0;">
+         <div class="panel-heading">Install New App</div>
+          <div class="panel-body" style="padding-left:10px;">
+             <form  id="form-install-app" enctype="multipart/form-data" role="form">
+              {% csrf_token %}
+              <div class="form-group">
+                <label class="control-label " for="file-app">Package File</label>
+                <div class="">
+                    <input id="file-app" name="package_file" type="file">
+                </div>
+              </div>
+            </form>
+
+            <button id="btn-install-app" type="button" class="btn btn-primary">Install</button>
+            <button id="btn-hide-install" type="button" class="btn btn-danger">Cancel</button>
+
+          </div>
+      </div>

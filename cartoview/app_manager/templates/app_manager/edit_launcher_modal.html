@@ -1,0 +1,54 @@
+{% load bootstrap_tags staticfiles%}
+{% load i18n %}
+
+ <!---------------------------Sorting Modal ------------------------------- -->
+
+   <div class="modal fade" id="sortingModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+   <div class="modal-dialog">
+      <div class="modal-content">
+         <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title" id="sortingModalLabel">Organize Cartoview Apps</h4>
+         </div>
+         <div class="modal-body">
+
+                 <div class="row alert alert-info alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        <strong>Hint: </strong> Drag and drop Apps between the lists , the right side list represents apps that are installed on <strong>Cartoview</strong> but will not appear in the left side menu , the other list will appear on the menu with its order.
+
+
+                </div>
+                 <div class=" row">
+
+
+                <div  class="col-md-6 col-sm-6 col-xs-6 layer block" >
+			    <div class="layer title">Menu Apps</div>
+			        <ul id="menu_apps" class="block__list block__list_words">
+                {% for app in menu_apps %}
+                     <li data-id="{{app.id}}" data-name="{{app.name}}"><strong>{{app.title}}</strong></li>
+                     {%  endfor %}
+			     </ul>
+		        </div>
+
+
+              <div class="col-md-6 col-sm-6 col-xs-6 layer block" >
+			<div class="layer title">Background Apps</div>
+			<ul id="non_menu_apps" class="block__list block__list_tags">
+				{% for app in non_menu_apps %}
+                     <li  data-id="{{app.id}}" data-name="{{app.name}}"><strong>{{app.title}}</strong></li>
+                     {% endfor %}
+			</ul>
+		</div>
+            </div>
+         </div>
+         <div class="modal-footer">
+             <div id = "load" class="form-group">
+        <img alt = "Saving...." src= "{% static 'app_manager/images/ajax-loader.gif' %}" class = "pull-right" style="display: none;" id="loading_image">
+        <a class="btn btn-info" type="button" id = "order">Save Changes </a>
+    </div>
+         </div>
+      </div>
+   </div>
+</div>
+
+    <!--------------------------------end Sorting Modal-------------------------------->

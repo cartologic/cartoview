@@ -1,0 +1,70 @@
+from tastypie.resources import Resource, ModelResource
+from django.conf.urls import url
+from django.shortcuts import render
+from django.forms.models import modelform_factory
+from django.db import models
+
+from serializers import HTMLSerializer, MultipartFormSerializer
+
+from geonode.api.authorization import GeoNodeAuthorization
+
+from geonode.api.resourcebase_api import *
+class BaseResource(Resource):
+    class Meta:
+        always_return_data = True
+        serializer = HTMLSerializer()
+        authorization = GeoNodeAuthorization()
+
+
+class BaseModelResource(ModelResource):
+    class Meta(BaseResource.Meta):
+        pass
+
+    def build_schema(self):
+        base_schema = super(BaseModelResource, self).build_schema()
+        for f in self._meta.object_class._meta.fields:
+            if f.name in base_schema['fields'] and f.choices:
+                base_schema['fields'][f.name].update({
+                    'choices': f.choices,
+                })
+        return base_schema
+
+    def get_form(self, obj=None):
+        form = modelform_factory(self._meta.object_class)
+        return form(instance=obj)
+
+    def prepend_urls(self):
+        return [url(r"^(?P<resource_name>%s)/edit/(?P<pk>.*?)/$" % self._meta.resource_name, self.wrap_view('edit')),
+                url(r"^(?P<resource_name>%s)/new/$" % self._meta.resource_name, self.wrap_view('new_item'))]
+
+
+    def new_item(self, request, **kwargs):
+        self.method_check(request, allowed=['get'])
+        form = self.get_form()
+        return render(request,'app_manager/rest_api/edit.html',{'form': form, 'operation': 'add', 'resource_uri' : self.get_resource_uri()})
+
+    def edit(self, request, pk, **kwargs):
+        self.method_check(request, allowed=['get'])
+        obj = self._meta.object_class.objects.get(id=pk)
+        form = self.get_form(obj)
+        return render(request,'app_manager/rest_api/edit.html',{'form':form , 'operation': 'edit', 'resource_uri' : self.get_resource_uri()})
+
+
+class FileUploadResource(BaseModelResource):
+    class Meta(BaseModelResource.Meta):
+        serializer = MultipartFormSerializer()
+
+    def obj_create(self, bundle, **kwargs):
+        bundle = super(FileUploadResource, self).obj_create(bundle, **kwargs)
+        for f in bundle.obj._meta.fields:
+            if isinstance(f, models.FileField):
+                file = bundle.request.FILES.get(f.name,None)
+                if file:
+                    f.save_form_data(bundle.obj, file)
+        return bundle
+
+    def deserialize(self, request, data, format='application/json'):
+        deserialized = self._meta.serializer.deserialize(data, request=request, format=request.META.get('CONTENT_TYPE', 'application/json'))
+        return deserialized
+
+

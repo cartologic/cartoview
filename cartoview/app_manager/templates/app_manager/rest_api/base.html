@@ -1,0 +1,14 @@
+
+{% block title %}REST API{% endblock %}
+{% block styles %}
+{% endblock styles %}
+{% block content %}
+    {{ html }}
+    {% if json_data %}
+    <pre>{{ json_data }}</pre>
+    {% endif %}
+    {% block content_inner %}{% endblock content_inner %}
+{% endblock content %}
+{% block scripts %}
+
+{% endblock scripts %}

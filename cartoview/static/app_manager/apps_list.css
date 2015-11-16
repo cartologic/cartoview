@@ -1,0 +1,17 @@
+
+
+
+div.list-group-item {
+			height: auto;
+		}
+		.list-group-item {
+			margin: 10px;
+		}
+		.list-group-item img{
+			max-height: 120px;
+			margin: auto;
+		}
+		.list-group-item {
+			border-bottom: 1px solid #eee;
+			border: 1px solid #eee;
+		}
