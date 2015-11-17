@@ -12,6 +12,7 @@ urlpatterns = patterns(
     url(r'^appinstances/$', TemplateView.as_view(template_name='app_manager/app_instance_list.html'),
                            name='appinstance_browse'),
     url(r'^appinstance/(?P<appinstanceid>\d+)/?$', appinstance_detail, name='appinstance_detail'),
+    url(r'^appinstance/(?P<appinstanceid>\d+)/metadata$', appinstance_metadata, name='appinstance_metadata'),
 
     url(r'^install/$', install_app_view, name='install_app'),
     url(r'^ajax_install/$', ajax_install_app, name='ajax_install_app'),

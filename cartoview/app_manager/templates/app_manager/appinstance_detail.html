@@ -74,10 +74,37 @@
   <div class="col-md-4">
 
     <ul class="list-group">
+    <li class="list-group-item">
+        <button class="btn btn-primary btn-md btn-block" data-toggle="modal" data-target="#edit-appinstance">{% trans "Edit App Instance" %}</button>
+      </li>
+      <div class="modal fade" id="edit-appinstance" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+              <h4 class="modal-title" id="myModalLabel">{% trans "Edit App Instance" %}</h4>
+            </div>
+            <div class="modal-body">
 
+              <div class="row edit-modal">
+                {% if "change_resourcebase_metadata" in perms_list %}
+                <div class="col-sm-3">
+                  <i class="fa fa-list-alt fa-3x"></i>
+                  <h4>{% trans "Metadata" %}</h4>
+                  <a class="btn btn-default btn-block btn-xs" href="{% url "appinstance_metadata" resource.id %}">{% trans "Edit" %}</a>
+                </div>
+                {% endif %}
+                </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Close" %}</button>
+            </div>
+          </div>
+        </div>
+      </div>
     {% for link in appinstance_links %}
       <li class="list-group-item">
-          <a style="text-decoration:none;" target="_blank" href="{{ link. }}"><button class="btn btn-primary btn-md btn-block">{{ link }}</button></a>
+          <a style="text-decoration:none;" target="_blank" href="{{ link.url }}"><button class="btn btn-primary btn-md btn-block">{{ link.name }}</button></a>
       </li>
     {% endfor %}
 

@@ -2,14 +2,21 @@ import django
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.core.files import File
+from django.core.urlresolvers import reverse
 from django.db.models import Max, Min, F
-from django.http import HttpResponse, Http404
+from django.forms.util import ErrorList
+from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.shortcuts import render, render_to_response
 
 # Create your views here.
 from django.template import RequestContext
 from django.utils import importlib
 from guardian.shortcuts import get_perms
+from cartoview.app_manager.forms import AppInstanceForm, AppInstanceEditForm
+from geonode.base.forms import CategoryForm
+from geonode.base.models import TopicCategory
+from geonode.documents.views import _resolve_document
+from geonode.people.forms import ProfileForm
 from geonode.security.views import _perms_info_json
 from models import *
 from apps_helper import *
@@ -380,3 +387,151 @@ def appinstance_detail(request, appinstanceid):
             "app_manager/appinstance_detail.html",
             RequestContext(request, context_dict))
 
+
+@login_required
+def appinstance_metadata(
+        request,
+        appinstanceid,
+        template='app_manager/appinstance_metadata.html'):
+
+    appinstance = None
+    try:
+        appinstance = _resolve_appinstance(
+            request,
+            appinstanceid,
+            'base.change_resourcebase_metadata',
+            _PERMISSION_MSG_METADATA)
+
+    except Http404:
+        return HttpResponse(
+            loader.render_to_string(
+                '404.html', RequestContext(
+                    request, {
+                        })), status=404)
+
+    except PermissionDenied:
+        return HttpResponse(
+            loader.render_to_string(
+                '401.html', RequestContext(
+                    request, {
+                        'error_message': _("You are not allowed to edit this instance.")})), status=403)
+
+    if appinstance is None:
+        return HttpResponse(
+            'An unknown error has occured.',
+            mimetype="text/plain",
+            status=401
+        )
+
+    else:
+        poc = appinstance.poc
+        metadata_author = appinstance.metadata_author
+        topic_category = appinstance.category
+
+        if request.method == "POST":
+            appinstance_form = AppInstanceEditForm(
+                request.POST,
+                instance=appinstance,
+                prefix="resource")
+            category_form = CategoryForm(
+                request.POST,
+                prefix="category_choice_field",
+                initial=int(
+                    request.POST["category_choice_field"]) if "category_choice_field" in request.POST else None)
+        else:
+            appinstance_form = AppInstanceEditForm(instance=appinstance, prefix="resource")
+            category_form = CategoryForm(
+                prefix="category_choice_field",
+                initial=topic_category.id if topic_category else None)
+
+        if request.method == "POST" and appinstance_form.is_valid(
+        ) and category_form.is_valid():
+            new_poc = appinstance_form.cleaned_data['poc']
+            new_author = appinstance_form.cleaned_data['metadata_author']
+            new_keywords = appinstance_form.cleaned_data['keywords']
+            new_category = TopicCategory.objects.get(
+                id=category_form.cleaned_data['category_choice_field'])
+
+            if new_poc is None:
+                if poc is None:
+                    poc_form = ProfileForm(
+                        request.POST,
+                        prefix="poc",
+                        instance=poc)
+                else:
+                    poc_form = ProfileForm(request.POST, prefix="poc")
+                if poc_form.is_valid():
+                    if len(poc_form.cleaned_data['profile']) == 0:
+                        # FIXME use form.add_error in django > 1.7
+                        errors = poc_form._errors.setdefault('profile', ErrorList())
+                        errors.append(_('You must set a point of contact for this resource'))
+                        poc = None
+                if poc_form.has_changed and poc_form.is_valid():
+                    new_poc = poc_form.save()
+
+            if new_author is None:
+                if metadata_author is None:
+                    author_form = ProfileForm(request.POST, prefix="author",
+                                              instance=metadata_author)
+                else:
+                    author_form = ProfileForm(request.POST, prefix="author")
+                if author_form.is_valid():
+                    if len(author_form.cleaned_data['profile']) == 0:
+                        # FIXME use form.add_error in django > 1.7
+                        errors = author_form._errors.setdefault('profile', ErrorList())
+                        errors.append(_('You must set an author for this resource'))
+                        metadata_author = None
+                if author_form.has_changed and author_form.is_valid():
+                    new_author = author_form.save()
+
+            if new_poc is not None and new_author is not None:
+                the_appinstance = appinstance_form.save()
+                the_appinstance.poc = new_poc
+                the_appinstance.metadata_author = new_author
+                the_appinstance.keywords.add(*new_keywords)
+                AppInstance.objects.filter(id=the_appinstance.id).update(category=new_category)
+
+                return HttpResponseRedirect(
+                    reverse(
+                        'appinstance_detail',
+                        args=(
+                            appinstance.id,
+                        )))
+            else:
+                the_appinstance = appinstance_form.save()
+                if new_poc is None:
+                    the_appinstance.poc = appinstance.owner
+                if new_author is None:
+                    the_appinstance.metadata_author = appinstance.owner
+                the_appinstance.keywords.add(*new_keywords)
+                AppInstance.objects.filter(id=the_appinstance.id).update(category=new_category)
+
+                return HttpResponseRedirect(
+                    reverse(
+                        'appinstance_detail',
+                        args=(
+                            appinstance.id,
+                        )))
+
+        if poc is not None:
+            appinstance_form.fields['poc'].initial = poc.id
+            poc_form = ProfileForm(prefix="poc")
+            poc_form.hidden = True
+        else:
+            poc_form = ProfileForm(prefix="poc")
+            poc_form.hidden = True
+        if metadata_author is not None:
+            appinstance_form.fields['metadata_author'].initial = metadata_author.id
+            author_form = ProfileForm(prefix="author")
+            author_form.hidden = True
+        else:
+            author_form = ProfileForm(prefix="author")
+            author_form.hidden = True
+
+        return render_to_response(template, RequestContext(request, {
+            "appinstance": appinstance,
+            "appinstance_form": appinstance_form,
+            "poc_form": poc_form,
+            "author_form": author_form,
+            "category_form": category_form,
+        }))

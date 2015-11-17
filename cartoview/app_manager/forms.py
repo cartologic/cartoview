@@ -30,3 +30,10 @@ class AppInstanceForm(TranslationModelForm):
     class Meta:
         model = AppInstance
         fields = ['title', 'abstract', 'keywords',]
+
+
+class AppInstanceEditForm(ResourceBaseForm):
+
+    class Meta(ResourceBaseForm.Meta):
+        model = AppInstance
+        exclude = ResourceBaseForm.Meta.exclude
