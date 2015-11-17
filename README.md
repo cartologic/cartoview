@@ -17,7 +17,7 @@ Cartoview is a an app framework built with django on the top of [GeoNode](http:/
  
  ```Python
 if "cartoview.app_manager" in settings.INSTALLED_APPS:
-	urlpatterns += patterns('',
+		urlpatterns += patterns('',
                         (r'^apps/', include('cartoview.app_manager.urls')),
                         )
  ```
