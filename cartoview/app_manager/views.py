@@ -2,7 +2,7 @@ import django
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.core.files import File
-from django.db.models import Max, Min
+from django.db.models import Max, Min, F
 from django.http import HttpResponse, Http404
 from django.shortcuts import render, render_to_response
 
@@ -352,6 +352,8 @@ def appinstance_detail(request, appinstanceid):
         )
 
     else:
+        if request.user != appinstance.owner and not request.user.is_superuser:
+            AppInstance.objects.filter(id=appinstance.id).update(popular_count=F('popular_count') + 1)
         appinstance_links =  appinstance.link_set.filter(link_type__in=['appinstance_view', 'appinstance_edit'])
         context_dict = {
             'perms_list': get_perms(request.user, appinstance.get_self_resource()),

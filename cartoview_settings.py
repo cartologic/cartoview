@@ -1,3 +1,4 @@
+from settings import *
 CARTOVIEW_ROOT =os.path.join( os.path.abspath(os.path.dirname(os.path.dirname(__file__))) , 'cartoview')
 STATICFILES_DIRS.extend([os.path.join(CARTOVIEW_ROOT, "static")])
 
