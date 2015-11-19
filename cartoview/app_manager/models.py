@@ -1,3 +1,4 @@
+import os
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.contrib.gis.db import models
@@ -43,7 +44,7 @@ class App(models.Model):
     help_url = models.URLField(null=True, blank=True)
     # app_logo = ImageField(upload_to=only_filename, help_text="The site will resize this master image as necessary for page display", blank=True, null = True)
     is_suspended = models.NullBooleanField(null=True, blank=True, default=False)
-    # app_img = ImageField(upload_to=only_filename, help_text="The site will resize this master image as necessary for page display", blank=True, null = True)
+    app_img_url = models.TextField(max_length=1000)
     in_menu = models.NullBooleanField(null=True, blank=True, default=True)
     admin_only = models.NullBooleanField(null=True, blank=True, default=False)
     rating = models.IntegerField(default=0, null=True, blank=True)
@@ -87,10 +88,30 @@ def pre_save_appinstance(instance, sender, **kwargs):
 
 
 
-
 def pre_delete_appinstance(instance, sender, **kwargs):
     remove_object_permissions(instance.get_self_resource())
 
+def create_thumbnail(sender, instance, created, **kwargs):
+    from geonode.base.models import Link
+
+    if not instance.has_thumbnail():
+        parent_app_thumbnail_url = App.objects.get(id=instance.app.pk).app_img_url
+        Link.objects.get_or_create(resource=instance,
+                                   url=parent_app_thumbnail_url,
+                                   defaults=dict(
+                                       name='Thumbnail',
+                                       extension='png',
+                                       mime='image/png',
+                                       link_type='image',
+                                   ))
+
+        instance.thumbnail_url=parent_app_thumbnail_url
+        instance.save()
+
+
+
 signals.pre_save.connect(pre_save_appinstance, sender=AppInstance)
+signals.post_save.connect(create_thumbnail, sender=AppInstance)
+
 signals.post_save.connect(resourcebase_post_save, sender=AppInstance)
 signals.pre_delete.connect(pre_delete_appinstance, sender=AppInstance)

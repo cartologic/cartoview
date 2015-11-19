@@ -1,10 +1,11 @@
+from urlparse import urljoin
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.db.models import Max, Min, F
 from django.forms.util import ErrorList
 from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.shortcuts import render, render_to_response
-
+from PIL import Image, ImageOps
 # Create your views here.
 from guardian.shortcuts import get_perms
 from cartoview.app_manager.forms import AppInstanceEditForm
@@ -21,6 +22,7 @@ import json
 from geonode.utils import resolve_object, build_social_links
 from django.utils.translation import ugettext as _
 from django.template import RequestContext, loader
+from django.core.files import File
 
 _PERMISSION_MSG_DELETE = _("You are not permitted to delete this document")
 _PERMISSION_MSG_GENERIC = _("You do not have permissions for this document.")
@@ -32,6 +34,20 @@ _PERMISSION_MSG_VIEW = _("You are not permitted to view this document")
 current_folder, filename = os.path.split(os.path.abspath(__file__))
 temp_dir = os.path.join(current_folder, 'temp')
 
+def save_thumbnail(filename, image):
+    thumb_folder = 'thumbs'
+    upload_path = os.path.join(django_settings.MEDIA_ROOT, thumb_folder)
+    if not os.path.exists(upload_path):
+        os.makedirs(upload_path)
+
+    with open(os.path.join(upload_path, filename), 'wb') as f:
+        thumbnail = File(f)
+        thumbnail.write(image)
+
+    url_path = os.path.join(django_settings.MEDIA_URL, thumb_folder, filename).replace('\\', '/')
+    url = urljoin(django_settings.SITEURL, url_path)
+
+    return url
 
 def save_uploaded_file(f, path):
     destination = open(path, 'wb+')
@@ -55,10 +71,7 @@ def add_app(app_name, info):
     app.short_description = get_attr(info, 'short_description', None)
     app.owner_url = get_attr(info, 'owner_url', None)
     app.help_url = get_attr(info, 'help_url', None)
-    # BASE_DIR = getattr(django_settings, 'BASE_DIR', None)
-    # app_img_path = os.path.abspath(os.path.join(BASE_DIR,'apps',app_name,'app_img.png'))
-    # if os.path.isfile(app_img_path):
-    #     r = open(app_img_path,'rb')
+
     #     data = r.read()
     #
     #     img_temp = NamedTemporaryFile()
@@ -87,6 +100,20 @@ def add_app(app_name, info):
     else:
         app.order = 1
     app.save()
+    CARTOVIEW_ROOT = getattr(django_settings, 'CARTOVIEW_ROOT', None)
+    app_img_path = os.path.abspath(os.path.join(CARTOVIEW_ROOT,'apps',app_name,'app_img.png'))
+    if os.path.isfile(app_img_path):
+        from cStringIO import StringIO
+        size = 200, 150
+        img = Image.open(app_img_path)
+        img = ImageOps.fit(img, size, Image.ANTIALIAS)
+        imgfile = StringIO()
+        img.save(imgfile, format='PNG')
+        imgvalue =  imgfile.getvalue()
+        filename = 'app-%s-thumb.png' % app.pk
+        app_img_url = save_thumbnail(filename, imgvalue)
+        app.app_img_url=app_img_url
+        app.save()
     tags = get_attr(info, 'tags', [])
     for tag_name in tags:
         try:

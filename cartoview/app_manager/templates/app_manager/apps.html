@@ -36,16 +36,13 @@
 								{% for app in Apps %}
 								{% if app.in_menu %}
 								<div class="list-group-item ">
-									<div class="media col-md-2 col-sm-3 col-xs-12">
-{#										{% if app.app_img %}#}
+									<div class="media col-md-2 col-sm-3 col-xs-12" style="margin-top:3%;margin-bottom: 3%">
+										{% if app.app_img_url %}
+                                            <img class="media-object img-rounded img-responsive"  src="{{ app.app_img_url }}"  >
 
-{#										{% thumbnail app.app_img  '300x200' format="PNG" as im %}#}
-{#											<img class="media-object img-rounded img-responsive"  src="{{ im.url }}"  >#}
-{#										{% endthumbnail  %}#}
-
-{#										{% else %}#}
+										{% else %}
 											<img class="media-object img-rounded img-responsive" src="{% static 'home_2/default.png' %}"  >
-{#										{% endif %}#}
+										{% endif %}
 									</div>
 									<div class="col-md-10 col-sm-9 col-xs-12">
 										<div class="row">
