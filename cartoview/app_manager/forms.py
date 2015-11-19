@@ -1,9 +1,10 @@
+from django import forms
 from modeltranslation.forms import TranslationModelForm
 from geonode.base.forms import ResourceBaseForm
 
 __author__ = 'Amr'
 
-from django.forms import ModelForm , FileField
+from django.forms import ModelForm, FileField
 from models import *
 from django.utils.translation import ugettext, ugettext_lazy as _
 
@@ -29,11 +30,13 @@ class AppForm(ModelForm):
 class AppInstanceForm(TranslationModelForm):
     class Meta:
         model = AppInstance
-        fields = ['title', 'abstract', 'keywords',]
+        fields = ['title', 'abstract', 'keywords', ]
 
 
 class AppInstanceEditForm(ResourceBaseForm):
-
     class Meta(ResourceBaseForm.Meta):
         model = AppInstance
         exclude = ResourceBaseForm.Meta.exclude
+
+
+

@@ -1,15 +1,18 @@
+from django.core.urlresolvers import reverse
 from django.db import models
 from django.contrib.gis.db import models
-from django.contrib.auth.models import   Group
+from django.contrib.auth.models import Group
 from django.contrib.sites.models import Site
-from django.db.models.signals import post_save ,m2m_changed
+from django.db.models.signals import post_save, m2m_changed
 from django.dispatch import receiver
-#from sorl.thumbnail.fields import ImageField
+# from sorl.thumbnail.fields import ImageField
 from apps_helper import delete_installed_app
 from django.conf import settings as geonode_settings
+from django.db.models import signals
 
 # Create your models here.
-from geonode.base.models import ResourceBase
+from geonode.base.models import ResourceBase, resourcebase_post_save
+from geonode.security.models import remove_object_permissions
 
 
 class AppTag(models.Model):
@@ -17,6 +20,7 @@ class AppTag(models.Model):
 
     def __unicode__(self):
         return self.name
+
 
 class App(models.Model):
     def only_filename(instance, filename):
@@ -37,28 +41,56 @@ class App(models.Model):
     order = models.SmallIntegerField(null=False, blank=False, default=0)
     owner_url = models.URLField(null=True, blank=True)
     help_url = models.URLField(null=True, blank=True)
-    #app_logo = ImageField(upload_to=only_filename, help_text="The site will resize this master image as necessary for page display", blank=True, null = True)
-    is_suspended = models.NullBooleanField(null=True, blank=True , default= False)
-    #app_img = ImageField(upload_to=only_filename, help_text="The site will resize this master image as necessary for page display", blank=True, null = True)
-    in_menu = models.NullBooleanField(null=True, blank=True , default= True)
-    admin_only = models.NullBooleanField(null=True, blank=True , default= False)
+    # app_logo = ImageField(upload_to=only_filename, help_text="The site will resize this master image as necessary for page display", blank=True, null = True)
+    is_suspended = models.NullBooleanField(null=True, blank=True, default=False)
+    # app_img = ImageField(upload_to=only_filename, help_text="The site will resize this master image as necessary for page display", blank=True, null = True)
+    in_menu = models.NullBooleanField(null=True, blank=True, default=True)
+    admin_only = models.NullBooleanField(null=True, blank=True, default=False)
     rating = models.IntegerField(default=0, null=True, blank=True)
     contact_name = models.CharField(max_length=200, null=True, blank=True)
-    contact_email = models.EmailField (null=True, blank=True)
+    contact_email = models.EmailField(null=True, blank=True)
 
     def delete(self):
         delete_installed_app(self)
         super(type(self), self).delete()
 
-
     def __unicode__(self):
         return self.title
 
-class AppInstance(ResourceBase):
 
+class AppInstance(ResourceBase):
     """
     An App Instance  is any kind of App Instance that can be created out of one of the Installed Apps.
     """
 
     # Relation to the App model
-    app = models.ForeignKey(App ,null=True,blank=True)
+    app = models.ForeignKey(App, null=True, blank=True)
+
+    def get_absolute_url(self):
+        return reverse('appinstance_detail', args=(self.id,))
+
+    @property
+    def name_long(self):
+        if not self.title:
+            return str(self.id)
+        else:
+            return '%s (%s)' % (self.title, self.id)
+
+def pre_save_appinstance(instance, sender, **kwargs):
+    if instance.abstract == '' or instance.abstract is None:
+        instance.abstract = 'No abstract provided'
+
+    if instance.title == '' or instance.title is None:
+        instance.title = 'No title provided'
+
+
+
+
+
+
+def pre_delete_appinstance(instance, sender, **kwargs):
+    remove_object_permissions(instance.get_self_resource())
+
+signals.pre_save.connect(pre_save_appinstance, sender=AppInstance)
+signals.post_save.connect(resourcebase_post_save, sender=AppInstance)
+signals.pre_delete.connect(pre_delete_appinstance, sender=AppInstance)

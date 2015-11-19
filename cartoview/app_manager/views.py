@@ -1,27 +1,20 @@
-import django
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
-from django.core.files import File
-from django.core.urlresolvers import reverse
 from django.db.models import Max, Min, F
 from django.forms.util import ErrorList
 from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.shortcuts import render, render_to_response
 
 # Create your views here.
-from django.template import RequestContext
-from django.utils import importlib
 from guardian.shortcuts import get_perms
-from cartoview.app_manager.forms import AppInstanceForm, AppInstanceEditForm
+from cartoview.app_manager.forms import AppInstanceEditForm
 from geonode.base.forms import CategoryForm
 from geonode.base.models import TopicCategory
-from geonode.documents.views import _resolve_document
 from geonode.people.forms import ProfileForm
 from geonode.security.views import _perms_info_json
 from models import *
 from apps_helper import *
 from django.conf import settings as django_settings
-from django.core.files.temp import NamedTemporaryFile
 from django.core import management
 from threading import Timer
 import json
@@ -29,14 +22,12 @@ from geonode.utils import resolve_object, build_social_links
 from django.utils.translation import ugettext as _
 from django.template import RequestContext, loader
 
-
 _PERMISSION_MSG_DELETE = _("You are not permitted to delete this document")
 _PERMISSION_MSG_GENERIC = _("You do not have permissions for this document.")
 _PERMISSION_MSG_MODIFY = _("You are not permitted to modify this document")
 _PERMISSION_MSG_METADATA = _(
     "You are not permitted to modify this document's metadata")
 _PERMISSION_MSG_VIEW = _("You are not permitted to view this document")
-
 
 current_folder, filename = os.path.split(os.path.abspath(__file__))
 temp_dir = os.path.join(current_folder, 'temp')
@@ -149,21 +140,21 @@ def install_app_view(request):
 def index(request):
     Apps = installed_apps()
     for app in Apps:
-        module = importlib.import_module('cartoview.apps.'+app.name)
+        module = importlib.import_module('cartoview.apps.' + app.name)
         if hasattr(module, 'urls_dict'):
             urls_dict = getattr(module, 'urls_dict')
             if 'admin' in urls_dict.keys():
-                app.admin_urls= urls_dict['admin']
+                app.admin_urls = urls_dict['admin']
             else:
-                app.admin_urls=None
+                app.admin_urls = None
             if 'logged_in' in urls_dict.keys():
-                app.logged_in_urls= urls_dict['logged_in']
+                app.logged_in_urls = urls_dict['logged_in']
             else:
-                app.logged_in_urls=None
-            if 'anonymous' in  urls_dict.keys():
-                app.anonymous_urls= urls_dict['anonymous']
+                app.logged_in_urls = None
+            if 'anonymous' in urls_dict.keys():
+                app.anonymous_urls = urls_dict['anonymous']
             else:
-                app.anonymous_urls=None
+                app.anonymous_urls = None
         else:
             app.admin_urls = app.logged_in_urls = app.anonymous_urls = None
 
@@ -361,15 +352,17 @@ def appinstance_detail(request, appinstanceid):
     else:
         if request.user != appinstance.owner and not request.user.is_superuser:
             AppInstance.objects.filter(id=appinstance.id).update(popular_count=F('popular_count') + 1)
-        appinstance_links =  appinstance.link_set.filter(link_type__in=['appinstance_view', 'appinstance_edit'])
+        appinstance_links = appinstance.link_set.filter(link_type__in=['appinstance_view', 'appinstance_edit'])
+        set_thumbnail_link = appinstance.link_set.filter(link_type='appinstance_thumbnail')
         context_dict = {
             'perms_list': get_perms(request.user, appinstance.get_self_resource()),
             'permissions_json': _perms_info_json(appinstance),
             'resource': appinstance,
             'appinstance_links': appinstance_links,
-            #'imgtypes': IMGTYPES,
-            #'related': related
-             }
+            'set_thumbnail_link': set_thumbnail_link
+            # 'imgtypes': IMGTYPES,
+            # 'related': related
+        }
 
         if geonode_settings.SOCIAL_ORIGINS:
             context_dict["social_links"] = build_social_links(request, appinstance)
@@ -393,7 +386,6 @@ def appinstance_metadata(
         request,
         appinstanceid,
         template='app_manager/appinstance_metadata.html'):
-
     appinstance = None
     try:
         appinstance = _resolve_appinstance(
@@ -407,7 +399,7 @@ def appinstance_metadata(
             loader.render_to_string(
                 '404.html', RequestContext(
                     request, {
-                        })), status=404)
+                    })), status=404)
 
     except PermissionDenied:
         return HttpResponse(

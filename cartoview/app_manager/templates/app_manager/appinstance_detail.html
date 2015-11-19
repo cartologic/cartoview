@@ -77,7 +77,7 @@
     <li class="list-group-item">
         <button class="btn btn-primary btn-md btn-block" data-toggle="modal" data-target="#edit-appinstance">{% trans "Edit App Instance" %}</button>
       </li>
-      <div class="modal fade" id="edit-appinstance" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal fade" id="edit-appinstance" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="z-index: 1400;" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
@@ -94,6 +94,18 @@
                   <a class="btn btn-default btn-block btn-xs" href="{% url "appinstance_metadata" resource.id %}">{% trans "Edit" %}</a>
                 </div>
                 {% endif %}
+              {% if "change_resourcebase" in perms_list %}
+                  {% if set_thumbnail_link.all %}
+              <div class="col-sm-3">
+                <i class="fa fa-photo fa-3x"></i>
+                <h4>{% trans "Thumbnail" %}</h4>
+                {% with set_thumbnail_link.all|first as thumbnail_link %}
+
+                <a class="btn btn-default btn-block btn-xs"   href="{{ thumbnail_link.url }}" id="edit_thumbnail">{{thumbnail_link.name}}</a>
+              {% endwith %}
+              </div>
+                  {% endif %}
+                  {% endif %}
                 </div>
             </div>
             <div class="modal-footer">
@@ -136,13 +148,13 @@
 }(document, 'script', 'facebook-jssdk'));</script>
 {% endif %}
     {% if request.user.is_authenticated %}
-        {% user_rating_js request.user resource "document" %}
+        {% user_rating_js request.user resource "appinstance" %}
     {% else %}
-        {% overall_rating resource "document" as the_doc_rating %}
+        {% overall_rating resource "appinstance" as the_doc_rating %}
     {% endif %}
     {% include 'rating.html' %}
-    {% include 'request_download.html' %}
     <script type="text/javascript">
+
         {% if SOCIAL_BUTTONS %}
         (function() {
             var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
