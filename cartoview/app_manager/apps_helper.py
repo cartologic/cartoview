@@ -51,6 +51,7 @@ def install_app(app_name):
     load_app('cartoview.apps.%s' % app_name)
     from django.core.management import call_command
     call_command('syncdb',load_initial_data=False)
+    call_command('collectstatic',interactive = False)
     try:
         print os.path.join(APPS_DIR,app_name,'fixtures')
         call_command('loaddata', os.path.join(APPS_DIR,app_name,'fixtures','initial_data.json'))
