@@ -140,6 +140,7 @@ def finalize_setup(app_name, user):
     restart_server_batch = getattr(django_settings, 'RESTART_SERVER_BAT', None)
     if restart_server_batch:
         def restart():
+            install_app(app_name)
             install()
             run_batch_file(restart_server_batch, None, APPS_DIR)
 
