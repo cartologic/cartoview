@@ -140,7 +140,6 @@ def finalize_setup(app_name, user):
     restart_server_batch = getattr(django_settings, 'RESTART_SERVER_BAT', None)
     if restart_server_batch:
         def restart():
-            install_app(app_name)
             install()
             run_batch_file(restart_server_batch, None, APPS_DIR)
 
@@ -380,13 +379,13 @@ def appinstance_detail(request, appinstanceid):
     else:
         if request.user != appinstance.owner and not request.user.is_superuser:
             AppInstance.objects.filter(id=appinstance.id).update(popular_count=F('popular_count') + 1)
-        appinstance_links = appinstance.link_set.filter(link_type__in=['appinstance_view', 'appinstance_edit'])
+        #appinstance_links = appinstance.link_set.filter(link_type__in=['appinstance_view', 'appinstance_edit'])
         set_thumbnail_link = appinstance.link_set.filter(link_type='appinstance_thumbnail')
         context_dict = {
             'perms_list': get_perms(request.user, appinstance.get_self_resource()),
             'permissions_json': _perms_info_json(appinstance),
             'resource': appinstance,
-            'appinstance_links': appinstance_links,
+            #'appinstance_links': appinstance_links,
             'set_thumbnail_link': set_thumbnail_link
             # 'imgtypes': IMGTYPES,
             # 'related': related
@@ -555,3 +554,20 @@ def appinstance_metadata(
             "author_form": author_form,
             "category_form": category_form,
         }))
+
+
+def appinstance_remove(request, appinstanceid):
+    try:
+        appinstance = _resolve_appinstance(
+            request,
+            appinstanceid,
+            'base.delete_resourcebase',
+            _PERMISSION_MSG_DELETE)
+        appinstance.delete()
+        return HttpResponseRedirect(reverse('appinstance_browse'))
+    except PermissionDenied:
+        return HttpResponse(
+            'You are not allowed to delete this Instance',
+            mimetype="text/plain",
+            status=401
+        )
