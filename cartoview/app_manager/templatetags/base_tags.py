@@ -6,7 +6,7 @@ from django.contrib.auth import get_user_model
 from django.db.models import Count
 
 from guardian.shortcuts import get_objects_for_user
-from cartoview.app_manager.models import AppInstance
+from cartoview.app_manager.models import AppInstance, App
 from geonode import settings
 
 from geonode.layers.models import Layer
@@ -93,11 +93,10 @@ def facets(context):
 
         facets['map'] = maps.count()
         facets['document'] = documents.count()
-
         if facet_type == 'home':
             facets['user'] = get_user_model().objects.exclude(
                 username='AnonymousUser').count()
-
+            facets['app'] = App.objects.count()
             facets['group'] = GroupProfile.objects.exclude(
                 access="private").count()
 

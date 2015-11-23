@@ -15,12 +15,14 @@
 {% block body %}
     <link href="{% static 'home_2/home_2.css' %}" rel="stylesheet">
     <link href="{% static 'app_manager/apps_list.css' %}" rel="stylesheet">
+{% if user.is_staff  %}
 
     <div class="page-header">
   <a href="{% url "install_app" %}" class="btn btn-primary pull-right">{% trans "Manage Apps" %}</a>
       <h2>{% trans "Explore Apps" %}</h2>
     </div>
 </div>
+{% endif %}
 
         <div id="page-wrapper">
 

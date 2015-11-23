@@ -18,6 +18,7 @@
 
 <div class="col-md-8 col-md-offset-2">
     <br>
+{% if user.is_staff  %}
     <button id="btn-show-install" type="button" class="btn btn-primary">
         Install New App
     </button>
@@ -28,6 +29,10 @@
       Edit App launcher
     </button>
     {% endif %}
+{% endif %}
+<a  class="btn btn-primary pull-right" href="http://cartologic.com/cartoview/apps/">
+     Cartoview Apps >>
+    </a>
     <br>
 
 {% include "app_manager/install_app_panel.html" %}
