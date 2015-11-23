@@ -140,18 +140,19 @@ def finalize_setup(app_name, user):
     restart_server_batch = getattr(django_settings, 'RESTART_SERVER_BAT', None)
     if restart_server_batch:
         def restart():
-            install_app(app_name)
             install()
+            install_app(app_name)
             run_batch_file(restart_server_batch, None, APPS_DIR)
 
         timer = Timer(0.1, restart)
         timer.start()
     else:
+        install()
         try:
             install_app(app_name)
         except:
             pass
-        install()
+
 
 
 @login_required
