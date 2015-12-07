@@ -9,8 +9,8 @@ Welcome to Cartoview's documentation!
 Cartoview is a an app framework built with django on the top of `GeoNode <http://geonode.org/>`_ , It extends Geonode with modules to install apps to better use the data ,layers and maps provided from Geonode and Geoserver.
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
+   
    
    about
-   tutorials/index
-   
+   Resources/index
