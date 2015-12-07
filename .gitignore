@@ -212,5 +212,5 @@ pip-log.txt
 #Translations
 *.mo
 
-#Mr Developer
-.mr.developer.cfg
+#Sphinx generated documentation
+docs/_build/
