@@ -1,2 +1,2 @@
-About Cartoview v0.8.1
+About Cartoview
 =====================================
