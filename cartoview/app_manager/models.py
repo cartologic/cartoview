@@ -1,16 +1,9 @@
-import os
-from django.core.urlresolvers import reverse
-from django.db import models
-from django.contrib.gis.db import models
-from django.contrib.auth.models import Group
-from django.contrib.sites.models import Site
-from django.db.models.signals import post_save, m2m_changed
-from django.dispatch import receiver
-# from sorl.thumbnail.fields import ImageField
-from apps_helper import delete_installed_app
 from django.conf import settings as geonode_settings
+from django.contrib.gis.db import models
+from django.core.urlresolvers import reverse
 from django.db.models import signals
 
+from apps_helper import delete_installed_app
 # Create your models here.
 from geonode.base.models import ResourceBase, resourcebase_post_save
 from geonode.security.models import remove_object_permissions
@@ -77,7 +70,10 @@ class AppInstance(ResourceBase):
         else:
             return '%s (%s)' % (self.title, self.id)
 
+
 def pre_save_appinstance(instance, sender, **kwargs):
+    if not isinstance(instance, AppInstance):
+        return
     if instance.abstract == '' or instance.abstract is None:
         instance.abstract = 'No abstract provided'
 
@@ -85,13 +81,15 @@ def pre_save_appinstance(instance, sender, **kwargs):
         instance.title = 'No title provided'
 
 
-
-
-
 def pre_delete_appinstance(instance, sender, **kwargs):
+    if not isinstance(instance, AppInstance):
+        return
     remove_object_permissions(instance.get_self_resource())
 
+
 def create_thumbnail(sender, instance, created, **kwargs):
+    if not isinstance(instance, AppInstance):
+        return
     from geonode.base.models import Link
 
     if not instance.has_thumbnail():
@@ -105,13 +103,18 @@ def create_thumbnail(sender, instance, created, **kwargs):
                                        link_type='image',
                                    ))
 
-        instance.thumbnail_url=parent_app_thumbnail_url
+        instance.thumbnail_url = parent_app_thumbnail_url
         instance.save()
 
 
+def appinstance_post_save(instance, *args, **kwargs):
+    if not isinstance(instance, AppInstance):
+        return
+    resourcebase_post_save(instance, args, kwargs)
 
-signals.pre_save.connect(pre_save_appinstance, sender=AppInstance)
-signals.post_save.connect(create_thumbnail, sender=AppInstance)
 
-signals.post_save.connect(resourcebase_post_save, sender=AppInstance)
-signals.pre_delete.connect(pre_delete_appinstance, sender=AppInstance)
+signals.pre_save.connect(pre_save_appinstance)
+signals.post_save.connect(create_thumbnail)
+
+signals.post_save.connect(appinstance_post_save)
+signals.pre_delete.connect(pre_delete_appinstance)
