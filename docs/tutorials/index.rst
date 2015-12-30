@@ -1,10 +1,15 @@
+.. _tutorials_index:
+
+=========
 Tutorials
-=====================================
+=========
 
-The tutorials are based around performing tasks, like using with another app or setup data to provide proper business logic.
-
+The tutorials are based around performing tasks, like adding data or publishing maps. The tutorials are written in a workshop like format and are broken into three groups Users, Administrators and Developers.
 
 .. toctree::
-   :maxdepth: 1
-   
-   roadsigninventory
+    :hidden:
+    :maxdepth: 3
+
+    users/index
+    developers/index 
+    administrators/index

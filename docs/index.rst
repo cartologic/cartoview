@@ -1,16 +1,28 @@
-.. Cartoview documentation master file, created by
-   sphinx-quickstart on Tue Dec 01 14:28:19 2015.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+.. _main_index:
 
-Welcome to Cartoview's documentation!
-=====================================
+=========================
+Cartoview's Documentation
+=========================
 
-Cartoview is a an app framework built with django on the top of `GeoNode <http://geonode.org/>`_ , It extends Geonode with modules to install apps to better use the data ,layers and maps provided from Geonode and Geoserver.
+Welcome to CartoView's Documentation.
+
+**Cartoview is a web platform** which enables the rapid deployment of easy-to-manage and easy-to-use Web Mapping Applications.
+
+#. :doc:`About Cartoview <introduction/index>`
+#. :doc:`Installation Guide <installation/index>`
+#. :doc:`Cartoview Resources <resources/index>`
+
+Table of contents
+=================
 
 .. toctree::
-   :maxdepth: 1
-   
-   
-   about
-   tutorials/index
+    :maxdepth: 10
+
+    introduction/index
+    installation/index
+    tutorials/index
+    resources/index
+    architecture/index
+    esri/index
+    opengeosuite/index
+    externals/index
