@@ -1,10 +1,10 @@
 # cartoview
-Cartoview is a an app framework built with django on the top of [GeoNode](http://geonode.org/) , It extends Geonode with modules to install apps to better use the data ,layers and maps provided from Geonode and Geoserver. 
+Cartoview is a an app framework built with django on the top of [GeoNode](http://geonode.org/) , It extends Geonode with modules to install apps to better use the data, layers and maps provided from Geonode and Geoserver. 
 
 ### To install Cartoview :
   1. Install GeoNode.
-	- For Windows , you can download Geonde windows installer from [here](http://cartologic.com/cartoview/download/)
-	- For Ubuntu , you can follow the [geonode official installation guide](http://docs.geonode.org/en/latest/tutorials/admin/install/quick_install.html#linux).
+	- For Windows , you can download GeoNode windows installer from [here](http://cartologic.com/cartoview/download/)
+	- For Ubuntu , you can follow the [GeoNode official installation guide](http://docs.geonode.org/en/latest/tutorials/admin/install/quick_install.html#linux).
   2. After installing Geonode , Copy cartoview folder from the repository to **geonode project folder** - beside **geonode** folder and **manage.py** file.
   3. Copy **cartoview_settings.py**  to (geonode-project-folder/geonode) beside the main **settings.py**.
   4. Copy **base.html** from the repository to replace the one in (geonode-project-folder/geonode/templates).
