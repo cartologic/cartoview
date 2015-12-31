@@ -13,9 +13,12 @@
   <div class="jumbotron">
     <div class="container">
       <h1>{% trans "Welcome" %}</h1>
-      <p>{% blocktrans %}GeoNode is an open source platform for sharing geospatial data and maps.{% endblocktrans %}</p>
-      <p>{% blocktrans %}If you have any questions about the software or service, join our <a href="http://lists.osgeo.org/cgi-bin/mailman/listinfo/geonode-users">mailing list</a>.{% endblocktrans %}</p>
-      <span>{% trans 'Need help?' %} <a href="http://docs.geonode.org/en/latest/tutorials/users/quickstart/index.html">{% trans 'Getting Started' %}</a></span>
+      <p>{% blocktrans %}<a href="http://cartologic.com/cartoview">Cartoview</a> extends GeoNode to create, manage GIS Web Mapping Applications.{% endblocktrans %}</p>
+      <p>{% blocktrans %}If you have any questions about the software or service,  <a href="http://cartologic.com/contact.php">contact us</a>.{% endblocktrans %}</p>
+      <p class="home-btns">
+		<a class="btn btn-lg btn-success" href="http://cartologic.com/cartoview/download"> <i class="fa fa-lg fa-angle-double-down animated"></i> Download</a>
+		<a class="btn btn-lg btn-warning" href="http://cartologic.com/cartoview/apps"> <i class="fa fa-cubes animated"></i> Apps</a>
+	  </p>
     </div>
   </div>
   {% endblock %}

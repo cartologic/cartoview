@@ -4,6 +4,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<link rel="shortcut icon" type="image/png" href="{{ STATIC_URL }}geonode/img/cartoview.png"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"> 
     <title>{% block title %}{{ SITE_NAME }}{% endblock %}</title>
     {% block head %}
@@ -18,6 +19,7 @@
       {% endif %}
       <link href="{{ STATIC_URL }}geonode/css/ext-compatibility.css?v={{ VERSION }}" rel="stylesheet" />
       <link href="{{ STATIC_URL }}geonode/css/base.css?v={{ VERSION }}" rel="stylesheet" />
+		<link href="{{ STATIC_URL }}geonode/css/custom.css" rel="stylesheet" />
       <style type="text/css">[ng\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}</style>
       {% block extra_head %}
       {% endblock %}
