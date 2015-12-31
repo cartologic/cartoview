@@ -1,0 +1,19 @@
+.navbar-brand {
+	height: 50px;
+    width: 180px;
+    margin-right: 0;
+    margin-top: 3px;
+}
+
+.jumbotron {
+	background-image: linear-gradient(to bottom, #235c73 0px, #112d39 100%);
+}
+
+.home-btns{
+	margin-top:20px;
+}
+
+.home-btns a{
+	color:#FFF;
+	margin-right: 5px;
+}
