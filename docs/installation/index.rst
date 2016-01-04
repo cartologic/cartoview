@@ -9,7 +9,7 @@ The following is a guide to get Cartoview and Geonode up and running in most com
 Recommended Minimum System Requirements
 =======================================
 
-For deployment of Cartoview on a single server, the following are the bare minimum system requirements as per Geonode's documentation. `Here <http://docs.Geonode.org/en/master/tutorials/install_and_admin/quick_install.html>`_
+For the deployment of Cartoview and Geonode on a single server, please find the bare minimum system requirements in Geonode's `Documentation. <http://docs.Geonode.org/en/master/tutorials/install_and_admin/quick_install.html>`_
 
 Windows Installation
 ====================
@@ -17,277 +17,283 @@ Windows Installation
 Pre Installation
 ================
 
-.. note::
-   Cartoview requires PostgreSQL and PostGIS to be installed.
-   If you already have PostgreSQL/PostGIS release 9.3 or later installed please proceed to step 2.
+1. Download and Install PostgreSQL and PostGIS. 
 
-#. Download and Install PostgreSQL and PostGIS. 
+  .. note::
+    Cartoview requires PostgreSQL and PostGIS release 9.3 or later to be installed.
+    If they are already installed on your system, please proceed to :ref:`Java Installation <java_installation>`.
 
-   Download the installer of PostgreSQL from `EnterpriseDB <http://www.enterprisedb.com/products-services-training/pgdownload#windows>`_. Recommended release is 9.3 or later 32 bits or 64 bits. Please choose the one that is compatible with your system.
+  Download the installer of PostgreSQL from `EnterpriseDB <http://www.enterprisedb.com/products-services-training/pgdownload#windows>`_. Recommended release is 9.3 or later 32 bits or 64 bits. Please choose the one that is compatible with your system.
    
-   .. figure:: ../img/EnterpriseDB_PostgreSQL_Download.png
+  .. figure:: ../img/postgresql_setup0.png
 
          *Download PostgreSQL*
 
-   The installation process is straight forward. Just run the downloaded installer, follow the wizard instructions and accept all the default parameters.
+  The installation process is straight forward. Just run the downloaded installer, follow the wizard instructions and accept all the default parameters.
 
-   .. figure:: ../img/postgresql_setup1.png
+  .. figure:: ../img/postgresql_setup1.png
 
          *Install PostgreSQL*
 
-   Specify the installation folder
+  Specify the installation folder
 
-   .. figure:: ../img/postgresql_setup2.png
+  .. figure:: ../img/postgresql_setup2.png
 
-   Specify the installation data folder
+  Specify the installation data folder
 
-   .. figure:: ../img/postgresql_setup3.png
+  .. figure:: ../img/postgresql_setup3.png
 
-   Specify the database administrator password
+  Specify the database administrator password
 
-   .. figure:: ../img/postgresql_setup4.png
+  .. figure:: ../img/postgresql_setup4.png
 
-   .. note:: Keep this password safe because we will need it later during the installation of PostGIS.
+  .. note:: Keep this password safe because we will need it later during the installation of PostGIS.
 
-   Accept the default port (5432) and click the **Next** button.
+  Accept the default port (5432) and click the **Next** button.
 
-   .. figure:: ../img/postgresql_setup5.png
+  .. figure:: ../img/postgresql_setup5.png
+
+  Accept the default locals and click the **Next** button
+
+  .. figure:: ../img/postgresql_setup6.png
+
+  Proceed with the installation, click the **Next** button
+
+  .. figure:: ../img/postgresql_setup7.png 
+
+  When you reach this point the installation of PostgreSQL is completed. Please make sure that the **Stack Builder** check box is checked and click **Finish** to proceed with the installation of PostGIS.
+
+  .. figure:: ../img/postgresql_setup8.png
+
+    *PostgreSQL installation completed*
+
+  Select **PostgreSQL 9.4(x64) on port 5432** from the combo box and click Next.
+
+  .. figure:: ../img/stack_builder1.png
+
+  Expand the category **Spatial Extensions**, select and check the **PostGIS 2.2** item from the list, choose the one which is compatible with your system (32 bits or 64 bits).
+
+  .. figure:: ../img/stack_builder2.png
+
+  Review your selection and choose a download directory, then click the **Next** button to begin downloading PostGIS installer.
    
-   Accept the default locals and click the **Next** button
+  .. figure:: ../img/stack_builder3.png
 
-   .. figure:: ../img/postgresql_setup6.png
+  The following dialog will indicate that the downloading of PostGIS installer finished successfully. Click **Next** to start installing PostGIS.
 
-   Proceed with the installation, click the **Next** button
+  .. figure:: ../img/stack_builder4.png
 
-   .. figure:: ../img/postgresql_setup7.png 
+  Review the license terms and if you accept them, click on the **I Agree** button to continue with the installation of PostGIS.
 
+  .. figure:: ../img/postgis_setup1.png
 
-   When you reach this point the installation of PostgreSQL is completed. Please make sure that the **Stack Builder** check box is checked and click **Finish** to proceed with the installation of PostGIS.
+  **Create spatial database** is optional, however it is recommended. 
 
-   .. figure:: ../img/postgresql_setup8.png
+  .. figure:: ../img/postgis_setup2.png
 
-   		  *PostgreSQL installation completed*
+  Specify the PostgreSQL installation location in which PostGIS will be installed.
 
-   Select **PostgreSQL 9.4(x64) on port 5432** from the combo box and click Next.
+  .. figure:: ../img/postgis_setup3.png
 
-   .. figure:: ../img/stack_builder1.png
+  Provide the PostgreSQL connection information (The one you saved in previous step).
 
-   Expand the category **Spatial Extensions**, select and check the **PostGIS 2.2** item from the list, choose the one which is compatible with your system (32 bits or 64 bits).
+  .. figure:: ../img/postgis_setup4.png
 
-   .. figure:: ../img/stack_builder2.png
+  Specify the name of the spatial database to be created at the end of the installation process. Accept the default is recommended.
 
-   Review your selection and choose a download directory, then click the **Next** button to begin downloading PostGIS installer.
-   
-   .. figure:: ../img/stack_builder3.png
+  .. figure:: ../img/postgis_setup5.png
 
-   The following dialog will indicate that the downloading of PostGIS installer finished successfully. Click **Next** to start installing PostGIS.
+  Just click on the **Yes** button.
 
-   .. figure:: ../img/stack_builder4.png
+  .. figure:: ../img/postgis_setup6.png
 
-   Review the license terms and if you accept them, click on the **I Agree** button to continue with the installation of PostGIS.
+  Just click on the **Yes** button.
 
-   .. figure:: ../img/postgis_setup1.png
+  .. figure:: ../img/postgis_setup7.png
 
-   **Create spatial database** is optional, however it is recommended. 
+  Just click on the **Yes** button.
 
-   .. figure:: ../img/postgis_setup2.png
+  .. figure:: ../img/postgis_setup8.png
 
-   Specify the PostgreSQL installation location in which PostGIS will be installed.
+  PostGIS setup was competed successfully. Just click on the **Close** button to return to the Stack Builder.
 
-   .. figure:: ../img/postgis_setup3.png
+  .. figure:: ../img/postgis_setup9.png
 
-   Provide the PostgreSQL connection information (The one you saved in previous step).
+  Installation of PostgreSQL database and PostGIS spatial extension has been completed successfully. Just click on the **Finish** button to complete the installation process.
 
-   .. figure:: ../img/postgis_setup4.png
+  .. figure:: ../img/stack_builder5.png
 
-   Specify the name of the spatial database to be created at the end of the installation process. Accept the default is recommended.
+  .. note:: Verify that your Postgres and PostGIS is running using pgAdminIII.
 
-   .. figure:: ../img/postgis_setup5.png
+.. _java_installation:
 
-   Just click on the **Yes** button.
+2. Download and install the latest release of **Java Runtime 64-Bit** from `Oracle <https://www.java.com/en/download/manual.jsp>`_
 
-   .. figure:: ../img/postgis_setup6.png
+  .. note::
+    Cartoview requires Java runtime 64-Bit release 7 or later to be installed.
+    If it is already installed on your system, please proceed to :ref:`Cartoview Installation <cartoview_installation>`.
 
-   Just click on the **Yes** button.
+  .. figure:: ../img/java_runtime1.png
 
-   .. figure:: ../img/postgis_setup7.png
+    *Java Runtime installer download page*
 
-   Just click on the **Yes** button.
+  .. figure:: ../img/java_runtime2.png
 
-   .. figure:: ../img/postgis_setup8.png
+    *Java Runtime installation wizard*
 
-   PostGIS setup was competed successfully. Just click on the **Close** button to return to the Stack Builder.
+    A few brief dialogs confirm the last steps of the installation process. Click Close on the last dialog and this will complete Java installation process. 
+  .. figure:: ../img/java_runtime3.png
 
-   .. figure:: ../img/postgis_setup9.png
+    *Java Runtime installation completed* 
 
-   Installation of PostgreSQL database and PostGIS spatial extension has been completed successfully. Just click on the **Finish** button to complete the installation process.
-
-   .. figure:: ../img/stack_builder5.png
-
-   .. note:: Verify that your Postgres and PostGIS is running using pgAdminIII.
-
-#. Download and install the latest release of **Java Runtime 64-Bit** from `Oracle <https://www.java.com/en/download/manual.jsp>`_
-
-   .. figure:: ../img/java_runtime1.png
-
-      *Java Runtime installer download page*
-
-   .. figure:: ../img/java_runtime2.png
-
-      *Java Runtime installation wizard*
-
-   A few brief dialogs confirm the last steps of the installation process. Click Close on the last dialog and this will complete Java installation process. 
-
-   .. figure:: ../img/java_runtime3.png
-
-      *Java Runtime installation completed* 
-      
-..   .. warning:: Make sure that the JAVA_HOME environment variable exists and points to the installation folder of Java Runtime
-    ``e.g. JAVA_HOME = C:\Program Files\Java\jre1.8.0_66``
-
-   Now you are ready to proceed with the installation of Cartoview.
+.. important:: Now you are ready to proceed with the installation of Cartoview.
 
 ------------
+
+.. _cartoview_installation:
 
 Cartoview and Geonode Installation
 ==================================
 
 .. note:: This installer contains Geonode 2.4 and Cartoview 0.9.14.
-          Cartoview has been tested with PostGIS 2.1 and Geonode 2.4
+    Cartoview has been tested with PostGIS 2.1 and Geonode 2.4
 
 #. Download the latest release of **Cartoview** Installer from `Cartologic <http://www.cartologic.com/cartoview/download>`_.
    
-   .. figure:: ../img/cartoview_setup1.png
+  .. figure:: ../img/cartoview_setup1.png
 
 #. Install Cartoview and Geonode
 
-   The installation process is straight forward. Just run the downloaded installer and follow the wizard instructions.
+  The installation process is straight forward. Just run the downloaded installer and follow the wizard instructions.
 
-   .. figure:: ../img/cartoview_setup2.png
-   
-   Specify the PostgreSQL installation folder.
+  .. figure:: ../img/cartoview_setup2.png
 
-   .. figure:: ../img/cartoview_setup3.png
+  Specify the PostgreSQL installation folder.
 
-   Provide PostgreSQL connection information.
+  .. figure:: ../img/cartoview_setup3.png
 
-   .. figure:: ../img/cartoview_setup4.png
+  Provide PostgreSQL connection information.
 
-   .. note:: If you are installing everything on one machine then repeat the PostgreSQL related information provided for the previous dialogs. Additional information might needed, if you have the PostgreSQL data hosted on a separated machine. 
+  .. figure:: ../img/cartoview_setup4.png
 
-   Specify the PostgreSQL installation data folder.
+  .. note:: If you are installing everything on one machine then repeat the PostgreSQL related information provided for the previous dialogs. Additional information might needed, if you have the PostgreSQL data hosted on a separated machine. 
 
-   .. figure:: ../img/cartoview_setup5.png
+  Specify the PostgreSQL installation data folder.
 
-   Provide PostgreSQL connection information.
+  .. figure:: ../img/cartoview_setup5.png
 
-   .. figure:: ../img/cartoview_setup6.png
+  Provide PostgreSQL connection information.
 
-   Specify installation folder for Geonode, however accepting the default is recommended.
+  .. figure:: ../img/cartoview_setup6.png
 
-   .. figure:: ../img/cartoview_setup7.png
+  Specify installation folder for Geonode, however accepting the default is recommended.
 
-   Select start menu folder, however accepting the default is again recommended.
+  .. figure:: ../img/cartoview_setup7.png
 
-   .. figure:: ../img/cartoview_setup8.png
+  Select start menu folder, however accepting the default is again recommended.
 
-   Setup is ready to install Cartoview and Geonode on your machine. Just click the **Install** button and be patient!
+  .. figure:: ../img/cartoview_setup8.png
 
-   .. figure:: ../img/cartoview_setup9.png
+  Setup is ready to install Cartoview and Geonode on your machine. Just click the **Install** button and be patient!
 
-   Setup has finished installing Cartoview and Geonode on your computer. Just click the **Finish** button to launch the home page in your browser.
+  .. figure:: ../img/cartoview_setup9.png
 
-   .. figure:: ../img/cartoview_setup10.png
+  Setup has finished installing Cartoview and Geonode on your computer. Just click the **Finish** button to launch the home page in your browser.
 
-      If you eventually manage to reach this page then the installation has been completed successfully. Click the **Start Geonode** button to launch the Geonode and Cartoview site. Sign in as admin/admin and start enjoying the experience of Geonode and Cartoview on Windows platform. Upload and style layers, create metadata, compose maps, create and install Apps using Cartoview etc.
+  .. figure:: ../img/cartoview_setup10.png
 
-   .. figure:: ../img/cartoview_setup11.png
+  Congratulations! You have successfully installed Cartoview and Geonode on your machine. This is the Admin Configuration page.
+  Click the **Start Geonode** button to launch the Geonode and Cartoview home page.
+  
+  .. figure:: ../img/cartoview_setup11.png
+
+  Sign in as admin/admin and start enjoying the experience of Geonode and Cartoview on Windows platform. Upload and style layers, create metadata, compose maps, share layers and maps with others, create and install Apps using Cartoview etc.
+
+  .. figure:: ../img/cartoview_setup12.png
 
 Deployment for Production
 =========================
+  .. danger:: Make sure that you have changed the default admin passwords for Django, Apache, Tomcat and Geoserver before you expose your site to the web. All default passwords are listed at the admin page installed with Cartoview.
 
 Windows Firewall Configuration
 ------------------------------
+  .. note:: Cartoview is installed by default on localhost. In order to deploy Cartoview on your production server and make it accessible to other users, you will need to change the hostname and configure all necessary ports. 
 
-  .. note:: Cartoview is installed by default on localhost. In order to deploy Cartoview on your production server and make it accessible to other users, you will need to change the hostname and configure all necessary ports.
+Configure Windows Firewall
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+  Create a new **Inbound Rule** to group the configuration of the necessary ports needed for the installed software.
+  Initially, search and launch the **Windows Firewall with Advanced Security** tool and click on the **New Rule** button.
 
-  .. warning:: Make sure that you have changed the default admin passwords for Django, Apache, Tomcat and Geoserver before you expose your site to the web. All default passwords are listed at the admin page installed with Cartoview. 
+  .. figure:: ../img/firewall_1.png
 
-  Configure Windows Firewall by creating a dedicated rule for configuring the necessary ports needed for the installed software.
+  Select **Port** as the type of Firewall Rule to be applied and click **Next**.
 
-  Initially search and launch the **Windows Firewall with Advanced Security** tool and click on the **New Rule** button.
+  .. figure:: ../img/firewall_2.png
 
-   .. figure:: ../img/firewall_1.png
+  Specify the protocol and ports to which the rule applies and click **Next**.
 
-   Select **Port** as the type of firewall rule to be applied and click **Next**.
+  .. figure:: ../img/firewall_3.png
 
-   .. figure:: ../img/firewall_2.png
+  .. tip:: 
+    +-----------+------+
+    | Software  | Port |
+    +===========+======+
+    | Geonode   | 4040 |
+    +-----------+------+
+    | GeoServer | 4041 |
+    +-----------+------+
+    | PostgreSQL| 5432 |
+    +-----------+------+
+    | SSL       | 555  |
+    +-----------+------+
 
-   Specify the protocol and ports to which the rule applies and click **Next**.
+  Specify the action to be taken when a connection matches the conditions specified in the rule and click **Next**. (Allow the connection) 
 
-   .. figure:: ../img/firewall_3.png
+  .. figure:: ../img/firewall_4.png
 
-   .. note:: 
-     +-----------+------+
-     | Software  | Port |
-     +===========+======+
-     | Geonode   | 4040 |
-     +-----------+------+
-     | GeoServer | 4041 |
-     +-----------+------+
-     | PostgreSQL| 5432 |
-     +-----------+------+
-     | SSL       | 555  |
-     +-----------+------+
+  Specify the profiles for which this rule applies. Accepting the defaults is recommended. Finally click **Next** to proceed to the next step. (All the options checked).
 
-   Specify the action to be taken when a connection matches the conditions specified in the rule and click **Next**. (Allow the connection) 
+  .. figure:: ../img/firewall_5.png
 
-   .. figure:: ../img/firewall_4.png
+  Specify the name and description of this rule and click **Finish** to complete the process.
 
-   Specify the profiles for which this rule applies. Accepting the defaults is recommended. Finally click **Next** to proceed to the next step. (All the options checked).
-
-   .. figure:: ../img/firewall_5.png
-
-   Specify the rule name and description of this rule and click **Finish** to complete the process.
-
-   .. figure:: ../img/firewall_6.png
+  .. figure:: ../img/firewall_6.png
    
-
 Replace **localhost** with **IP Address** or **Domain Name**
 ------------------------------------------------------------
 
-#. Apache 2.4
+1. Apache 2.4
 
-   Open the Apache configuration file ``..\Goenode\Apache24\conf\httpd.conf``.
+  Open the Apache configuration file ``..\Goenode\Apache24\conf\httpd.conf``.
 
-   Replace localhost with IP Address or Domain Name only for the highlighted lines.
+  Replace localhost with IP Address or Domain Name only for the highlighted lines.
 
-   .. code-block:: python
-      :linenos:
-      :emphasize-lines: 12,14
+  .. code-block:: python
+    :linenos:
+    :emphasize-lines: 12,14
 
-      WSGIPassAuthorization On
-      WSGIPythonHome "C:/Program Files (x86)/Geonode/Python"
+    WSGIPassAuthorization On
+    WSGIPythonHome "C:/Program Files (x86)/Geonode/Python"
 
-      <Proxy *>
-           Order allow,deny
-           Allow from all
-       </Proxy>
-       
-       ProxyRequests     Off
-       ProxyPreserveHost On
+    <Proxy *>
+        Order allow,deny
+        Allow from all
+    </Proxy>
+     
+      ProxyRequests     Off
+      ProxyPreserveHost On
 
-       ProxyPass /geoserver http://localhost:4041/geoserver max=200 ttl=120 retry=300
+      ProxyPass /geoserver http://localhost:4041/geoserver max=200 ttl=120 retry=300
 
-       ProxyPassReverse /geoserver http://localhost:4041/geoserver
+      ProxyPassReverse /geoserver http://localhost:4041/geoserver
 
-#. Geonode 2.4
+2. Geonode 2.4
 
-   Open the Geonode configuration file ``..\Geonode\geonode\geonode\local_settings.py``
+  Open the Geonode configuration file ``..\Geonode\geonode\geonode\local_settings.py``
    
-   Replace localhost with IP Address or Domain Name only for the highlighted lines.
+  Replace localhost with IP Address or Domain Name only for the highlighted lines.
 
-   .. code-block:: python
+  .. code-block:: python
       :linenos:
       :emphasize-lines: 1,7
 
@@ -313,26 +319,26 @@ Replace **localhost** with **IP Address** or **Domain Name**
           }
       }
    
-#. Tomcat 8.0
+3. Tomcat 8.0
 
-   Open the Tomcat Geoserver configuration file ``..\Geonode\Tomcat 8.0\webapps\geoserver\WEB-INF\web.xml``
+  Open the Tomcat Geoserver configuration file ``..\Geonode\Tomcat 8.0\webapps\geoserver\WEB-INF\web.xml``
    
-   Replace localhost with IP Address or Domain Name for the highlighted lines.
+  Replace localhost with IP Address or Domain Name for the highlighted line.
 
-   .. code-block:: xml
+  .. code-block:: xml
       :linenos:
       :emphasize-lines: 3
 
       <context-param>
-         <param-name>GEONODE_BASE_URL</param-name>
-         <param-value>http://localhost/</param-value>
+        <param-name>GEONODE_BASE_URL</param-name>
+        <param-value>http://localhost/</param-value>
       </context-param>
 
-   Open the Tomcat Geoserver configuration file ``..\Geonode\Tomcat 8.0\webapps\geoserver\data\security\auth\geonodeAuthProvider\config.xml``
+  Open the Tomcat Geoserver configuration file ``..\Geonode\Tomcat 8.0\webapps\geoserver\data\security\auth\geonodeAuthProvider\config.xml``
    
-   Replace localhost with IP Address or Domain Name for the highlighted lines.
+  Replace localhost with IP Address or Domain Name for the highlighted line.
 
-   .. code-block:: xml
+  .. code-block:: xml
       :linenos:
       :emphasize-lines: 5
 
@@ -343,25 +349,25 @@ Replace **localhost** with **IP Address** or **Domain Name**
         <baseUrl>http://localhost:4040/</baseUrl>
       </org.geonode.security.GeoNodeAuthProviderConfig>
 
-#. Restart Services
+4. Restart Services
 
-   Restart the Windows services
+  Restart the Windows services
 
-   * GEONODE_APACHE_4040
-   * GEONODE_TOMCAT_4041
+    * GEONODE_APACHE_4040
+    * GEONODE_TOMCAT_4041
 
-#. Geoserver 2.7.4
+5. Geoserver 2.7.4
 
-   * Launch Geoserver's home page at ``http://localhost:4040/geoserver/web``
-   * Login as admin/geoserver
+  * Launch Geoserver's home page at ``http://localhost:4040/geoserver/web``
+  * Login as admin/geoserver
 
-   .. figure:: ../img/geoserver_config0.png
+  .. figure:: ../img/geoserver_config0.png
 
-   * Click on **Global** button
+  * Click on **Global** button
 
-   * Define the **Proxy Base URL** parameter as: ``http://xx.xx.xx.xx:4040/geoserver``
+  * Define the **Proxy Base URL** parameter as: ``http://xx.xx.xx.xx:4040/geoserver``
 
-   .. figure:: ../img/geoserver_config1.png
+  .. figure:: ../img/geoserver_config1.png
 
 ------------
 
