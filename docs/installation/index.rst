@@ -145,17 +145,19 @@ Pre Installation
 ..   .. warning:: Make sure that the JAVA_HOME environment variable exists and points to the installation folder of Java Runtime
     ``e.g. JAVA_HOME = C:\Program Files\Java\jre1.8.0_66``
 
-   Now you are ready to proceed with the installation of Cartoview.|
+   Now you are ready to proceed with the installation of Cartoview.
 
-#. Download the latest release of **Cartoview** Installer from `Cartologic <http://www.cartologic.com/cartoview/download>`_.
-   
-   .. figure:: ../img/cartoview_setup1.png
+------------
 
 Cartoview and Geonode Installation
 ==================================
 
 .. note:: This installer contains Geonode 2.4 and Cartoview 0.9.14.
           Cartoview has been tested with PostGIS 2.1 and Geonode 2.4
+
+#. Download the latest release of **Cartoview** Installer from `Cartologic <http://www.cartologic.com/cartoview/download>`_.
+   
+   .. figure:: ../img/cartoview_setup1.png
 
 #. Install Cartoview and Geonode
 
@@ -225,17 +227,18 @@ Windows Firewall Configuration
 
    .. figure:: ../img/firewall_3.png
 
-   +-----------+------+
-   | Software  | Port |
-   +===========+======+
-   | Geonode   | 4040 |
-   +-----------+------+
-   | GeoServer | 4041 |
-   +-----------+------+
-   | PostgreSQL| 5432 |
-   +-----------+------+
-   | SSL       | 555  |
-   +-----------+------+
+   .. note:: 
+     +-----------+------+
+     | Software  | Port |
+     +===========+======+
+     | Geonode   | 4040 |
+     +-----------+------+
+     | GeoServer | 4041 |
+     +-----------+------+
+     | PostgreSQL| 5432 |
+     +-----------+------+
+     | SSL       | 555  |
+     +-----------+------+
 
    Specify the action to be taken when a connection matches the conditions specified in the rule and click **Next**. (Allow the connection) 
 
@@ -347,7 +350,7 @@ Replace **localhost** with **IP Address** or **Domain Name**
    * GEONODE_APACHE_4040
    * GEONODE_TOMCAT_4041
 
-#. Geoserver
+#. Geoserver 2.7.4
 
    * Launch Geoserver's home page at ``http://localhost:4040/geoserver/web``
    * Login as admin/geoserver
