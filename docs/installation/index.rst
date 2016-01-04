@@ -171,7 +171,7 @@ Cartoview and Geonode Installation
 
    .. figure:: ../img/cartoview_setup4.png
 
-.. note:: If you are installing everything on one machine then repeat the PostgreSQL related information provided for the previous dialogs. Additional information might needed, if you have the PostgreSQL data hosted on a separated machine. 
+   .. note:: If you are installing everything on one machine then repeat the PostgreSQL related information provided for the previous dialogs. Additional information might needed, if you have the PostgreSQL data hosted on a separated machine. 
 
    Specify the PostgreSQL installation data folder.
 
