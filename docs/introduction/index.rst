@@ -7,7 +7,8 @@ About Cartoview
 .. image:: ../img/cartoview-logo.png
 
 **Cartoview is a web platform** which enables the rapid deployment of easy-to-manage and easy-to-use Web Mapping Applications.
-
+A simple windows installer will provide both Geonode and Cartoview for your windows server.
+Download the installer from `Cartologic's Site <http://www.cartologic.com/cartoview/download>`_ 
 
 Cartoview and GeoNode
 =====================

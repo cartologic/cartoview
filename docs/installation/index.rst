@@ -207,9 +207,13 @@ Deployment for Production
 Windows Firewall Configuration
 ------------------------------
 
-   Configure Windows Firewall by creating a dedicated rule for configuring the necessary ports needed for the installed software.
+  .. note:: Cartoview is installed by default on localhost. In order to deploy Cartoview on your production server and make it accessible to other users, you will need to change the hostname and configure all necessary ports.
 
-   Initially search and launch the **Windows Firewall with Advanced Security** tool and click on the **New Rule** button.
+  .. warning:: Make sure that you have changed the default admin passwords for Django, Apache, Tomcat and Geoserver before you expose your site to the web. All default passwords are listed at the admin page installed with Cartoview. 
+
+  Configure Windows Firewall by creating a dedicated rule for configuring the necessary ports needed for the installed software.
+
+  Initially search and launch the **Windows Firewall with Advanced Security** tool and click on the **New Rule** button.
 
    .. figure:: ../img/firewall_1.png
 
