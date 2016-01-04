@@ -201,6 +201,163 @@ Cartoview and Geonode Installation
 
    .. figure:: ../img/cartoview_setup11.png
 
+Deployment for Production
+=========================
+
+Windows Firewall Configuration
+------------------------------
+
+   Configure Windows Firewall by creating a dedicated rule for configuring the necessary ports needed for the installed software.
+
+   Initially search and launch the **Windows Firewall with Advanced Security** tool and click on the **New Rule** button.
+
+   .. figure:: ../img/firewall_1.png
+
+   Select **Port** as the type of firewall rule to be applied and click **Next**.
+
+   .. figure:: ../img/firewall_2.png
+
+   Specify the protocol and ports to which the rule applies and click **Next**.
+
+   .. figure:: ../img/firewall_3.png
+
+   +-----------+------+
+   | Software  | Port |
+   +===========+======+
+   | Geonode   | 4040 |
+   +-----------+------+
+   | GeoServer | 4041 |
+   +-----------+------+
+   | PostgreSQL| 5432 |
+   +-----------+------+
+   | SSL       | 555  |
+   +-----------+------+
+
+   Specify the action to be taken when a connection matches the conditions specified in the rule and click **Next**. (Allow the connection) 
+
+   .. figure:: ../img/firewall_4.png
+
+   Specify the profiles for which this rule applies. Accepting the defaults is recommended. Finally click **Next** to proceed to the next step. (All the options checked).
+
+   .. figure:: ../img/firewall_5.png
+
+   Specify the rule name and description of this rule and click **Finish** to complete the process.
+
+   .. figure:: ../img/firewall_6.png
+   
+
+Replace **localhost** with **IP Address** or **Domain Name**
+------------------------------------------------------------
+
+#. Apache 2.4
+
+   Open the Apache configuration file ``..\Goenode\Apache24\conf\httpd.conf``.
+
+   Replace localhost with IP Address or Domain Name only for the highlighted lines.
+
+   .. code-block:: python
+      :linenos:
+      :emphasize-lines: 12,14
+
+      WSGIPassAuthorization On
+      WSGIPythonHome "C:/Program Files (x86)/Geonode/Python"
+
+      <Proxy *>
+           Order allow,deny
+           Allow from all
+       </Proxy>
+       
+       ProxyRequests     Off
+       ProxyPreserveHost On
+
+       ProxyPass /geoserver http://localhost:4041/geoserver max=200 ttl=120 retry=300
+
+       ProxyPassReverse /geoserver http://localhost:4041/geoserver
+
+#. Geonode 2.4
+
+   Open the Geonode configuration file ``..\Geonode\geonode\geonode\local_settings.py``
+   
+   Replace localhost with IP Address or Domain Name only for the highlighted lines.
+
+   .. code-block:: python
+      :linenos:
+      :emphasize-lines: 1,7
+
+      SITEURL = "http://localhost:4040/"
+
+      OGC_SERVER = {
+          'default' : {
+              'BACKEND' : 'geonode.geoserver',
+              'LOCATION' : 'http://localhost:4041/geoserver/',
+              'PUBLIC_LOCATION' : 'http://localhost:4041/geoserver/',
+              'USER' : 'admin',
+              'PASSWORD' : 'geoserver',
+              'MAPFISH_PRINT_ENABLED' : True,
+              'PRINT_NG_ENABLED' : True,
+              'GEONODE_SECURITY_ENABLED' : True,
+              'GEOGIG_ENABLED' : False,
+              'WMST_ENABLED' : False,
+              'BACKEND_WRITE_ENABLED': True,
+              'WPS_ENABLED' : False,
+              'LOG_FILE': '%s/geoserver/data/logs/geoserver.log' % os.path.abspath(os.path.join(PROJECT_ROOT, os.pardir)),
+              # Set to name of database in DATABASES dictionary to enable
+              'DATASTORE': 'datastore',
+          }
+      }
+   
+#. Tomcat 8.0
+
+   Open the Tomcat Geoserver configuration file ``..\Geonode\Tomcat 8.0\webapps\geoserver\WEB-INF\web.xml``
+   
+   Replace localhost with IP Address or Domain Name for the highlighted lines.
+
+   .. code-block:: xml
+      :linenos:
+      :emphasize-lines: 3
+
+      <context-param>
+         <param-name>GEONODE_BASE_URL</param-name>
+         <param-value>http://localhost/</param-value>
+      </context-param>
+
+   Open the Tomcat Geoserver configuration file ``..\Geonode\Tomcat 8.0\webapps\geoserver\data\security\auth\geonodeAuthProvider\config.xml``
+   
+   Replace localhost with IP Address or Domain Name for the highlighted lines.
+
+   .. code-block:: xml
+      :linenos:
+      :emphasize-lines: 5
+
+      <org.geonode.security.GeoNodeAuthProviderConfig>
+        <id>-54fbcd7b:1402c24f6bc:-7fe9</id>
+        <name>geonodeAuthProvider</name>
+        <className>org.geonode.security.GeoNodeAuthenticationProvider</className>
+        <baseUrl>http://localhost:4040/</baseUrl>
+      </org.geonode.security.GeoNodeAuthProviderConfig>
+
+#. Restart Services
+
+   Restart the Windows services
+
+   * GEONODE_APACHE_4040
+   * GEONODE_TOMCAT_4041
+
+#. Geoserver
+
+   * Launch Geoserver's home page at ``http://localhost:4040/geoserver/web``
+   * Login as admin/geoserver
+
+   .. figure:: ../img/geoserver_config0.png
+
+   * Click on **Global** button
+
+   * Define the **Proxy Base URL** parameter as: ``http://xx.xx.xx.xx:4040/geoserver``
+
+   .. figure:: ../img/geoserver_config1.png
+
+------------
+
 Linux Installation
 ==================
 
@@ -210,11 +367,5 @@ Get `Cartoview <https://github.com/cartologic/Cartoview>`_ code from GitHub and 
 
 Installation of multiple instances
 ==================================
-
-Documentation not available yet!
-
-
-Deployment for Production
-=========================
 
 Documentation not available yet!
