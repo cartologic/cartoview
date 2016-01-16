@@ -4,12 +4,12 @@
 Installation Guide
 ==================
 
-The following is a guide to get Cartoview and Geonode up and running in most common operating systems (Windows, Linux/Ubuntu).
+The following is a guide to get Geonode and Cartoview up and running in most common operating systems (Windows, Linux/Ubuntu).
 
 Recommended Minimum System Requirements
 =======================================
 
-For the deployment of Cartoview and Geonode on a single server, please find the bare minimum system requirements in Geonode's `Documentation. <http://docs.Geonode.org/en/master/tutorials/install_and_admin/quick_install.html>`_
+For the deployment of Geonode and Cartoview on a single server, please find the bare minimum system requirements in Geonode's `Documentation. <http://docs.Geonode.org/en/master/tutorials/install_and_admin/quick_install.html>`_
 
 Windows Installation
 ====================
@@ -146,25 +146,23 @@ Pre Installation
 
     *Java Runtime installation completed* 
 
-.. important:: Now you are ready to proceed with the installation of Cartoview.
+.. important:: Now you are ready to proceed with the installation of Geonode and Cartoview.
 
 ------------
 
 .. _cartoview_installation:
 
-Cartoview and Geonode Installation
+Geonode and Cartoview Installation
 ==================================
 
-.. note:: This installer contains Geonode 2.4 and Cartoview 0.9.14.
+  .. note:: This installer contains Geonode 2.4 and Cartoview 0.9.14.
     Cartoview has been tested with PostGIS 2.1 and Geonode 2.4
 
-#. Download the latest release of **Cartoview** Installer from `Cartologic <http://www.cartologic.com/cartoview/download>`_.
+  Download the latest release of **Geonode_Cartoview** Installer from `Cartologic <http://www.cartologic.com/cartoview/download>`_.
    
   .. figure:: ../img/cartoview_setup1.png
 
-#. Install Cartoview and Geonode
-
-  The installation process is straight forward. Just run the downloaded installer and follow the wizard instructions.
+  The installation process is straight forward. Just run the downloaded installer and follow the wizard instructions. Accepting the defaults is strongly recommented.
 
   .. figure:: ../img/cartoview_setup2.png
 
@@ -176,33 +174,31 @@ Cartoview and Geonode Installation
 
   .. figure:: ../img/cartoview_setup4.png
 
-  .. note:: If you are installing everything on one machine then repeat the PostgreSQL related information provided for the previous dialogs. Additional information might needed, if you have the PostgreSQL data hosted on a separated machine. 
-
-  Specify the PostgreSQL installation data folder.
+  Provide the Geonode database name. This database will host information related to the Geonode website e.g. users, permissions etc.
 
   .. figure:: ../img/cartoview_setup5.png
 
-  Provide PostgreSQL connection information.
+  Provide the GIS database name. This database will host the GIS data.
 
   .. figure:: ../img/cartoview_setup6.png
 
-  Specify installation folder for Geonode, however accepting the default is recommended.
+  Specify installation folder for Geonode_Cartoview, however accepting the default is recommended.
 
   .. figure:: ../img/cartoview_setup7.png
 
-  Select start menu folder, however accepting the default is again recommended.
+  Provide start menu folder name, however accepting the default is again recommended.
 
   .. figure:: ../img/cartoview_setup8.png
 
-  Setup is ready to install Cartoview and Geonode on your machine. Just click the **Install** button and be patient!
+  Setup is ready to install Geonode and Cartoview on your machine. Just click the **Install** button and be patient!
 
   .. figure:: ../img/cartoview_setup9.png
 
-  Setup has finished installing Cartoview and Geonode on your computer. Just click the **Finish** button to launch the home page in your browser.
+  Setup has finished installing Geonode and Cartoview on your computer. Just click the **Finish** button to launch the home page in your browser.
 
   .. figure:: ../img/cartoview_setup10.png
 
-  Congratulations! You have successfully installed Cartoview and Geonode on your machine. This is the Admin Configuration page.
+  Congratulations! You have successfully installed Geonode and Cartoview on your machine. This is the Admin Configuration page.
   Click the **Start Geonode** button to launch the Geonode and Cartoview home page.
   
   .. figure:: ../img/cartoview_setup11.png
@@ -371,8 +367,8 @@ Replace **localhost** with **IP Address** or **Domain Name**
 
 ------------
 
-Linux Installation
-==================
+Linux/Ubuntu Installation
+=========================
 
 Follow `Geonode <http://docs.Geonode.org/en/master/tutorials/install_and_admin/index.html>`_ instructions for installing Geonode on your Ubuntu machine.
 
