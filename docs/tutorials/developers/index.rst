@@ -7,7 +7,6 @@ For Developers
 This documentation is related to Cartoview for Developers
 
 .. toctree::
-    :hidden:
     :maxdepth: 3
 
     apps_types/index
