@@ -4,34 +4,14 @@
 For Users
 =========
 
-Cartoview documentation for End Uses
+Welcome to the GeoNode and Cartoview Users Training documentation.
 
-
-What is a Cartoview application
-===============================
-
-Where to find Cartoview apps
-============================
-
-Get Started with GeoNode
-========================
-
-Create, Edit and Style layers
-=============================
+This workshop will guide you on how to use the GeoNode and Cartoview platform, go in depth into what we can achieve with the platform and how to integrate it with third-party software. At the end of this section you will master many of the GeoNode and Cartoview tasks from the perspective of the user.
 
 .. toctree::
     :hidden:
-    :maxdepth: 3
+    :maxdepth: 2
 
-    create_layers/index
-    style_layers/index
-    edit_layers/index
-
-Author and publish webmaps
-==========================
-
-Share your work
-===============
-
-Work with QGIS, ArcGIS and CartoView
-====================================
+    cartoview/index
+    geonode/index
+    integration/index
