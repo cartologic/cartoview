@@ -18,4 +18,4 @@ GeoNode Documentation
 	Create, delete, manage and share Maps on GeoNode.
 
 .. note::
-	This is the official documentation provided by the GeoNode community
+	This documentation is kindly provided to the community by the GeoNode Team.
