@@ -2,8 +2,9 @@ from tastypie.constants import ALL
 from cartoview.app_manager.models import AppInstance
 from geonode.api.resourcebase_api import *
 from .resources import BaseModelResource , FileUploadResource
-
-
+from geonode.maps.models import Map as GeonodeMap, MapLayer as GeonodeMapLayer
+from tastypie.resources import ModelResource
+from tastypie import fields
 
 class AppResource(FileUploadResource):
     class Meta(FileUploadResource.Meta):
@@ -27,3 +28,14 @@ class AppInstanceResource(CommonModelApi):
             queryset = queryset.filter(is_published=True)
         resource_name = 'appinstances'
 
+
+
+class GeonodeMapLayerResource(ModelResource):
+    class Meta:
+        queryset = GeonodeMapLayer.objects.distinct()
+
+
+class GeonodeMapResource(ModelResource):
+    map_layers = fields.ToManyField(GeonodeMapLayerResource, 'layer_set', null=True, full=True)
+    class Meta:
+        queryset = GeonodeMap.objects.distinct().order_by('-date')

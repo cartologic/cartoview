@@ -2,10 +2,12 @@ from django.conf.urls import patterns
 from django.views.generic import TemplateView
 
 from api import rest_api
-from cartoview.app_manager.rest import AppResource
+from .rest import AppResource, GeonodeMapResource, GeonodeMapLayerResource
 from views import *
 
 rest_api.register(AppResource())
+rest_api.register(GeonodeMapResource())
+rest_api.register(GeonodeMapLayerResource())
 
 urlpatterns = patterns(
         'cartoview.app_manager',
