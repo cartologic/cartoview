@@ -4,7 +4,7 @@
 Cartoview Application Manager
 =============================
 
-What the Cartoview
+What is Cartoview
 =====================
 
 Cartoview is a web platform which enables the rapid deployment of easy-to-manage and easy-to-use Web Mapping Applications. It is an expansion of the well-known GeoNode platform and it's all about installing, authoring and utilizing Web Mapping Applications within this platform. It integrates with the GeoNode Project to extend the platform and provide users with the experience of using Web Mapping Applications along with their Layers, Maps and Documents. It makes extensive use of the infrastructure, security and management tools of GeoNode in order to solve user problems and challenges. It enables user to apply workflows on data management and maintenance of their content (e.g. layers, maps and documents). It offers functionality to install, uninstall, author and manage Web Mapping Apps. Furthermore, it enables user to create App instances for specific  business requirements utilizing the layers, maps, documents, users and groups which are available within the framework of GeoNode.
