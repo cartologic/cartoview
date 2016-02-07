@@ -43,7 +43,7 @@ Cartoview Apps Installation
 
 Click on the **Install new Apps** button on the upper left corner of the **Cartoview Apps Manager**. Click on the **Choose file** button, navigate to the App .zip file and select it.    
 
-  .. figure:: ../../../img/cartoview_apps_install_1.png
+  .. figure:: ../../../img/cartoview_apps_install.png
 
 Click the **Install** button and wait for the installer to complete the installation and redirect to the **Cartoview Apps Manager**. Once done, the newly installed App should appear at the bottom of the Apps list.
 
