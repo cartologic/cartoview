@@ -6,6 +6,9 @@ from cartoview.app_manager.rest import AppResource
 from views import *
 
 rest_api.register(AppResource())
+from cartoview.basic.geonode_map_application.rest import GeonodeMapResource, GeonodeMapLayerResource
+rest_api.register(GeonodeMapResource())
+rest_api.register(GeonodeMapLayerResource())
 
 urlpatterns = patterns(
         'cartoview.app_manager',
