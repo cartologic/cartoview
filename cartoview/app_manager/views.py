@@ -6,6 +6,7 @@ from django.forms.util import ErrorList
 from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.shortcuts import render, render_to_response
 from PIL import Image, ImageOps
+# Create your views here.
 from guardian.shortcuts import get_perms
 from cartoview.app_manager.forms import AppInstanceEditForm
 from geonode.base.forms import CategoryForm

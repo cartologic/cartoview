@@ -7,7 +7,7 @@ from apps_helper import delete_installed_app
 # Create your models here.
 from geonode.base.models import ResourceBase, resourcebase_post_save
 from geonode.security.models import remove_object_permissions
-from geonode.maps.models import Map as GeonodeMap
+
 
 class AppTag(models.Model):
     name = models.CharField(max_length=200, unique=True, null=True, blank=True)
@@ -71,16 +71,6 @@ class AppInstance(ResourceBase):
             return '%s (%s)' % (self.title, self.id)
 
 
-class BaseMapApp(AppInstance):
-    """
-    Base model for app instances that works on geonode maps
-    """
-    geonode_map = models.ForeignKey(GeonodeMap)
-    map_config = models.TextField(null=True, blank=True)
-
-    class Meta(AppInstance.Meta):
-        abstract = True
-
 def pre_save_appinstance(instance, sender, **kwargs):
     if not isinstance(instance, AppInstance):
         return
@@ -98,38 +88,31 @@ def pre_delete_appinstance(instance, sender, **kwargs):
 
 
 def create_thumbnail(sender, instance, created, **kwargs):
-    try:
-        if not isinstance(instance, AppInstance):
-            return
-        from geonode.base.models import Link
+    if not isinstance(instance, AppInstance):
+        return
+    from geonode.base.models import Link
 
-        if not instance.has_thumbnail():
-            parent_app_thumbnail_url = App.objects.get(id=instance.app.pk).app_img_url
-            Link.objects.get_or_create(resource=instance,
-                                       url=parent_app_thumbnail_url,
-                                       defaults=dict(
-                                           name='Thumbnail',
-                                           extension='png',
-                                           mime='image/png',
-                                           link_type='image',
-                                       ))
+    if not instance.has_thumbnail():
+        parent_app_thumbnail_url = App.objects.get(id=instance.app.pk).app_img_url
+        Link.objects.get_or_create(resource=instance,
+                                   url=parent_app_thumbnail_url,
+                                   defaults=dict(
+                                       name='Thumbnail',
+                                       extension='png',
+                                       mime='image/png',
+                                       link_type='image',
+                                   ))
 
-            instance.thumbnail_url = parent_app_thumbnail_url
-            instance.save()
-    except:
-        pass
+        instance.thumbnail_url = parent_app_thumbnail_url
+        instance.save()
 
 
 def appinstance_post_save(instance, *args, **kwargs):
-    try:
-        if not isinstance(instance, AppInstance):
-            return
-        resourcebase_post_save(instance, args, kwargs)
-    except:
-        pass
+    if not isinstance(instance, AppInstance):
+        return
+    resourcebase_post_save(instance, args, kwargs)
 
-# this comment is by Kamal Alseisy at 4 Feb 2016:
-# TODO let the application handle this so this must be moved to AppInstance Model class
+
 signals.pre_save.connect(pre_save_appinstance)
 signals.post_save.connect(create_thumbnail)
 
