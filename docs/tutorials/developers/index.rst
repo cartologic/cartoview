@@ -1,6 +1,5 @@
 .. _developers_index:
 
-==============
 For Developers
 ==============
 
@@ -15,7 +14,7 @@ Cartoview for Developers documentation
 
 
 Expose localhot to the Internet
-===============================
+-------------------------------
 
 Use `ngrok <https://www.ngrok.com/>`_ to expose local web developent server to the internet.
 

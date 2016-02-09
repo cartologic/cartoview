@@ -10,7 +10,7 @@ GeoNode Portal
 
 .. toctree::
    :maxdepth: 2
-   :caption: Introduction
+   :caption: Geonode Introduction
 
    intro/index
 

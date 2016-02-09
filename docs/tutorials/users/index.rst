@@ -1,6 +1,5 @@
 .. _users_index:
 
-=========
 For Users
 =========
 

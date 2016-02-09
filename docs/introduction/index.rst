@@ -1,6 +1,5 @@
 .. _introduction_index:
 
-===============
 About Cartoview
 ===============
 

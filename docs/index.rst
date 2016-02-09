@@ -1,14 +1,17 @@
-===============================
 Cartoview Project Documentation
 ===============================
 
 Welcome to CartoView Project.
 
-**Cartoview is a web platform** which enables the rapid deployment of easy-to-manage and easy-to-use Web Mapping Applications.
+`Cartoview`_ is a web platform which enables the rapid deployment of easy-to-manage and easy-to-use Web Mapping Applications.
 
-#. :doc:`About Cartoview <introduction/index>`
-#. :doc:`Installation Guide <installation/index>`
-#. :doc:`Cartoview Resources <resources/index>`
+.. _Cartoview: http://www.cartologic.com/cartoview/
+
+The main documentation for the site is organized into the following sections:
+
+* :ref:`introduction_index`
+* :ref:`installation_index`
+* :ref:`tutorials_index`
 
 .. toctree::
    :maxdepth: 2

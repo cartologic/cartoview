@@ -1,6 +1,5 @@
 .. _apps_types:
 
-=======================
 Types of Cartoview Apps
 =======================
 

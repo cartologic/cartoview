@@ -1,21 +1,20 @@
 .. _installation_index:
 
-==================
 Installation Guide
 ==================
 
 The following is a guide to get Geonode and Cartoview up and running in most common operating systems (Windows, Linux/Ubuntu).
 
 Recommended Minimum System Requirements
-=======================================
+---------------------------------------
 
 For the deployment of Geonode and Cartoview on a single server, please find the bare minimum system requirements in Geonode's `Documentation. <http://docs.Geonode.org/en/master/tutorials/install_and_admin/quick_install.html>`_
 
 Windows Installation
-====================
+--------------------
 
 Pre Installation
-================
+~~~~~~~~~~~~~~~~
 
 1. Download and Install PostgreSQL and PostGIS. 
 
@@ -153,7 +152,7 @@ Pre Installation
 .. _cartoview_installation:
 
 Geonode and Cartoview Installation
-==================================
+----------------------------------
 
   .. note:: This installer contains Geonode 2.4 and Cartoview 0.9.14.
     Cartoview has been tested with PostGIS 2.1 and Geonode 2.4
@@ -208,11 +207,11 @@ Geonode and Cartoview Installation
   .. figure:: ../img/cartoview_setup12.png
 
 Deployment for Production
-=========================
+-------------------------
   .. danger:: Make sure that you have changed the default admin passwords for Django, Apache, Tomcat and Geoserver before you expose your site to the web. All default passwords are listed at the admin page installed with Cartoview.
 
 Windows Firewall Configuration
-------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   .. note:: Cartoview is installed by default on localhost. In order to deploy Cartoview on your production server and make it accessible to other users, you will need to change the hostname and configure all necessary ports. 
 
 Configure Windows Firewall
@@ -368,13 +367,13 @@ Replace **localhost** with **IP Address** or **Domain Name**
 ------------
 
 Linux/Ubuntu Installation
-=========================
+-------------------------
 
 Follow `Geonode <http://docs.Geonode.org/en/master/tutorials/install_and_admin/index.html>`_ instructions for installing Geonode on your Ubuntu machine.
 
 Get `Cartoview <https://github.com/cartologic/Cartoview>`_ code from GitHub and install it as Django App in the Geonode project.
 
 Installation of multiple instances
-==================================
+----------------------------------
 
 Documentation not available yet!
