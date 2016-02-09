@@ -16,13 +16,10 @@ Table of contents
 =================
 
 .. toctree::
-    :maxdepth: 10
+    :maxdepth: 5
 
     introduction/index
     installation/index
     tutorials/index
     resources/index
-    architecture/index
-    esri/index
-    opengeosuite/index
     externals/index
