@@ -4,10 +4,10 @@
 For Developers
 ==============
 
-This documentation is related to Cartoview for Developers
+Cartoview for Developers documentation
 
 .. toctree::
-    :maxdepth: 3
+    :maxdepth: 2
 
     apps_types/index
     apps_create/index

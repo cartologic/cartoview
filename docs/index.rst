@@ -1,10 +1,8 @@
-.. _main_index:
+===============================
+Cartoview Project Documentation
+===============================
 
-=========================
-Cartoview's Documentation
-=========================
-
-Welcome to CartoView's Documentation.
+Welcome to CartoView Project.
 
 **Cartoview is a web platform** which enables the rapid deployment of easy-to-manage and easy-to-use Web Mapping Applications.
 
@@ -16,10 +14,26 @@ Table of contents
 =================
 
 .. toctree::
-    :maxdepth: 5
+   :maxdepth: 2
 
-    introduction/index
-    installation/index
-    tutorials/index
-    resources/index
-    externals/index
+   introduction/index
+
+.. toctree::
+   :maxdepth: 2
+
+   installation/index
+
+.. toctree::
+   :maxdepth: 2
+
+   tutorials/index
+
+.. toctree::
+   :maxdepth: 2
+
+   resources/index
+
+.. toctree::
+   :maxdepth: 2
+
+   externals/index

@@ -4,5 +4,5 @@
 Create Cartoview Apps
 =====================
 
-How to create cartoview apps documentation will go here!
+Documentation not ready yet.
 

@@ -1,7 +1,5 @@
-GeoNode Users Workshop 2.4
-==========================
-
-Welcome to the GeoNode Users Workshop! This workshop will teach how to use the `GeoNode <http://geonode.org>`_ software application.
+GeoNode Portal
+==============
 
 * :ref:`intro-docs`
 * :ref:`accounts-docs`
