@@ -10,9 +10,6 @@ Welcome to CartoView Project.
 #. :doc:`Installation Guide <installation/index>`
 #. :doc:`Cartoview Resources <resources/index>`
 
-Table of contents
-=================
-
 .. toctree::
    :maxdepth: 2
 
