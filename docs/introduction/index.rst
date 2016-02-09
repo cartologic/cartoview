@@ -9,8 +9,8 @@ About Cartoview
 A simple windows installer will provide both Geonode and Cartoview for your windows server.
 Download the installer from `Cartologic's Site <http://www.cartologic.com/cartoview/download>`_ 
 
-Cartoview and GeoNode
-=====================
+GeoNode and Cartoview
+---------------------
 
 `GeoNode <http://www.geonode.org>`_ is an Open Source, Content Management System (CMS) for geospatial data. It is a web-based application and platform for developing geospatial information systems (GIS) and for deploying spatial data infrastructures (SDI).
 

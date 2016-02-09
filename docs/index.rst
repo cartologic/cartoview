@@ -12,28 +12,14 @@ The main documentation for the site is organized into the following sections:
 * :ref:`introduction_index`
 * :ref:`installation_index`
 * :ref:`tutorials_index`
+* :ref:`resources_index`
+* :ref:`externals_index`
 
 .. toctree::
    :maxdepth: 2
 
    introduction/index
-
-.. toctree::
-   :maxdepth: 2
-
    installation/index
-
-.. toctree::
-   :maxdepth: 2
-
    tutorials/index
-
-.. toctree::
-   :maxdepth: 2
-
    resources/index
-
-.. toctree::
-   :maxdepth: 2
-
    externals/index
