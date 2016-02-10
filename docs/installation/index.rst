@@ -25,6 +25,11 @@ Pre Installation
   Download the installer of PostgreSQL from `EnterpriseDB <http://www.enterprisedb.com/products-services-training/pgdownload#windows>`_. Recommended release is 9.3 or later 32 bits or 64 bits. Please choose the one that is compatible with your system.
    
   .. figure:: ../img/postgresql_setup0.png
+     :alt: postgresql
+     :align: right
+     :target: http://www.enterprisedb.com/products-services-training/pgdownload#windows
+     :height: 100 pt
+     :width: 200 pt
 
          *Download PostgreSQL*
 
