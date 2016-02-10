@@ -19,7 +19,7 @@ The documentation of the project is organized into the following sections:
 
 .. toctree::
    :hidden:
-   :maxdepth: 5
+   :maxdepth: 3
 
    introduction/index
    installation/index
