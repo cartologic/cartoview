@@ -10,6 +10,7 @@ The tutorials are based around performing tasks within the GeoNode and Cartoview
 * :ref:`administrators_index`
 
 .. toctree::
+    :hidden:
     :maxdepth: 2
 
     users/index

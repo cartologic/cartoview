@@ -16,7 +16,8 @@ The main documentation for the site is organized into the following sections:
 * :ref:`externals_index`
 
 .. toctree::
-   :maxdepth: 2
+   :hidden:
+   :maxdepth: 4
 
    introduction/index
    installation/index
