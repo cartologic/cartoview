@@ -3,7 +3,7 @@
 A tour of GeoNode
 =================
 
-In order to get started, let's look at the GeoNode interface and get a feel for how to navigate around it.
+In order to get started, let's look at the GeoNode interface and get a feel on how to navigate around.
 
 The GeoNode web interface is the primary method of interacting with GeoNode as a user. From this interface, one can view and modify existing spatial layers and maps, as well as find information on other GeoNode users.
 
