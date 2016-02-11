@@ -1,6 +1,5 @@
 .. _externals_index:
 
-===================
 External References
 ===================
 

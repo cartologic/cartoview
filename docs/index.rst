@@ -1,28 +1,28 @@
-.. _main_index:
+Cartoview Project Documentation
+===============================
 
-=========================
-Cartoview's Documentation
-=========================
+.. image:: img/cartoview-logo.png
 
-Welcome to CartoView's Documentation.
+Welcome to CartoView Project.
 
-**Cartoview is a web platform** which enables the rapid deployment of easy-to-manage and easy-to-use Web Mapping Applications.
+`Cartoview`_ is a web platform which enables the rapid deployment of easy-to-manage and easy-to-use Web Mapping Applications.
 
-#. :doc:`About Cartoview <introduction/index>`
-#. :doc:`Installation Guide <installation/index>`
-#. :doc:`Cartoview Resources <resources/index>`
+.. _Cartoview: http://www.cartologic.com/cartoview/
 
-Table of contents
-=================
+The documentation of the project is organized into the following sections:
+
+* :ref:`introduction_index`
+* :ref:`installation_index`
+* :ref:`tutorials_index`
+* :ref:`resources_index`
+* :ref:`externals_index`
 
 .. toctree::
-    :maxdepth: 10
+   :hidden:
+   :maxdepth: 3
 
-    introduction/index
-    installation/index
-    tutorials/index
-    resources/index
-    architecture/index
-    esri/index
-    opengeosuite/index
-    externals/index
+   introduction/index
+   installation/index
+   tutorials/index
+   resources/index
+   externals/index

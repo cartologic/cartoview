@@ -1,8 +1,7 @@
 .. _apps_create:
 
-=====================
-Create Cartoview Apps
-=====================
+Cartoview Apps Development
+==========================
 
-How to create cartoview apps documentation will go here!
+Documentation not ready yet.
 

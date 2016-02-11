@@ -1,13 +1,12 @@
 .. _developers_index:
 
-==============
 For Developers
 ==============
 
-This documentation is related to Cartoview for Developers
+Cartoview for Developers documentation
 
 .. toctree::
-    :maxdepth: 3
+    :maxdepth: 2
 
     apps_types/index
     apps_create/index
@@ -15,7 +14,7 @@ This documentation is related to Cartoview for Developers
 
 
 Expose localhot to the Internet
-===============================
+-------------------------------
 
 Use `ngrok <https://www.ngrok.com/>`_ to expose local web developent server to the internet.
 

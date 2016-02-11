@@ -1,19 +1,24 @@
 .. _administrators_index:
 
-==================
 For Administrators
 ==================
 
 Documentation related to Cartoview for Administrators
 
 
-Django Administration
-=====================
-
-
 GeoNode Administration
-======================
+----------------------
+
+Documentation not ready yet.
 
 
-CartoView Apps Administration
-=============================
+CartoView Administration
+------------------------
+
+Documentation not ready yet.
+
+
+Django Administration
+---------------------
+
+Documentation not ready yet.

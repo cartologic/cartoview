@@ -1,21 +1,20 @@
 .. _installation_index:
 
-==================
 Installation Guide
 ==================
 
 The following is a guide to get Geonode and Cartoview up and running in most common operating systems (Windows, Linux/Ubuntu).
 
 Recommended Minimum System Requirements
-=======================================
+---------------------------------------
 
 For the deployment of Geonode and Cartoview on a single server, please find the bare minimum system requirements in Geonode's `Documentation. <http://docs.Geonode.org/en/master/tutorials/install_and_admin/quick_install.html>`_
 
 Windows Installation
-====================
+--------------------
 
 Pre Installation
-================
+~~~~~~~~~~~~~~~~
 
 1. Download and Install PostgreSQL and PostGIS. 
 
@@ -26,103 +25,128 @@ Pre Installation
   Download the installer of PostgreSQL from `EnterpriseDB <http://www.enterprisedb.com/products-services-training/pgdownload#windows>`_. Recommended release is 9.3 or later 32 bits or 64 bits. Please choose the one that is compatible with your system.
    
   .. figure:: ../img/postgresql_setup0.png
+     :alt: download postgresql
+     :target: http://www.enterprisedb.com/products-services-training/pgdownload#windows
+     :width: 380 pt
 
-         *Download PostgreSQL*
+     *Download PostgreSQL*
 
   The installation process is straight forward. Just run the downloaded installer, follow the wizard instructions and accept all the default parameters.
 
   .. figure:: ../img/postgresql_setup1.png
+     :width: 350 pt
 
-         *Install PostgreSQL*
+     *Install PostgreSQL*
 
   Specify the installation folder
 
   .. figure:: ../img/postgresql_setup2.png
+     :width: 350 pt
 
   Specify the installation data folder
 
   .. figure:: ../img/postgresql_setup3.png
+     :width: 350 pt
 
   Specify the database administrator password
 
   .. figure:: ../img/postgresql_setup4.png
+     :width: 350 pt
 
   .. note:: Keep this password safe because we will need it later during the installation of PostGIS.
 
   Accept the default port (5432) and click the **Next** button.
 
   .. figure:: ../img/postgresql_setup5.png
+     :width: 350 pt
 
   Accept the default locals and click the **Next** button
 
   .. figure:: ../img/postgresql_setup6.png
+     :width: 350 pt
 
   Proceed with the installation, click the **Next** button
 
   .. figure:: ../img/postgresql_setup7.png 
+     :width: 350 pt
 
   When you reach this point the installation of PostgreSQL is completed. Please make sure that the **Stack Builder** check box is checked and click **Finish** to proceed with the installation of PostGIS.
 
   .. figure:: ../img/postgresql_setup8.png
+     :width: 350 pt
 
-    *PostgreSQL installation completed*
+     PostgreSQL installation completed
 
   Select **PostgreSQL 9.4(x64) on port 5432** from the combo box and click Next.
 
   .. figure:: ../img/stack_builder1.png
-
+     :width: 350 pt
+  
   Expand the category **Spatial Extensions**, select and check the **PostGIS 2.2** item from the list, choose the one which is compatible with your system (32 bits or 64 bits).
 
   .. figure:: ../img/stack_builder2.png
+     :width: 350 pt
 
   Review your selection and choose a download directory, then click the **Next** button to begin downloading PostGIS installer.
    
   .. figure:: ../img/stack_builder3.png
+     :width: 350 pt
 
   The following dialog will indicate that the downloading of PostGIS installer finished successfully. Click **Next** to start installing PostGIS.
 
   .. figure:: ../img/stack_builder4.png
+     :width: 350 pt
 
   Review the license terms and if you accept them, click on the **I Agree** button to continue with the installation of PostGIS.
 
   .. figure:: ../img/postgis_setup1.png
+     :width: 350 pt
 
   **Create spatial database** is optional, however it is recommended. 
 
   .. figure:: ../img/postgis_setup2.png
+     :width: 350 pt
 
   Specify the PostgreSQL installation location in which PostGIS will be installed.
 
   .. figure:: ../img/postgis_setup3.png
+     :width: 350 pt
 
   Provide the PostgreSQL connection information (The one you saved in previous step).
 
   .. figure:: ../img/postgis_setup4.png
+     :width: 350 pt
 
   Specify the name of the spatial database to be created at the end of the installation process. Accept the default is recommended.
 
   .. figure:: ../img/postgis_setup5.png
+     :width: 350 pt
 
   Just click on the **Yes** button.
 
   .. figure:: ../img/postgis_setup6.png
+     :width: 350 pt
 
   Just click on the **Yes** button.
 
   .. figure:: ../img/postgis_setup7.png
+     :width: 350 pt
 
   Just click on the **Yes** button.
 
   .. figure:: ../img/postgis_setup8.png
+     :width: 350 pt
 
   PostGIS setup was competed successfully. Just click on the **Close** button to return to the Stack Builder.
 
   .. figure:: ../img/postgis_setup9.png
+     :width: 350 pt
 
   Installation of PostgreSQL database and PostGIS spatial extension has been completed successfully. Just click on the **Finish** button to complete the installation process.
 
   .. figure:: ../img/stack_builder5.png
-
+     :width: 350 pt
+     
   .. note:: Verify that your Postgres and PostGIS is running using pgAdminIII.
 
 .. _java_installation:
@@ -153,7 +177,7 @@ Pre Installation
 .. _cartoview_installation:
 
 Geonode and Cartoview Installation
-==================================
+----------------------------------
 
   .. note:: This installer contains Geonode 2.4 and Cartoview 0.9.14.
     Cartoview has been tested with PostGIS 2.1 and Geonode 2.4
@@ -208,11 +232,11 @@ Geonode and Cartoview Installation
   .. figure:: ../img/cartoview_setup12.png
 
 Deployment for Production
-=========================
+-------------------------
   .. danger:: Make sure that you have changed the default admin passwords for Django, Apache, Tomcat and Geoserver before you expose your site to the web. All default passwords are listed at the admin page installed with Cartoview.
 
 Windows Firewall Configuration
-------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   .. note:: Cartoview is installed by default on localhost. In order to deploy Cartoview on your production server and make it accessible to other users, you will need to change the hostname and configure all necessary ports. 
 
 Configure Windows Firewall
@@ -255,8 +279,8 @@ Configure Windows Firewall
 
   .. figure:: ../img/firewall_6.png
    
-Replace **localhost** with **IP Address** or **Domain Name**
-------------------------------------------------------------
+Replace localhost with IP Address or Domain Name
+------------------------------------------------
 
 1. Apache 2.4
 
@@ -368,13 +392,13 @@ Replace **localhost** with **IP Address** or **Domain Name**
 ------------
 
 Linux/Ubuntu Installation
-=========================
+-------------------------
 
 Follow `Geonode <http://docs.Geonode.org/en/master/tutorials/install_and_admin/index.html>`_ instructions for installing Geonode on your Ubuntu machine.
 
 Get `Cartoview <https://github.com/cartologic/Cartoview>`_ code from GitHub and install it as Django App in the Geonode project.
 
 Installation of multiple instances
-==================================
+----------------------------------
 
 Documentation not available yet!

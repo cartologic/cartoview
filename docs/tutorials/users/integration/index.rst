@@ -1,6 +1,5 @@
 .. _integration_index:
 
-===============================================
 Integration with other third party applications
 ===============================================
 
