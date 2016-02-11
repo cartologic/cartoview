@@ -220,3 +220,6 @@ docs/_build/
 
 # cartoview apps folder
 cartoview/apps/
+cartoview/uploaded/
+downloaded/
+geoserver/

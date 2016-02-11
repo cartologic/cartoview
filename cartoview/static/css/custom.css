@@ -3,6 +3,7 @@
     width: 180px;
     margin-right: 0;
     margin-top: 3px;
+	background: rgba(0, 0, 0, 0) url("../img/logo.png") no-repeat scroll 15px 0;
 }
 
 .jumbotron {
