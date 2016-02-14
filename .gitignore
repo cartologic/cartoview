@@ -223,3 +223,4 @@ cartoview/apps/
 cartoview/uploaded/
 downloaded/
 geoserver/
+cartoview/local_settings.py
