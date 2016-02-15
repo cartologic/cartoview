@@ -61,11 +61,21 @@
     <div class="row">
         {% block body %}
             <div class="page-header">
-                <h2 class="page-title">Edit</h2>
+                <h2 class="page-title">{% trans 'Maploom Viewer' %} -
+                    {% if is_edit %}
+                        {% trans 'Edit Map Configuration' %}
+                    {% else %}
+                        {% trans 'Create New' %}
+                    {% endif %}
+                </h2>
             </div>
             <ul class="nav nav-pills nav-stacked col-md-2">
-                <li class="active"><a href="#tab_webmap" data-toggle="pill">{% trans 'Web map' %}</a></li>
-                <li><a href="#tab_general" data-toggle="pill">{% trans 'General' %}</a></li>
+                {% if not is_edit %}
+                    <li class="active"><a href="#tab_webmap" data-toggle="pill">{% trans 'Select a map' %}</a></li>
+                {% endif %}
+                <li {% if is_edit %}class="active"{% endif %}>
+                    <a href="#tab_general" data-toggle="pill">{% trans 'General' %}</a>
+                </li>
                 <li><a href="#tab_config" data-toggle="pill">{% trans 'Configuration' %}</a></li>
                 {% for tab in tabs %}
                 <li><a href="#tab_{{ forloop.counter }}" data-toggle="pill">{{ tab.title }}</a></li>
@@ -74,20 +84,19 @@
             {{ app_instance_form.media }}
             <form id='addForm' class="form-horizontal" role="form" method="post" enctype="multipart/form-data"> {% csrf_token %}
                 <div class="tab-content col-lg-10">
+                    {% if is_edit %}
                     <div class="tab-pane active" id="tab_webmap">
                         {{ app_instance_form.web_map_id }}
-                        <h4>{% trans 'Select web map' %}</h4>
                         <div class="col-md-12" id="maps-body">
                             <img id="loading_img" style="display: none" src="{% static '' %}geonode_map_application/loading.gif">
-
                             <div id="page-selection" class="pull-right"></div>
-{#                            <p>From <span id="maps-from"></span> to <span id="maps-to"></span> of <span id="maps-count"></span></p>#}
                             <select id="maps-select" class="image-picker show-html hide" name="geonode_map_id"></select>
 
                         </div>
 
                     </div>
-                    <div class="tab-pane" id="tab_general">
+                    {% endif %}
+                    <div class="tab-pane {% if is_edit %}active{% endif %}" id="tab_general">
                         {% bootstrap_form form  %}
                     </div>
                     <div class="tab-pane" id="tab_config">
@@ -111,10 +120,11 @@
 {% endblock body_outer %}
 
 {% block extra_script %}
-    <script src="{% static '' %}image-picker/image-picker.js"></script>
-    <script src="{% static '' %}jquery.bootpag.min.js"></script>
+    <script src="{% static '' %}geonode_map_application/image-picker/image-picker.js"></script>
+    <script src="{% static '' %}geonode_map_application/jquery.bootpag.min.js"></script>
     <script type="text/javascript">
-        var MAP_LIST_URL = '{% url "app_manager_base_url" %}rest/basic/geonodemap/'
+        var MAP_LIST_REST_URL = '{% url "app_manager_base_url" %}rest/basic/geonodemap/'
+        var IS_EDIT = {% if is_edit %}true{% else %}false{% endif %};
     </script>
     <script src="{% static '' %}geonode_map_application/new_map_app.js"></script>
     {{ config_form.media }}

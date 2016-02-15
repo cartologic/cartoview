@@ -9,7 +9,7 @@ $(function(){
         $('#loading_img').show();
         $('#maps-select').addClass("hide");
         $.ajax({
-            url: MAP_LIST_URL,
+            url: MAP_LIST_REST_URL,
             cache: false,
             data: {
                 limit: numItemsPerPage ,
@@ -34,7 +34,6 @@ $(function(){
                 var mapSelected = function(){
 
                   var selectedMap = current_maps_list[$("#maps-select").val()];
-                    console.debug(selectedMap);
                     $('#id_app_instance-abstract').val(selectedMap.abstract);
                     $('#id_app_instance-title').val(selectedMap.title);
                     if(window.mapSelected){
@@ -54,26 +53,28 @@ $(function(){
         });
     }
 
-    load_web_maps(1);
-    if (selected_web_map_id) {
-        $.ajax({
-            url: "{% url 'arcportal_home' %}sharing/rest/content/items/" + selected_web_map_id,
-            cache: false,
-            success: function (web_map) {
-                $('#selected-map-img').attr("src", web_map.thumbnail);
-                $('#selected-map-label').text(web_map.title);
-            }
+    if(!IS_EDIT) {
+        load_web_maps(1);
+
+        if (selected_web_map_id) {
+            $.ajax({
+                url: "{% url 'arcportal_home' %}sharing/rest/content/items/" + selected_web_map_id,
+                cache: false,
+                success: function (web_map) {
+                    $('#selected-map-img').attr("src", web_map.thumbnail);
+                    $('#selected-map-label').text(web_map.title);
+                }
+            });
+        }
+
+        $('#page-selection').bootpag({
+            total: 1 // TODO remove this hard coded number and use the number returned from the rest
+        }).on("page", function (event, /* page number here */ num) {
+            load_web_maps(num)
         });
     }
-
-    $('#page-selection').bootpag({
-        total: 1 // TODO remove this hard coded number and use the number returned from the rest
-    }).on("page", function (event, /* page number here */ num) {
-        load_web_maps(num)
-    });
-
-    $("a[href='#tab_configuration']").on('shown.bs.tab', function (e) {
-        $('#id_app_instance_form-config').next('.CodeMirror').get(0).CodeMirror.refresh()
-    });
+    //$("a[href='#tab_configuration']").on('shown.bs.tab', function (e) {
+    //    $('#id_app_instance_form-config').next('.CodeMirror').get(0).CodeMirror.refresh()
+    //});
 
 });

@@ -30,7 +30,7 @@ class AppForm(ModelForm):
 class AppInstanceForm(TranslationModelForm):
     class Meta:
         model = AppInstance
-        fields = ['title', 'abstract', 'keywords', ]
+        fields = ['title', 'abstract',]
 
 
 class AppInstanceEditForm(ResourceBaseForm):

@@ -6,7 +6,8 @@ from django.http import HttpResponseRedirect
 from django.views.generic import FormView
 from geonode.maps.models import Map as GeonodeMap
 
-class NewAppInstanceView(FormView):
+
+class EditAppInstanceView(FormView):
     template_name = "geonode_map_application/new_map_app_instance.html"
     form_class = AppInstanceForm
     config_form_class = MapConfigForm
@@ -15,23 +16,25 @@ class NewAppInstanceView(FormView):
     app_name = None
 
     def __init__(self, **kwargs):
-        super(NewAppInstanceView, self).__init__(**kwargs)
+        super(EditAppInstanceView, self).__init__(**kwargs)
         self.instance = None
 
     def get_context_data(self, **kwargs):
-        context = super(NewAppInstanceView,self).get_context_data(**kwargs)
-        context.update(config_form=self.config_form)
+        context = super(EditAppInstanceView, self).get_context_data(**kwargs)
+        context.update(config_form=self.config_form, is_edit=self.is_edit)
         return context
 
     def form_valid(self, form):
-        form.instance.owner = self.request.user
-        form.instance.app = App.objects.get(name=self.app_name)
-        geonode_map = GeonodeMap.objects.get(pk=self.request.POST.get("geonode_map_id"))
+        if not self.is_edit:
+            form.instance.owner = self.request.user
+            form.instance.app = App.objects.get(name=self.app_name)
+            geonode_map = GeonodeMap.objects.get(pk=self.request.POST.get("geonode_map_id"))
+            form.instance.geonode_map = geonode_map
+
         if "config" in self.config_form.cleaned_data:
             form.instance.map_config = self.config_form.cleaned_data["config"]
-        form.instance.geonode_map = geonode_map
         self.instance = form.save()
-        return super(NewAppInstanceView, self).form_valid(form)
+        return super(EditAppInstanceView, self).form_valid(form)
 
     # def form_valid(self, form):
     #     geonode_map = GeonodeMap.objects.get(pk=self.request.POST.get("geonode_map_id"))
@@ -43,8 +46,8 @@ class NewAppInstanceView(FormView):
         return reverse("appinstance_detail", kwargs={'appinstanceid': self.instance.pk})
 
     def get(self, request, *args, **kwargs):
-        self.config_form = self.config_form_class(prefix=self.config_form_prefix)
-        return super(NewAppInstanceView, self).get(request, *args, **kwargs)
+        self.config_form = self.config_form_class(prefix=self.config_form_prefix, instance=self.get_instance())
+        return super(EditAppInstanceView, self).get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
         form_class = self.get_form_class()
@@ -56,20 +59,30 @@ class NewAppInstanceView(FormView):
         else:
             return self.form_invalid(form)
 
+    def get_instance(self):
+        return None
 
+    @property
+    def is_edit(self):
+        return self.get_instance() is not None
 
-def edit_app_instance(request, app_type, instance_id):
-    if request.method == 'POST':
-        _form = NewMapForm(request.POST, request.FILES)
-        if _form.is_valid():
-            new_form = _form.save(commit=False)
-            new_form.app = App.objects.get(name=self.app_name)
-            new_form.owner = request.user
-            new_form.save()
-            return HttpResponseRedirect(reverse('appinstance_detail', kwargs={'appinstanceid': new_form.pk}))
-        else:
-            context = {'map_form': _form, 'error': _form.errors}
-    else:
-        map_form = NewMapForm()
-        context = {'map_form': map_form, 'oper': 'new'}
-    return render_to_response(NEW_EDIT_TPL, context, context_instance=RequestContext(request))
+    def get_form_kwargs(self):
+        kwargs = super(EditAppInstanceView, self).get_form_kwargs()
+        kwargs.update(instance=self.get_instance())
+        return kwargs
+
+# def edit_app_instance(request, app_type, instance_id):
+#     if request.method == 'POST':
+#         _form = NewMapForm(request.POST, request.FILES)
+#         if _form.is_valid():
+#             new_form = _form.save(commit=False)
+#             new_form.app = App.objects.get(name=self.app_name)
+#             new_form.owner = request.user
+#             new_form.save()
+#             return HttpResponseRedirect(reverse('appinstance_detail', kwargs={'appinstanceid': new_form.pk}))
+#         else:
+#             context = {'map_form': _form, 'error': _form.errors}
+#     else:
+#         map_form = NewMapForm()
+#         context = {'map_form': map_form, 'oper': 'new'}
+#     return render_to_response(NEW_EDIT_TPL, context, context_instance=RequestContext(request))
