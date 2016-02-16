@@ -84,7 +84,7 @@
             {{ app_instance_form.media }}
             <form id='addForm' class="form-horizontal" role="form" method="post" enctype="multipart/form-data"> {% csrf_token %}
                 <div class="tab-content col-lg-10">
-                    {% if is_edit %}
+                    {% if not is_edit %}
                     <div class="tab-pane active" id="tab_webmap">
                         {{ app_instance_form.web_map_id }}
                         <div class="col-md-12" id="maps-body">
