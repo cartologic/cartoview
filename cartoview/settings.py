@@ -91,7 +91,8 @@ LOCALE_PATHS = (
 
 # Add cartoview.app_manager to INSTALLED_APPS before GEONODE_APPS
 INSTALLED_APPS = tuple(i for i in INSTALLED_APPS if i not in GEONODE_APPS)
-INSTALLED_APPS += ('cartoview.app_manager', 'cartoview.apps')
+INSTALLED_APPS += ('bootstrap3', )
+INSTALLED_APPS += ('cartoview.app_manager', 'cartoview.basic.geonode_map_application', 'cartoview.apps')
 INSTALLED_APPS += GEONODE_APPS
 
 # auto load apps
