@@ -3,6 +3,8 @@ $("#btn-install-app").click(function(event) {
 	$('#ct-install-result').empty().append(msg_div('Installing application, Please wait!','info loading'));
 	var formData = new FormData($('#form-install-app')[0]);
 	//data = {name:'test_install'};
+     var pleaseWaitDiv = $('<div class="modal" id="pleaseWaitDialog" data-backdrop="static" data-keyboard="false"><div class="modal-body" style="margin: 20% 50%;"><img src="'+ loading_gif_src+'"/></div></div>');
+    pleaseWaitDiv.modal();
 	$.ajax({
         type: 'POST',
         //contentType: 'application/json',
@@ -21,9 +23,7 @@ $("#btn-install-app").click(function(event) {
                 });
                 $('#btn-show-install').show();
                 $('#ct-install').hide();
-                msg_div('Restarting the server, Please wait!','info loading', '#ct-install-result')
-                var pleaseWaitDiv = $('<div class="modal" id="pleaseWaitDialog" data-backdrop="static" data-keyboard="false"><div class="modal-body" style="margin: 20% 50%;"><img src="'+ loading_gif_src+'"/></div></div>');
-                pleaseWaitDiv.modal();
+                msg_div('Restarting the server, Please wait!','info loading', '#ct-install-result');
                 window.setTimeout(function(){get_installed_app_info(res.app_name);}, 5000);
             }
             else{
@@ -31,12 +31,14 @@ $("#btn-install-app").click(function(event) {
                 $.each(res.errors, function(index, err) {
                      msg_div(err,'danger','#ct-install-result');
                 });
+                pleaseWaitDiv.hide();
             }
         },
         error: function(jqXHR, textStatus, errorThrown) {
             $('#ct-install-result').empty()
             msg_div(jqXHR.responseJSON.error_message,'danger','#ct-install-result');
             msg_div(jqXHR.responseJSON.traceback,'danger','#ct-install-result');
+            pleaseWaitDiv.hide();
         },
         xhr: function() {  // Custom XMLHttpRequest
             var myXhr = $.ajaxSettings.xhr();
