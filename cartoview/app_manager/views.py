@@ -1,11 +1,15 @@
 from urlparse import urljoin
+
+from PIL import Image, ImageOps
 from django.contrib.auth.decorators import login_required
+from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import PermissionDenied
+from django.db import connections
 from django.db.models import Max, Min, F
 from django.forms.util import ErrorList
 from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.shortcuts import render, render_to_response
-from PIL import Image, ImageOps
+
 # Create your views here.
 from guardian.shortcuts import get_perms
 from cartoview.app_manager.forms import AppInstanceEditForm
@@ -34,6 +38,7 @@ _PERMISSION_MSG_VIEW = _("You are not permitted to view this document")
 current_folder, filename = os.path.split(os.path.abspath(__file__))
 temp_dir = os.path.join(current_folder, 'temp')
 
+
 def save_thumbnail(filename, image):
     thumb_folder = 'thumbs'
     upload_path = os.path.join(django_settings.MEDIA_ROOT, thumb_folder)
@@ -48,6 +53,7 @@ def save_thumbnail(filename, image):
     url = urljoin(django_settings.SITEURL, url_path)
 
     return url
+
 
 def save_uploaded_file(f, path):
     destination = open(path, 'wb+')
@@ -101,7 +107,7 @@ def add_app(app_name, info):
         app.order = 1
     app.save()
     CARTOVIEW_ROOT = getattr(django_settings, 'CARTOVIEW_ROOT', None)
-    app_img_path = os.path.abspath(os.path.join(CARTOVIEW_ROOT,'apps',app_name,'app_img.png'))
+    app_img_path = os.path.abspath(os.path.join(CARTOVIEW_ROOT, 'apps', app_name, 'app_img.png'))
     if os.path.isfile(app_img_path):
         from cStringIO import StringIO
         size = 200, 150
@@ -109,10 +115,10 @@ def add_app(app_name, info):
         img = ImageOps.fit(img, size, Image.ANTIALIAS)
         imgfile = StringIO()
         img.save(imgfile, format='PNG')
-        imgvalue =  imgfile.getvalue()
+        imgvalue = imgfile.getvalue()
         filename = 'app-%s-thumb.png' % app.pk
         app_img_url = save_thumbnail(filename, imgvalue)
-        app.app_img_url=app_img_url
+        app.app_img_url = app_img_url
         app.save()
     tags = get_attr(info, 'tags', [])
     for tag_name in tags:
@@ -152,7 +158,6 @@ def finalize_setup(app_name, user):
             install_app(app_name)
         except:
             pass
-
 
 
 @login_required
@@ -206,6 +211,8 @@ def ajax_install_app(request):
     if package_file is None:
         response_data["errors"].append("No package file uploaded")
     else:
+        if not os.path.exists(temp_dir):
+            os.makedirs(temp_dir)
         response_data["log"].append("Package file uploaded")
         extract_to = tempfile.mkdtemp(dir=temp_dir)
         x, uploaded_file_path = tempfile.mkstemp(dir=temp_dir)
@@ -260,6 +267,14 @@ def ajax_install_app(request):
 def uninstall_app(request, app_name):
     try:
         installer = importlib.import_module('cartoview.apps.%s.installer' % app_name)
+        c = connections['default'].cursor()
+        try:
+            for app_model_type in ContentType.objects.filter(app_label=app_name):
+                c.execute('drop table "%s" CASCADE ' % app_model_type.model_class()._meta.db_table)
+        finally:
+            c.close()
+
+        ContentType.objects.filter(app_label=app_name).delete()
         installer.uninstall()
         app = App.objects.get(name=app_name)
         app.delete()
@@ -381,13 +396,13 @@ def appinstance_detail(request, appinstanceid):
     else:
         if request.user != appinstance.owner and not request.user.is_superuser:
             AppInstance.objects.filter(id=appinstance.id).update(popular_count=F('popular_count') + 1)
-        #appinstance_links = appinstance.link_set.filter(link_type__in=['appinstance_view', 'appinstance_edit'])
+        # appinstance_links = appinstance.link_set.filter(link_type__in=['appinstance_view', 'appinstance_edit'])
         set_thumbnail_link = appinstance.link_set.filter(link_type='appinstance_thumbnail')
         context_dict = {
             'perms_list': get_perms(request.user, appinstance.get_self_resource()),
             'permissions_json': _perms_info_json(appinstance),
             'resource': appinstance,
-            #'appinstance_links': appinstance_links,
+            # 'appinstance_links': appinstance_links,
             'set_thumbnail_link': set_thumbnail_link
             # 'imgtypes': IMGTYPES,
             # 'related': related
