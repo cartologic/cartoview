@@ -119,5 +119,19 @@ for app_name in get_apps_names():
 
 INSTALLED_APPS += CARTOVIEW_APPS
 
+# define the urls after the settings are overridden
+if 'geonode.geoserver' in INSTALLED_APPS:
+    MAP_BASELAYERS.remove(LOCAL_GEOSERVER)
+    LOCAL_GEOSERVER = {
+        "source": {
+            "ptype": "gxp_wmscsource",
+            "url": OGC_SERVER['default']['PUBLIC_LOCATION'] + "wms",
+            "restUrl": "/gs/rest"
+        }
+    }
+    baselayers = MAP_BASELAYERS
+    MAP_BASELAYERS = [LOCAL_GEOSERVER]
+    MAP_BASELAYERS.extend(baselayers)
+
 # Uncomment this line incase a restart server batch exists.
 # RESTART_SERVER_BAT = "<full_path>/restart_server.bat"
