@@ -1,5 +1,5 @@
 # cartoview
-Cartoview is a an app framework built with django on the top of [GeoNode](http://geonode.org/) , It extends Geonode with modules to install apps to better use the data, layers and maps provided from Geonode and Geoserver. 
+Cartoview is a an app framework built with django implemented as a [GeoNode](http://geonode.org/) project, It extends Geonode with modules to install web mapping apps to better use the data, layers and maps served from Geonode and Geoserver. 
 
 ### To install Cartoview :
   - For Windows , you can download cartoview windows installer from [here](http://cartologic.com/cartoview/download/)
