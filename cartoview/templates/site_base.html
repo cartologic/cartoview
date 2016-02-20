@@ -1,4 +1,16 @@
 {% extends "base.html" %}
+{% load static  i18n%}
 {% block extra_head %}
-      <link href="{{ STATIC_URL }}css/site_base.css" rel="stylesheet"/>
+    <link href="{{ STATIC_URL }}css/site_base.css" rel="stylesheet"/>
+    {% get_current_language_bidi as bidi %}
+    {% if bidi %}
+        <link href="{% static 'bootstrap-3-arabic/css/bootstrap-arabic.min.css' %}" rel="stylesheet"/>
+    {% endif %}
 {% endblock %}
+
+{% block extra_script %}
+    {% get_current_language_bidi as bidi %}
+    {% if bidi %}
+        <script type="text/javascript" src="{% static 'bootstrap-3-arabic/js/bootstrap-arabic.min.js' %}"/>
+    {% endif %}
+{% endblock extra_script %}
