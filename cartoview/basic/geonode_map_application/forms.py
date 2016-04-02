@@ -7,12 +7,14 @@ class MapConfigForm(forms.Form):
     """
     Basic configuration form that works with Maps applications
     """
-    config = forms.CharField(widget=forms.Textarea)
+    config = forms.CharField(widget=forms.Textarea, required=False)
 
     class Media:
         css = {
-            all: [static("codemerror/lib/codemirror.css")]
+            all: [static("codemirror/lib/codemirror.css")]
         }
-        js = [static("codemerror/lib/codemirror.js"),
-              static("codemerror/mode/javascript/javascript.js"),
-              static("geonode_map_app/map_config_form.js")]
+        js = [
+            static("codemirror/lib/codemirror.js"),
+            static("codemirror/mode/javascript/javascript.js"),
+            # static("geonode_map_app/map_config_form.js")
+        ]

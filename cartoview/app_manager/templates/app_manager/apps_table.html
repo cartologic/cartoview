@@ -2,52 +2,24 @@
 {% load i18n %}
 
 {% if Apps|length > 0   %}
+<h3>{% trans 'Installed Apps' %}:</h3>
 <table class="table table-striped table-bordered sortable" style="margin-top:20px;">
         <thead>
             <tr>
                 <th data-defaultsort="asc">Name</th>
-                <!--<th>Author</th>-->
-                <!--<th>License</th>-->
-                <th >Settings</th>
-                <th data-defaultsort='disabled'></th>
-                <th data-defaultsort='disabled'></th>
+                <th ></th>
             </tr>
         </thead>
         <tbody id="table-apps">
-            {% for app in Apps %}
+            {% for app in apps %}
             <tr id="app_{{app.id}}_row">
                 <td>{{app.title}}</td>
-                <!--<td>-->
-                  <!--{% if app.author_website %}-->
-                    <!--<a href="{{app.author_website}}" target="_blank">{{app.author}}</a>-->
-                  <!--{% else %}-->
-                    <!--{{app.author}}-->
-                  <!--{% endif %}-->
-                <!--</td>-->
-                <!--<td><a href="{{ STATIC_URL }}{{app.name}}/license.txt" target="_blank">{{app.license}}</a></td>-->
                 <td>
-                   {% if app.settings_url %}
-                   <a title="App Settings" href="{{app.settings_url}}">Settings</a>
+                    {% if app.settings_url %}
+                    <a title="App Settings" href="{{app.settings_url}}" class="btn btn-default pull-left">Settings</a>
                     {% endif %}
-                </td>
-                <td>
-                     <a  href="{% url 'cartoview_uninstall_app_url' app.name %}" type="button" class="btn btn-danger btn-uninstall-app">Uninstall</a>
-                </td>
-                <!--<td><a class="up glyphicon glyphicon-arrow-up" data-app_id="{{app.id}}">-->
-
-                        <!--</a><a class="down glyphicon glyphicon-arrow-down" data-app_id="{{app.id}}">-->
-
-                        <!--</a>-->
-                <!--</td>-->
-                <td>
-                   {% if app.is_suspended %}
-                <a class="app_state resume btn btn-info" type="button" data-app_id="{{app.id}}">
-                        Resume
-                        </a>
-                    {% else %}
-                <a class="app_state suspend btn btn-warning" type="button" data-app_id="{{app.id}}">
-                        Suspend
-                        </a>
+                    {% if is_admin_site %}
+                    <a  href="{% url 'cartoview_uninstall_app_url' app.name %}" type="button" class="pull-left btn btn-danger btn-uninstall-app">Uninstall</a>
                     {% endif %}
                 </td>
             </tr>

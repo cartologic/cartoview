@@ -91,6 +91,7 @@ function uninstall_app(event) {
     event.preventDefault();
     if(confirm('Uninstall this app? This action cannot be reversed.')){
         $.ajax({
+            type: 'POST',
             contentType: 'application/json',
             url: $(this).attr('href'),
             processData: false,
@@ -165,12 +166,12 @@ function msg_div(msg,cls,ct){
       $(".app_state").click(function(e) {
         var current = $('#app_'+$(e.target).data('app_id')+'_row');
         var state_button = $(this);
-        if (state_button.hasClass('suspend'))
+        if (state_button.hasClass('deactivate'))
          {
          $.ajax({
-         url:app_manager_base_url+'suspend/'+$(e.target).data('app_id')+'/',
+         url:app_manager_base_url+'deactivate/'+$(e.target).data('app_id')+'/',
          success:function(res){
-             state_button.addClass('resume').removeClass('suspend');
+             state_button.addClass('activate').removeClass('deactivate');
              state_button.addClass('btn-info').removeClass('btn-warning');
 
              state_button.text('Resume')
@@ -178,14 +179,14 @@ function msg_div(msg,cls,ct){
 
          });
          }
-         else if (state_button.hasClass('resume'))
+         else if (state_button.hasClass('activate'))
          {
           $.ajax({
-         url:app_manager_base_url+'resume/'+$(e.target).data('app_id')+'/',
+         url:app_manager_base_url+'activate/'+$(e.target).data('app_id')+'/',
          success:function(res){
-             state_button.addClass('suspend').removeClass('resume');
+             state_button.addClass('deactivate').removeClass('activate');
              state_button.addClass('btn-warning').removeClass('btn-info');
-             state_button.text('Suspend')
+             state_button.text('Deactivate')
          }
 
          });

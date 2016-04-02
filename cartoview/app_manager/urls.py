@@ -2,10 +2,11 @@ from django.conf.urls import patterns
 from django.views.generic import TemplateView
 
 from api import rest_api
-from cartoview.app_manager.rest import AppResource
+from cartoview.app_manager.rest import AppResource,AppInstanceResource
 from views import *
 
 rest_api.register(AppResource())
+rest_api.register(AppInstanceResource())
 from cartoview.basic.geonode_map_application.rest import GeonodeMapResource, GeonodeMapLayerResource
 rest_api.register(GeonodeMapResource())
 rest_api.register(GeonodeMapLayerResource())
@@ -18,19 +19,22 @@ urlpatterns = patterns(
         url(r'^appinstance/(?P<appinstanceid>\d+)/?$', appinstance_detail, name='appinstance_detail'),
         url(r'^appinstance/(?P<appinstanceid>\d+)/metadata$', appinstance_metadata, name='appinstance_metadata'),
 
-        url(r'^install/$', install_app_view, name='install_app'),
+        url(r'^manage/$', manage_apps, name='manage_apps'),
+
+        # url(r'^install/$', install_app_view, name='install_app'),
+
         url(r'^ajax_install/$', ajax_install_app, name='ajax_install_app'),
         url(r'^uninstall/(?P<app_name>.*)/$', uninstall_app, name='cartoview_uninstall_app_url'),
         url(r'^moveup/(?P<app_id>\d+)/$', move_up, name='move_up'),
         url(r'^movedown/(?P<app_id>\d+)/$', move_down, name='move_down'),
-        url(r'^suspend/(?P<app_id>\d+)/$', suspend_app, name='suspend'),
-        url(r'^resume/(?P<app_id>\d+)/$', resume_app, name='resume'),
         url(r'^save_app_orders/$', save_app_orders, name='save_app_orders'),
         url(r'^(?P<appinstanceid>\d+)/remove$', appinstance_remove, name="appinstance_remove"),
         (r'^rest/', include(rest_api.urls)),
 )
 
-apps = get_apps_names()
+from django.conf import settings
+apps = [n for n in os.listdir(settings.APPS_DIR) if os.path.isdir(os.path.join(settings.APPS_DIR, n))]
+# apps = get_apps_names()
 for name in apps:
     import_app_rest(name)
 

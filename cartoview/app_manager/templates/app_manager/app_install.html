@@ -10,45 +10,40 @@
     {% include "geonode/app_header.html" %}
 
     {{ block.super }}
-
+    <link href="{% static 'app_manager/app.css' %}" rel="stylesheet">
 {% endblock %}
 
 {% block body %}
-<link href="{% static 'app_manager/app.css' %}" rel="stylesheet">
+
 
 <div class="col-md-8 col-md-offset-2">
-    <br>
-{% if user.is_staff  %}
-    <button id="btn-show-install" type="button" class="btn btn-primary">
-        Install New App
-    </button>
-    &nbsp;
+    <div>
+        {% include "app_manager/apps_table.html" %}
+    </div>
 
-    {% if Apps|length > 0 %}
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#sortingModal">
-      Edit App launcher
-    </button>
-    {% endif %}
-{% endif %}
-<a  class="btn btn-primary pull-right" href="http://cartologic.com/cartoview/apps/">
-     Cartoview Apps >>
-    </a>
-    <br>
+    <div style="padding: 10px;height: 50px;">
+        {% if user.is_staff  %}
+        <button id="btn-show-install" type="button" class="btn btn-primary">
+            Install New App
+        </button>
+        {% endif %}
+        <a  class="btn btn-primary pull-right" href="http://cartologic.com/cartoview/apps/">
+             Get more apps <i class="fa fa-angle-double-right"></i>
+        </a>
+    </div>
+    <div>
+        {% include "app_manager/install_app_panel.html" %}
+        {% include "app_manager/install_result.html" %}
+        {% include "app_manager/edit_launcher_modal.html" %}
+    </div>
 
-{% include "app_manager/install_app_panel.html" %}
-    <br>
-{% include "app_manager/install_result.html" %}
-{% include "app_manager/edit_launcher_modal.html" %}
-{% include "app_manager/apps_table.html" %}
 </div>
-
 {% endblock %}
 
 
 
 {% block extra_script %}
 <script src="{% static 'app_manager/jquery-jtemplates.js' %}"></script>
-
 <script src="{% static 'app_manager/Sortable.js' %}"></script>
 
 <script>

@@ -20,7 +20,7 @@ class App(models.Model):
     def only_filename(instance, filename):
         return filename
 
-    name = models.CharField(max_length=200, unique=True, null=True, blank=True)
+    name = models.CharField(max_length=200, null=True, blank=True)
     title = models.CharField(max_length=200, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     short_description = models.TextField(null=True, blank=True)
@@ -50,6 +50,20 @@ class App(models.Model):
 
     def __unicode__(self):
         return self.title
+
+    @property
+    def settings_url(self):
+        try:
+            return reverse("%s_settings" % self.name)
+        except:
+            return None
+
+    @property
+    def new_url(self):
+        try:
+            return reverse("%s.new" % self.name)
+        except:
+            return None
 
 
 class AppInstance(ResourceBase):

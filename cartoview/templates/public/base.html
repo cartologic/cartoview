@@ -1,0 +1,65 @@
+{% load i18n static avatar_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% block favicon %}
+    <link rel="shortcut icon" type="image/png" href="{{ STATIC_URL }}img/cartoview.png"/>
+    {% endblock %}
+    <title>{% block title %}{{ SITE_NAME }}{% endblock %}</title>
+    {% block head %}
+        {% include 'public/base_css.html' %}
+        {% block extra_head %}
+        {% endblock %}
+    {% endblock %}
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body class="{% block body_class %}{% endblock %}">
+
+{% block header %}
+    {% include 'public/site_header.html' %}
+{% endblock header %}
+
+{% block middle %}
+    <div class="container">
+        {% block body_outer %}
+            <div class="row">
+                <div class="col-md-8">
+                    {% block body %}{% endblock %}
+                </div>
+                <div class="col-md-4">
+                    {% block sidebar %}{% endblock %}
+                </div>
+            </div>
+        {% endblock %}
+    </div>
+{% endblock middle %}
+
+
+{% block footer %}
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                    {% trans "Powered by" %} <a href="http://cartoview.org">{% trans "Cartoview" %}</a>
+                    <em>{% trans "version" %} {{ VERSION }}</em> |
+                    <a href="{% url "developer" %}">{% trans "Developers" %}</a> |
+                    <a href="{% url "about" %}">{% trans "About" %}</a>
+            </div>
+        </div>
+    </footer>
+{% endblock footer %}
+
+{% block scripts %}
+    {% include 'public/base_scripts.html' %}
+    {% block extra_script %}{% endblock extra_script %}
+{% endblock scripts %}
+</body>
+</html>

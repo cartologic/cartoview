@@ -18,10 +18,10 @@
 {% if user.is_staff  %}
 
     <div class="page-header">
-  <a href="{% url "install_app" %}" class="btn btn-primary pull-right">{% trans "Manage Apps" %}</a>
+      <a href="{% url 'manage_apps' %}" class="btn btn-primary pull-right">{% trans "Manage Apps" %}</a>
       <h2>{% trans "Explore Apps" %}</h2>
     </div>
-</div>
+
 {% endif %}
 
         <div id="page-wrapper">
@@ -38,13 +38,8 @@
 								{% for app in Apps %}
 								{% if app.in_menu %}
 								<div class="list-group-item ">
-									<div class="media col-md-2 col-sm-3 col-xs-12" style="margin-top:3%;margin-bottom: 3%">
-										{% if app.app_img_url %}
-                                            <img class="media-object img-rounded img-responsive"  src="{{ app.app_img_url }}"  >
-
-										{% else %}
-											<img class="media-object img-rounded img-responsive" src="{% static 'home_2/default.png' %}"  >
-										{% endif %}
+									<div class="col-md-2 col-sm-3 col-xs-12 app-logo-ct">
+                                        <div class="app-logo" style="background-image: url({{STATIC_URL}}{{app.name}}/logo.png);"></div>
 									</div>
 									<div class="col-md-10 col-sm-9 col-xs-12">
 										<div class="row">
@@ -76,7 +71,7 @@
                                                                 {% endif %}
                                                             {% endfor %}
                                                     {% endif %}
-												{% if user.is_superuser and  app.admin_urls  %}
+												{% if user.is_staff and  app.admin_urls  %}
                                                         {% for key, values in app.admin_urls.iteritems %}
                                                                 {% url key as the_url %}
                                                                 {% if the_url %}

@@ -1,0 +1,18 @@
+{% extends 'public/index.html' %}
+{% load i18n %}
+{% comment %}
+This is where you can override the hero area block. You can simply modify the content below or replace it wholesale to meet your own needs. 
+{% endcomment %}
+  {% block hero %}
+  <div class="jumbotron">
+    <div class="container">
+      <h1>{% trans "Welcome" %}</h1>
+      <p>{% blocktrans %}<a href="http://cartologic.com/cartoview">Cartoview</a> extends GeoNode to create, manage GIS Web Mapping Applications.{% endblocktrans %}</p>
+      <p>{% blocktrans %}If you have any questions about the software or service,  <a href="http://cartologic.com/contact.php">contact us</a>.{% endblocktrans %}</p>
+      <p class="home-btns">
+		<a class="btn btn-lg btn-success" href="http://cartologic.com/cartoview/download"> <i class="fa fa-lg fa-angle-double-down animated"></i> Download</a>
+		<a class="btn btn-lg btn-warning" href="http://cartologic.com/cartoview/apps"> <i class="fa fa-cubes animated"></i> Apps</a>
+	  </p>
+    </div>
+  </div>
+  {% endblock %}

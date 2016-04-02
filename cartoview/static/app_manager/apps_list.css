@@ -1,17 +1,33 @@
 
+.app-logo-ct{
+	background-image: url(default-logo.png);
+    background-size: auto 100%;
+    background-position: center center;
+    background-repeat: no-repeat;
+    padding: 0;
+    margin: 0;
+}
 
-
+.app-logo{
+	min-height: 100px;
+	width: 100%;
+	background-size: auto 100%;
+    background-position: center center;
+    background-repeat: no-repeat;
+	display: inline-block;
+}
 div.list-group-item {
-			height: auto;
-		}
-		.list-group-item {
-			margin: 10px;
-		}
-		.list-group-item img{
-			max-height: 120px;
-			margin: auto;
-		}
-		.list-group-item {
-			border-bottom: 1px solid #eee;
-			border: 1px solid #eee;
-		}
+	height: auto;
+	padding: 0;
+}
+.list-group-item {
+	margin: 10px;
+}
+.list-group-item img{
+	max-height: 120px;
+	margin: auto;
+}
+.list-group-item {
+	border-bottom: 1px solid #eee;
+	border: 1px solid #eee;
+}

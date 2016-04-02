@@ -2,6 +2,7 @@ from urlparse import urljoin
 
 from PIL import Image, ImageOps
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_POST
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import PermissionDenied
 from django.db import connections
@@ -19,7 +20,7 @@ from geonode.people.forms import ProfileForm
 from geonode.security.views import _perms_info_json
 from models import *
 from apps_helper import *
-from django.conf import settings as django_settings
+from django.conf import settings
 from django.core import management
 from threading import Timer
 import json
@@ -37,11 +38,12 @@ _PERMISSION_MSG_VIEW = _("You are not permitted to view this document")
 
 current_folder, filename = os.path.split(os.path.abspath(__file__))
 temp_dir = os.path.join(current_folder, 'temp')
-
+if not os.path.exists(temp_dir):
+    os.makedirs(temp_dir)
 
 def save_thumbnail(filename, image):
     thumb_folder = 'thumbs'
-    upload_path = os.path.join(django_settings.MEDIA_ROOT, thumb_folder)
+    upload_path = os.path.join(settings.MEDIA_ROOT, thumb_folder)
     if not os.path.exists(upload_path):
         os.makedirs(upload_path)
 
@@ -49,8 +51,8 @@ def save_thumbnail(filename, image):
         thumbnail = File(f)
         thumbnail.write(image)
 
-    url_path = os.path.join(django_settings.MEDIA_URL, thumb_folder, filename).replace('\\', '/')
-    url = urljoin(django_settings.SITEURL, url_path)
+    url_path = os.path.join(settings.MEDIA_URL, thumb_folder, filename).replace('\\', '/')
+    url = urljoin(settings.SITEURL, url_path)
 
     return url
 
@@ -106,8 +108,8 @@ def add_app(app_name, info):
     else:
         app.order = 1
     app.save()
-    CARTOVIEW_ROOT = getattr(django_settings, 'CARTOVIEW_ROOT', None)
-    app_img_path = os.path.abspath(os.path.join(CARTOVIEW_ROOT, 'apps', app_name, 'app_img.png'))
+
+    app_img_path = os.path.abspath(os.path.join(settings.APPS_DIR, app_name, 'app_img.png'))
     if os.path.isfile(app_img_path):
         from cStringIO import StringIO
         size = 200, 150
@@ -129,7 +131,7 @@ def add_app(app_name, info):
         except:
             pass
     # from django.db.models import loading
-    # django_settings.INSTALLED_APPS+=('cartoview.apps.'+app_name,)
+    # django_settings.INSTALLED_APPS+=(''+app_name,)
     # loading.cache.loaded = False
     management.call_command('syncdb', interactive=False)
 
@@ -137,18 +139,18 @@ def add_app(app_name, info):
 def finalize_setup(app_name, user):
     def install():
         try:
-            installer = importlib.import_module('cartoview.apps.%s.installer' % app_name)
+            installer = importlib.import_module('%s.installer' % app_name)
             add_app(app_name, installer.info)
             installer.install()
         except:
             pass
 
-    restart_server_batch = getattr(django_settings, 'RESTART_SERVER_BAT', None)
+    restart_server_batch = getattr(settings, 'RESTART_SERVER_BAT', None)
     if restart_server_batch:
         def restart():
             install()
             install_app(app_name)
-            run_batch_file(restart_server_batch, None, APPS_DIR)
+            run_batch_file(restart_server_batch, None, settings.APPS_DIR)
 
         timer = Timer(0.1, restart)
         timer.start()
@@ -160,21 +162,26 @@ def finalize_setup(app_name, user):
             pass
 
 
+
 @login_required
-def install_app_view(request):
-    Apps = installed_apps()
-    menu_apps = App.objects.filter(is_suspended=False).filter(in_menu=True).order_by('order')
-    non_menu_apps = App.objects.filter(is_suspended=False).filter(in_menu=False).order_by('order')
-    context = {'Apps': Apps}
-    context['menu_apps'] = menu_apps
-    context['non_menu_apps'] = non_menu_apps
+def manage_apps(request):
+    apps = App.objects.all()
+    site_apps = {}
+
+
+    context = {
+        'apps': apps,
+        'site_apps': get_apps_names(),
+        'is_admin_site': settings.IS_ADMIN_SITE
+    }
+
     return render(request, 'app_manager/app_install.html', context)
 
 
 def index(request):
     Apps = installed_apps()
     for app in Apps:
-        module = importlib.import_module('cartoview.apps.' + app.name)
+        module = importlib.import_module(app.name)
         if hasattr(module, 'urls_dict'):
             urls_dict = getattr(module, 'urls_dict')
             if 'admin' in urls_dict.keys():
@@ -238,13 +245,13 @@ def ajax_install_app(request):
         no_installer = True
         response_data["app_name"] = app_name
         app_dir = os.path.join(extract_to, app_name)
-        installed_app_dir = os.path.join(APPS_DIR, app_name)
+        installed_app_dir = os.path.join(settings.APPS_DIR, app_name)
         if os.path.isdir(installed_app_dir):
             response_data['warnings'].append('application %s is already exists' % app_name)
         else:
-            shutil.move(app_dir, APPS_DIR)
+            shutil.move(app_dir, settings.APPS_DIR)
             try:
-                installer = importlib.import_module('cartoview.apps.%s.installer' % app_name)
+                installer = importlib.import_module('%s.installer' % app_name)
                 no_installer = False
             except:
                 pass
@@ -264,18 +271,20 @@ def ajax_install_app(request):
 
 
 @login_required
+@require_POST
 def uninstall_app(request, app_name):
     try:
-        installer = importlib.import_module('cartoview.apps.%s.installer' % app_name)
-        c = connections['default'].cursor()
-        try:
-            for app_model_type in ContentType.objects.filter(app_label=app_name):
-                c.execute('drop table "%s" CASCADE ' % app_model_type.model_class()._meta.db_table)
-        finally:
-            c.close()
+        # installer = importlib.import_module('%s.installer' % app_name)
+        # c = connections['default'].cursor()
+        # try:
+        #     for app_model_type in ContentType.objects.filter(app_label=app_name):
+        #         c.execute('drop table "%s" CASCADE ' % app_model_type.model_class()._meta.db_table)
+        # finally:
+        #     c.close()
 
+        #
+        # installer.uninstall()
         ContentType.objects.filter(app_label=app_name).delete()
-        installer.uninstall()
         app = App.objects.get(name=app_name)
         app.delete()
         response_data = {"success": True}
@@ -306,20 +315,6 @@ def move_down(request, app_id):
     next_app.order = order
     app.save()
     next_app.save()
-    return HttpResponse(json.dumps({"success": True}), content_type="application/json")
-
-
-def suspend_app(request, app_id):
-    app = App.objects.get(id=app_id)
-    app.is_suspended = True
-    app.save()
-    return HttpResponse(json.dumps({"success": True}), content_type="application/json")
-
-
-def resume_app(request, app_id):
-    app = App.objects.get(id=app_id)
-    app.is_suspended = False
-    app.save()
     return HttpResponse(json.dumps({"success": True}), content_type="application/json")
 
 
