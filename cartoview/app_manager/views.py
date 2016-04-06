@@ -172,7 +172,6 @@ def manage_apps(request):
     context = {
         'apps': apps,
         'site_apps': get_apps_names(),
-        'is_admin_site': settings.IS_ADMIN_SITE
     }
 
     return render(request, 'app_manager/app_install.html', context)

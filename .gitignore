@@ -222,6 +222,9 @@ docs/_build/
 # cartoview apps folder
 cartoview/apps/
 cartoview/uploaded/
+cartoview/static_root/
 downloaded/
 geoserver/
 cartoview/local_settings.py
+apps/
+.idea/
