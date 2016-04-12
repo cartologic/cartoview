@@ -76,7 +76,9 @@
                 <li {% if is_edit %}class="active"{% endif %}>
                     <a href="#tab_general" data-toggle="pill">{% trans 'General' %}</a>
                 </li>
+				{% if config_form %}
                 <li><a href="#tab_config" data-toggle="pill">{% trans 'Configuration' %}</a></li>
+				{% endif %}
                 {% for tab in tabs %}
                 <li><a href="#tab_{{ forloop.counter }}" data-toggle="pill">{{ tab.title }}</a></li>
                 {% endfor %}
@@ -99,9 +101,11 @@
                     <div class="tab-pane {% if is_edit %}active{% endif %}" id="tab_general">
                         {% bootstrap_form form  %}
                     </div>
+					{% if config_form %}
                     <div class="tab-pane" id="tab_config">
                         {% bootstrap_form config_form  %}
                     </div>
+					{% endif %}
                     {% for tab in tabs %}
                         <div class="tab-pan" id="tab_{{ forloop.counter }}">
                         {% if tab.tpl %}{% include tab.tpl  %}{% endif %}
