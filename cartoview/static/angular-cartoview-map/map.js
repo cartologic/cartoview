@@ -86,13 +86,16 @@ mapWidgetApp.service("mapService", function($http, $q) {
 
     var get = function(id, url) {
         maps[id] = maps[id] || {};
-        if(!maps[id].promise){
+        if(!maps[id].promise) {
             var deferObj = $q.defer();
-            maps[id].promise = deferObj.promise
-            $http.get(url).then(function(response) {
+            maps[id].deferObj = deferObj;
+            maps[id].promise = deferObj.promise;
+        }
+        if(url) {
+            $http.get(url).then(function (response) {
                 maps[id].config = response.data;
                 initMap(maps[id]);
-                deferObj.resolve(maps[id]);
+                maps[id].deferObj.resolve(maps[id]);
             });
         }
         return maps[id];
