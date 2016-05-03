@@ -2,3 +2,8 @@
     height: 100%;
     width: 100%;
 }
+
+.map-widget .popover {
+    min-height: 200px;
+    min-width: 220px;
+}

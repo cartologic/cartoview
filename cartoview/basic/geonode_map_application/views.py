@@ -55,7 +55,7 @@ class EditAppInstanceView(FormView):
         if issubclass(self.config_form_class, forms.ModelForm):
             self.config_form = self.config_form_class(prefix=self.config_form_prefix, instance=self.get_instance())
         else:
-            self.config_form = self.config_form_class(prefix=self.config_form_prefix)
+            self.config_form = self.config_form_class(prefix=self.config_form_prefix, initial=self.get_initial())
         return super(EditAppInstanceView, self).get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
@@ -69,6 +69,11 @@ class EditAppInstanceView(FormView):
             return self.form_invalid(form)
 
     def get_instance(self):
+        return None
+
+    def get_initial(self):
+        if self.instance is not None:
+            return {'config':self.instance.config}
         return None
 
     @property

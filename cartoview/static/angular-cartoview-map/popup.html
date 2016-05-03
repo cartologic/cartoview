@@ -1,0 +1,18 @@
+<div ng-if="!selected" class="list-group">
+    <a class="list-group-item" ng-repeat="feature in features"
+        ng-click="selectFeature(feature)">
+        {{feature.title}} <i ng-if="feature.title == ''">(No Title)</i>
+    </a>
+</div>
+<div  ng-if="selected">
+    <a href="#" class="btn pull-right" ng-click="unselect()"><i class="fa fa-chevron-left" aria-hidden="true"></i></a>
+    <h4>{{ selected.title }}</h4>
+    <table class="table table-bordered table-condensed table-striped">
+    <tbody>
+        <tr ng-repeat="property in selected.properties">
+            <th>{{ property.name }}</th>
+            <td>{{ property.value }}</td>
+        </tr>
+    </tbody>
+</table>
+</div>
