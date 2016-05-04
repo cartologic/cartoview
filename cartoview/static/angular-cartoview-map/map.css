@@ -3,7 +3,11 @@
     width: 100%;
 }
 
+.map-widget .popover .navbar-text {
+    margin-right: 0;
+    margin-left: 0;
+}
 .map-widget .popover {
-    min-height: 200px;
-    min-width: 220px;
+    min-height: 300px;
+    min-width: 400px;
 }
