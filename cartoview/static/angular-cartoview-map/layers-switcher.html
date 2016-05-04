@@ -1,0 +1,16 @@
+<h4>Background</h4>
+<ul class="list-group" >
+  <li class="list-group-item" ng-repeat="layer in backgrounds">
+       <div class="checkbox"> <input type="radio" ng-value="layer" ng-model="backgrounds.active" ng-change="setBackground(layer)"/>
+           <label for="">{{ layer.get('title') }}</label>
+       </div>
+  </li>
+</ul>
+<h4>Overlays</h4>
+<ul class="list-group" >
+  <li class="list-group-item" ng-repeat="layer in overlays">
+       <div class="checkbox"> <input type="checkbox" ng-model="layer.visible"/>
+           <label for="">{{ layer.get('title') }}</label>
+       </div>
+  </li>
+</ul>

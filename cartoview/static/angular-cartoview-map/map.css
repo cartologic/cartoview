@@ -3,25 +3,31 @@
     width: 100%;
 }
 
-.map-widget .popover .navbar-text {
+.map-widget .popup-popover .navbar-text {
     margin-right: 0;
     margin-left: 0;
 }
-.map-widget .popover .table-responsive{
+.map-widget .popup-popover .table-responsive{
     max-height: 150px;
 }
-.map-widget .popover {
+
+.map-widget .popup-popover {
     min-height: 300px;
     max-height: 300px;
     min-width: 400px;
 }
-/*
-copied from https://github.com/geosolutions-it/MapStore2/blob/master/web/client/components/map/openlayers/mapstore-ol-overrides.css
-*/
+.layers-switcher button{
+    padding-top: 2px;
+}
+.layers-switcher{
+    top: 70px;
+    right: .5em;
+}
+
 .ol-control button:hover, .ol-control button:focus {
     background-color: #f4f4f4;
 }
-.ol-zoom .ol-zoom-out, .ol-zoom .ol-zoom-in{
+.ol-control button{
     width: 26px;
     height: 26px;
     line-height: 26px;
@@ -30,10 +36,9 @@ copied from https://github.com/geosolutions-it/MapStore2/blob/master/web/client/
     color: black;
     background-color: #fff;
     border-width: 0;
-    margin:0;
 }
-.ol-zoom.ol-unselectable.ol-control .ol-zoom-in, .ol-zoom.ol-unselectable.ol-control .ol-zoom-out {
-    font-family: 'Lucida Console', Monaco, monospace;
+.ol-zoom.ol-unselectable.ol-control .ol-zoom-in,
+.ol-zoom.ol-unselectable.ol-control .ol-zoom-out {
     text-align: center;
     text-decoration: none;
     font-weight: bold;
@@ -50,12 +55,26 @@ copied from https://github.com/geosolutions-it/MapStore2/blob/master/web/client/
 }
 .ol-zoom.ol-unselectable.ol-control{
     top:10px;
-    right:10px;
+    right:.5em;
+
+}
+.ol-control{
     padding:0;
     box-shadow: rgba(0, 0, 0, 0.65098) 0px 1px 5px 0px;
     border-radius: 4px;
 }
-
 .ol-scale-line.ol-unselectable{
     background-color: rgba(255, 255, 255, 0.8);
+}
+
+/* layers switcher*/
+.map-widget .layers-switcher-popover {
+    min-width: 400px;
+    width: auto;
+    height: auto;
+}
+.layers-switcher-popover .list-group-item .checkbox{
+    display:inline-block;
+    margin:0px 20px;
+
 }
