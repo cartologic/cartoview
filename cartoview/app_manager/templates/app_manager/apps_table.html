@@ -18,9 +18,9 @@
                     {% if app.settings_url %}
                     <a title="App Settings" href="{{app.settings_url}}" class="btn btn-default pull-left">Settings</a>
                     {% endif %}
-                    {% if is_admin_site %}
+
                     <a  href="{% url 'cartoview_uninstall_app_url' app.name %}" type="button" class="pull-left btn btn-danger btn-uninstall-app">Uninstall</a>
-                    {% endif %}
+
                 </td>
             </tr>
             {% endfor %}
