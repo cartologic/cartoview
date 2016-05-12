@@ -1,0 +1,79 @@
+ul.thumbnails.image_picker_selector {
+    overflow: auto;
+    list-style-image: none;
+    list-style-position: outside;
+    list-style-type: none;
+    padding: 0px;
+    margin: 0px;
+    width:100%;
+}
+ul.thumbnails.image_picker_selector ul {
+    overflow: auto;
+    list-style-image: none;
+    list-style-position: outside;
+    list-style-type: none;
+    padding: 0px;
+    margin: 0px;
+    width:100%;
+}
+ul.thumbnails.image_picker_selector li.group_title {
+    float: none;
+}
+ul.thumbnails.image_picker_selector li {
+
+
+}
+ul.thumbnails.image_picker_selector li .thumbnail {
+    padding: 6px;
+    border: 1px solid #dddddd;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+ul.thumbnails.image_picker_selector li .thumbnail img {
+    -webkit-user-drag: none;
+    width: 100%;
+}
+ul.thumbnails.image_picker_selector li .thumbnail p {
+    height: 60px;
+    padding-top: 10px;
+}
+ul.thumbnails.image_picker_selector li .thumbnail.selected {
+    background: #0088cc;
+}
+
+.maps-selector .selected .thumbnail {
+    background-color: #3276b1;
+}
+.maps-selector .thumbnail .caption{
+    font-weight: bold;
+}
+.maps-selector .selected .thumbnail .caption{
+    color: #fff;
+}
+
+.selected-map{
+    display: inline-block;
+    font-size: 14px;
+    text-align: left;
+    background-color: #fff;
+    -webkit-box-shadow: 0 1px 1px 0 rgba(0,0,0,.2);
+    box-shadow: 0 1px 1px 0 rgba(0,0,0,.1);
+    margin-bottom: 10px;
+    width: 400px;
+}
+
+
+
+.selected-map > img{
+    background: #337ab7;
+    width: 25%;
+    float: left;
+
+}
+
+.selected-map > .selected-map-text {
+    float: left;
+    padding: 10px;
+    width: 75%;
+}

@@ -226,5 +226,4 @@ cartoview/static_root/
 downloaded/
 geoserver/
 cartoview/local_settings.py
-apps/
 .idea/

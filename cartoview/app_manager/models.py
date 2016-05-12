@@ -7,7 +7,8 @@ from apps_helper import delete_installed_app
 # Create your models here.
 from geonode.base.models import ResourceBase, resourcebase_post_save
 from geonode.security.models import remove_object_permissions
-
+from geonode.maps.models import Map as GeonodeMap
+import json
 
 class AppTag(models.Model):
     name = models.CharField(max_length=200, unique=True, null=True, blank=True)
@@ -73,6 +74,8 @@ class AppInstance(ResourceBase):
 
     # Relation to the App model
     app = models.ForeignKey(App, null=True, blank=True)
+    config = models.TextField(null=True, blank=True)
+    map = models.ForeignKey(GeonodeMap, null=True, blank=True)
 
     def get_absolute_url(self):
         return reverse('appinstance_detail', args=(self.id,))
@@ -83,7 +86,12 @@ class AppInstance(ResourceBase):
             return str(self.id)
         else:
             return '%s (%s)' % (self.title, self.id)
-
+    @property
+    def config_obj(self):
+        try:
+            return json.loads(self.config)
+        except:
+            return None
 
 def pre_save_appinstance(instance, sender, **kwargs):
     if not isinstance(instance, AppInstance):

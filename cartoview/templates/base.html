@@ -1,4 +1,4 @@
-{% load i18n static avatar_tags %}
+{% load i18n  avatar_tags %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,7 +19,7 @@
         {% endif %}
         {% get_current_language_bidi as bidi %}
         {% if bidi %}
-            <link href="{% static 'bootstrap-3-arabic/css/bootstrap-arabic.min.css' %}" rel="stylesheet"/>
+            <link href="{{ STATIC_URL }}bootstrap-3-arabic/css/bootstrap-arabic.min.css" rel="stylesheet"/>
         {% endif %}
         <link href="{{ STATIC_URL }}geonode/css/ext-compatibility.css?v={{ VERSION }}" rel="stylesheet"/>
         <link href="{{ STATIC_URL }}geonode/css/base.css?v={{ VERSION }}" rel="stylesheet"/>
@@ -225,7 +225,7 @@
 {% endif %}
 {% get_current_language_bidi as bidi %}
 {% if bidi %}
-    <script type="text/javascript" src="{% static 'bootstrap-3-arabic/js/bootstrap-arabic.min.js' %}"/>
+    <script type="text/javascript" src="{{ STATIC_URL }}bootstrap-3-arabic/js/bootstrap-arabic.min.js"/>
 {% endif %}
 <script src="{{ STATIC_URL }}geonode/js/utils/utils.js?v={{ VERSION }}"></script>
 <script src="{{ STATIC_URL }}geonode/js/base/base.js?v={{ VERSION }}"></script>
