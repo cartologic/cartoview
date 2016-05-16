@@ -146,7 +146,14 @@ angular.module('newInstanceApp').directive('configField', function() {
         replace: true,
         templateUrl: "config-field.html",
         controller: function($scope, dataService) {
-            $scope.instanceObj = dataService.instanceObj;
+            $scope.config = JSON.stringify(dataService.instanceObj.config);
+            $scope.changeConfig = function () {
+                try{
+                    dataService.instanceObj.config = JSON.parse($scope.config);
+                }
+                catch (err){}
+
+            }
         }
     }
 });

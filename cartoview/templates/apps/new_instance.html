@@ -71,7 +71,11 @@
             <script type="text/ng-template" id="config-field.html">
                 <div class="form-group">
                     <label>Configuration</label>
-                    <textarea class="form-control" ng-model="instanceObj.config" placeholder="Configuration"></textarea>
+
+                    <textarea class="form-control"
+                              ng-change="changeConfig()"
+                              ng-model="config"
+                              placeholder="Configuration"></textarea>
                 </div>
             </script>
             <script type="text/ng-template" id="save-buttons.html">
