@@ -152,8 +152,8 @@ angular.module('cartoview.map').service("mapService", function($http, $q) {
         });
         map.olMap.beforeRender(bounce);
         map.olMap.beforeRender(pan);
-        view.setCenter(config.map.center);
-        view.setZoom(config.map.zoom);
+        view.setCenter(map.config.map.center);
+        view.setZoom(map.config.map.zoom);
     };
 
     var zoom = function(delta){
@@ -206,7 +206,15 @@ angular.module('cartoview.map').service("mapService", function($http, $q) {
                     map.loading--;
                     result.features = new ol.format.GeoJSON().readFeatures(response.data);
                     result.features.forEach(function(f) {
-                        f.getGeometry().transform('EPSG:4326', 'EPSG:3857');
+
+                        try{
+                            var crs = response.data.crs.properties.name.split(":").pop();
+                            f.getGeometry().transform('EPSG:' + crs, 'EPSG:3857');
+
+                        }catch(err) {
+                            f.getGeometry().transform('EPSG:4326', 'EPSG:3857');
+                        }
+
                         f.properties = f.getProperties();
                         delete f.properties[f.getGeometryName()];
                     });
