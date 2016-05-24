@@ -202,23 +202,31 @@ angular.module('cartoview.map').service("mapService", function($http, $q) {
                     features: []
                 };
                 map.content.results.push(result);
-                $http.get(url).then(function(response) {
-                    map.loading--;
-                    result.features = new ol.format.GeoJSON().readFeatures(response.data);
-                    result.features.forEach(function(f) {
-
-                        try{
-                            var crs = response.data.crs.properties.name.split(":").pop();
-                            f.getGeometry().transform('EPSG:' + crs, 'EPSG:3857');
-
-                        }catch(err) {
-                            f.getGeometry().transform('EPSG:4326', 'EPSG:3857');
-                        }
-
+                var addFeatures = function (features, crs) {
+                    features.forEach(function(f) {
+                        f.getGeometry().transform('EPSG:' + crs, 'EPSG:3857');
                         f.properties = f.getProperties();
                         delete f.properties[f.getGeometryName()];
                     });
                     resultsVectorSource.addFeatures(result.features);
+
+                }
+                $http.get(url).then(function(response) {
+                    map.loading--;
+                    result.features = new ol.format.GeoJSON().readFeatures(response.data);
+                    var crs = response.data.crs.properties.name.split(":").pop();
+                    if(proj4.defs('EPSG:' + crs)){
+                        addFeatures(result.features, crs );
+                    }
+                    else{
+                        //load the proj def first
+                        $http.get("http://epsg.io/?format=json&q=" + crs).then(function (res) {
+                            proj4.defs('EPSG:' + crs, res.data.results[0].proj4);
+                            addFeatures(result.features, crs);
+                        });
+
+                    }
+
                 });//end $http.then
             });//end forEach overlay
         });// end on singleClick
