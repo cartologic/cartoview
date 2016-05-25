@@ -87,7 +87,7 @@ html, body, .full-height{
     position: absolute;
     top: 10px;
     right: 10px;
-    z-index: 999;
+    z-index: 1;
 }
 .zoombar md-list-item{
     min-height: 1px;

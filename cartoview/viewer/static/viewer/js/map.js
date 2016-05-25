@@ -66,12 +66,22 @@ angular.module('cartoview.map').service("mapService", function($http, $q) {
                     url: layerSourceConfig.url,
                     params: {
                         LAYERS: layerConfig.name,
-                        VERSION: '1.1.1',
-                        tiled: layerConfig.tiled,
+                        //VERSION: '1.1.1',
+                        TILED: true,
                         STYLES: layerConfig.styles,
                         FORMAT: layerConfig.format,
                         TRANSPARENT: layerConfig.transparent
                     }
+                    //,
+                    // tileLoadFunction:function(imageTile, src) {
+                    //
+                    //     var extent     = map.olMap.getView().calculateExtent(map.olMap.getSize());
+                    //     //extent      = ol.proj.transformExtent(extent, 'EPSG:3857', 'EPSG:4326');
+                    //     var coordinates = ol.extent.getBottomLeft(extent);
+                    //     imageTile.getImage().src = src + "&TILESORIGIN=" + coordinates[0] + "," + coordinates[1];
+                    //     console.debug(imageTile.getImage());
+                    //     console.debug(imageTile.getImage().src);
+                    // }
                 });
                 layer = getTileLayer(layerConfig, layerSource);
             }
@@ -107,7 +117,7 @@ angular.module('cartoview.map').service("mapService", function($http, $q) {
                 center: config.map.center,
                 zoom: config.map.zoom
             }),
-            renderer: 'canvas',
+            //renderer: 'canvas',
             layers:[new ol.layer.Group({
                 layers:baseLayers
             }),
