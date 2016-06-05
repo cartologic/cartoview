@@ -26,7 +26,7 @@ class GeonodeLayerResource(ModelResource):
 class GeonodeLayerAttributeResource(ModelResource):
     layer = fields.ForeignKey(GeonodeLayerResource,'layer')
     class Meta:
-        queryset = Attribute.objects.all()
+        queryset = Attribute.objects.all().order_by('display_order')
         filtering = {
             "layer": ALL_WITH_RELATIONS,
             "attribute": ALL_WITH_RELATIONS
