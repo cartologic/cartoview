@@ -23,14 +23,17 @@ class GeonodeLayerResource(ModelResource):
         excludes = ['csw_anytext', 'metadata_xml']
         filtering = {"typename": ALL}
 
+
 class GeonodeLayerAttributeResource(ModelResource):
     layer = fields.ForeignKey(GeonodeLayerResource,'layer')
     class Meta:
         queryset = Attribute.objects.all().order_by('display_order')
         filtering = {
             "layer": ALL_WITH_RELATIONS,
+            "id": ALL,
             "attribute": ALL_WITH_RELATIONS
         }
+
 
 class AppResource(FileUploadResource):
     class Meta(FileUploadResource.Meta):
