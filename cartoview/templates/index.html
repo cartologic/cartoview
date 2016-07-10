@@ -1,95 +1,193 @@
-{% extends "site_base.html" %}
 {% load i18n %}
 {% load staticfiles %}
 {% load base_tags %}
-
-{% block title %} {% trans "Welcome!" %} - {{ block.super }} {% endblock %}
-
-{% block body_class %}home{% endblock %}
-
-{% block middle %}
-   {{ block.super }}
-  {% block hero %}
-  <div class="jumbotron">
-    <div class="container">
-      <h1>{% trans "Welcome" %}</h1>
-      <p>{% blocktrans %}<a href="http://cartologic.com/cartoview">Cartoview</a> extends GeoNode to create, manage GIS Web Mapping Applications.{% endblocktrans %}</p>
-      <p>{% blocktrans %}If you have any questions about the software or service,  <a href="http://cartologic.com/contact.php">contact us</a>.{% endblocktrans %}</p>
-      <p class="home-btns">
-		<a class="btn btn-lg btn-success" href="http://cartologic.com/cartoview/download"> <i class="fa fa-lg fa-angle-double-down animated"></i> Download</a>
-		<a class="btn btn-lg btn-warning" href="http://cartologic.com/cartoview/apps"> <i class="fa fa-cubes animated"></i> Apps</a>
-	  </p>
-    </div>
-  </div>
-  {% endblock %}
-
-  {% block mainbody %}
-  <div class="container">
-    <div class="row home-facets">
-    {% with facet_type='home' %}
+{% load  avatar_tags %}
+<!--A Design by W3layouts
+Author: W3layout
+Author URL: http://w3layouts.com
+License: Creative Commons Attribution 3.0 Unported
+License URL: http://creativecommons.org/licenses/by/3.0/
+-->
+<!doctype html>
+<html>
+	<head>
+		<title>{{ SITE_NAME }}</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta name="keywords" content="Play-Offs Responsive web template, Bootstrap Web Templates, Flat Web Templates, Andriod Compatible web template, Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyErricsson, Motorola web design" />
+		<script type="application/x-javascript"> addEventListener("load", function() {setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+		<!meta charset utf="8">
+		<!--flexslider-css-->
+		<link href="{{ STATIC_URL }}web_landing_page/css/flexslider.css" rel='stylesheet' type='text/css' />
+		<!--bootstrap-->
+		<link href="{{ STATIC_URL }}web_landing_page/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+		<!--coustom css-->
+		<link href="{{ STATIC_URL }}web_landing_page/css/style.css" rel="stylesheet" type="text/css"/>
+		<!--fonts-->
+		<link href='http://fonts.googleapis.com/css?family=Coda:400,800' rel='stylesheet' type='text/css'>
+		<link href='http://fonts.googleapis.com/css?family=Jockey+One' rel='stylesheet' type='text/css'>
+		<!--script-->
+		<script type="text/javascript" src="{{ STATIC_URL }}web_landing_page/js/move-top.js"></script>
+		<script type="text/javascript" src="{{ STATIC_URL }}web_landing_page/js/easing.js"></script>
+		<script src="{{ STATIC_URL }}web_landing_page/js/modernizr.custom.js"></script>
+		<script src="{{ STATIC_URL }}web_landing_page/js/jquery-2.1.4.min.js"></script>
+		<script src="{{ STATIC_URL }}web_landing_page/js/bootstrap.min.js"></script>
+		<!--script-->
+		<script type="text/javascript">
+			jQuery(document).ready(function($) {
+				$(".scroll").click(function(event){		
+					event.preventDefault();
+					$('html,body').animate({scrollTop:$(this.hash).offset().top},900);
+				});
+			});
+		</script>
+		<!--fonts-->
+		<style type="text/css">
+			.navbar-brand img{
+				z-index: 1;
+				position: relative;
+			}
+			.rotate-45 {
+				-webkit-transform: rotate(45deg);
+				-moz-transform: rotate(45deg);
+				-ms-transform: rotate(45deg);
+				-o-transform: rotate(45deg);
+				transform: rotate(45deg);
+			}
+			.bgi p {
+				color: #333;
+    			font-weight: bold;
+			}
+			.header-socend-img {
+				width: 100%;
+			}
+			.bgi {
+			    padding-top: 0 !important;
+			}
+			.bgi .site-title{
+				padding-top: 100px;
+				background-color: rgba(200,200,200,.5);
+			}
+		</style>
+	</head>
+	<body>
+	{% with facet_type='home' %}
      {% facets as facets %}
-      <div class="col-md-3">
-        <p><a href="{% url "layer_browse" %}"><i class="fa fa-square-o fa-5x rotate-45"></i></a></p>
-        <h2><a href="{% url "layer_browse" %}">{{ facets.layer|default:_("No") }} {% blocktrans count counter=facets.layer %}Layer{% plural %}Layers{% endblocktrans %}</a></h2>
-        <p>{% trans "Click to search for geospatial data published by other users, organizations and public sources. Download data in standard formats." %}</p> 
-        {% if user.is_authenticated %}
-        <p class="text-center"><a class="btn btn-default" href="{% url "layer_upload" %}" role="button">{% trans "Add layers" %} &raquo;</a></p>
-        {% else %}
-        <p class="text-center"><a class="btn btn-default" href="{% url "layer_browse" %}" role="button">{% trans "Explore layers" %} &raquo;</a></p>        
-        {% endif %}
-      </div>
-      <div class="col-md-3">
-        <p><a href="{% url "maps_browse" %}"><i class="fa fa-map-marker fa-5x"></i></a></p>
-        <h2><a href="{% url "maps_browse" %}">{{ facets.map|default:_("No") }} {% blocktrans count counter=facets.map %}Map{% plural %}Maps{% endblocktrans %}</a></h2>
-        <p>{% trans "Data is available for browsing, aggregating and styling to generate maps which can be shared publicly or restricted to specific users only." %}</p>
-        {% if user.is_authenticated %}
-        <p><a class="btn btn-default" href="{% url "new_map" %}" role="button">{% trans "Create maps" %} &raquo;</a></p>
-        {% else %}
-        <p><a class="btn btn-default" href="{% url "maps_browse" %}" role="button">{% trans "Explore maps" %} &raquo;</a></p>
-        {% endif %}
-      </div>
-        <div class="col-md-3">
-        <p><a href="{% url "app_manager_base_url" %}"><i class="fa fa-th fa-5x"></i></a></p>
-        <h2><a href="{% url "app_manager_base_url" %}">{{ facets.app|default:_("No") }} {% blocktrans count counter=facets.app %}App{% plural %}Apps{% endblocktrans %}</a></h2>
-        <p>{% trans "Pluggable Apps available on App Market for quick deployments." %}</p>
-        <p><a class="btn btn-default" href="{% url "app_manager_base_url" %}" role="button">{% trans "Explore Apps" %} &raquo;</a></p>
-      </div>
-      <div class="col-md-3">
-        <p><a href="{% url "profile_browse" %}"><i class="fa fa-user fa-5x"></i></a></p>
-        <h2><a href="{% url "profile_browse" %}">{{ facets.user|default:_("No") }} {% blocktrans count counter=facets.user %}User{% plural %}Users{% endblocktrans %}</a></h2>
-        <p>{% trans "GeoNode allows registered users to easily upload geospatial data in several formats including shapefile and GeoTiff." %}</p>
-        <p><a class="btn btn-default" href="{% url "profile_browse" %}" role="button">{% trans "See users" %} &raquo;</a></p>
-      </div>
+		<div class="header" id="home">
+			<nav class="navbar navbar-default">
+				<div class="container">
+					<!-- Brand and toggle get grouped for better mobile display -->
+					<div class="navbar-header">
+					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+						<span class="sr-only">Toggle navigation</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+					<a class="navbar-brand" href="{{ STATIC_URL }}web_landing_page/index.html">
+						<img src="http://45.35.64.50:8001/uploaded/documents/Logoforweb.png">
+					</a>
+					</div>
+					<!-- Collect the nav links, forms, and other content for toggling -->
+						<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+							<ul class="nav navbar-nav navbar-right margin-top cl-effect-2">
+								<li><a href="/"><span data-hover="Home">Home</span></a></li>
+								<!-- <li class="dropdown">
+								<a href="{{ STATIC_URL }}web_landing_page/about.html" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span data-hover="About">About</span><span class="caret"></span></a>
+								<ul class="dropdown-menu">
+								<li><a href="{{ STATIC_URL }}web_landing_page/about.html"><span data-hover="Action">Action</span></a></li>
+								<li><a href="{{ STATIC_URL }}web_landing_page/Pages.html"><span data-hover="Pages">Pages</span></a></li>
+								</ul>
+								</li> -->
+								<li><a href="/layers"><span data-hover="layers">Layers</span></a></li>
+								<li><a href="maps"><span data-hover="Maps">Maps</span></a></li>
+								<li><a href="/apps"><span data-hover="Apps">Apps</span></a></li>
+								<li><a href="/documents"><span data-hover="Documents">Documents</span></a></li>
 
-    {% endwith %}
-    </div>
-  </div>
-  {% verbatim %}
-  <div ng-app="featured">
-    <div ng-repeat="item in featured">
-      <!--{{ item.title }}-->
-    </div>
-  </div>
-  {% endverbatim %}
-  {% endblock %}
-  
-{% endblock %}
+                                {% if not user.is_authenticated and REGISTRATION_OPEN %}
+                                    <li><a href="{% url "account_signup" %}"><span data-hover="{% trans "Register" %}">{% trans "Register" %}</span></a></li>
+                                {% endif %}
+                                {% if not user.is_authenticated %}
 
-{% block extra_script %}
-{% if DEBUG_STATIC %}
-<script src="{{ STATIC_URL }}lib/js/angular.js"></script>
-{% endif %}
-  <script type="text/javascript">
-    FEATURED_URL = '{% url 'api_dispatch_list' api_name='api' resource_name='featured' %}'
-    'use strict';
-    (function(){  
-      var module = angular.module('featured', []);
-      module.run(function($http, $rootScope){
-        $http.get(FEATURED_URL).success(function(data){
-          $rootScope.featured = data.objects;
-        });
-      });
-    })(); 
-  </script>
+                                    <li>
+                                        <a href="/account/login" >
+                                            <span data-hover="{% trans "Sign in" %}">{% trans "Sign in" %}</span>
+                                        </a>
+                                    </li>
+                                {% endif %}
 
-{% endblock extra_script %}
+							</ul>
+
+							<div class="clearfix"></div>
+						</div><!-- /.navbar-collapse -->
+						<div class="clearfix"></div>
+				</div><!-- /.container-fluid -->
+			</nav>
+			
+			<div class="header-banner">
+					<!-- Top Navigation -->
+					<div class="container page-seperator">
+					
+					<section class="col-8 color bgi">
+						<div class="col-md-8 site-title">
+							<h3>WVA Floods 2016: Disaster Tracker</h3>
+							<p>This is a crowd-source platform hosted by the <a href="http://www.polis.iupui.edu/"  target="_blank">Polis Center</a>  
+							at IUPUI in collaboration with West Virginia University 
+							to report and track the damage and casualties caused by the Flood of June 25, 2016</p>
+						</div>
+						<div class="col-md-4">
+							<img class="header-socend-img" src="http://45.35.64.50:8001/uploaded/documents/062516-w-va-counties.jpg">
+						</div>
+						
+							
+					</section>
+					
+					<section class="col-3 ss-style-doublediagonal our-features">
+							<!-- <h1>our features</h1>
+							<p>lorem ipsum simply a dummy text to format fonts and paragraphs</p> -->
+							<div class="column our-feat">
+								<a href="/layers"><span class="glyphicon glyphicon-unchecked our-icons rotate-45" aria-hidden="true"></span>
+								<h3>{{ facets.layer|default:_("No") }} {% blocktrans count counter=facets.layer %}Layer{% plural %}Layers{% endblocktrans %}</h3></a>
+								<p>{% trans "Click to search for geospatial data published by other users, organizations and public sources. Download data in standard formats." %}</p>
+							</div>
+							<div class="column our-feat">
+								<a href="{% url "maps_browse" %}"><span class="glyphicon glyphicon-map-marker our-icons" aria-hidden="true"></span>
+								<h3>{{ facets.map|default:_("No") }} {% blocktrans count counter=facets.map %}Map{% plural %}Maps{% endblocktrans %}</h3></a>
+								<p>{% trans "Data is available for browsing, aggregating and styling to generate maps which can be shared publicly or restricted to specific users only." %}</p>
+							</div>
+							<div class="column our-feat">
+								<a href="/apps"><span class="glyphicon glyphicon-th our-icons" aria-hidden="true"></span>
+								<h3>{{ facets.app|default:_("No") }} {% blocktrans count counter=facets.app %}App{% plural %}Apps{% endblocktrans %}</h3>
+								</a>
+								<p>{% trans "Pluggable Apps available on App Market for quick deployments." %}</p>
+							</div>
+							<div class="clearfix"></div>
+					</section>
+					</div>
+			</div>
+			
+			<div class="footer">
+			<div class="container">
+				<!-- <div class="social">
+					<ul>
+						<li><a href="#" class="face"></a></li>
+						<li><a href="#" class="twit"></a></li>
+						<li><a href="#" class="insta"></a></li>
+						<li><a href="#" class="gplus"></a></li>
+						<li><a href="#" class="dribl"></a></li>
+					</ul>
+				</div> -->
+				<div class="copy-rt">
+					<p>&#169; 2016 Catoview -  <a href="http://cartologic.com" target="_blank">Cartologic</a>
+					</p>
+				</div>
+				<div class="copy-rt">
+					<p>&#169; 2015 Home Page Template Archer Design by <a href="http://www.w3layouts.com" target="_blank">w3layouts</a>
+					</p>
+				</div>
+			</div>
+			</div>
+			<a href="#home" id="toTop" class="scroll" style="display: block;"> <span id="toTopHover" style="opacity: 1;"> </span></a>
+	</body>
+	{% endwith %}
+</html>

@@ -47,7 +47,7 @@ class AppResource(FileUploadResource):
 
 class AppInstanceResource(CommonModelApi):
 
-    app = fields.ToOneField(AppResource, 'app', full=True)
+    app = fields.ToOneField(AppResource, 'app', full=True, null=True)
     map = fields.ForeignKey(GeonodeMapResource, 'map', full=True)
     class Meta(CommonMetaApi):
         filtering = CommonMetaApi.filtering

@@ -114,7 +114,7 @@ def create_thumbnail(sender, instance, created, **kwargs):
         return
     from geonode.base.models import Link
 
-    if not instance.has_thumbnail():
+    if not instance.has_thumbnail() and instance.app_id is not None:
         parent_app_thumbnail_url = App.objects.get(id=instance.app.pk).app_img_url
         Link.objects.get_or_create(resource=instance,
                                    url=parent_app_thumbnail_url,

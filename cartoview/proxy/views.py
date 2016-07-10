@@ -2,18 +2,16 @@ import requests
 from django.http import HttpResponse
 from django.http import QueryDict
 from django.views.decorators.csrf import csrf_exempt
-from django.utils.http import urlencode,urlquote
 
+from django.conf import settings
+urls = {
+    'geoserver': settings.OGC_SERVER['default']['PUBLIC_LOCATION'],
+}
 @csrf_exempt
-def proxy_view(request, url, requests_args=None):
-    """
-    Forward as close to an exact copy of the request as possible along to the
-    given url.  Respond with as close to an exact copy of the resulting
-    response as possible.
-
-    If there are any additional arguments you wish to send to requests, put
-    them in the requests_args dictionary.
-    """
+def proxy_view(request, url_name, sub_url, requests_args=None):
+    print url_name
+    print sub_url
+    url = urls[url_name] + sub_url
     requests_args = (requests_args or {}).copy()
     headers = get_headers(request.META)
     params = request.GET.copy()
@@ -37,18 +35,10 @@ def proxy_view(request, url, requests_args=None):
             del headers[key]
 
     requests_args['headers'] = headers
-
-    #this condition to overcome the problem of sending url after ?
-    if(not url):
-        url = request.META['QUERY_STRING']
-    else:
-        requests_args['params'] = params
-    #################################################################
-    #this condition to overcome the problem appears only on deploying on iis.
-    if(url.find('://') == -1):
-        url = url.replace(':/', '://')
-    #################################################################
-    response = requests.request(request.method, url, **requests_args)
+    requests_args['params'] = params
+    # url = "https://ao82912.maps.arcgis.com" if url == "" else "https://ao82912.maps.arcgis.com/" + url
+    print url
+    response = requests.request(request.method, url, stream=True, **requests_args)
 
     proxy_response = HttpResponse(
         response.content,
@@ -60,9 +50,9 @@ def proxy_view(request, url, requests_args=None):
         # Certain response headers should NOT be just tunneled through.  These
         # are they.  For more info, see:
         # http://www.w3.org/Protocols/rfc2616/rfc2616-sec13.html#sec13.5.1
-        'connection', 'keep-alive', 'proxy-authenticate', 
-        'proxy-authorization', 'te', 'trailers', 'transfer-encoding', 
-        'upgrade', 
+        'connection', 'keep-alive', 'proxy-authenticate',
+        'proxy-authorization', 'te', 'trailers', 'transfer-encoding',
+        'upgrade',
 
         # Although content-encoding is not listed among the hop-by-hop headers,
         # it can cause trouble as well.  Just let the server set the value as
@@ -96,3 +86,4 @@ def get_headers(environ):
             headers[key.replace('_', '-')] = value
 
     return headers
+

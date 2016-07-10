@@ -227,3 +227,4 @@ downloaded/
 geoserver/
 cartoview/local_settings.py
 .idea/
+cartoview/static/landing/
