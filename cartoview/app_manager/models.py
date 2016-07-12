@@ -93,6 +93,10 @@ class AppInstance(ResourceBase):
         except:
             return None
 
+    @property
+    def launch_url(self):
+        return  reverse("%s.view" % self.app.name, args=[self.pk])
+
 def pre_save_appinstance(instance, sender, **kwargs):
     if not isinstance(instance, AppInstance):
         return

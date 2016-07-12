@@ -7,6 +7,7 @@ from tastypie import fields
 from geonode.maps.models import Map as GeonodeMap, MapLayer as GeonodeMapLayer
 from geonode.layers.models import Layer, Attribute
 from tastypie.constants import ALL_WITH_RELATIONS, ALL
+from django.core.urlresolvers import reverse
 
 class GeonodeMapLayerResource(ModelResource):
     class Meta:
@@ -45,10 +46,12 @@ class AppResource(FileUploadResource):
 
 
 
-class AppInstanceResource(CommonModelApi):
-
+class AppInstanceResource(ModelResource):
+    launch_app_url = fields.CharField(null=True, blank=True)
     app = fields.ToOneField(AppResource, 'app', full=True, null=True)
-    map = fields.ForeignKey(GeonodeMapResource, 'map', full=True)
+    map = fields.ForeignKey(GeonodeMapResource, 'map', full=True, null=True)
+
+
     class Meta(CommonMetaApi):
         filtering = CommonMetaApi.filtering
 
@@ -58,3 +61,7 @@ class AppInstanceResource(CommonModelApi):
             queryset = queryset.filter(is_published=True)
         resource_name = 'appinstances'
 
+    def dehydrate_launch_app_url(self, bundle):
+        if bundle.obj.app is not None:
+            return reverse("%s.view" % bundle.obj.app.name, args=[bundle.obj.pk])
+        return None
