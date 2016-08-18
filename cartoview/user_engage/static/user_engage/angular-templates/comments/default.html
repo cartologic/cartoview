@@ -1,0 +1,18 @@
+<div layout="column">
+    <md-list>
+        <md-list-item class="md-3-line " ng-repeat="c in comment.list.objects">
+            <img ng-src="{{c.user.avatar}}" class="md-avatar" />
+            <div class="md-list-item-text">
+                <h3>{{ c.user.username }}</h3>
+                <p style="white-space: pre;">{{ c.comment }}</p>
+            </div>
+            <md-divider></md-divider>
+        </md-list-item>
+    </md-list>
+
+    <md-input-container class="md-block">
+        <label>Add Comment</label>
+        <textarea ng-model="comment.newCommentText" placeholder="Comment" ng-keypress="onKeyPress($event)"></textarea>
+        <md-button class="md-primary" ng-click="addComment()" style="position: absolute;right: 0;bottom: 16px;"><md-icon>send</md-icon></md-button>
+    </md-input-container>
+</div>

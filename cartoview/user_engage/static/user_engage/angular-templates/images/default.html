@@ -1,0 +1,33 @@
+<div layout="column" >
+    <div layout="row" layout-wrap layout-align="center center">
+        <a layout="column"
+           ng-repeat="img in image.list.objects"
+           href="#"
+           ng-if="img.image"
+           class="image-item md-whiteframe-2dp"
+           layout-align="center center"
+
+           ng-click="showImage(img)">
+            <img ng-src="{{ img.thumbnail }}"
+                 class="md-card-image"
+                 alt="{{ img.title }}"
+                 ng-image-appear placeholder responsive>
+            <h2>{{ img.title }}</h2>
+        </a>
+    </div>
+    <div layout="column" class="md-padding">
+
+        <md-input-container class="md-block">
+            <input ng-model="image.newImageTitle" placeholder="Title (Optional)">
+        </md-input-container>
+        <!--<md-input-container class="md-block">
+            <label>Upload Image</label>
+            <input file-model="image.imageFile" type="file">
+        </md-input-container>-->
+        <lf-ng-md-file-input lf-files="image.imageFile" lf-api="image.uploadFileApi" preview lf-mimetype="image/*"></lf-ng-md-file-input>
+        <div>
+            <md-button class="md-primary md-raised" ng-click="addImage()"><md-icon>send</md-icon></md-button>
+        </div>
+
+    </div>
+</div>

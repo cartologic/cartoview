@@ -8,6 +8,9 @@ from geonode.maps.models import Map as GeonodeMap, MapLayer as GeonodeMapLayer
 from geonode.layers.models import Layer, Attribute
 from tastypie.constants import ALL_WITH_RELATIONS, ALL
 from django.core.urlresolvers import reverse
+from tastypie.authentication import Authentication
+from tastypie.authorization import Authorization
+from taggit.models import Tag
 
 class GeonodeMapLayerResource(ModelResource):
     class Meta:
@@ -15,8 +18,10 @@ class GeonodeMapLayerResource(ModelResource):
 
 class GeonodeMapResource(ModelResource):
     map_layers = fields.ToManyField(GeonodeMapLayerResource, 'layer_set', null=True, full=True)
-    class Meta:
+
+    class Meta(CommonMetaApi):
         queryset = GeonodeMap.objects.distinct().order_by('-date')
+
 
 class GeonodeLayerResource(ModelResource):
     class Meta:
@@ -48,20 +53,28 @@ class AppResource(FileUploadResource):
 
 class AppInstanceResource(ModelResource):
     launch_app_url = fields.CharField(null=True, blank=True)
-    app = fields.ToOneField(AppResource, 'app', full=True, null=True)
+    app = fields.ForeignKey(AppResource, 'app', full=False, null=True)
     map = fields.ForeignKey(GeonodeMapResource, 'map', full=True, null=True)
 
 
     class Meta(CommonMetaApi):
         filtering = CommonMetaApi.filtering
-
+        always_return_data = True
         filtering.update({'app': ALL_WITH_RELATIONS})
         queryset = AppInstance.objects.distinct().order_by('-date')
         if settings.RESOURCE_PUBLISHING:
             queryset = queryset.filter(is_published=True)
         resource_name = 'appinstances'
+        allowed_methods = ['get', 'post', 'put']
+        excludes = ['csw_anytext', 'metadata_xml']
+
 
     def dehydrate_launch_app_url(self, bundle):
         if bundle.obj.app is not None:
             return reverse("%s.view" % bundle.obj.app.name, args=[bundle.obj.pk])
         return None
+
+
+class TagResource(ModelResource):
+    class Meta:
+        queryset = Tag.objects.all()

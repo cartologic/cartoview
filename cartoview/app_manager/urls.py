@@ -11,6 +11,11 @@ rest_api.register(GeonodeMapResource())
 rest_api.register(GeonodeMapLayerResource())
 rest_api.register(GeonodeLayerResource())
 rest_api.register(GeonodeLayerAttributeResource())
+rest_api.register(TagResource())
+
+from cartoview.user_engage.rest import *
+rest_api.register(ImageResource())
+rest_api.register(CommentResource())
 
 urlpatterns = patterns(
         'cartoview.app_manager',

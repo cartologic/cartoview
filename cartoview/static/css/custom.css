@@ -5,6 +5,9 @@
     margin-top: 3px;
 	background: rgba(0, 0, 0, 0) url("../img/logo.png") no-repeat scroll 15px 0;
 }
+#main-navbar .navbar-right>li>a {
+    padding: 5px;
+}
 
 .jumbotron {
 	background-image: linear-gradient(to bottom, #235c73 0px, #112d39 100%);
@@ -17,4 +20,102 @@
 .home-btns a{
 	color:#FFF;
 	margin-right: 5px;
+}
+
+
+#main-navbar.navbar-default .navbar-brand {
+    color: #202020;
+    background: none;
+    text-indent: inherit;
+    margin-top: 0;
+    padding: 10px;
+    width: auto;
+}
+#main-navbar.navbar-default .navbar-brand img{
+    /*position: relative;*/
+    /*z-index: 999999;*/
+    height: 32px;
+    /*margin-top: 10px;*/
+}
+#main-navbar.navbar-default {
+    font-size: 15px;
+    background-color: #f6f6f6;
+    border-width: 0px;
+    border-radius: 0px;
+    box-shadow: 0 1px 5px 0 rgba(0,0,0,.2),0 2px 2px 0 rgba(0,0,0,.14),0 3px 1px -2px rgba(0,0,0,.12);
+}
+#main-navbar.navbar-default .navbar-nav>li>a {
+    color: #202020;
+    background-color: rgba(248, 248, 248, 0);
+}
+#main-navbar.navbar-default .navbar-nav>li>a:hover,
+#main-navbar.navbar-default .navbar-nav>li>a:focus {
+    color: #000000;
+    background-color: rgba(248, 248, 248, 0);
+}
+#main-navbar.navbar-default .navbar-nav>.active>a,
+#main-navbar.navbar-default .navbar-nav>.active>a:hover,
+#main-navbar.navbar-default .navbar-nav>.active>a:focus {
+    color: rgb(63,81,181);
+    background-color: rgba(231, 231, 231, 1);
+}
+#main-navbar.navbar-default .navbar-toggle {
+    border-color: #ddd;
+}
+#main-navbar.navbar-default .navbar-toggle:hover,
+#main-navbar.navbar-default .navbar-toggle:focus {
+    background-color: #ddd;
+}
+#main-navbar.navbar-default .navbar-toggle .icon-bar {
+    background-color: #888;
+}
+#main-navbar.navbar-default .navbar-toggle:hover .icon-bar,
+#main-navbar.navbar-default .navbar-toggle:focus .icon-bar {
+    background-color: rgb(63,81,181);
+}
+
+.btn-primary{
+    background-color: rgb(63,81,181);
+    border-color: rgb(63,81,181);
+}
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active,
+.btn-primary.active,
+.open .dropdown-toggle.btn-primary{
+    background-color: rgb(63,81,181);
+    border-color: rgb(63,81,181);
+}
+#site-banner {
+    background: #0098DB ;
+}
+
+#site-banner h2,
+#site-banner h3{
+
+}
+a,
+.pagination>li>a,
+.pagination>li>span{
+    color:rgb(63,81,181);
+}
+
+a:hover, a:focus,
+.pagination>li>a:hover,
+.pagination>li>span:hover,
+.pagination>li>a:focus,
+.pagination>li>span:focus{
+    color: #0098DB;
+}
+
+nav.filter h4{
+    background-color: rgb(63,81,181);
+}
+
+.btn-primary:hover{}
+
+
+
+.jumbotron a:hover, .jumbotron a:focus, .jumbotron a {
+    color: #f0ad4e;
 }

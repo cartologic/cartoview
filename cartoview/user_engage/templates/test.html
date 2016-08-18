@@ -1,0 +1,28 @@
+{% extends "cartoview/base.html" %}
+
+{% block title %} TEST {% endblock %}
+{% block styles %}
+    <style>
+
+    </style>
+    <link rel="stylesheet" href="{{ STATIC_URL }}user_engage/css/main.css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}vendor/lf-ng-md-file-input/lf-ng-md-file-input.min.css">
+{% endblock %}
+
+{% block scripts %}
+    <script type="text/javascript" src="{{ STATIC_URL }}vendor/angular-resource.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}vendor/ng-image-appear.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}vendor/lf-ng-md-file-input/lf-ng-md-file-input.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}user_engage/js/app.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}user_engage/js/services.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}user_engage/js/directives.js"></script>
+{% endblock %}
+{% block body_directives %}ng-app="cartoview.userEngage"{% endblock %}
+{% block body %}
+<div  layout-align="center center" layout="column" layout-padding>
+    <cartoview-images identifier="test"></cartoview-images>
+
+    <cartoview-comments identifier="test"></cartoview-comments>
+    <cartoview-comments identifier="test1"></cartoview-comments>
+</div>
+{% endblock %}

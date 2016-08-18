@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+    <link rel="shortcut icon" type="image/png" href="{{ STATIC_URL }}img/cartoview.png"/>
+
+    <title>
+    {% block title %}
+        {{ SITE_NAME }}
+    {% endblock %}
+    </title>
+    <link rel="stylesheet" href="{{ STATIC_URL }}vendor/normalize.css">
+    <link rel='stylesheet prefetch' href='{{ STATIC_URL }}vendor/angular-material/angular-material.min.css'>
+    <link rel='stylesheet prefetch' href='https://fonts.googleapis.com/icon?family=Material+Icons'>
+    <link rel="stylesheet" href="{{ STATIC_URL }}cartoview/css/base.css">
+    {% block styles %}
+
+    {% endblock %}
+</head>
+<body {% block body_directives %}ng-app="ngMaterial" {% endblock %} layout="column">
+    {% block header_toolbar %}
+    <md-toolbar class="header-toolbar " md-whiteframe="2">
+      <div class="md-toolbar-tools">
+        <md-button class="tbar-logo" aria-label="Home" href="/">
+            <img src="{{ STATIC_URL }}cartoview/img/cartoview-logo.png">Cartoview
+        </md-button>
+        <md-button aria-label="Apps" href="/apps">Apps</md-button>
+      </div>
+    </md-toolbar>
+    {% endblock %}
+    <div flex class="content-ct">
+        <div class="content-ct-inner">
+        {% block body %}{% endblock %}
+        </div>
+    </div>
+    <script type="text/javascript" src='{{ STATIC_URL }}vendor/angular/angular.js'></script>
+    <script type="text/javascript" src='{{ STATIC_URL }}vendor/angular-animate/angular-animate.js'></script>
+    <script type="text/javascript" src='{{ STATIC_URL }}vendor/angular-aria/angular-aria.js'></script>
+    <script type="text/javascript" src='{{ STATIC_URL }}vendor/angular-material/angular-material.js'></script>
+
+    <!--
+    <script type="text/javascript" src='{{ STATIC_URL }}vendor/angular/angular.min.js'></script>
+    <script type="text/javascript" src='{{ STATIC_URL }}vendor/angular-animate/angular-animate.min.js'></script>
+    <script type="text/javascript" src='{{ STATIC_URL }}vendor/angular-aria/angular-aria.min.js'></script>
+    <script type="text/javascript" src='{{ STATIC_URL }}vendor/angular-material/angular-material.min.js'></script>
+    -->
+    <script type="text/javascript">
+        angular.module('cartoview.urlsHelper',[]);
+        angular.module('cartoview.urlsHelper').constant('urls', {
+            BASE_URL: "/",
+            GEOSERVER_BASE_URL: "{{ GEOSERVER_BASE_URL }}",
+            PROXY_URL: "{{ PROXY_URL }}",
+            CARTOVIEW_PROXY_URL: "{% url 'cartoview_proxy' 'geoserver' '' %}",
+            MEDIA_URL: "{{ MEDIA_URL }}",
+            STATIC_URL: "{{ STATIC_URL }}",
+            APPS_BASE_URL: "{% url 'app_manager_base_url' %}",
+            REST_URL: "{% url 'app_manager_base_url' %}rest/app_manager/"
+        })
+    </script>
+    {% block scripts %}
+
+    {% endblock %}
+</body>
+</html>

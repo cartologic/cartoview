@@ -97,6 +97,9 @@ class AppInstance(ResourceBase):
     def launch_url(self):
         return  reverse("%s.view" % self.app.name, args=[self.pk])
 
+    def get_thumbnail_url(self):
+        return self.thumbnail_url
+
 def pre_save_appinstance(instance, sender, **kwargs):
     if not isinstance(instance, AppInstance):
         return
@@ -113,24 +116,24 @@ def pre_delete_appinstance(instance, sender, **kwargs):
     remove_object_permissions(instance.get_self_resource())
 
 
-def create_thumbnail(sender, instance, created, **kwargs):
-    if not isinstance(instance, AppInstance):
-        return
-    from geonode.base.models import Link
-
-    if not instance.has_thumbnail() and instance.app_id is not None:
-        parent_app_thumbnail_url = App.objects.get(id=instance.app.pk).app_img_url
-        Link.objects.get_or_create(resource=instance,
-                                   url=parent_app_thumbnail_url,
-                                   defaults=dict(
-                                       name='Thumbnail',
-                                       extension='png',
-                                       mime='image/png',
-                                       link_type='image',
-                                   ))
-
-        instance.thumbnail_url = parent_app_thumbnail_url
-        instance.save()
+# def create_thumbnail(sender, instance, created, **kwargs):
+#     if not isinstance(instance, AppInstance):
+#         return
+#     from geonode.base.models import Link
+#
+#     if not instance.has_thumbnail() and instance.map is not None:
+#         parent_app_thumbnail_url = instance.map.get_thumbnail_url()
+#         # Link.objects.get_or_create(resource=instance,
+#         #                            url=parent_app_thumbnail_url,
+#         #                            defaults=dict(
+#         #                                name='Thumbnail',
+#         #                                extension='png',
+#         #                                mime='image/png',
+#         #                                link_type='image',
+#         #                            ))
+#
+#         instance.thumbnail_url = parent_app_thumbnail_url
+#         instance.save()
 
 
 def appinstance_post_save(instance, *args, **kwargs):
@@ -140,7 +143,7 @@ def appinstance_post_save(instance, *args, **kwargs):
 
 
 signals.pre_save.connect(pre_save_appinstance)
-signals.post_save.connect(create_thumbnail)
+# signals.post_save.connect(create_thumbnail)
 
 signals.post_save.connect(appinstance_post_save)
 signals.pre_delete.connect(pre_delete_appinstance)

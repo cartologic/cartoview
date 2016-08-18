@@ -1,0 +1,41 @@
+{% extends "cartoview/base.html" %}
+
+{% block title %} {{ block.super }} {% endblock %}
+{% block styles %}
+    <link rel="stylesheet" href="{{ STATIC_URL }}cartoview/css/index.css">
+{% endblock %}
+
+{% block scripts %}
+
+    <script type="text/javascript" src="{{ STATIC_URL }}cartoview/js/index.js"></script>
+
+{% endblock %}
+{% block body_directives %}ng-app="cartoview.index"{% endblock %}
+{% block body %}
+<div class="index-intro"  layout-padding layout="row" layout-wrap>
+    <div layout-padding flex-gt-md="50" flex="100">
+        <h1>Cartoview</h1>
+        <h2>Build a geospatial website in minutes with Cartoview</h2>
+        <h2>Manage GIS Web Mapping Applications</h2>
+        <p>Cartoview enables the rapid deployment of easy-to-manage and easy-to-use spatial web applications</p>
+    </div>
+    <div flex-gt-md="50" flex="100">
+        <img src="http://cartologic.com/cartoview/static/cartoview/img/cartoview-banner.png">
+    </div>
+
+</div>
+<div  layout-align="center center" layout="column" layout-padding>
+    <h1>Features</h1>
+    <div layout="row" flex>
+        <div flex="100" flex-gt-sm="80">
+            <ul>
+                <li>Browse and search for geospatial data and web services</li>
+                <li>Upload, manage, and share geospatial data</li>
+                <li>Create and share interactive maps</li>
+                <li>Create and share interactive geospatial apps</li>
+                <li>Collaborate and interact with other users</li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

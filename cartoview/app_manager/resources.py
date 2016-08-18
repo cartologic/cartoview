@@ -6,14 +6,14 @@ from django.db import models
 
 from serializers import HTMLSerializer, MultipartFormSerializer
 
-from geonode.api.authorization import GeoNodeAuthorization
+from tastypie.authorization import Authorization
 
 from geonode.api.resourcebase_api import *
 class BaseResource(Resource):
     class Meta:
         always_return_data = True
         serializer = HTMLSerializer()
-        authorization = GeoNodeAuthorization()
+        authorization = Authorization()
 
 
 class BaseModelResource(ModelResource):

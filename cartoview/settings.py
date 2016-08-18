@@ -86,21 +86,47 @@ LOCALE_PATHS = (
                    os.path.join(LOCAL_ROOT, 'locale'),
                ) + LOCALE_PATHS
 
+
+MIDDLEWARE_CLASSES = (
+    'cartoview.middleware.LimitDomainsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    # The setting below makes it possible to serve different languages per
+    # user depending on things like headers in HTTP requests.
+    'django.middleware.locale.LocaleMiddleware',
+    'pagination.middleware.PaginationMiddleware',
+    # 'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # This middleware allows to print private layers for the users that have
+    # the permissions to view them.
+    # It sets temporary the involved layers as public before restoring the permissions.
+    # Beware that for few seconds the involved layers are public there could be risks.
+    # 'geonode.middleware.PrintProxyMiddleware',
+)
+
+# print MIDDLEWARE_CLASSES
 # Add cartoview.app_manager to INSTALLED_APPS before GEONODE_APPS to ovrride the template tag 'base_tags' of geonode
 INSTALLED_APPS = tuple(i for i in INSTALLED_APPS if i not in GEONODE_APPS)
-INSTALLED_APPS += ('bootstrap3',)
-INSTALLED_APPS += ('cartoview', 'cartoview.app_manager', 'cartoview.viewer', 'cartoview.basic.geonode_map_application')
+INSTALLED_APPS += ('bootstrap3', 'south', 'corsheaders',)
+INSTALLED_APPS += ('cartoview', 
+    'cartoview.app_manager', 
+    'cartoview.user_engage',
+    # 'cartoview.viewer',
+    'cartoview.basic.geonode_map_application',)
 INSTALLED_APPS += GEONODE_APPS
 CARTOVIEW_APPS = ()
 # auto load apps
 import sys, importlib
 
-APPS_DIR = os.path.join(CARTOVIEW_ROOT, os.pardir, "apps")
-sys.path.append(APPS_DIR)
+APPS_DIR = os.path.abspath(os.path.join(CARTOVIEW_ROOT, os.pardir, "apps"))
+# print APPS_DIR
 apps_names = [n for n in os.listdir(APPS_DIR) if os.path.isdir(os.path.join(APPS_DIR, n))]
-
+sys.path.append(APPS_DIR)
 for app_name in apps_names:
-    print app_name
+    # print app_name
     try:
         # ensure that the folder is python module
         app_module = importlib.import_module(app_name)
@@ -120,7 +146,7 @@ INSTALLED_APPS = CARTOVIEW_APPS + INSTALLED_APPS
 
 # define the urls after the settings are overridden
 if 'geonode.geoserver' in INSTALLED_APPS:
-    MAP_BASELAYERS.remove(LOCAL_GEOSERVER)
+    # MAP_BASELAYERS.remove(LOCAL_GEOSERVER)
     LOCAL_GEOSERVER = {
         "source": {
             "ptype": "gxp_wmscsource",
@@ -134,3 +160,10 @@ if 'geonode.geoserver' in INSTALLED_APPS:
 
     # Uncomment this line incase a restart server batch exists.
     # RESTART_SERVER_BAT = "<full_path>/restart_server.bat"
+
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = True
+
+TASTYPIE_ALLOW_MISSING_SLASH = True
+
+PROXY_ALLOWED_HOSTS = ('*',)

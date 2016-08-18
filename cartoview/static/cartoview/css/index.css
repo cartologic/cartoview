@@ -1,0 +1,18 @@
+.index-intro{
+    background-color: #00b3ee;
+    color: #FFFFFF;
+}
+
+.index-intro h1{
+    font-size: 60px;
+    margin: 0;
+}
+
+.index-intro p{
+    font-size: 24px;
+    margin: 0;
+}
+
+.index-intro img{
+    width: 100%;
+}
