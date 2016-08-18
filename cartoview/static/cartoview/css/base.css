@@ -26,6 +26,14 @@ body, .main-ct{
     font-size: 22px;
 }
 
+.tbar-avatar img{
+    float: left;
+    margin: 0 5px;
+    height: 30px;
+}
+.tbar-avatar span{
+    text-transform: none;
+}
 .content-ct{
     position: relative;
 }

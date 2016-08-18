@@ -1,3 +1,4 @@
+{% load i18n avatar_tags %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -24,11 +25,23 @@
 <body {% block body_directives %}ng-app="ngMaterial" {% endblock %} layout="column">
     {% block header_toolbar %}
     <md-toolbar class="header-toolbar " md-whiteframe="2">
-      <div class="md-toolbar-tools">
-        <md-button class="tbar-logo" aria-label="Home" href="/">
-            <img src="{{ STATIC_URL }}cartoview/img/cartoview-logo.png">Cartoview
-        </md-button>
-        <md-button aria-label="Apps" href="/apps">Apps</md-button>
+        <div class="md-toolbar-tools">
+            <md-button class="tbar-logo" aria-label="Home" href="/">
+                <img src="{{ STATIC_URL }}cartoview/img/cartoview-logo.png">Cartoview
+            </md-button>
+            <md-button aria-label="Apps" href="/apps">Apps</md-button>
+            <md-button aria-label="Apps" href="/geonode">Geonode</md-button>
+            <span flex></span>
+            {% if not user.is_authenticated and REGISTRATION_OPEN %}
+                <md-button aria-label="{% trans "Register" %}" href="{% url "account_signup" %}">{% trans "Register" %}</md-button>
+            {% endif %}
+            {% if user.is_authenticated %}
+                <md-button class="tbar-avatar" aria-label="user">
+                    {% avatar user 30 %}{{ user.username }}
+                </md-button>
+            {% else %}
+                <md-button aria-label="{% trans "Sign in" %}" href="{% url 'account_login' %}?next=/">{% trans "Sign in" %}</md-button>
+            {% endif %}
       </div>
     </md-toolbar>
     {% endblock %}
