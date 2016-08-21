@@ -1,4 +1,4 @@
-{% load i18n avatar_tags %}
+{% load i18n avatar_tags cartoview_tags %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -22,28 +22,29 @@
 
     {% endblock %}
 </head>
-<body {% block body_directives %}ng-app="ngMaterial" {% endblock %} layout="column">
+<body {% block body_directives %}ng-app="cartoview.topToolbar" {% endblock %} layout="column">
     {% block header_toolbar %}
-    <md-toolbar class="header-toolbar " md-whiteframe="2">
-        <div class="md-toolbar-tools">
-            <md-button class="tbar-logo" aria-label="Home" href="/">
-                <img src="{{ STATIC_URL }}cartoview/img/cartoview-logo.png">Cartoview
-            </md-button>
-            <md-button aria-label="Apps" href="/apps">Apps</md-button>
-            <md-button aria-label="Apps" href="/geonode">Geonode</md-button>
-            <span flex></span>
-            {% if not user.is_authenticated and REGISTRATION_OPEN %}
-                <md-button aria-label="{% trans "Register" %}" href="{% url "account_signup" %}">{% trans "Register" %}</md-button>
-            {% endif %}
-            {% if user.is_authenticated %}
-                <md-button class="tbar-avatar" aria-label="user">
-                    {% avatar user 30 %}{{ user.username }}
-                </md-button>
-            {% else %}
-                <md-button aria-label="{% trans "Sign in" %}" href="{% url 'account_login' %}?next=/">{% trans "Sign in" %}</md-button>
-            {% endif %}
-      </div>
-    </md-toolbar>
+{#    <md-toolbar class="header-toolbar " md-whiteframe="2">#}
+{#        <div class="md-toolbar-tools">#}
+{#            <md-button class="tbar-logo" aria-label="Home" href="/">#}
+{#                <img src="{{ STATIC_URL }}cartoview/img/cartoview-logo.png">Cartoview#}
+{#            </md-button>#}
+{#            <md-button aria-label="Apps" href="/apps">Apps</md-button>#}
+{#            <md-button aria-label="Apps" href="/geonode">Geonode</md-button>#}
+{#            <span flex></span>#}
+{#            {% if not user.is_authenticated and REGISTRATION_OPEN %}#}
+{#                <md-button aria-label="{% trans "Register" %}" href="{% url "account_signup" %}">{% trans "Register" %}</md-button>#}
+{#            {% endif %}#}
+{#            {% if user.is_authenticated %}#}
+{#                <md-button class="tbar-avatar" aria-label="user">#}
+{#                    {% avatar user 30 %}{{ user.username }}#}
+{#                </md-button>#}
+{#            {% else %}#}
+{#                <md-button aria-label="{% trans "Sign in" %}" href="{% url 'account_login' %}?next=/">{% trans "Sign in" %}</md-button>#}
+{#            {% endif %}#}
+{#      </div>#}
+{#    </md-toolbar>#}
+        <cartoview-top-toolbar></cartoview-top-toolbar>
     {% endblock %}
     <div flex class="content-ct">
         <div class="content-ct-inner">
@@ -62,8 +63,7 @@
     <script type="text/javascript" src='{{ STATIC_URL }}vendor/angular-material/angular-material.min.js'></script>
     -->
     <script type="text/javascript">
-        angular.module('cartoview.urlsHelper',[]);
-        angular.module('cartoview.urlsHelper').constant('urls', {
+        angular.module('cartoview.urlsHelper',[]).constant('urls', {
             BASE_URL: "/",
             GEOSERVER_BASE_URL: "{{ GEOSERVER_BASE_URL }}",
             PROXY_URL: "{{ PROXY_URL }}",
@@ -72,7 +72,22 @@
             STATIC_URL: "{{ STATIC_URL }}",
             APPS_BASE_URL: "{% url 'app_manager_base_url' %}",
             REST_URL: "{% url 'app_manager_base_url' %}rest/app_manager/"
-        })
+        });
+        angular.module('cartoview.userInfo',[]).service("cartoviewUser",function () {
+            this.isAuthenticated = {{ user.is_authenticated | dump_json }};
+            this.isSuperUser = {{ user.is_superuser | dump_json }};
+            this.loginUrl = "{% url 'account_login' %}?next={{ request.get_full_path }}";
+            this.logoutUrl = "{% url 'account_logout' %}";
+            this.registerUrl = "{% url 'account_signup' %}";
+            //{% if user.is_authenticated %}
+            this.username = "{{ user.username }}";
+            this.avatar = "{% avatar_url user 60 %}";
+            //{% endif %}
+        });
+    </script>
+    <script type="text/javascript" src='{{ STATIC_URL }}cartoview/js/top-toolbar.js'></script>
+    <script type="text/javascript">
+        angular.module('cartoview.base',['cartoview.topToolbar']);
     </script>
     {% block scripts %}
 

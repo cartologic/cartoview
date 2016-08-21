@@ -1,0 +1,116 @@
+<div  class="header">
+	<md-sidenav class="md-sidenav-right md-whiteframe-z2" md-component-id="right">
+		<md-toolbar md-whiteframe="2"  layout="row" class="top-toolbar">
+		 <div class="md-toolbar-tools">
+	        <md-button class="tbar-logo" aria-label="Home" href="/">
+                <img ng-src="{{ urls.STATIC_URL }}cartoview/img/cartoview-logo.png">Cartoview
+            </md-button>
+	        <span flex></span>
+	        <md-button class="md-icon-button" aria-label="Close Side Panel" ng-click="closeSideNavPanel('right')">
+	          <md-tooltip>Close Side Panel</md-tooltip>
+	          <md-icon class="md-default-theme" class="material-icons">&#xE5CD;</md-icon>
+	        </md-button>
+	       </div>
+		</md-toolbar>
+		<md-content layout-padding="">
+	    <md-list>
+		  <md-list-item>
+		    <md-icon class="md-default-theme" class="material-icons">&#xE851;</md-icon>
+		    <p>User</p>
+		  </md-list-item>
+		  <md-list-item>
+		    <md-icon class="md-default-theme" class="material-icons">&#xE0C9;</md-icon>
+		    <p>Messages</p>
+		  </md-list-item>
+		  <md-list-item>
+		    <md-icon class="material-icons">&#xE150;</md-icon>
+		    <p>Create Post</p>
+		  </md-list-item>
+		  <md-list-item>
+		    <md-icon class="md-default-theme" class="material-icons">&#xE8B8;</md-icon>
+		    <p>Settings</p>
+		  </md-list-item>
+		  <md-list-item>
+		    <md-icon class="material-icons">&#xE7F4;</md-icon>
+		    <p>Alerts</p>
+		  </md-list-item>
+		  <md-list-item>
+		    <md-icon class="material-icons">&#xE887;</md-icon>
+		    <p>Help</p>
+		  </md-list-item>
+	    </md-list>
+	  </md-content>
+	</md-sidenav>
+
+    <md-sidenav class="md-sidenav-right md-whiteframe-z2" md-component-id="user-menu">
+		<md-toolbar md-whiteframe="2"  layout="row" class="top-toolbar">
+		 <div class="md-toolbar-tools">
+	        <md-button class="tbar-logo" aria-label="Home" href="/">
+                <img ng-src="{{ urls.STATIC_URL }}cartoview/img/cartoview-logo.png">Cartoview
+            </md-button>
+	        <span flex></span>
+	        <md-button class="md-icon-button" aria-label="Close Side Panel" ng-click="closeSideNavPanel('user-menu')">
+	          <md-tooltip>Close Side Panel</md-tooltip>
+	          <md-icon class="md-default-theme" class="material-icons">&#xE5CD;</md-icon>
+	        </md-button>
+	       </div>
+		</md-toolbar>
+		<md-content layout-padding="">
+	    <md-list>
+		  <md-list-item ng-href="/people/profile/{{ cartoviewUser.username }}">
+		    <md-icon class="md-default-theme" class="material-icons">&#xE851;</md-icon>
+		    <p>Profile</p>
+		  </md-list-item>
+		  <md-list-item href="/messages/inbox/">
+		    <md-icon class="md-default-theme" class="material-icons">&#xE0C9;</md-icon>
+		    <p>Inbox</p>
+		  </md-list-item>
+            <md-list-item href="/announcements/">
+		    <md-icon class="material-icons">&#xE7F4;</md-icon>
+		    <p>Announcements</p>
+		  </md-list-item>
+
+
+		  <md-list-item href="/admin/" ng-if="cartoviewUser.isSuperUser">
+		    <md-icon class="md-default-theme" class="material-icons">&#xE8B8;</md-icon>
+		    <p>Admin</p>
+		  </md-list-item>
+		  <md-list-item ng-href="{{ urls.GEOSERVER_BASE_URL }}" >
+		    <md-icon class="md-default-theme" class="material-icons">&#xE55B;</md-icon>
+		    <p>Geoserver</p>
+		  </md-list-item>
+
+		  <md-list-item href="/help">
+		    <md-icon class="material-icons">&#xE887;</md-icon>
+		    <p>Help</p>
+		  </md-list-item>
+            <md-list-item ng-href="{{ cartoviewUser.logoutUrl }}">
+		    <md-icon class="material-icons">&#xE8AC;</md-icon>
+		    <p>Log out</p>
+		  </md-list-item>
+	    </md-list>
+	  </md-content>
+	</md-sidenav>
+
+    <md-toolbar md-whiteframe="2"  class="top-toolbar">
+        <div class="md-toolbar-tools">
+            <md-button class="tbar-logo" aria-label="Home" href="/">
+                <img ng-src="{{ urls.STATIC_URL }}cartoview/img/cartoview-logo.png">Cartoview
+            </md-button>
+            <md-button hide-xs aria-label="Layers" href="/layers">Layers</md-button>
+            <md-button hide-xs aria-label="Maps" href="/maps">Maps</md-button>
+            <md-button hide-xs aria-label="Documents" href="/documents">Documents</md-button>
+            <md-button hide-xs aria-label="Apps" href="/apps">Apps</md-button>
+            <span flex></span>
+            <md-button ng-if="!cartoviewUser.isAuthenticated" ng-href="{{ cartoviewUser.loginUrl }}">Login</md-button>
+            <md-button ng-if="cartoviewUser.isAuthenticated" class="tbar-avatar" aria-label="user" ng-click="openSideNavPanel('user-menu')">
+                <img ng-src="{{ cartoviewUser.avatar }}">
+                {{ cartoviewUser.username }}
+            </md-button>
+            <md-button hide-gt-xs class="md-icon-button" aria-label="More" ng-click="openSideNavPanel('right')">
+              <md-tooltip>More</md-tooltip>
+              <md-icon class="material-icons">&#xE5D4;</md-icon>
+            </md-button>
+        </div>
+    </md-toolbar>
+</div>

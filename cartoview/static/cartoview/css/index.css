@@ -16,3 +16,18 @@
 .index-intro img{
     width: 100%;
 }
+
+.index-intro .actions .md-button.md-raised{
+    display: inline;
+    padding: 8px 20px;
+    margin-left: 0;
+}
+
+/*.index-intro .md-button.md-raised[disabled]{*/
+    /*background-color: transparent;*/
+/*}*/
+
+/*.index-intro .md-button.md-raised[disabled] span{*/
+    /*color: #ffffff;*/
+    /*text-transform: none;*/
+/*}*/

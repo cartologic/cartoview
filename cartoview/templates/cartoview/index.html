@@ -1,5 +1,5 @@
 {% extends "cartoview/base.html" %}
-
+{% load i18n %}
 {% block title %} {{ block.super }} {% endblock %}
 {% block styles %}
     <link rel="stylesheet" href="{{ STATIC_URL }}cartoview/css/index.css">
@@ -18,6 +18,13 @@
         <h2>Build a geospatial website in minutes with Cartoview</h2>
         <h2>Manage GIS Web Mapping Applications</h2>
         <p>Cartoview enables the rapid deployment of easy-to-manage and easy-to-use spatial web applications</p>
+        <p class="actions">
+            <md-button class="md-raised" aria-label="{% trans "Join" %}" href="{% url "account_signup" %}">{% trans "Join" %}</md-button>
+            and manage your geo-app or
+            <md-button  class="md-raised md-primary" aria-label="{% trans "Download" %}" href="http://cartologic.com/cartoview/download/">
+                {% trans "Download" %}</md-button>
+            and install on your environment.
+        </p>
     </div>
     <div flex-gt-md="50" flex="100">
         <img src="http://cartologic.com/cartoview/static/cartoview/img/cartoview-banner.png">

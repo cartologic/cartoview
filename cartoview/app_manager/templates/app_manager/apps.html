@@ -24,7 +24,7 @@
 {% block scripts %}
     <script type="text/javascript" src="{{ STATIC_URL }}vendor/ng-image-appear.min.js"></script>
     <script type="text/javascript">
-        angular.module("cartoview.apps", ["ngMaterial", 'ngImageAppear'])
+        angular.module("cartoview.apps", ["cartoview.base", 'ngImageAppear'])
     </script>
 {% endblock %}
 {% block body_directives %}ng-app="cartoview.apps" {% endblock %}
