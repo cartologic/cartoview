@@ -1,11 +1,9 @@
 {% load i18n avatar_tags cartoview_tags %}
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="format-detection" content="telephone=no">
-    <meta name="msapplication-tap-highlight" content="no">
     <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
     <link rel="shortcut icon" type="image/png" href="{{ STATIC_URL }}img/cartoview.png"/>
 
@@ -24,26 +22,6 @@
 </head>
 <body {% block body_directives %}ng-app="cartoview.topToolbar" {% endblock %} layout="column">
     {% block header_toolbar %}
-{#    <md-toolbar class="header-toolbar " md-whiteframe="2">#}
-{#        <div class="md-toolbar-tools">#}
-{#            <md-button class="tbar-logo" aria-label="Home" href="/">#}
-{#                <img src="{{ STATIC_URL }}cartoview/img/cartoview-logo.png">Cartoview#}
-{#            </md-button>#}
-{#            <md-button aria-label="Apps" href="/apps">Apps</md-button>#}
-{#            <md-button aria-label="Apps" href="/geonode">Geonode</md-button>#}
-{#            <span flex></span>#}
-{#            {% if not user.is_authenticated and REGISTRATION_OPEN %}#}
-{#                <md-button aria-label="{% trans "Register" %}" href="{% url "account_signup" %}">{% trans "Register" %}</md-button>#}
-{#            {% endif %}#}
-{#            {% if user.is_authenticated %}#}
-{#                <md-button class="tbar-avatar" aria-label="user">#}
-{#                    {% avatar user 30 %}{{ user.username }}#}
-{#                </md-button>#}
-{#            {% else %}#}
-{#                <md-button aria-label="{% trans "Sign in" %}" href="{% url 'account_login' %}?next=/">{% trans "Sign in" %}</md-button>#}
-{#            {% endif %}#}
-{#      </div>#}
-{#    </md-toolbar>#}
         <cartoview-top-toolbar></cartoview-top-toolbar>
     {% endblock %}
     <div flex class="content-ct">
@@ -51,17 +29,17 @@
         {% block body %}{% endblock %}
         </div>
     </div>
+    <!--
     <script type="text/javascript" src='{{ STATIC_URL }}vendor/angular/angular.js'></script>
     <script type="text/javascript" src='{{ STATIC_URL }}vendor/angular-animate/angular-animate.js'></script>
     <script type="text/javascript" src='{{ STATIC_URL }}vendor/angular-aria/angular-aria.js'></script>
     <script type="text/javascript" src='{{ STATIC_URL }}vendor/angular-material/angular-material.js'></script>
+-->
 
-    <!--
     <script type="text/javascript" src='{{ STATIC_URL }}vendor/angular/angular.min.js'></script>
     <script type="text/javascript" src='{{ STATIC_URL }}vendor/angular-animate/angular-animate.min.js'></script>
     <script type="text/javascript" src='{{ STATIC_URL }}vendor/angular-aria/angular-aria.min.js'></script>
     <script type="text/javascript" src='{{ STATIC_URL }}vendor/angular-material/angular-material.min.js'></script>
-    -->
     <script type="text/javascript">
         angular.module('cartoview.urlsHelper',[]).constant('urls', {
             BASE_URL: "/",
