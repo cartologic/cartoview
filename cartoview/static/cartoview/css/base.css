@@ -89,3 +89,8 @@ body, .main-ct{
 }
 
 
+.footer{
+    padding: 20px 10%;
+    background-color: #dddddd;
+    border-top: #aaaaaa;
+}
