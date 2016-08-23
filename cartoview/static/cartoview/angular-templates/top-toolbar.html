@@ -14,6 +14,10 @@
 		</md-toolbar>
 		<md-content layout-padding="">
 	    <md-list>
+            <md-list-item href="/apps">
+                <md-icon class="md-default-theme" class="material-icons">view_module</md-icon>
+                <p>Apps</p>
+            </md-list-item>
             <md-list-item href="/layers">
                 <md-icon class="md-default-theme" class="material-icons">layers</md-icon>
                 <p>Layers</p>
@@ -26,10 +30,7 @@
                 <md-icon class="md-default-theme" class="material-icons">description</md-icon>
                 <p>Documents</p>
             </md-list-item>
-            <md-list-item href="/apps">
-                <md-icon class="md-default-theme" class="material-icons">view_module</md-icon>
-                <p>Apps</p>
-            </md-list-item>
+
 	    </md-list>
 	  </md-content>
 	</md-sidenav>
@@ -89,10 +90,10 @@
             <md-button class="tbar-logo" aria-label="Home" href="/">
                 <img ng-src="{{ urls.STATIC_URL }}cartoview/img/cartoview-logo.png">Cartoview
             </md-button>
+            <md-button hide-xs aria-label="Apps" href="/apps">Apps</md-button>
             <md-button hide-xs aria-label="Layers" href="/layers">Layers</md-button>
             <md-button hide-xs aria-label="Maps" href="/maps">Maps</md-button>
             <md-button hide-xs aria-label="Documents" href="/documents">Documents</md-button>
-            <md-button hide-xs aria-label="Apps" href="/apps">Apps</md-button>
             <span flex></span>
             <md-button ng-if="!cartoviewUser.isAuthenticated" ng-href="{{ cartoviewUser.loginUrl }}">Login</md-button>
             <md-button ng-if="cartoviewUser.isAuthenticated" class="tbar-avatar" aria-label="user" ng-click="openSideNavPanel('user-menu')">
