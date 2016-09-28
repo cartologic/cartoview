@@ -41,14 +41,12 @@ angular.module('cartoview.userEngage').directive('cartoviewImages',function (url
     return {
         restrict: 'E',
         replace: true,
-        scope:{
-            identifier: "@"
-        },
         template: "<div class='cv-images'><ng-include src='templateUrl'></ng-include></div>",
         link: function (scope, element, attrs) {
             var template = attrs.template || 'default';
-            scope.templateUrl = urls.STATIC_URL + "user_engage/angular-templates/images/" + template + ".html";
-            scope.image = new Image(scope.identifier, attrs.thumbnailSize);
+            scope.templateUrl = attrs.templateUrl ||  (urls.STATIC_URL + "user_engage/angular-templates/images/" + template + ".html");
+
+            scope.image = new Image(attrs.identifier, attrs.thumbnailSize);
             scope.image.newImageTitle = "";
             scope.onKeyPress = function(event){
                 if(event.which == 13 && !event.shiftKey){
