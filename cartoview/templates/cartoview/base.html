@@ -22,8 +22,7 @@
 </head>
 <body {% block body_directives %}ng-app="cartoview.topToolbar" {% endblock %} layout="column">
     {% block header_toolbar %}
-
-        {% if request.GET.embed %}
+        {% if request.GET.embed == ''%}
         {% else %}
             <cartoview-top-toolbar></cartoview-top-toolbar>
         {% endif %}
