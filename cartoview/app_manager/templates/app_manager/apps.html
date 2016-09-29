@@ -19,6 +19,22 @@
         margin: 0 8px;
         padding: 0;
     }
+.app-image-ct{
+    height: 150px;
+    overflow: hidden;
+    padding: 0;
+    max-width:200px;
+
+}
+.app-image-ct img{
+    width: auto;
+    height: auto;
+    max-width: none;
+    max-height: none;
+}
+.app-info{
+    border-left: solid 1px #ccc;
+}
 </style>
 {% endblock %}
 {% block scripts %}
@@ -44,9 +60,13 @@
     {% for app in Apps %}
     {% if app.in_menu %}
     <div layout="row" layout-align="center center">
-        <div md-whiteframe="2" layout="row" class="app-list-item" layout-wrap layout-align="start start" flex="100" flex-gt-sm="80">
-            <img src="{{STATIC_URL}}{{app.name}}/logo.png" ng-image-appear placeholder>
-            <div flex layout-padding>
+        <div md-whiteframe="2" layout="row" class="app-list-item" layout-wrap  flex="100" flex-gt-sm="80">
+
+            <div class="app-image-ct" layout="row" layout-align="center center">
+                <img src="{{STATIC_URL}}{{app.name}}/logo.png">
+            </div>
+
+            <div class="app-info" flex layout-padding>
                 <h4>{{app.title}}</h4>
                 <p >{{app.description}}</p>
                 <div layout="row" layout-wrap>

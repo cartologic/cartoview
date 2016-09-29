@@ -1,5 +1,5 @@
 
-from cartoview.app_manager.models import AppInstance
+from cartoview.app_manager.models import AppInstance, App
 from geonode.api.resourcebase_api import *
 from .resources import  FileUploadResource
 from tastypie.resources import ModelResource
@@ -43,7 +43,6 @@ class GeonodeLayerAttributeResource(ModelResource):
 
 class AppResource(FileUploadResource):
     class Meta(FileUploadResource.Meta):
-        from models import App
         queryset = App.objects.all()
         filtering = {"name": ALL ,"title":ALL}
         can_edit = True
@@ -73,6 +72,22 @@ class AppInstanceResource(ModelResource):
         if bundle.obj.app is not None:
             return reverse("%s.view" % bundle.obj.app.name, args=[bundle.obj.pk])
         return None
+
+    def obj_create(self, bundle, **kwargs):
+        """
+        A ORM-specific implementation of ``obj_create``.
+        """
+        bundle.obj = AppInstance()
+        bundle.obj.owner = bundle.request.user
+        app_name = bundle.data['appName']
+        print app_name
+        bundle.obj.app = App.objects.get(name=app_name)
+        for key, value in kwargs.items():
+            setattr(bundle.obj, key, value)
+
+        bundle = self.full_hydrate(bundle)
+        return self.save(bundle)
+
 
 
 class TagResource(ModelResource):
