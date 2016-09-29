@@ -22,7 +22,11 @@
 </head>
 <body {% block body_directives %}ng-app="cartoview.topToolbar" {% endblock %} layout="column">
     {% block header_toolbar %}
-        <cartoview-top-toolbar></cartoview-top-toolbar>
+
+        {% if request.GET.embed %}
+        {% else %}
+            <cartoview-top-toolbar></cartoview-top-toolbar>
+        {% endif %}
     {% endblock %}
     <div flex class="content-ct">
         <div class="content-ct-inner">
