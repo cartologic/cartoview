@@ -52,9 +52,10 @@ class AppResource(FileUploadResource):
 
 class AppInstanceResource(ModelResource):
     launch_app_url = fields.CharField(null=True, blank=True)
+    edit_url = fields.CharField(null=True, blank=True)
     app = fields.ForeignKey(AppResource, 'app', full=False, null=True)
     map = fields.ForeignKey(GeonodeMapResource, 'map', full=True, null=True)
-
+    owner = fields.CharField(null=True, blank=True)
 
     class Meta(CommonMetaApi):
         filtering = CommonMetaApi.filtering
@@ -68,9 +69,18 @@ class AppInstanceResource(ModelResource):
         excludes = ['csw_anytext', 'metadata_xml']
 
 
+    def dehydrate_owner(self, bundle):
+        return bundle.obj.owner.username
+
     def dehydrate_launch_app_url(self, bundle):
         if bundle.obj.app is not None:
             return reverse("%s.view" % bundle.obj.app.name, args=[bundle.obj.pk])
+        return None
+
+    def dehydrate_edit_url(self, bundle):
+        if bundle.obj.owner == bundle.request.user:
+            if bundle.obj.app is not None:
+                return reverse("%s.edit" % bundle.obj.app.name, args=[bundle.obj.pk])
         return None
 
     def obj_create(self, bundle, **kwargs):
