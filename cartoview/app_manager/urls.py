@@ -17,6 +17,18 @@ from cartoview.user_engage.rest import *
 rest_api.register(ImageResource())
 rest_api.register(CommentResource())
 
+from django.conf import settings
+
+for app_name in settings.CARTOVIEW_APPS:
+    # print app_name
+    try:
+        # ensure that the folder is python module
+        app_module = importlib.import_module(app_name + ".rest")
+    except:
+        # TODO: log the error
+        pass
+
+
 urlpatterns = patterns(
         'cartoview.app_manager',
         url(r'^$', index, name='app_manager_base_url'),

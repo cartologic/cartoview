@@ -52,7 +52,8 @@
             MEDIA_URL: "{{ MEDIA_URL }}",
             STATIC_URL: "{{ STATIC_URL }}",
             APPS_BASE_URL: "{% url 'app_manager_base_url' %}",
-            REST_URL: "{% url 'app_manager_base_url' %}rest/app_manager/"
+            REST_URL: "{% url 'app_manager_base_url' %}rest/app_manager/",
+            GEONODE_REST_URL: "{% url 'api_api_top_level' 'api' %}/"
         });
         angular.module('cartoview.userInfo',[]).service("cartoviewUser",function () {
             this.isAuthenticated = {{ user.is_authenticated | dump_json }};
