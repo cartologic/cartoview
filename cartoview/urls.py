@@ -15,7 +15,7 @@ urlpatterns = patterns('',
     url(r'', include(api.urls)),
     (r'^apps/', include('cartoview.app_manager.urls')),
     (r'^engage/', include('cartoview.user_engage.urls')),
-    (r'^pages/', include('cartoview.pages.urls')),
+    # (r'^pages/', include('cartoview.pages.urls')),
     # (r'^viewer/', include('cartoview.viewer.urls')),
     (r'^cartoview_proxy/', include('cartoview.proxy.urls')),
 ) + urlpatterns
