@@ -25,6 +25,7 @@ newInstanceApp.service("dataService", function ($http, $tastypieResource) {
         instances.objects.$get({id:window.instanceId}).then(function(result){
             instanceObj.title = result.title;
             instanceObj.abstract = result.abstract;
+            instanceObj.thumbnail_url = result.thumbnail_url;
             try{
                 var config = JSON.parse(result.config);
                 angular.extend(instanceObj.config, config)
