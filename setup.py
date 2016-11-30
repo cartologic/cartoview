@@ -24,5 +24,8 @@ setup(
     zip_safe=False,
     install_requires=[
         'geonode==2.4',
+        'south',
+        'django-bootstrap3==6.2.2',
+        'django-cors-headers==1.1.0',
     ]
 )
