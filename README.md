@@ -1,5 +1,5 @@
 # cartoview
-Cartoview is a an app framework built with django implemented as a [GeoNode](http://geonode.org/) project, It extends Geonode with modules to install web mapping apps to better use the data, layers and maps served from Geonode and Geoserver. 
+Cartoview is an app framework built with django implemented as a [GeoNode](http://geonode.org/) project, It extends Geonode with modules to install web mapping apps to better use the data, layers and maps served from Geonode and Geoserver. 
 
 ### To install Cartoview :
   - For Windows , you can download cartoview windows installer from [here](http://cartologic.com/cartoview/download/)
@@ -34,7 +34,7 @@ Cartoview is a an app framework built with django implemented as a [GeoNode](htt
 		
 
 
-## For Ubunu 14.04 development installation:
+## For Ubuntu 14.04 development installation:
 
    Install geonode using [this instructions](http://docs.geonode.org/en/master/tutorials/install_and_admin/geonode_install/install_geonode_application.html)
    
@@ -46,7 +46,7 @@ Cartoview is a an app framework built with django implemented as a [GeoNode](htt
 		# To install Cartoview follow these commands:
 		git clone https://github.com/cartologic/cartoview.git
 
-		#Tthere is no specific path to clone Cartoview
+		# There is no specific path to clone Cartoview
 
 		cd <cartoview_folder>
 		
