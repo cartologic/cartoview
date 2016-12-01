@@ -109,19 +109,19 @@ def add_app(app_name, info):
         app.order = 1
     app.save()
 
-    app_img_path = os.path.abspath(os.path.join(settings.APPS_DIR, app_name, 'app_img.png'))
-    if os.path.isfile(app_img_path):
-        from cStringIO import StringIO
-        size = 200, 150
-        img = Image.open(app_img_path)
-        img = ImageOps.fit(img, size, Image.ANTIALIAS)
-        imgfile = StringIO()
-        img.save(imgfile, format='PNG')
-        imgvalue = imgfile.getvalue()
-        filename = 'app-%s-thumb.png' % app.pk
-        app_img_url = save_thumbnail(filename, imgvalue)
-        app.app_img_url = app_img_url
-        app.save()
+    # app_img_path = os.path.abspath(os.path.join(settings.APPS_DIR, app_name, 'app_img.png'))
+    # if os.path.isfile(app_img_path):
+        # from cStringIO import StringIO
+        # size = 200, 150
+        # img = Image.open(app_img_path)
+        # img = ImageOps.fit(img, size, Image.ANTIALIAS)
+        # imgfile = StringIO()
+        # img.save(imgfile, format='PNG')
+        # imgvalue = imgfile.getvalue()
+        # filename = 'app-%s-thumb.png' % app.pk
+        # app_img_url = save_thumbnail(filename, imgvalue)
+        # app.app_img_url = app_img_url
+        # app.save()
     tags = get_attr(info, 'tags', [])
     for tag_name in tags:
         try:
@@ -133,7 +133,7 @@ def add_app(app_name, info):
     # from django.db.models import loading
     # django_settings.INSTALLED_APPS+=(''+app_name,)
     # loading.cache.loaded = False
-    management.call_command('syncdb', interactive=False)
+    # management.call_command('syncdb', interactive=False)
 
 
 def finalize_setup(app_name, user):
@@ -145,12 +145,12 @@ def finalize_setup(app_name, user):
         except:
             pass
 
-    restart_server_batch = getattr(settings, 'RESTART_SERVER_BAT', None)
-    if restart_server_batch:
+    install_app_batch = getattr(settings, 'CARTOVIEW_INSTALL_APP_BAT', None)
+    if install_app_batch:
         def restart():
             install()
             install_app(app_name)
-            run_batch_file(restart_server_batch, None, settings.APPS_DIR)
+            run_batch_file(install_app_batch, None, os.path.dirname(install_app_batch))
 
         timer = Timer(0.1, restart)
         timer.start()
@@ -173,7 +173,7 @@ def manage_apps(request):
         'apps': apps,
         'site_apps': get_apps_names(),
     }
-
+    print context["site_apps"]
     return render(request, 'app_manager/app_install.html', context)
 
 

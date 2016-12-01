@@ -8,12 +8,9 @@
 {% block head %}
     {% include "geonode/ext_header.html" %}
     {% include "geonode/app_header.html" %}
-
     {{ block.super }}
-
 {% endblock %}
 {% block body %}
-    <link href="{% static 'home_2/home_2.css' %}" rel="stylesheet">
     <link href="{% static 'app_manager/apps_list.css' %}" rel="stylesheet">
 {% if user.is_staff  %}
 

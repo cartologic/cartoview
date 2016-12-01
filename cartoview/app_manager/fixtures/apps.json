@@ -1,0 +1,26 @@
+[{
+    "fields": {
+        "rating": 0,
+        "is_suspended": false,
+        "contact_name": "",
+        "app_url": "",
+        "author": "Cartologic",
+        "single_instance": false,
+        "author_website": "http://www.cartologic.com",
+        "short_description": "",
+        "owner_url": "",
+        "admin_only": false,
+        "description": "Simple, responsive and mobile enabled map viewer",
+        "in_menu": true,
+        "contact_email": "",
+        "help_url": "http://cartologic.com/cartoview/apps/viewer/help/",
+        "name": "cartoview_map_viewer",
+        "license": "BSD",
+        "title": "Simple Map Viewer",
+        "app_img_url": "http://localhost:8000/admin/app_manager/app/1/",
+        "installed_by": null,
+        "order": 1
+    },
+    "model": "app_manager.app",
+    "pk": 1
+}]
