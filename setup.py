@@ -23,8 +23,7 @@ setup(
     include_package_data=True,
     zip_safe=False,
     install_requires=[
-        'geonode==2.4',
-        'south',
+        'geonode==2.5',
         'django-bootstrap3==6.2.2',
         'django-cors-headers==1.1.0',
     ]
