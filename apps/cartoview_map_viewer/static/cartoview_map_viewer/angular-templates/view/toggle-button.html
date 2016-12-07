@@ -1,0 +1,15 @@
+<div>
+    <md-button ng-click="toggle=!toggle" class="md-button-toggle">
+        <div flex layout="row">
+            <md-icon class="material-icons floating-menu-item-icon" ng-if="icon">{{ icon }}</md-icon>
+            <span class="md-inline-list-icon-label">{{ title }}</span>
+            <span flex></span>
+            <span aria-hidden="true" class="md-toggle-icon" ng-class="{'toggled' : toggle}">
+              <md-icon md-svg-src="md-toggle-arrow"></md-icon>
+            </span>
+        </div>
+        <span class="md-visually-hidden">
+            Toggle {{toggle? 'expanded' : 'collapsed'}}
+        </span>
+    </md-button>
+</div>

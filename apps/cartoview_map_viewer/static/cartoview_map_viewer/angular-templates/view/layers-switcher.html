@@ -1,0 +1,5 @@
+<md-content class="md-padding">
+    <div flex="100" ng-repeat="layer in overlays">
+        <md-checkbox ng-model="layer.visible" class="md-primary">{{ layer.get('title') }}</md-checkbox>
+    </div>
+</md-content>

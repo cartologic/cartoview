@@ -1,0 +1,82 @@
+
+
+.pointer {
+  cursor: pointer;
+}
+.floating-menu .md-button .floating-menu-item-icon{
+    font-size: 20px;
+}
+.floating-menu .md-button{
+    border-radius: 0;
+    cursor: pointer;
+    display: block;
+    align-items: inherit;
+    line-height: 40px;
+    margin: 0;
+    max-height: 40px;
+    overflow: hidden;
+    padding: 0px 16px;
+    text-align: left;
+    text-decoration: none;
+    white-space: normal;
+    width: 100%;
+}
+.md-button-toggle .md-toggle-icon {
+    display: block;
+    margin-left: auto;
+    speak: none;
+    vertical-align: middle;
+    transform: rotate(180deg);
+    -webkit-transform: rotate(180deg);
+    transition: transform 0.3s ease-in-out;
+    -webkit-transition: -webkit-transform 0.3s ease-in-out;
+}
+
+.md-button-toggle .md-toggle-icon.toggled {
+    transform: rotate(0deg);
+    -webkit-transform: rotate(0deg);
+}
+
+.content-panel {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+
+}
+.content-panel .header{
+    background-color: transparent;
+}
+.content-panel.has-content .header .md-button{
+    min-width: 56px;
+}
+.content-panel.has-content {
+    bottom: 0;
+    background-color: #FFFFFF;
+    width: 360px;
+    min-width: 30%;
+    max-width: 100%;
+}
+.content-panel .content{
+    -webkit-transform: translate3d(0,0,0);
+    transform: translate3d(0,0,0);
+}
+.map-results .map-results-header{
+    min-height: auto;
+}
+.map-results .map-results-header h4{
+    margin: 0;
+}
+
+.map-results table{
+    border-spacing: 0;
+}
+.map-results td,
+.map-results th{
+    padding: 8px;
+    text-align: left;
+    vertical-align: top;
+}
+.map-results th{
+    font-weight: bold;
+}

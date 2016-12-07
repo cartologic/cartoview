@@ -1,0 +1,16 @@
+.map-selector-dialog{
+    min-width: 80%;
+}
+.map-selector-dialog md-card{
+    width: 280px;
+}
+
+
+
+.map-selector-dialog md-card.selected{
+    background-color: rgb(63,81,181);
+    color: #fff;
+    border: solid rgb(63,81,181) 5px;
+}
+
+

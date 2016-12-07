@@ -1,0 +1,92 @@
+{% extends 'cartoview/base.html' %}
+{% block title %}
+    {{ block.super }} - {{ instance.title }}
+{% endblock %}
+{% block styles %}
+    <link rel="stylesheet" href="{{ STATIC_URL }}vendor/ol3/ol.css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}cartoview_map_viewer/css/map.css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}cartoview_map_viewer/css/style.css">
+    {% for w in widgets %}
+        {% for css_url in w.view.css %}<link rel="stylesheet" href="{{ css_url }}">{% endfor %}
+    {% endfor %}
+{% endblock %}
+{% block scripts %}
+    <script type="text/javascript" src="{{ STATIC_URL }}vendor/ol3/ol.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/proj4js/2.3.14/proj4.js"></script>
+
+    {% include "cartoview_map_viewer/dynamic_view_js.html" %}
+    <script type="text/javascript" src="{{ STATIC_URL }}cartoview_map_viewer/js/view/app.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}cartoview_map_viewer/js/view/map-service.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}cartoview_map_viewer/js/view/map-directive.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}cartoview_map_viewer/js/view/basic-controls-directives.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}cartoview_map_viewer/js/view/identify-service.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}cartoview_map_viewer/js/view/identify-results-directive.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}cartoview_map_viewer/js/view/widget-view-directive.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}cartoview_map_viewer/js/view/main-controller.js"></script>
+    {% for w in widgets %}
+        {% for js_url in w.view.js %}<script type="text/javascript" src="{{ js_url }}"></script>{% endfor %}
+    {% endfor %}
+{% endblock %}
+{% block body_directives %}ng-app="cartoview.mapViewerApp" ng-controller="cartoview.MainController"{% endblock %}
+{% block header_toolbar %}{% endblock %}
+{% block body %}
+    {% block main_panel %}
+    <div class="content-panel" layout="column" ng-class="{'md-whiteframe-1dp has-content': identify.hasContent}">
+        <md-content class="header" layout="row">
+            <md-button ng-click="toggleSidenav()" class="md-primary" ng-class="{'md-fab': !identify.hasContent}">
+                <md-icon aria-label="Menu" class="material-icons">menu</md-icon>
+            </md-button>
+            <span flex></span>
+            <md-button ng-click="identify.clearContent()" class="md-primary" ng-show="identify.hasContent">
+                <md-icon aria-label="Menu" class="material-icons">close</md-icon>
+            </md-button>
+        </md-content>
+
+        <md-content flex  ng-show="identify.hasContent" class="content">
+          <identify-results></identify-results>
+        </md-content>
+        {% block main_panel_content %} {% endblock %}
+
+    </div>
+    {% endblock %}
+    <div class="ol3-map" flex cartoview-map>
+        {% block map_content %}
+            <zoom-bar ng-if="config.showZoombar"></zoom-bar>
+            <!--<rotation-bar></rotation-bar>-->
+        {% endblock %}
+    </div>
+    {% block floating_menu %}
+    <md-sidenav md-component-id="left" class="md-sidenav-left md-whiteframe-z2 floating-menu">
+
+        {% verbatim %}
+        <md-toolbar>
+          <div class="md-toolbar-tools">
+            <h2>{{ config.title }}</h2>
+          </div>
+        </md-toolbar>
+        <md-button class="md-list-item-content" ng-click="map.zoomHome()">
+            <md-icon class="material-icons floating-menu-item-icon">home</md-icon>
+            <span class="md-inline-list-icon-label">Home</span>
+        </md-button>
+        <md-button about-button class="md-list-item-content">
+            <md-icon class="material-icons floating-menu-item-icon">help</md-icon>
+            <span class="md-inline-list-icon-label">About</span>
+        </md-button>
+        <div ng-if="config.showLayerSwitcher">
+            <toggle-button toggle="layersSwitcherVisible" title="Layers" icon="layers"></toggle-button>
+            <layers-switcher ng-show="layersSwitcherVisible"></layers-switcher>
+        </div>
+        <div ng-if="config.showLegend">
+            <toggle-button toggle="legendVisible" title="Legend"  icon="view_list"></toggle-button>
+            <layers-legend ng-show="legendVisible" ></layers-legend>
+        </div>
+        <div ng-if="config.showBasemapSwitcher">
+            <toggle-button toggle="baseMapsSwitcherVisible" title="Base Maps"  icon="satellite"></toggle-button>
+            <basemaps-switcher ng-show="baseMapsSwitcherVisible"></basemaps-switcher>
+        </div>
+        {% endverbatim %}
+        {% block floating_menu_content %}{% endblock %}
+    </md-sidenav>
+    {% endblock floating_menu %}
+
+{% endblock %}

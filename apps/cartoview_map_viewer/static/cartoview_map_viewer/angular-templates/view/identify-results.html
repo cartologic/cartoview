@@ -1,0 +1,25 @@
+<md-content class="map-results">
+    <div ng-show="!identify.selected">
+        <md-list ng-repeat="result in identify.content.results" ng-if="result.features.length > 0" >
+            <md-list-item class="map-results-header"><h4>{{ result.title }}</h4></md-list-item>
+            <md-list-item aria-label=""
+                ng-repeat="feature in result.features"
+                ng-click="identify.selectFeature(feature)">
+                <p ng-include="result.listItemTpl" flex></p>
+                <span><md-icon>chevron_right</md-icon></span>
+                <md-divider ng-if="!$last"></md-divider>
+            </md-list-item>
+        </md-list>
+    </div>
+
+    <div class="" ng-show="identify.selected">
+        <md-button ng-click="identify.selectFeature()" ng-if="identify.featuresCount != 1">Back to results</md-button>
+        <md-list>
+            <md-list-item ng-repeat="(key,value) in identify.selected.properties">
+                <span flex="30" style="font-weight: bold;">{{ key }}</span>
+                <p flex>{{ value }}</p>
+                <md-divider ng-if="!$last"></md-divider>
+            </md-list-item>
+        </md-list>
+    </div>
+</md-content>

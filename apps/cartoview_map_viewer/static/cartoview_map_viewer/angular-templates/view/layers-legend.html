@@ -1,0 +1,13 @@
+<md-content>
+    <md-list>
+        <md-list-item class="md-3-line" ng-repeat="layer in overlays">
+            <div class="md-list-item-text">
+                <span>{{ layer.get('title') }}</span>
+                <p>
+                    <img ng-src="{{ layer.get('source').getUrls()[0] }}?layer={{ layer.get('source').getParams().LAYERS  }}&request=GetLegendGraphic&format=image%2Fpng&transparent=true&legend_options=fontAntiAliasing:true;fontSize:14;&width=30&height=30&style={{ layer.get('source').getParams().STYLES || ''  }}">
+                </p>
+            </div>
+            <md-divider ng-if="!$last"></md-divider>
+        </md-list-item>
+    </md-list>
+</md-content>

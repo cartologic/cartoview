@@ -1,0 +1,99 @@
+html, body, .full-height{
+    height: 100%;
+    padding: 0;
+    overflow: hidden;
+}
+.ol3-map{
+    position: relative;
+    height: 100%;
+    width: 100%;
+
+}
+
+.map-widget .popup-popover .navbar-text {
+    margin-right: 0;
+    margin-left: 0;
+}
+.map-widget .popup-popover .table-responsive{
+    max-height: 150px;
+}
+
+.map-widget .popup-popover {
+    min-height: 300px;
+    max-height: 300px;
+    min-width: 400px;
+}
+.layers-switcher button{
+    padding-top: 2px;
+}
+.layers-switcher{
+    top: 70px;
+    right: .5em;
+}
+
+.ol-control button:hover, .ol-control button:focus {
+    background-color: #f4f4f4;
+}
+.ol-control button{
+    width: 26px;
+    height: 26px;
+    line-height: 26px;
+    display: block;
+    color: black;
+    background-color: #fff;
+    border-width: 0;
+}
+
+.ol-control{
+    padding:0;
+    box-shadow: rgba(0, 0, 0, 0.65098) 0px 1px 5px 0px;
+    border-radius: 4px;
+}
+.ol-scale-line.ol-unselectable{
+    background-color: rgba(255, 255, 255, 0.8);
+}
+
+
+.menu-toggle-btn{
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    z-index: 9999;
+}
+
+/* ZOOMBAR*/
+.zoombar{
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    z-index: 1;
+    width: 30px;
+    padding: 0;
+}
+.zoombar .md-button{
+    min-width: 30px;
+    margin: 0;
+}
+
+.zoombar .zoom-in-btn{
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.zoombar .zoom-out-btn{
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+
+.rotation{
+    position: absolute;
+    top: 90px;
+    right: 15px;
+    z-index: 1;
+    width: 30px;
+    padding: 0;
+}
+.rotation .md-button{
+    min-width: 30px;
+    margin: 0;
+}

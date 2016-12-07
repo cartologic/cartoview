@@ -1,0 +1,10 @@
+<md-content class="md-padding">
+    <md-radio-group ng-model="backgrounds.active" ng-change="setBackground()">
+        <md-radio-button
+            ng-repeat="layer in backgrounds"
+            class="md-primary"
+            ng-value="layer"
+            ng-model="backgrounds.active"> {{ layer.get('title') }}
+        </md-radio-button>
+    </md-radio-group>
+</md-content>

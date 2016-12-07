@@ -312,7 +312,8 @@ _DEFAULT_INSTALLED_APPS = (
                               # 'modeltranslation',
                               'djcelery',
                               'storages',
-
+                              # myapps
+                              'cartoview.apps_management',
                               # Theme
                               "pinax_theme_bootstrap_account",
                               "pinax_theme_bootstrap",
@@ -331,7 +332,7 @@ _DEFAULT_INSTALLED_APPS = (
                               'polymorphic',
                               'guardian',
 
-                          ) + GEONODE_APPS + ('cartoview', 'cartoview.app_manager', 'cartoview.user_engage', )
+                          ) + GEONODE_APPS + ('cartoview', 'cartoview.app_manager', 'cartoview.user_engage',)
 
 INSTALLED_APPS = os.getenv('INSTALLED_APPS', _DEFAULT_INSTALLED_APPS)
 
@@ -1067,8 +1068,9 @@ if 'geonode.geoserver' in INSTALLED_APPS:
     # TODO: Allow overriding with an env var
     DB_DATASTORE = str2bool(os.getenv('DB_DATASTORE', 'True'))
 
-    ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', ['localhost', ])
-
+    ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', ['localhost', '127.0.0.1'])
 
 TASTYPIE_ALLOW_MISSING_SLASH = True
-CARTOVIEW_INSTALL_APP_BAT = os.path.abspath(os.path.join(PROJECT_ROOT, os.path.pardir, os.path.pardir, "setup scripts", "install_app.bat"))
+CARTOVIEW_INSTALL_APP_BAT = os.path.abspath(
+    os.path.join(PROJECT_ROOT, os.path.pardir, os.path.pardir, "setup scripts", "install_app.bat"))
+PIP_PATH = "C:\Users\CartoLogic\Desktop\cartoview_dev\env\Scripts"

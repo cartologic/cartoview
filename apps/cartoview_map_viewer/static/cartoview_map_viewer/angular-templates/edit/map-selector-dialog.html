@@ -1,0 +1,36 @@
+<md-dialog aria-label="Select Map" ng-cloak class="map-selector-dialog">
+
+    <md-toolbar>
+      <div class="md-toolbar-tools">
+        <h2>Select Map</h2>
+      </div>
+    </md-toolbar>
+    <md-dialog-content>
+        <di flex layout="row"  layout-align="center center" layout-wrap>
+            <md-card ng-repeat="obj in maps.page.objects"
+                ng-click="$event.preventDefault(); selected.map = obj;"
+                ng-class="{selected:selected.map.id==obj.id}">
+                <img ng-src="{{  obj.thumbnail_url }}" class="md-card-image" alt="Washed Out">
+                <md-card-title>
+                    <md-card-title-text>
+                        <span class="md-subhead">{{ obj.title }}</span>
+                    </md-card-title-text>
+                </md-card-title>
+
+            </md-card>
+        </di>
+    </md-dialog-content>
+    <md-dialog-actions layout="row">
+        <md-button ng-click="maps.page.first()" ng-disabled="!maps.page.meta.previous">First</md-button>
+        <md-button ng-click="maps.page.previous()" ng-disabled="!maps.page.meta.previous" >Previous</md-button>
+        <b ng-show="maps.page.length">{{maps.page.index}}/{{maps.page.length}}</b>
+        <md-button ng-click="maps.page.next()" ng-disabled="!maps.page.meta.next">Next</md-button>
+        <md-button ng-click="maps.page.last()" ng-disabled="!maps.page.meta.next">Last</md-button>
+    </md-dialog-actions>
+    <md-dialog-actions layout="row">
+
+        <md-button ng-click="ok()">OK</md-button>
+        <md-button ng-click="cancel()" ng-if="showCancel">Cancel</md-button>
+    </md-dialog-actions>
+
+</md-dialog>

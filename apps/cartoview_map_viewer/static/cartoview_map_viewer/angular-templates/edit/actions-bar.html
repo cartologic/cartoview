@@ -1,0 +1,14 @@
+<div layout="row" layout-align="start start">
+    <md-button class="md-raised md-primary" ng-click="save()">Save</md-button>
+    <md-button class="md-raised" ng-href="{{ urls.detailsUrl }}" ng-disabled="newInstance">Details</md-button>
+    <md-button class="md-raised" ng-href="{{ urls.viewUrl }}" ng-disabled="newInstance">View</md-button>
+
+    <md-progress-circular ng-show="saving"
+                          ng-disabled="!saving"
+                          class="md-accent md-hue-1"
+                          md-diameter="60">
+    </md-progress-circular>
+
+    <span class="alert alert-success" role="alert" ng-show="success">Saved Successfuly!</span>
+    <span class="alert alert-danger" role="alert" ng-show="error">{{ errorMsg }}</span>
+</div>

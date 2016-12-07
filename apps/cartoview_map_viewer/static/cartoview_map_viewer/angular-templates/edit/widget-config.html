@@ -1,0 +1,8 @@
+<md-content layout-padding layout="column" class="md-whiteframe-3dp">
+    <md-checkbox ng-model="instanceObj.config.widgets[widget.name]">{{ widget.title }}</md-checkbox>
+    <div ng-show="instanceObj.config.widgets[widgetName]">
+
+        <ng-transclude></ng-transclude>
+    </div>
+
+</md-content>

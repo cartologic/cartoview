@@ -1,0 +1,58 @@
+{% load viewer_helper_tags %}
+<script type="text/javascript">
+    (function () {
+        var module = angular.module('cartoview.viewer.urlsHelper', []);
+        var urls = {
+            geoserver: "{{ GEOSERVER_BASE_URL }}",
+            proxy: "{{ PROXY_URL }}",
+            cartoviewGeoserverProxy: "{% url 'cartoview_proxy' 'geoserver' '' %}",
+            static: "{{ STATIC_URL }}",
+            media: "{{ MEDIA_URL }}",
+            rest: "{% url 'app_manager_base_url' %}rest/app_manager/",
+            geonodeRest: "{% url 'api_api_top_level' 'api' %}/"
+        };
+        //{% if instance %}
+        urls.viewUrl = "{% url 'cartoview_map_viewer.view' instance.id %}";
+        urls.detailsUrl = "{% url 'appinstance_detail' instance.id %}";
+        urls.editUrl = "{% url 'cartoview_map_viewer.edit' instance.id %}";
+        //{% endif %}
+        module.constant("urlsHelper", urls);
+    })();
+    (function () {
+        var module = angular.module('cartoview.viewer.widgetsInfo', []);
+        module.service("widgetsInfo",function () {
+            var widgets = {{ widgets | dump_json }};
+            widgetsDict = {};
+            widgets.forEach(function(w){
+                widgetsDict[w.name] = w;
+            });
+            var get = function (name) {
+                return widgetsDict[name];
+            };
+            return {
+                widgets: widgets,
+                get: get
+            }
+        });
+    })();
+    (function () {
+        var module = angular.module('cartoview.viewer.mapConfig', []);
+        module.service("mapConfig",function () {
+            return {{ map_config | dump_json }};
+        });
+    })();
+    (function () {
+        var module = angular.module('cartoview.viewer.appConfig', []);
+        module.service("appConfig",function () {
+            var config = {{ instance.config | safe }};
+            config.id = {{ instance.id }};
+            config.title = {{ instance.title | dump_json }};
+            config.abstract = {{ instance.abstract | dump_json }};
+
+            return config;
+        });
+    })();
+    //{% if instance %}
+    var instanceId = {{ instance.id }};
+    //{% endif %}
+</script>
