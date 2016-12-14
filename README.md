@@ -41,29 +41,146 @@ Cartoview is an app framework built with django implemented as a [GeoNode](http:
 	
 ## For Ubuntu 14.04 development installation:
 
-   Install geonode using [this instructions](http://docs.geonode.org/en/master/tutorials/install_and_admin/geonode_install/install_geonode_application.html)
+  1. Geonode Installation :
+  
+   - Required Packages Installation :
+        ```sh
+        $sudo apt-get install    \
+        python-virtualenv      \
+        build-essential        \
+        openssh-server         \
+        apache2                \
+        gcc                    \
+        gdal-bin               \
+        gettext                \
+        git-core               \
+        libapache2-mod-wsgi    \
+        libgeos-dev            \
+        libjpeg-dev            \
+        libpng-dev             \
+        libpq-dev              \
+        libproj-dev            \
+        libxml2-dev            \
+        libxslt-dev            \
+        openjdk-7-jre          \
+        patch                  \
+        postgresql             \
+        postgis                \
+        postgresql-9.3-postgis-scripts \
+        postgresql-contrib     \
+        python                 \
+        python-dev             \
+        python-gdal            \
+        python-pycurl          \
+        python-imaging         \
+        python-pastescript     \
+        python-psycopg2        \
+        python-support         \
+        python-urlgrabber      \
+        python-virtualenv      \
+        tomcat7                \
+        unzip                  \
+        zip
+        ```
+	    
+   - GeoNode Setup :
    
-		
-		# Verify that Geonode installation is working by the following commands:
-		cd <geonode_folder>
-		python manage.py validate 
-		
-		# To install Cartoview follow these commands:
-		git clone https://github.com/cartologic/cartoview.git
+     - Let’s download GeoNode from the main GeoNode repository on GitHub:
+        
+        ```sh
+        $git clone https://github.com/GeoNode/geonode.git --branch 2.5.x
+        ```
+     - create new user with home folder and move geonode to home folder of this user:
+        
+        ```sh
+        $sudo useradd -m geonode
+        $sudo mv ~/geonode /home/geonode/
+        ```
+      - now goto project folder using this command:
+        
+        ```sh
+        $cd /home/geonode/geonode
+        ```
+      - install Geonode:
+        
+        ```sh
+        $sudo pip install -e .
+        ```
+      - install Celery 3.1.25 to avoid some errors using:
+        
+            ```sh
+            $sudo pip install celery==3.1.25
+            ```
+      - The following command will download a GeoServer web archive that we are going to use in GeoServer setup:
 
-		# There is no specific path to clone Cartoview
-
-		cd <cartoview_folder>
-		
-		# To download geonode_geoserver and jetty.
-		paver setup
-		
-		# Initialize database
-		paver sync
-		
-		# To start geoserver and django web server.
-		python start
-
+        ```sh
+        $sudo paver setup
+        ```
+  2. Upgrade Python to latest version to avoid errors in cartoview :
+   
+   - python upgrade using the following commands:
+        
+        ```sh
+        $sudo add-apt-repository ppa:fkrull/deadsnakes-python2.7
+        $sudo apt-get update
+        $sudo apt-get install python2.7
+        ```
+            
+   - check python version using :
+        
+        ```sh
+        $python --version
+        ```
+            
+  3. Cartoview installion:
+   - clone cartoview beside geonode folder :
+   
+        ```sh
+        $sudo git clone https://github.com/cartologic/cartoview.git
+        ```
+   - goto cartoview folder using:
+   
+        ```sh
+        $cd cartoview/
+        ```
+   - create apps folder:
+   
+        ```sh
+        $sudo mkdir apps
+        ```
+   - install django-overextends package:
+   
+        ```sh
+        $sudo pip install django-overextends
+        ```
+   - goto migrations folder of appmanager:
+   
+        ```sh
+        $cd cartoview/appmanager/migrations
+        ```
+   - remove all files in migrations folder except  ```__init.py``` from file explorer or using these commands:
+   
+        ```sh
+        $sudo shopt -s extglob
+        $sudo rm -- !(__init__.py)
+        ```
+   - back to cartoview project folder:
+   
+        ```sh
+        $cd ../../../
+        ```
+   - run these commands :
+   
+        ```sh
+        $sudo python manage.py makemigraions app_manager
+        $sudo python manage.py migrate
+        ```
+   - run django server:
+   
+        ```sh
+        $sudo python manage.py runserver
+        ```
+    now server is running on ```http://localhost:8000```
 
     
 	
