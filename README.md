@@ -158,7 +158,7 @@ Cartoview is an app framework built with django implemented as a [GeoNode](http:
         ```sh
         $cd cartoview/appmanager/migrations
         ```
-   - remove all files in migrations folder except  ```__init.py``` from file explorer or using these commands:
+   - remove all files in migrations folder except  ```__init__.py``` from file explorer or using these commands:
    
         ```sh
         $sudo shopt -s extglob
