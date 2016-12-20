@@ -230,3 +230,5 @@ cartoview/local_settings.py
 cartoview/static/landing/
 cartoview/pre_settings.py
 cartoview/static/vendor/
+
+apps/
