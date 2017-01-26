@@ -232,3 +232,9 @@ cartoview/pre_settings.py
 cartoview/static/vendor/
 
 apps/
+cartoview_project/apps/*
+cartoview_project/uploaded/*
+cartoview_project/static/*
+.vscode/
+
+cartoview_project/cartoview_project/local_settings.py

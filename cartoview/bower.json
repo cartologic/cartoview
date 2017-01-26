@@ -17,15 +17,15 @@
     "tests"
   ],
   "dependencies": {
-    "angular": "^1.5.9",
-    "angular-animate": "^1.5.9",
-    "angular-aria": "^1.5.9",
-    "angular-material": "^1.1.1",
-    "lf-ng-md-file-input": "^1.4.8",
-    "angular-resource": "^1.5.9",
-    "angular-resource-tastypie": "^1.0.4",
-    "normalize-css": "normalize.css#^5.0.0",
     "ol3": "ol3-bower#^3.18.2",
-    "ng-image-appear": "^1.11.3"
+    "angular": "#1.5.9",
+    "angular-animate": "#1.5.9",
+    "angular-aria": "#1.5.9",
+    "angular-messages": "#1.5.9",
+    "angular-material": "^1.1.1",
+    "angular-resource": "#1.5.9",
+    "angular-resource-tastypie": "^1.0.4",
+    "normalize-css": "^5.0.0",
+    "angular-bootstrap": "^2.4.0"
   }
 }

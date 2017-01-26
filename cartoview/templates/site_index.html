@@ -1,26 +1,22 @@
 {% extends 'index.html' %}
 {% load i18n %}
-{#{% block hero %}#}
-{#<div  id="site-banner" class="jumbotron">#}
-{#    <div class="container">#}
-{#        <div class="row">#}
-{#            <div class="col-md-4 col-sm-12" style="text-align: center;">#}
-{#                <img src="http://isdf.cartoview.org/uploaded/documents/isdf_logo.png">#}
-{#            </div>#}
-{#            <div class="col-md-8 col-sm-12">#}
-{#                <h2>{% trans "Informal Settlements Development Facility" %}</h2>#}
-{#                <h3>{% trans "Ensure a safe residential areas" %}</h3>#}
-{#                <p>#}
-{#                    {% blocktrans %}#}
-{#                     The Informal Settlements Development Facility (ISDF) is the Egyptian governmental body that is responsible for financing slums redevelopment projects#}
-{#                    {% endblocktrans %}#}
-{#                </p>#}
-{#            </div>#}
-{#        </div>#}
-{##}
-{#    </div>#}
-{#</div>#}
-{#{% endblock %}#}
+{% block extra_head %}
+    {{ block.super }}
+    <style>
+    #site-banner{
+        background: #0098DB;
+    }
+    </style>
+{% endblock %}
+{% block hero %}
+  <div id="site-banner" class="jumbotron">
+    <div class="container">
+      <h1>{% trans "Welcome" %}</h1>
+      <p>{% blocktrans %}<a href="http://cartologic.com/cartoview">Cartoview</a> extends GeoNode to create, manage GIS Web Mapping Applications.{% endblocktrans %}</p>
+      <p>{% blocktrans %}If you have any questions about the software or service,  <a href="http://cartologic.com/contact.php">contact us</a>.{% endblocktrans %}</p>
+    </div>
+  </div>
+{% endblock %}
 {% block mainbody %}
     {{ block.super }}
 {% endblock %}

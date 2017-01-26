@@ -1,17 +1,14 @@
+import os
+import importlib
 from urlparse import urljoin
-
-from PIL import Image, ImageOps
 from django.contrib.auth.decorators import login_required
+from django.contrib.admin.views.decorators import staff_member_required
 from django.views.decorators.http import require_POST
-from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import PermissionDenied
-from django.db import connections
 from django.db.models import Max, Min, F
 from django.forms.util import ErrorList
 from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.shortcuts import render, render_to_response
-
-# Create your views here.
 from guardian.shortcuts import get_perms
 from cartoview.app_manager.forms import AppInstanceEditForm
 from geonode.base.forms import CategoryForm
@@ -19,15 +16,14 @@ from geonode.base.models import TopicCategory
 from geonode.people.forms import ProfileForm
 from geonode.security.views import _perms_info_json
 from models import *
-from apps_helper import *
 from django.conf import settings
-from django.core import management
-from threading import Timer
+
 import json
 from geonode.utils import resolve_object, build_social_links
 from django.utils.translation import ugettext as _
 from django.template import RequestContext, loader
 from django.core.files import File
+from .installer import AppInstaller
 
 _PERMISSION_MSG_DELETE = _("You are not permitted to delete this document")
 _PERMISSION_MSG_GENERIC = _("You do not have permissions for this document.")
@@ -56,114 +52,15 @@ def save_thumbnail(filename, image):
 
     return url
 
+def get_apps_names():
+    return [n for n in os.listdir(settings.APPS_DIR) if os.path.isdir(os.path.join(settings.APPS_DIR, n))]
 
-def save_uploaded_file(f, path):
-    destination = open(path, 'wb+')
-    for chunk in f.chunks():
-        destination.write(chunk)
-    destination.close()
+def installed_apps():
+    from .models import App
+    apps = App.objects.filter(is_suspended=False).order_by('order')
+    return apps
 
-
-def get_attr(obj, key, default):
-    try:
-        return obj[key]
-    except:
-        return default
-
-
-def add_app(app_name, info):
-    app = App()
-    app.name = app_name
-    app.title = get_attr(info, 'title', app_name)
-    app.description = get_attr(info, 'description', None)
-    app.short_description = get_attr(info, 'short_description', None)
-    app.owner_url = get_attr(info, 'owner_url', None)
-    app.help_url = get_attr(info, 'help_url', None)
-
-    #     data = r.read()
-    #
-    #     img_temp = NamedTemporaryFile()
-    #     img_temp.write(data)
-    #     img_temp.flush()
-    #     app.app_img.save(app_name+'.png', File(img_temp))
-    # app_logo_path = os.path.abspath(os.path.join(BASE_DIR,'apps',app_name,'logo.png'))
-    # if os.path.isfile(app_logo_path):
-    #     r_logo = open(app_logo_path,'rb')
-    #     data_logo = r_logo.read()
-    #
-    #     img_temp_logo = NamedTemporaryFile()
-    #     img_temp_logo.write(data_logo)
-    #     img_temp_logo.flush()
-    #     app.app_logo.save(app_name+'_logo.png', File(img_temp_logo))
-    app.author = get_attr(info, 'author', None)
-    app.author_website = get_attr(info, 'author_website', None)
-    app.home_page = get_attr(info, 'home_page', None)
-    app.license = get_attr(info, 'licence', None)
-    app.single_instance = get_attr(info, 'single_instance', False)
-    app.in_menu = get_attr(info, 'in_menu', True)
-    app.admin_only = get_attr(info, 'admin_only', False)
-    apps = App.objects.all()
-    if apps:
-        app.order = apps.aggregate(Max('order'))['order__max'] + 1
-    else:
-        app.order = 1
-    app.save()
-
-    # app_img_path = os.path.abspath(os.path.join(settings.APPS_DIR, app_name, 'app_img.png'))
-    # if os.path.isfile(app_img_path):
-        # from cStringIO import StringIO
-        # size = 200, 150
-        # img = Image.open(app_img_path)
-        # img = ImageOps.fit(img, size, Image.ANTIALIAS)
-        # imgfile = StringIO()
-        # img.save(imgfile, format='PNG')
-        # imgvalue = imgfile.getvalue()
-        # filename = 'app-%s-thumb.png' % app.pk
-        # app_img_url = save_thumbnail(filename, imgvalue)
-        # app.app_img_url = app_img_url
-        # app.save()
-    tags = get_attr(info, 'tags', [])
-    for tag_name in tags:
-        try:
-            tag = AppTag(name=tag_name)
-            tag.save()
-            app.tags.add(tag)
-        except:
-            pass
-    # from django.db.models import loading
-    # django_settings.INSTALLED_APPS+=(''+app_name,)
-    # loading.cache.loaded = False
-    # management.call_command('syncdb', interactive=False)
-
-
-def finalize_setup(app_name, user):
-    def install():
-        try:
-            installer = importlib.import_module('%s.installer' % app_name)
-            add_app(app_name, installer.info)
-            installer.install()
-        except:
-            pass
-
-    install_app_batch = getattr(settings, 'CARTOVIEW_INSTALL_APP_BAT', None)
-    if install_app_batch:
-        def restart():
-            install()
-            install_app(app_name)
-            run_batch_file(install_app_batch, None, os.path.dirname(install_app_batch))
-
-        timer = Timer(0.1, restart)
-        timer.start()
-    else:
-        install()
-        try:
-            install_app(app_name)
-        except:
-            pass
-
-
-
-@login_required
+@staff_member_required
 def manage_apps(request):
     apps = App.objects.all()
     site_apps = {}
@@ -174,7 +71,10 @@ def manage_apps(request):
         'site_apps': get_apps_names(),
     }
     print context["site_apps"]
-    return render(request, 'app_manager/app_install.html', context)
+    return render(request, 'app_manager/manage.html', context)
+
+
+
 
 
 def index(request):
@@ -202,95 +102,44 @@ def index(request):
     return render(request, 'app_manager/apps.html', context)
 
 
-@login_required
-def ajax_install_app(request):
-    import tempfile
-    import zipfile
+@staff_member_required
+@require_POST
+def install_app(request, store_id, app_name, version):
     response_data = {
         'success': False,
-        'log': [],
-        'errors': [],
-        'warnings': [],
+        'messages': []
     }
-
-    package_file = request.FILES.get('package_file', None)
-    if package_file is None:
-        response_data["errors"].append("No package file uploaded")
-    else:
-        if not os.path.exists(temp_dir):
-            os.makedirs(temp_dir)
-        response_data["log"].append("Package file uploaded")
-        extract_to = tempfile.mkdtemp(dir=temp_dir)
-        x, uploaded_file_path = tempfile.mkstemp(dir=temp_dir)
-        save_uploaded_file(package_file, uploaded_file_path)
-        # Get a real Python file handle on the uploaded file
-        file_handle = open(uploaded_file_path, 'rb')
-        # Unzip the file, creating subdirectories as needed
-        zfobj = zipfile.ZipFile(file_handle)
-        for name in zfobj.namelist():
-            if name.startswith('__MACOSX/'):
-                continue
-            if name.endswith('/'):
-                try:  # Don't try to create a directory if exists
-                    os.mkdir(os.path.join(extract_to, name))
-                except:
-                    pass
-            else:
-                outfile = open(os.path.join(extract_to, name), 'wb')
-                outfile.write(zfobj.read(name))
-                outfile.close()
-        response_data["log"].append("Package file extracted")
-        app_name = os.listdir(extract_to)[0]
-        no_installer = True
-        response_data["app_name"] = app_name
-        app_dir = os.path.join(extract_to, app_name)
-        installed_app_dir = os.path.join(settings.APPS_DIR, app_name)
-        if os.path.isdir(installed_app_dir):
-            response_data['warnings'].append('application %s is already exists' % app_name)
-        else:
-            shutil.move(app_dir, settings.APPS_DIR)
-            try:
-                installer = importlib.import_module('%s.installer' % app_name)
-                no_installer = False
-            except:
-                pass
-        response_data["success"] = True
-        if no_installer:
-            response_data['warnings'].append('no application installer found')
-
-        os.close(x)
-        zfobj.close()
-        file_handle.close()
-        os.remove(uploaded_file_path)
-
-        shutil.rmtree(extract_to)
-        finalize_setup(app_name, request.user)
-        response_data["log"].append("Running installation scripts...")
-    return HttpResponse(json.dumps(response_data), content_type="application/json")
-
-
-@login_required
-@require_POST
-def uninstall_app(request, app_name):
     try:
-        # installer = importlib.import_module('%s.installer' % app_name)
-        # c = connections['default'].cursor()
-        # try:
-        #     for app_model_type in ContentType.objects.filter(app_label=app_name):
-        #         c.execute('drop table "%s" CASCADE ' % app_model_type.model_class()._meta.db_table)
-        # finally:
-        #     c.close()
-
-        #
-        # installer.uninstall()
-        ContentType.objects.filter(app_label=app_name).delete()
-        app = App.objects.get(name=app_name)
-        app.delete()
-        response_data = {"success": True}
+        installer = AppInstaller(app_name, store_id, version)
+        installedApps = installer.install()
+        response_data["success"] = True
+        # names = ",".join([app.name for app in installedApps])
+        # rest_url = "{}rest/app_manager/app/?name__in={}".format(reverse("app_manager_base_url"), names)
+        # print rest_url
+        # return HttpResponseRedirect(rest_url)
     except Exception as ex:
-        response_data = {"success": False, "errors": [ex.message]}
+        response_data["messages"].append({"type": "error", "msg": ex.message})
+
 
     return HttpResponse(json.dumps(response_data), content_type="application/json")
+
+
+
+@staff_member_required
+@require_POST
+def uninstall_app(request, store_id, app_name):
+    response_data = {
+        "success": False,
+        "errors": []
+    }
+    try:
+        installer = AppInstaller(app_name, store_id)
+        installer.uninstall()
+        response_data["success"] = True
+    except Exception as ex:
+        response_data["errors"].append(ex.message)
+    return HttpResponse(json.dumps(response_data), content_type="application/json")
+
 
 
 @login_required

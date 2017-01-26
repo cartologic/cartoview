@@ -1,5 +1,21 @@
 {% extends "base.html" %}
 {% load static  i18n%}
 {% block extra_head %}
-    <link href="{% static 'css/site_base.css' %}" rel="stylesheet"/>
+    <link rel="shortcut icon" type="image/png" href="{{ STATIC_URL }}cartoview/img/icon.png"/>
+    <link href="{{ STATIC_URL }}cartoview/css/custom.css" rel="stylesheet"/>
+{% endblock %}
+{% block tabs %}
+    <li>
+        <a href="{% url 'app_manager_base_url' %}">{% trans "Apps" %}</a>
+{#      {% if user.is_superuser %}#}
+{#      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{% trans "Apps" %}<i class="fa fa-angle-down fa-lg"></i></a>#}
+{#      <ul class="dropdown-menu">#}
+{#        <li><a href="{% url "app_manager_base_url" %}">{% trans "Explore Apps" %}</a></li>#}
+{#        <li> <a href="{% url "manage_apps" %}">{% trans "Manage Apps" %}</a></li>#}
+{#      </ul>#}
+{#      {% else %}#}
+{#      <a href="{% url "app_manager_base_url" %}">{% trans "Apps" %}</a>#}
+{#      {% endif %}#}
+    </li>
+    {{ block.super }}
 {% endblock %}

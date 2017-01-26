@@ -3,17 +3,28 @@ from django.contrib.gis.db import models
 from django.core.urlresolvers import reverse
 from django.db.models import signals
 
-from apps_helper import delete_installed_app
 # Create your models here.
 from geonode.base.models import ResourceBase, resourcebase_post_save
 from geonode.security.models import remove_object_permissions
 from geonode.maps.models import Map as GeonodeMap
 import json
 
+
 class AppTag(models.Model):
     name = models.CharField(max_length=200, unique=True, null=True, blank=True)
 
     def __unicode__(self):
+        return self.name
+
+class AppStore(models.Model):
+    """
+    to store links for cartoview appstores
+    """
+    name = models.CharField(max_length=256)
+    url = models.URLField(verbose_name="App Store URL")
+    is_default = models.BooleanField(default=False)
+
+    def __str__(self):
         return self.name
 
 
@@ -29,25 +40,20 @@ class App(models.Model):
     author = models.CharField(max_length=200, null=True, blank=True)
     author_website = models.URLField(null=True, blank=True)
     license = models.CharField(max_length=200, null=True, blank=True)
-    tags = models.ManyToManyField(AppTag, null=True, blank=True)
+    tags = models.ManyToManyField(AppTag, blank=True)
     date_installed = models.DateTimeField('Date Installed', auto_now_add=True, null=True)
     installed_by = models.ForeignKey(geonode_settings.AUTH_USER_MODEL, null=True, blank=True)
     single_instance = models.BooleanField(default=False, null=False, blank=False)
     order = models.SmallIntegerField(null=False, blank=False, default=0)
     owner_url = models.URLField(null=True, blank=True)
     help_url = models.URLField(null=True, blank=True)
-    # app_logo = ImageField(upload_to=only_filename, help_text="The site will resize this master image as necessary for page display", blank=True, null = True)
     is_suspended = models.NullBooleanField(null=True, blank=True, default=False)
     app_img_url = models.TextField(max_length=1000, blank=True, null=True)
-    in_menu = models.NullBooleanField(null=True, blank=True, default=True)
-    admin_only = models.NullBooleanField(null=True, blank=True, default=False)
     rating = models.IntegerField(default=0, null=True, blank=True)
     contact_name = models.CharField(max_length=200, null=True, blank=True)
     contact_email = models.EmailField(null=True, blank=True)
-
-    def delete(self):
-        delete_installed_app(self)
-        super(type(self), self).delete()
+    version = models.CharField(max_length=10)
+    store = models.ForeignKey(AppStore, null=True)
 
     def __unicode__(self):
         return self.title
@@ -67,9 +73,13 @@ class App(models.Model):
             return None
 
 
+
+
+
 class AppInstance(ResourceBase):
     """
-    An App Instance  is any kind of App Instance that can be created out of one of the Installed Apps.
+    An App Instance  is any kind of App Instance that can be created
+    out of one of the Installed Apps.
     """
 
     # Relation to the App model
@@ -86,6 +96,7 @@ class AppInstance(ResourceBase):
             return str(self.id)
         else:
             return '%s (%s)' % (self.title, self.id)
+
     @property
     def config_obj(self):
         try:
@@ -95,10 +106,11 @@ class AppInstance(ResourceBase):
 
     @property
     def launch_url(self):
-        return  reverse("%s.view" % self.app.name, args=[self.pk])
+        return reverse("%s.view" % self.app.name, args=[self.pk])
 
     def get_thumbnail_url(self):
         return self.thumbnail_url
+
 
 def pre_save_appinstance(instance, sender, **kwargs):
     if not isinstance(instance, AppInstance):
