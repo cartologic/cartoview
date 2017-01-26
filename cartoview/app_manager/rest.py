@@ -1,5 +1,5 @@
 
-from cartoview.app_manager.models import AppInstance, App
+from cartoview.app_manager.models import AppInstance, App, AppStore
 from geonode.api.resourcebase_api import *
 from .resources import  FileUploadResource
 from tastypie.resources import ModelResource
@@ -41,13 +41,17 @@ class GeonodeLayerAttributeResource(ModelResource):
         }
 
 
+class AppStoreResource(FileUploadResource):
+    class Meta(FileUploadResource.Meta):
+        queryset = AppStore.objects.all()
+
+
 class AppResource(FileUploadResource):
+    store = fields.ForeignKey(AppStoreResource, 'store', full=False, null=True)
     class Meta(FileUploadResource.Meta):
         queryset = App.objects.all()
-        filtering = {"name": ALL ,"title":ALL}
+        filtering = {"id": ALL, "name": ALL, "title":ALL , "store": ALL_WITH_RELATIONS}
         can_edit = True
-
-
 
 
 class AppInstanceResource(ModelResource):

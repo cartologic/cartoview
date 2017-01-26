@@ -12,19 +12,14 @@
 {% endblock %}
 {% block body %}
     <link href="{% static 'app_manager/apps_list.css' %}" rel="stylesheet">
-{% if user.is_staff  %}
-
     <div class="page-header">
-      <a href="{% url 'manage_apps' %}" class="btn btn-primary pull-right">{% trans "Manage Apps" %}</a>
-      <h2>{% trans "Explore Apps" %}</h2>
+        {% if user.is_staff  %}
+        <a href="{% url 'manage_apps' %}" class="btn btn-primary pull-right">{% trans "Manage Apps" %}</a>
+        {% endif %}
+        <h2>{% trans "Explore Apps" %}</h2>
     </div>
-
-{% endif %}
-
         <div id="page-wrapper">
-
             <div class="container-fluid">
-
                 <!-- Page Heading -->
                 <div class="row" style="margin:10px 0; font-size: 12px;">
 
@@ -33,7 +28,6 @@
 							<div class="list-group">
 
 								{% for app in Apps %}
-								{% if app.in_menu %}
 								<div class="list-group-item ">
 									<div class="col-md-2 col-sm-3 col-xs-12 app-logo-ct">
                                         <div class="app-logo" style="background-image: url({{STATIC_URL}}{{app.name}}/logo.png);"></div>
@@ -83,7 +77,6 @@
 									<div style="clear:both;"></div>
 
 								</div>
-							 {% endif %}
 							 {% endfor %}
 							</div>
 						</div>

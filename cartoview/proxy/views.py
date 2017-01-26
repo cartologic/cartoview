@@ -7,11 +7,9 @@ from django.conf import settings
 urls = {
     'geoserver': settings.OGC_SERVER['default']['PUBLIC_LOCATION'],
 }
-@csrf_exempt
-def proxy_view(request, url_name, sub_url, requests_args=None):
-    print url_name
-    print sub_url
-    url = urls[url_name] + sub_url
+
+
+def send_request(request, url, requests_args=None):
     requests_args = (requests_args or {}).copy()
     headers = get_headers(request.META)
     params = request.GET.copy()
@@ -70,6 +68,12 @@ def proxy_view(request, url_name, sub_url, requests_args=None):
         proxy_response[key] = value
 
     return proxy_response
+
+
+@csrf_exempt
+def proxy_view(request, url_name, sub_url, requests_args=None):
+    url = urls[url_name] + sub_url
+    return send_request(request, url, requests_args)
 
 
 def get_headers(environ):

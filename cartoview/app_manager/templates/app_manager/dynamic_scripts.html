@@ -1,0 +1,25 @@
+{% load i18n avatar_tags cartoview_tags %}
+<script type="text/javascript">
+    angular.module('cartoview.urlsHelper',[]).constant('urls', {
+        BASE_URL: "/",
+        GEOSERVER_BASE_URL: "{{ GEOSERVER_BASE_URL }}",
+        PROXY_URL: "{{ PROXY_URL }}",
+        CARTOVIEW_PROXY_URL: "{% url 'cartoview_proxy' 'geoserver' '' %}",
+        MEDIA_URL: "{{ MEDIA_URL }}",
+        STATIC_URL: "{{ STATIC_URL }}",
+        APPS_BASE_URL: "{% url 'app_manager_base_url' %}",
+        REST_URL: "{% url 'app_manager_base_url' %}rest/app_manager/",
+        GEONODE_REST_URL: "{% url 'api_api_top_level' 'api' %}/"
+    });
+    angular.module('cartoview.userInfo',[]).service("cartoviewUser",function () {
+        this.isAuthenticated = {{ user.is_authenticated | dump_json }};
+        this.isSuperUser = {{ user.is_superuser | dump_json }};
+        this.loginUrl = "{% url 'account_login' %}?next={{ request.get_full_path }}";
+        this.logoutUrl = "{% url 'account_logout' %}";
+        this.registerUrl = "{% url 'account_signup' %}";
+        //{% if user.is_authenticated %}
+        this.username = "{{ user.username }}";
+        this.avatar = "{% avatar_url user 60 %}";
+        //{% endif %}
+    });
+</script>
