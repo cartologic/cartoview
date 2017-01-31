@@ -2,12 +2,12 @@ from distutils.core import setup
 setup(
   name = 'cartoview',
   packages = ['cartoview'],
-  version = '1.0.0',
+  version = '1.1.0',
   description = 'Cartoview is a GIS web mapping application framework to easily share and deploy apps based on Geonode',
   author = 'Cartologic',
   author_email = 'info@cartologic.com',
   url = 'https://github.com/cartologic/cartoview',
-  download_url = 'https://github.com/cartologic/cartoview/tarball/1.0.0', 
+  download_url = 'https://github.com/cartologic/cartoview/tarball/1.1.0', 
   keywords = ['cartoview', 'gis', 'geonode', "django", "web mapping", "applications", "apps", "application management"],
   classifiers = [
     "Development Status :: 3 - Alpha",
