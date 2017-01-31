@@ -4,12 +4,13 @@ from setuptools import find_packages
 setup(
   name = 'cartoview',
   packages = find_packages(),
-  version = '1.1.1',
+  version = '1.1.2',
   description = 'Cartoview is a GIS web mapping application framework to easily share and deploy apps based on Geonode',
   author = 'Cartologic',
   author_email = 'info@cartologic.com',
   url = 'https://github.com/cartologic/cartoview',
-  download_url = 'https://github.com/cartologic/cartoview/tarball/1.1.1', 
+  download_url = 'https://github.com/cartologic/cartoview/tarball/1.1.2', 
+  include_package_data=True,
   keywords = ['cartoview', 'gis', 'geonode', "django", "web mapping", "applications", "apps", "application management"],
   classifiers = [
     "Development Status :: 3 - Alpha",
