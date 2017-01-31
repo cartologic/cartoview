@@ -1,30 +1,21 @@
-import os
-from setuptools import setup
-
-def read(*rnames):
-    return open(os.path.join(os.path.dirname(__file__), *rnames)).read()
-
+from distutils.core import setup
 setup(
-    name="cartoview",
-    version="0.2",
-    author="",
-    author_email="",
-    description="cartoview, based on GeoNode",
-    long_description=(read('README.md')),
-    # Full list of classifiers can be found at:
-    # http://pypi.python.org/pypi?%3Aaction=list_classifiers
-    classifiers=[
-        'Development Status :: 1 - Planning',
-    ],
-    license="BSD",
-    keywords="cartoview geonode django",
-    url='https://github.com/cartoview/cartoview',
-    packages=['cartoview',],
-    include_package_data=True,
-    zip_safe=False,
-    install_requires=[
-        'geonode==2.5',
-        'django-bootstrap3==6.2.2',
-        'django-cors-headers==1.1.0',
-    ]
+  name = 'cartoview',
+  packages = ['cartoview'],
+  version = '1.0.0',
+  description = 'Cartoview is a GIS web mapping application framework to easily share and deploy apps based on Geonode',
+  author = 'Cartologic',
+  author_email = 'info@cartologic.com',
+  url = 'https://github.com/cartologic/cartoview',
+  download_url = 'https://github.com/cartologic/cartoview/tarball/1.0.0', 
+  keywords = ['cartoview', 'gis', 'geonode', "django", "web mapping", "applications", "apps", "application management"],
+  classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Framework :: Django :: 1.8",
+    "Topic :: Scientific/Engineering :: GIS"
+  ],
+  license="BSD",
+  install_requires= [
+    "geonode==2.5.10",
+  ]
 )
