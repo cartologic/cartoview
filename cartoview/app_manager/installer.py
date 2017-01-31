@@ -171,8 +171,11 @@ def finalize_setup():
     if install_app_batch:
         def _finalize_setup():
             from subprocess import Popen
-            p = Popen(install_app_batch)
-            stdout, stderr = p.communicate()
+            working_dir = os.path.dirname(install_app_batch)
+            log_file = os.path.join(working_dir, "install_app_log.txt")
+            with open(log_file, 'a') as log:
+                p = Popen(install_app_batch, stdout=log, stderr=log, shell=True, cwd=working_dir)
+            # stdout, stderr = p.communicate()
 
         from threading import Timer
         timer = Timer(0.1, _finalize_setup)
