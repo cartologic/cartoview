@@ -7,6 +7,7 @@ Welcome to CartoView.
 
 `Cartoview`_ is a web application store which enables the rapid deployment of easy-to-manage and easy-to-use Web Mapping Applications.
 CartoView extends `GeoNode`_ to deploy web apps. Developers can upload their mapping applications to `Cartoview`_ app store. Their apps will become immidiately available to all `Cartoview`_ deployments.
+`GeoNode`_ users will start using `Cartoview`_ apps to author and publish their web mapping applications directly from the browser, without any programming.
 
 .. _Cartoview: http://www.cartoview.org/
 .. _GeoNode: http://www.geonode.org/
