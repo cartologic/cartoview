@@ -1,0 +1,1 @@
+[{"fields": {"url": "http://cartoview.org/api/v1/", "is_default": true, "name": "Cartoview App Store"}, "model": "app_manager.appstore", "pk": 1}]

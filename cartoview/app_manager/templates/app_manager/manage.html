@@ -27,7 +27,7 @@
             <div dynamic-template template="options.template" context="options"></div>
         </div>
         <div class="modal-footer">
-            <button class="btn btn-primary" type="button" ng-click="ok()">{% trans 'OK' %}</button>
+            <button class="btn btn-primary" type="button" ng-click="ok()">{% verbatim %}{{options.okText}}{% endverbatim %}</button>
             <button class="btn btn-warning" type="button" ng-click="cancel()">{% trans 'Cancel' %}</button>
         </div>
     </script>
@@ -36,7 +36,7 @@
         <div>
             <div class="alert alert-danger">
                 <h4><span class="fa fa-exclamation-triangle"></span> Warning!</h4>
-                Please note that the Apache web server will be restarted after installing
+                Please note that the web server will be restarted after installing
                 or uninstalling any application.
             </div>
             <div class="restart-msg" ng-show="restarting">
@@ -45,16 +45,17 @@
                 </div>
 
             </div>
-            <div class="form-group">
+            <div class="form-group" ng-show="stores.objects.length > 1">
                 <label>{% trans "Store" %}</label>
                 <select class="form-control"
                         ng-model="selectedStoreId"
                         ng-options="store.id as store.name for store in stores.objects">
                 </select>
             </div>
-            {% verbatim %}
-                <h3>{{ getSelectedStore().name }}</h3>
-            {% endverbatim %}
+            <div class="row reorder-btn-ct">
+                <a ng-click="reorder()" class="btn btn-primary pull-right">Reorder Installed Apps</a>
+            </div>
+
             <ul class="list-group">
                 <li class="list-group-item" ng-repeat="app in getSelectedStore().apps.objects">
                     {% verbatim %}
@@ -65,7 +66,6 @@
                         <span class="label label-success pull-right" ng-show="app.installedApp"> installed version {{ app.installedApp.version }}</span>
 
                     </h4>
-
                     {% endverbatim %}
                     <div class="list-group-item-text">
                         <alerts-panel messages="app.messages"></alerts-panel>
@@ -82,12 +82,32 @@
                                 <span class="fa fa-circle-o-notch rotating" ng-show="installing==app"></span>
                                 UnInstall<span ng-show="installing==app">ing</span>
                             </a>
+
+                            <a ng-if="app.installedApp" ng-click="toggleActive(app)" class="btn btn-warning">
+                                <span ng-show="app.installedApp.active">Suspend</span>
+                                <span ng-show="!app.installedApp.active">Activate</span>
+                            </a>
                         </div>
                     </div>
                 </li>
             </ul>
         </div>
 
+    </script>
+    <script type="text/ng-template" id="apps-reorder.html">
+        <label>Drag and drop items to reorder</label>
+        <div class="apps-reorder-list">
+            <ul dnd-list="installedApps">
+                <li ng-repeat="app in installedApps"
+                    dnd-draggable="app"
+                    dnd-moved="installedApps.splice($index, 1)"
+                    dnd-effect-allowed="move"
+                    dnd-selected="models.selected = app"
+                    ng-class="{'selected': models.selected === app}">
+                    {% verbatim %}{{app.title}}{% endverbatim %}
+                </li>
+            </ul>
+        </div>
     </script>
 
 </div>
@@ -106,6 +126,7 @@
     {% include "app_manager/dynamic_scripts.html" %}
 
     <script src="{{ STATIC_URL }}vendor/angular-resource/angular-resource.min.js"></script>
+    <script src="{{ STATIC_URL }}vendor/angular-drag-and-drop-lists/angular-drag-and-drop-lists.min.js"></script>
     <script src="{{ STATIC_URL }}app_manager/js/resources.js"></script>
     <script src="{{ STATIC_URL }}app_manager/js/manager.js"></script>
 {% endblock %}

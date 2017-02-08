@@ -57,7 +57,7 @@ def get_apps_names():
 
 def installed_apps():
     from .models import App
-    apps = App.objects.filter(is_suspended=False).order_by('order')
+    apps = App.objects.filter()
     return apps
 
 @staff_member_required
@@ -113,10 +113,6 @@ def install_app(request, store_id, app_name, version):
         installer = AppInstaller(app_name, store_id, version)
         installedApps = installer.install()
         response_data["success"] = True
-        # names = ",".join([app.name for app in installedApps])
-        # rest_url = "{}rest/app_manager/app/?name__in={}".format(reverse("app_manager_base_url"), names)
-        # print rest_url
-        # return HttpResponseRedirect(rest_url)
     except Exception as ex:
         response_data["messages"].append({"type": "error", "msg": ex.message})
 

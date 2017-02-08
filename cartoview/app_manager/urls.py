@@ -1,7 +1,7 @@
 import importlib
 from django.conf.urls import patterns, url, include
 from django.views.generic import TemplateView
-
+from django.conf import settings
 from api import rest_api
 from cartoview.app_manager.rest import *
 from views import *
@@ -20,16 +20,16 @@ rest_api.register(ImageResource())
 rest_api.register(CommentResource())
 
 
-from django.conf import settings
-
-for app_name in settings.CARTOVIEW_APPS:
-    # print app_name
-    try:
-        # ensure that the folder is python module
-        app_module = importlib.import_module(app_name + ".rest")
-    except:
-        # TODO: log the error
-        pass
+# from django.conf import settings
+#
+# for app_name in settings.CARTOVIEW_APPS:
+#     # print app_name
+#     try:
+#         # ensure that the folder is python module
+#         app_module = importlib.import_module(app_name + ".rest")
+#     except:
+#         # TODO: log the error
+#         pass
 
 urlpatterns = patterns('cartoview.app_manager',
     url(r'^$', index, name='app_manager_base_url'),
@@ -48,10 +48,6 @@ urlpatterns = patterns('cartoview.app_manager',
     (r'^rest/', include(rest_api.urls)),
 )
 
-from django.conf import settings
-apps = [n for n in os.listdir(settings.APPS_DIR) if os.path.isdir(os.path.join(settings.APPS_DIR, n))]
-
-
 def import_app_rest(app_name):
     try:
         # print 'define %s rest api ....' % app_name
@@ -64,10 +60,9 @@ def app_url(app_name):
     app = str(app_name)
     return url(r'^' + app + '/', include('%s.urls' % app), name=app + '_base_url')
 
+apps_config = AppsConfig()
+for app_config in apps_config:
+    import_app_rest(app_config.name)
 
-# apps = get_apps_names()
-for name in apps:
-    import_app_rest(name)
-
-for name in apps:
-    urlpatterns.append(app_url(name))
+for app_config in apps_config:
+    urlpatterns.append(app_url(app_config.name))

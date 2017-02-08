@@ -13,7 +13,10 @@ from collections import OrderedDict
 from django.apps import apps
 from django.conf import settings
 from django.core import management
+from .config import App as AppConfig, AppsConfig
 reload(pkg_resources)
+
+
 current_folder = os.path.abspath(os.path.dirname(__file__))
 temp_dir = os.path.join(current_folder, 'temp')
 
@@ -39,12 +42,6 @@ class AppInstaller:
             data = self._request_rest_data("appversion/?app__name=", name, "&version=", version)
             self.version = data['objects'][0]
 
-
-
-
-
-
-
     def _request_rest_data(self, *args):
         """
         get app information form app store rest url
@@ -54,7 +51,6 @@ class AppInstaller:
             return q.json()
         except:
             return None
-
 
     def _download_app(self):
         response = requests.get(self.version["download_link"], stream=True)
@@ -77,8 +73,16 @@ class AppInstaller:
             zip_ref.close()
     
     def add_app(self, installer):
+
+        # save app configuration
         info = installer.info
         app, created = App.objects.get_or_create(name=self.name)
+        if created:
+            app_config = AppConfig(name=self.name, active=True)
+            app.apps_config.append(app_config)
+            app.apps_config.save()
+            app.order = app_config.order
+
         app.title = info.get('title', self.name)
         app.description = info.get('description', None)
         app.short_description = info.get('short_description', None)
@@ -90,13 +94,6 @@ class AppInstaller:
         app.license = info.get('licence', None)
         app.single_instance = info.get('single_instance', False)
         app.version = self.version["version"]
-
-        if created:
-            apps = App.objects.all()
-            if apps:
-                app.order = apps.aggregate(Max('order'))['order__max'] + 1
-            else:
-                app.order = 1
         app.save()
         tags = info.get('tags', [])
         for tag_name in tags:
@@ -106,6 +103,7 @@ class AppInstaller:
                 app.tags.add(tag)
             except:
                 pass
+
         return app
 
     def install(self, restart=True):
@@ -161,6 +159,12 @@ class AppInstaller:
         ContentType.objects.filter(app_label=self.name).delete()
         app = App.objects.get(name=self.name)
         app.delete()
+
+
+        app_config = app.apps_config.get_by_name(self.name)
+        del app.apps_config[app_config]
+        app.apps_config.save()
+
         app_dir = os.path.join(settings.APPS_DIR, self.name)
         shutil.rmtree(app_dir)
         if restart:

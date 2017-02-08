@@ -7,13 +7,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('app_manager', '0001_initial'),
+        ('app_manager', '0002_auto_20170207_0745'),
     ]
 
     operations = [
-        migrations.AlterField(
+        migrations.AddField(
             model_name='app',
-            name='app_img_url',
-            field=models.TextField(max_length=1000, null=True, blank=True),
+            name='order',
+            field=models.IntegerField(default=0, null=True),
         ),
     ]

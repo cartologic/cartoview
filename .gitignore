@@ -238,3 +238,6 @@ cartoview_project/static/*
 .vscode/
 
 cartoview_project/cartoview_project/local_settings.py
+cartoview.egg-info/
+dist/
+

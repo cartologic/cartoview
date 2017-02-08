@@ -7,13 +7,16 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('app_manager', '0006_auto_20170108_0308'),
+        ('app_manager', '0001_initial'),
     ]
 
     operations = [
-        migrations.AddField(
+        migrations.RemoveField(
             model_name='app',
-            name='store',
-            field=models.ForeignKey(to='app_manager.AppStore', null=True),
+            name='is_suspended',
+        ),
+        migrations.RemoveField(
+            model_name='app',
+            name='order',
         ),
     ]

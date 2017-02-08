@@ -1,5 +1,5 @@
 (function(){
-    var app = angular.module('cartoview.appManager.manager',["cartoview.appManager.resources", 'ui.bootstrap']);
+    var app = angular.module('cartoview.appManager.manager',["cartoview.appManager.resources", 'ui.bootstrap', "dndLists"]);
 
     app.config(function($httpProvider) {
         $httpProvider.defaults.xsrfCookieName = 'csrftoken';
@@ -25,12 +25,23 @@
             }
         }
     });
+
+    app.directive('appsReorder',  function($compile) {
+        return {
+            restrict: 'E',
+            templateUrl: "apps-reorder.html",
+            scope:{
+                installedApps: "="
+            }
+        }
+    });
     app.service("Dialogs", function($uibModal, $log, $document){
         this.confirm = function(options){
 
             var controller = function($scope, $uibModalInstance){
                 options.template = options.template || "{{msg}}";
                 $scope.options = options;
+                options.okText = options.okText || "Ok";
                 $scope.ok = function(){
                     $uibModalInstance.close(true);
                 };
@@ -159,7 +170,6 @@
                                 t: new Date().getTime() //to force server request
                             };
                             store.installedApps = InstalledAppResource.query(params, function(){
-                                console.debug(arguments);
                                 if (store._apps && store._apps.objects) {
                                     store._apps.objects.forEach(function(app){
                                         delete app.installedApp;
@@ -277,7 +287,8 @@
                 };
 
                 var uninstall = function (app) {
-                     AppInstaller.uninstall(app).success(function(res){
+                    $scope.installing = app;
+                    AppInstaller.uninstall(app).success(function(res){
                         updateStore(app.store);
                     }).error(function(){
                         $scope.installing = null;
@@ -285,9 +296,21 @@
 
                     });
                 };
+
+                var setActive = function (app, active) {
+                    var action = active ? 'activate' :'suspend';
+                    InstalledAppResource[action]({appId:app.installedApp.id},  function (res) {
+                        if(res.success){
+                            app.installedApp.active = active;
+                        }
+                    });
+                };
+                $scope.toggleActive = function (app) {
+                    setActive(app, !app.installedApp.active);
+                };
+
                 $scope.uninstall = function(app){
 
-                    $scope.installing = app;
                     var dependents = AppInstaller.getDependents(app, appsHash);
                     if(dependents.length > 0){
                         Dialogs.confirm({
@@ -312,9 +335,31 @@
                     else{
                         uninstall(app)
                     }
-
-
                 };
+
+                $scope.reorder = function () {
+                    var installedApps = $scope.getSelectedStore().installedApps.objects;
+                    Dialogs.confirm({
+                        okText: "Save Order",
+                        title: "Reorder Installed Apps",
+                        template: "<apps-reorder installed-apps='installedApps'></apps-reorder>",
+                        installedApps: installedApps
+                    }).then(function (confirm) {
+                        if (confirm) {
+                            var apps = [];
+                            installedApps.forEach(function(app){
+                                apps.push(app.id);
+                            });
+                            var params = {
+                                apps: apps
+                            };
+                            InstalledAppResource.reorder(params, function (res) {
+                                console.debug(res)
+                            })
+                        }
+                    });
+
+                }
             }
         }
     });

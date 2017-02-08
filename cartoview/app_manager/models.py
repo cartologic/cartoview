@@ -8,7 +8,7 @@ from geonode.base.models import ResourceBase, resourcebase_post_save
 from geonode.security.models import remove_object_permissions
 from geonode.maps.models import Map as GeonodeMap
 import json
-
+from .config import AppsConfig
 
 class AppTag(models.Model):
     name = models.CharField(max_length=200, unique=True, null=True, blank=True)
@@ -44,16 +44,15 @@ class App(models.Model):
     date_installed = models.DateTimeField('Date Installed', auto_now_add=True, null=True)
     installed_by = models.ForeignKey(geonode_settings.AUTH_USER_MODEL, null=True, blank=True)
     single_instance = models.BooleanField(default=False, null=False, blank=False)
-    order = models.SmallIntegerField(null=False, blank=False, default=0)
     owner_url = models.URLField(null=True, blank=True)
     help_url = models.URLField(null=True, blank=True)
-    is_suspended = models.NullBooleanField(null=True, blank=True, default=False)
     app_img_url = models.TextField(max_length=1000, blank=True, null=True)
     rating = models.IntegerField(default=0, null=True, blank=True)
     contact_name = models.CharField(max_length=200, null=True, blank=True)
     contact_email = models.EmailField(null=True, blank=True)
     version = models.CharField(max_length=10)
     store = models.ForeignKey(AppStore, null=True)
+    order = models.IntegerField(null=True, default=0)
 
     def __unicode__(self):
         return self.title
@@ -72,8 +71,17 @@ class App(models.Model):
         except:
             return None
 
+    _apps_config = None
 
+    @property
+    def apps_config(self):
+        if App._apps_config is None:
+            App._apps_config = AppsConfig()
+        return App._apps_config
 
+    @property
+    def config(self):
+        return self.apps_config.get_by_name(self.name)
 
 
 class AppInstance(ResourceBase):

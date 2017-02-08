@@ -28,6 +28,7 @@
 							<div class="list-group">
 
 								{% for app in Apps %}
+                                {% if app.config.active %}
 								<div class="list-group-item ">
 									<div class="col-md-2 col-sm-3 col-xs-12 app-logo-ct">
                                         <div class="app-logo" style="background-image: url({{STATIC_URL}}{{app.name}}/logo.png);"></div>
@@ -77,7 +78,8 @@
 									<div style="clear:both;"></div>
 
 								</div>
-							 {% endfor %}
+                            {% endif %}
+                            {% endfor %}
 							</div>
 						</div>
 					</div>
