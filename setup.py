@@ -4,7 +4,7 @@ from setuptools import find_packages
 setup(
   name = 'cartoview',
   packages = find_packages(),
-  version = '1.1.6',
+  version = '1.1.7',
   description = 'Cartoview is a GIS web mapping application framework to easily share and deploy apps based on Geonode',
   author = 'Cartologic',
   author_email = 'info@cartologic.com',
