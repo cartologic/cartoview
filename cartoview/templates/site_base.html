@@ -19,3 +19,6 @@
     </li>
     {{ block.super }}
 {% endblock %}
+{% block extra_script %}
+    <script type="text/javascript" src="{% url 'check_version' %}"></script>
+{% endblock %}

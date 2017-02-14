@@ -20,13 +20,8 @@
 
     {% endblock %}
 </head>
-<body {% block body_directives %}ng-app="cartoview.topToolbar" {% endblock %} layout="column">
-    {% block header_toolbar %}
-        {% if request.GET.embed == '' %}
-        {% else %}
-            <cartoview-top-toolbar></cartoview-top-toolbar>
-        {% endif %}
-    {% endblock %}
+<body {% block body_directives %} {% endblock %} layout="column">
+
     <div flex class="content-ct">
         <div class="content-ct-inner">
         {% block body %}{% endblock %}
@@ -67,9 +62,8 @@
             //{% endif %}
         });
     </script>
-    <script type="text/javascript" src='{{ STATIC_URL }}cartoview/js/top-toolbar.js'></script>
     <script type="text/javascript">
-        angular.module('cartoview.base',['cartoview.topToolbar']);
+        angular.module('cartoview.base',[]);
     </script>
     {% block scripts %}
 
