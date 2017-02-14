@@ -9,4 +9,4 @@ The following is a guide to get Geonode and Cartoview up and running in most com
 - Install Cartoview
 	- Follow Instructions [Cartoview][2]
 [1]: https://github.com/GeoNode/geonode
-[2]: https://github.com/cartologic/cartoview_sample_project
+[2]: https://github.com/cartologic/cartoview-project-template
