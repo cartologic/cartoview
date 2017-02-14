@@ -1,0 +1,20 @@
+site_name: Cartoview
+site_url: http://www.cartoview.org
+repo_url: https://github.com/cartologic/cartoview.git
+edit_uri: /docs/
+repo_name: Github
+site_author: Cartologic
+copyright: Cartologic
+theme: readthedocs
+pages:
+    - About Cartoview: index.md
+    - Installation Guide: 'Installation/Installation.md'
+    - Tutorials: 
+        - For Users:
+            - 'Introduction': 'users.md'
+            - 'Cartoview Application Manager': 'manager.md'
+        - For Developers: 'developers.md'
+    - Resources: resources.md
+    - External References : external.md
+markdown_extensions:
+    - smarty 
