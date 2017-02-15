@@ -1,28 +1,7 @@
-# Cartoview Installation
-You Can Install Cartoview Using ```pip``` or ```easy_install``` open ```Terminal``` or Command ```Prompt``` and type :
-- ```pip install -U cartoview```
+Cartoview extends the popular GeoNode SDI to provide the ability to create, share, and visualize GIS Web Mapping Applications very easily and very quickly from the browser without programming.
 
-or
+Cartoview enables communities of users to share geospatial applications, to collaborate on these applications, and to exchange the underlying data as Open Geospatial Consortium (OGC) compliant web services
 
-- ```easy_install cartoview```
+Cartoview has been built utilizing open source software and open standards to make it available for all GIS operators and to maximize interoperability.
 
-# Demo
-- First step Follow instructions [here][1]
-
-- configure Project Settings by renaming ```local_settings.py.sample``` in  ```project_name``` folder to ```local_settings.py```
-
-- open ```local_settings.py``` and override Database paramters , also you can override any settings variable in this file.
-
-- in your Project Folder open ```Terminal``` or ```Command Prompt```  type :
-
-    ``` 
-        python manage.py makemigrations app_manager
-    	python manage.py migrate people
-    	python manage.py migrate
-    	python manage.py loaddata sample_admin.json
-    	python manage.py loaddata json/default_oauth_apps.json
-    	python manage.py runserver 0.0.0.0:8000 
-    ```
-- Now Demo is running on ```http://localhost:8000```
-
-[1]: https://github.com/cartologic/cartoview-project-template
+For Documentation use this [Link](http://cartologic.github.io/cartoview/)
