@@ -4,8 +4,9 @@ from setuptools import find_packages
 setup(
   name = 'cartoview',
   packages = find_packages(),
-  version = '1.1.8',
+  version = '1.1.9',
   description = 'Cartoview is a GIS web mapping application framework to easily share and deploy apps based on Geonode',
+  long_description=open('README').read(),
   author = 'Cartologic',
   author_email = 'info@cartologic.com',
   url = 'https://github.com/cartologic/cartoview',
@@ -18,7 +19,7 @@ setup(
   ],
   license="BSD",
   install_requires= [
-    "geonode>=2.5.15",
+    "geonode==2.5.15",
     "django-geonode-client"
   ]
 )
