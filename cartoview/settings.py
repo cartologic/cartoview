@@ -9,5 +9,3 @@ TEMPLATES[0]["DIRS"] = [os.path.join(CARTOVIEW_ROOT, "templates")] + TEMPLATES[0
 STATICFILES_DIRS += [os.path.join(CARTOVIEW_ROOT, "static"),]
 cartoview_apps_settings_path = os.path.join(CARTOVIEW_ROOT, 'app_manager', "settings.py")
 execfile(cartoview_apps_settings_path)
-
-LAYER_PREVIEW_LIBRARY = "react"
