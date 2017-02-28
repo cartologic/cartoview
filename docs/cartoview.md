@@ -78,6 +78,12 @@ Create your account, load some test data and start authoring web mapping applica
 	pip install cartoview
 	```
 
+- Install geonode client
+
+	``` python
+	pip install django-geonode-client
+	```
+
 
 - Install CartoView_Django Project
 
@@ -333,8 +339,12 @@ Have you found a new bug? Want to request a new feature? We'd love to hear from 
 	- Click ```Submit New App``` Button and Fill Required Info
 	
 	- Now Users can install your app
-	
 
+
+##GEO App Market
+	
+!!! success "INFO"
+		- Cartoview Provides a [GeoApp Market][2] for GIS Developers.
 
 ##Contributing to CartoView
 
@@ -349,6 +359,7 @@ Please refer to each project's style guidelines and guidelines for submitting pa
 
 !!! note
 	Be sure to merge the latest from "upstream" before making a pull request!
+
 	
 [1]: https://github.com/GeoNode/geonode
 [2]: http://www.cartoview.org
