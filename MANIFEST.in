@@ -8,6 +8,7 @@ cartoview/urls.py
 cartoview/views.py
 cartoview/wsgi.py
 include cartoview/bower.json
+include README.md
 include cartoview/.bowerrc
 recursive-include cartoview/static *
 recursive-include cartoview/templates *
