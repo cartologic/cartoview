@@ -21,10 +21,12 @@
                     {% endif %}
                 {% endfor %}
                 {% if user.is_authenticated %}
-                    <li><a href="{% url 'manage_apps' %}"><i class="fa fa-fw fa-cog"></i>{% trans "Manage Apps" %}</a>
+                    <li role="separator" class="divider"></li>
+                    <li><a href="{% url 'manage_apps' %}">{% trans "Manage Apps" %}</a>
                     </li>
                 {% endif %}
-                <li><a href="{% url 'app_manager_base_url' %}"><i class="fa fa-fw fa-eye"></i>All apps</a></li>
+                <li role="separator" class="divider"></li>
+                <li><a href="{% url 'app_manager_base_url' %}">All apps</a></li>
             </ul>
         {% else %}
             <li><a href="{% url 'app_manager_base_url' %}">{% trans "Apps" %}</a></li>
