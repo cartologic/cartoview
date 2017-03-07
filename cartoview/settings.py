@@ -8,4 +8,5 @@ GEONODE_ROOT = os.path.abspath(os.path.dirname(geonode.__file__))
 TEMPLATES[0]["DIRS"] = [os.path.join(CARTOVIEW_ROOT, "templates")] + TEMPLATES[0]["DIRS"]
 STATICFILES_DIRS += [os.path.join(CARTOVIEW_ROOT, "static"),]
 cartoview_apps_settings_path = os.path.join(CARTOVIEW_ROOT, 'app_manager', "settings.py")
+TEMPLATES[0]["OPTIONS"]['context_processors'] += ('app_manager.context_processors.apps',)
 execfile(cartoview_apps_settings_path)
