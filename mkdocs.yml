@@ -1,28 +1,2 @@
 site_name: Cartologic
-site_url: http://www.cartologic.com/
-repo_url: https://github.com/cartologic/cartoview
-site_description: GIS Web Mapping Applications.Cartoview enables the rapid deployment of easy-to-manage and easy-to-use spatial web applications
-copyright: Cartologic
-site_author: Cartologic
-pages:
-    - 'Welcome': 'index.md'
-    - 'Cartoview': 'cartoview.md'
-theme: 'material'
-extra:
-  palette:
-    primary: 'indigo'
-    accent: 'indigo'
-  font:
-    text: 'PT Sans'
-    code: 'Source Code Pro'
-  
-markdown_extensions:
-  - admonition
-  - footnotes
-  - codehilite(linenums=true)
-  - toc(permalink=true)
-  - meta
-  - pymdownx.superfences
-  - pymdownx.tasklist(custom_checkbox=true)
-  - pymdownx.emoji:
-      emoji_generator: !!python/name:pymdownx.emoji.to_svg
+theme: readthedocs
