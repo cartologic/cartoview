@@ -8,7 +8,7 @@ except(IOError, ImportError):
 setup(
   name = 'cartoview',
   packages = find_packages(),
-  version = '1.1.16',
+  version = '1.1.17',
   description = 'Cartoview is a GIS web mapping application framework to easily share and deploy apps based on Geonode',
   long_description=long_description,
   author = 'Cartologic',
@@ -24,4 +24,3 @@ setup(
   license="BSD",
   install_requires= []
 )
-
