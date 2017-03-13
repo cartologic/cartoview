@@ -5,6 +5,23 @@
     <link href="{{ STATIC_URL }}cartoview/css/custom.css" rel="stylesheet"/>
 {% endblock %}
 {% block tabs %}
+{% if news_app %}
+        <li>
+            {% if user.is_authenticated %}
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                   aria-haspopup="true" aria-expanded="false">{% trans "News" %}<i
+                        class="fa fa-angle-down fa-lg"></i></a>
+                <ul class="dropdown-menu">
+                    <li><a href="{% url "cartoview_news.list" %}">{% trans "Explore News" %}</a></li>
+                    {% if user.is_superuser %}
+                        <li><a href="{% url "cartoview_news.new" %}">{% trans "Create News" %}</a></li>
+                    {% endif %}
+                </ul>
+            {% else %}
+                <li><a href="{% url "news-list" %}">{% trans "News" %}</a></li>
+            {% endif %}
+        </li>
+    {% endif %}
     <li>
         {% if apps %}
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
