@@ -2,11 +2,11 @@
  * Created by kamal on 8/11/16.
  */
 
-angular.module('cartoview.userEngage').directive('cartoviewComments',function (urls, Comment, $rootScope) {
+angular.module('cartoview.userEngage').directive('cartoviewComments', function (urls, Comment, $rootScope) {
     return {
         restrict: 'E',
         replace: true,
-        scope:{
+        scope: {
             identifier: "@"
         },
         template: "<div class='cv-comments'><ng-include src='templateUrl'></ng-include></div>",
@@ -16,8 +16,8 @@ angular.module('cartoview.userEngage').directive('cartoviewComments',function (u
             var template = attrs.template || 'default';
             scope.templateUrl = urls.STATIC_URL + "user_engage/angular-templates/comments/" + template + ".html";
             scope.comment = new Comment(scope.identifier);
-            scope.onKeyPress = function(event){
-                if(event.which == 13 && !event.shiftKey){
+            scope.onKeyPress = function (event) {
+                if (event.which == 13 && !event.shiftKey) {
                     scope.addComment()
                 }
             };
@@ -37,19 +37,19 @@ angular.module('cartoview.userEngage').directive('cartoviewComments',function (u
     }
 });
 
-angular.module('cartoview.userEngage').directive('cartoviewImages',function (urls, Image, $mdDialog) {
+angular.module('cartoview.userEngage').directive('cartoviewImages', function (urls, Image, $mdDialog) {
     return {
         restrict: 'E',
         replace: true,
         template: "<div class='cv-images'><ng-include src='templateUrl'></ng-include></div>",
         link: function (scope, element, attrs) {
             var template = attrs.template || 'default';
-            scope.templateUrl = attrs.templateUrl ||  (urls.STATIC_URL + "user_engage/angular-templates/images/" + template + ".html");
+            scope.templateUrl = attrs.templateUrl || (urls.STATIC_URL + "user_engage/angular-templates/images/" + template + ".html");
 
             scope.image = new Image(attrs.identifier, attrs.thumbnailSize);
             scope.image.newImageTitle = "";
-            scope.onKeyPress = function(event){
-                if(event.which == 13 && !event.shiftKey){
+            scope.onKeyPress = function (event) {
+                if (event.which == 13 && !event.shiftKey) {
                     scope.addImage()
                 }
             };
@@ -61,18 +61,17 @@ angular.module('cartoview.userEngage').directive('cartoviewImages',function (url
             scope.showImage = function (img) {
                 $mdDialog.show({
                     template: '<md-dialog class="cv-images-dialog">'
-                            + '<md-dialog-content>'
-                                + '<img src="' + img.image + '">'
-                            + '</md-dialog-content>'
-                        + '</md-dialog>',
+                    + '<md-dialog-content>'
+                    + '<img src="' + img.image + '">'
+                    + '</md-dialog-content>'
+                    + '</md-dialog>',
                     parent: angular.element(document.body),
-                    clickOutsideToClose:true
+                    clickOutsideToClose: true
                 });
             }
         }
     }
 });
-
 
 
 angular.module('cartoview.userEngage').directive('fileModel', ['$parse', function ($parse) {
@@ -90,3 +89,33 @@ angular.module('cartoview.userEngage').directive('fileModel', ['$parse', functio
         }
     };
 }]);
+// angular.module('cartoview.userEngage').directive('slideThumb', function (urls, $timeout) {
+//     return {
+//         restrict: 'E',
+//         templateUrl: urls.STATIC_URL + "user_engage/angular-templates/images/slider_thumb.tmp.html",
+//         link: function (scope, element, attrs) {
+//             scope.images = attrs.images;
+//             console.log(attrs.images)
+//             $timeout(function () {
+//                   var options = {
+//                       $AutoPlay: 0,                                   //[Optional] Auto play or not, to enable slideshow, this option must be set to greater than 0. Default value is 0. 0: no auto play, 1: continuously, 2: stop at last slide, 4: stop on click, 8: stop on user navigation (by arrow/bullet/thumbnail/drag/arrow key navigation)
+//                       $SlideDuration: 500,                                //[Optional] Specifies default duration (swipe) for slide in milliseconds, default value is 500
+//
+//                       $ThumbnailNavigatorOptions: {                       //[Optional] Options to specify and enable thumbnail navigator or not
+//                           $Class: $JssorThumbnailNavigator$,              //[Required] Class to create thumbnail navigator instance
+//                           $ChanceToShow: 2,                               //[Required] 0 Never, 1 Mouse Over, 2 Always
+//
+//                           $ActionMode: 1,                                 //[Optional] 0 None, 1 act by click, 2 act by mouse hover, 3 both, default value is 1
+//                           $SpacingX: 8,                                   //[Optional] Horizontal space between each thumbnail in pixel, default value is 0
+//                           $Cols: 10,                             //[Optional] Number of pieces to display, default value is 1
+//                           $ParkingPosition: 360                           //[Optional] The offset position to park thumbnail
+//                       }
+//                   };
+//
+//             var jssor_slider1 = new $JssorSlider$('slider1_container', options);
+//             }, 1000)
+//
+//
+//         }
+//     };
+// });

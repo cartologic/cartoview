@@ -1,5 +1,5 @@
-<div layout="column" >
-    <div layout="row" layout-wrap layout-align="center center">
+<div layout="column">
+    <!--<div layout="row" layout-wrap layout-align="center center">
         <a layout="column"
            ng-repeat="img in image.list.objects"
            href="#"
@@ -14,7 +14,25 @@
                  ng-image-appear placeholder responsive>
             <h2>{{ img.title }}</h2>
         </a>
+    </div>-->
+    <div class="slide-thumb" ng-if="image.list.objects">
+        <md-tabs class="" md-selected="data.selectedIndex" md-align-tabs="bottom">
+            <md-tab ng-repeat="img in image.list.objects" id="{{img.id}}">
+                <md-tab-label><img ng-src="{{ img.thumbnail }}"></md-tab-label>
+                <md-tab-body style="height: 100%;">
+                    <div style="padding-top: 10px;padding-bottom: 10px" layout="column">
+                        <span style="display: block;margin-right: auto;margin-left: auto;" ng-if="img.title">{{ img.title }}</span>
+                        <img style="display: block;margin-right: auto;margin-left: auto;border: 1px solid #b0b2b5;padding: 1px;max-height: 170px" ng-src="{{ img.thumbnail }}" responsive>
+                    </div>
+
+                </md-tab-body>
+            </md-tab>
+        </md-tabs>
     </div>
+
+    <!--<div>
+        <slide-thumb ng-if="image.list.objects.length!=0" images="{{image.list.objects}}"></slide-thumb>
+    </div>-->
     <div layout="column" class="md-padding">
 
         <md-input-container class="md-block">
@@ -24,9 +42,12 @@
             <label>Upload Image</label>
             <input file-model="image.imageFile" type="file">
         </md-input-container>-->
-        <lf-ng-md-file-input lf-files="image.imageFile" lf-api="image.uploadFileApi" preview lf-mimetype="image/*"></lf-ng-md-file-input>
-        <div>
-            <md-button class="md-primary md-raised" ng-click="addImage()"><md-icon>send</md-icon></md-button>
+        <lf-ng-md-file-input lf-files="image.imageFile" lf-api="image.uploadFileApi" preview
+                             lf-mimetype="image/*"></lf-ng-md-file-input>
+        <div style="text-align: center">
+            <md-button class="md-primary md-raised" ng-click="addImage()">
+                <md-icon>send</md-icon>
+            </md-button>
         </div>
 
     </div>
