@@ -1,0 +1,28 @@
+<md-dialog aria-label="Images (Upload)">
+    <form ng-cloak>
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2>Upload</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="cancel()">
+                    <md-icon aria-label="Menu" class="material-icons">close</md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+
+        <md-dialog-content>
+            <div class="md-dialog-content">
+                <md-input-container class="md-block">
+                    <input ng-model="parent.image.newImageTitle" placeholder="Title (Optional)">
+                </md-input-container>
+                <lf-ng-md-file-input lf-files="parent.image.imageFile" lf-api="parent.image.uploadFileApi" preview
+                                     lf-mimetype="image/*"></lf-ng-md-file-input>
+                <div style="text-align: center">
+                    <md-button class="md-primary md-raised" ng-click="parent.addImage()">
+                        <md-icon class="material-icons">send</md-icon>
+                    </md-button>
+                </div>
+            </div>
+        </md-dialog-content>
+    </form>
+</md-dialog>

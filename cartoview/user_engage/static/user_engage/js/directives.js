@@ -69,6 +69,24 @@ angular.module('cartoview.userEngage').directive('cartoviewImages', function (ur
                     clickOutsideToClose: true
                 });
             }
+            scope.showUploadImage = function (ev) {
+                $mdDialog.show({
+                    controller: DialogController,
+                    templateUrl: urls.STATIC_URL + 'user_engage/angular-templates/images/images.dialog.tpl.html',
+                    parent: angular.element(document.body),
+                    targetEvent: ev,
+                    clickOutsideToClose: true,
+                    locals: {parentScope: scope},
+                    fullscreen: false
+                });
+            };
+            function DialogController($scope, parentScope) {
+                $scope.parent = parentScope;
+                $scope.cancel = function () {
+                    $mdDialog.cancel();
+                };
+            }
+
         }
     }
 });
