@@ -13,7 +13,7 @@
             <ul class="dropdown-menu">
                 {% for app in apps|slice:":5" %}
                     {% if app.single_instance %}
-                        <a href="{% url 'app_manager_base_url' %}{{ app.name }}" target="_parent">{{ app.title }}</a>
+                        <li><a href="{% url 'app_manager_base_url' %}{{ app.name }}" target="_parent">{{ app.title }}</a></li>
                     {% else %}
                         <li><a href="{% url 'appinstance_browse' %}?app__title={{ app.title }}" target="_parent"
                         >{{ app.title }}</a></li>
