@@ -30,7 +30,7 @@
   AUTOCOMPLETE_URL_RESOURCEBASE = '{% url "autocomplete_light_autocomplete" "ResourceBaseAutocomplete" %}';
   AUTOCOMPLETE_URL_REGION = '{% url "autocomplete_light_autocomplete" "RegionAutocomplete" %}';
 
-  var module = angular.module('search', ['geonode_main_search', 'cart']);
+  var module = angular.module('search', ['geonode_main_search', 'cart','dcbImgFallback']);
   module.constant('Configs', {
     url: SEARCH_URL
   });

@@ -5,7 +5,7 @@
       <div class="col-xs-12 profile-avatar">
         <div class="col-xs-4 item-thumb">
           <a href="{{ item.detail_url }}">
-              <img ng-src="{{ item.thumbnail_url || item.map.thumbnail_url }}" />
+              <img ng-src="{{ item.thumbnail_url || item.map.thumbnail_url }}" fallback-src="/static/app_manager/img/no-image.jpg" loading-src  style="max-height: 205px"/>
           </a>
         </div>
         <div class="col-xs-8 item-details">
