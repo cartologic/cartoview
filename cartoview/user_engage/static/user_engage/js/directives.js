@@ -2,7 +2,7 @@
  * Created by kamal on 8/11/16.
  */
 
-angular.module('cartoview.userEngage').directive('cartoviewComments', function (urls, Comment, $rootScope) {
+angular.module('cartoview.userEngage').directive('cartoviewComments', function (urls, Comment, $rootScope, cartoviewUser) {
     return {
         restrict: 'E',
         replace: true,
@@ -14,6 +14,7 @@ angular.module('cartoview.userEngage').directive('cartoviewComments', function (
 
 
             var template = attrs.template || 'default';
+            scope.authenticated = cartoviewUser.isAuthenticated;
             scope.templateUrl = urls.STATIC_URL + "user_engage/angular-templates/comments/" + template + ".html";
             scope.comment = new Comment(scope.identifier);
             scope.onKeyPress = function (event) {
@@ -37,7 +38,7 @@ angular.module('cartoview.userEngage').directive('cartoviewComments', function (
     }
 });
 
-angular.module('cartoview.userEngage').directive('cartoviewImages', function (urls, Image, $mdDialog) {
+angular.module('cartoview.userEngage').directive('cartoviewImages', function (urls, Image, $mdDialog, cartoviewUser) {
     return {
         restrict: 'E',
         replace: true,
@@ -45,7 +46,7 @@ angular.module('cartoview.userEngage').directive('cartoviewImages', function (ur
         link: function (scope, element, attrs) {
             var template = attrs.template || 'default';
             scope.templateUrl = attrs.templateUrl || (urls.STATIC_URL + "user_engage/angular-templates/images/" + template + ".html");
-
+            scope.authenticated = cartoviewUser.isAuthenticated;
             scope.image = new Image(attrs.identifier, attrs.thumbnailSize);
             scope.image.newImageTitle = "";
             scope.onKeyPress = function (event) {

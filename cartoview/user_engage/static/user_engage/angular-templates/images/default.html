@@ -1,22 +1,21 @@
 <div layout="column">
-
-    <div class="slide-thumb" ng-if="image.list.objects">
+    <md-subheader class="md-primary">Gallary</md-subheader>
+    <div class="slide-thumb" ng-if="image.list.objects.length != 0">
         <md-tabs class="" md-selected="data.selectedIndex" md-align-tabs="bottom">
             <md-tab ng-repeat="img in image.list.objects" id="{{img.id}}">
                 <md-tab-label><img ng-src="{{ img.thumbnail }}"></md-tab-label>
                 <md-tab-body style="height: 100%;">
                     <div style="padding-top: 10px;padding-bottom: 10px" layout="column">
                         <span style="display: block;margin-right: auto;margin-left: auto;" ng-if="img.title">{{ img.title }}</span>
-                        <img style="display: block;margin-right: auto;margin-left: auto;border: 1px solid #b0b2b5;padding: 1px;max-height: 170px"
-                             ng-src="{{ img.thumbnail }}" responsive>
+                        <a target="_blank" href="{{ img.thumbnail }}"><img style="display: block;margin-right: auto;margin-left: auto;border: 1px solid #b0b2b5;padding: 1px;max-height: 170px"
+                                ng-src="{{ img.thumbnail }}" responsive></a>
                     </div>
-
                 </md-tab-body>
             </md-tab>
         </md-tabs>
     </div>
 
-    <div layout="column" style="text-align: center" class="md-padding">
+    <div layout="column" style="text-align: center" class="md-padding" ng-if="authenticated">
         <!--<md-input-container class="md-block">
             <input ng-model="image.newImageTitle" placeholder="Title (Optional)">
         </md-input-container>
