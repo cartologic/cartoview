@@ -60,7 +60,7 @@
                     <h5>Please Login to Create Apps</h5>
                     <div class="col-md-2 col-md-offset-4">
                         <a class="btn button_shadow btn-primary" style="color: white"
-                           href="{% url 'account_login' %}"
+                           href="{% url 'account_login' %}?next={% url 'app_manager_base_url' %}"
                            role="button">
                             Create New
                         </a>
