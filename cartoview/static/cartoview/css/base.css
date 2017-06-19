@@ -1,12 +1,14 @@
-body, .main-ct{
+body, .main-ct {
     height: 100%;
 }
 
-.top-toolbar{
+.top-toolbar {
     background: #f6f6f6 !important;
     color: #202020 !important;
     z-index: 3;
 }
+
+
 
 .top-toolbar .md-button,
 .top-toolbar .md-button md-icon {
@@ -14,32 +16,34 @@ body, .main-ct{
     fill: #666 !important;
 }
 
-
-.tbar-logo img{
+.tbar-logo img {
     float: left;
     margin: 0 5px;
     height: 40px;
 }
 
-.tbar-logo span{
+.tbar-logo span {
     text-transform: none;
     font-size: 22px;
 }
 
-.tbar-avatar img{
+.tbar-avatar img {
     float: left;
     margin: 0 5px;
     height: 30px;
 }
-.tbar-avatar span{
+
+.tbar-avatar span {
     text-transform: none;
 }
-.content-ct{
+
+.content-ct {
     position: relative;
 }
-.content-ct-inner{
+
+.content-ct-inner {
     position: absolute;
-    top:0px;
+    top: 0px;
     bottom: 0;
     left: 0;
     right: 0;
@@ -49,47 +53,52 @@ body, .main-ct{
 /* responsive classes */
 
 @media only screen
-  and (max-width: 736px) {
-  .mobile {
-    display:block;
-  }
-  .desktop {
-    display:none;
-  }
-  .tablet {
-    display:none;
-  }
+and (max-width: 736px) {
+    .mobile {
+        display: block;
+    }
+
+    .desktop {
+        display: none;
+    }
+
+    .tablet {
+        display: none;
+    }
 }
 
 @media only screen
-  and (min-width: 736px)
-  and (max-width: 1200px){
-  .tablet {
-    display:block;
-  }
-  .desktop {
-    display:none;
-  }
-  .mobile {
-    display:none;
-  }
+and (min-width: 736px)
+and (max-width: 1200px) {
+    .tablet {
+        display: block;
+    }
+
+    .desktop {
+        display: none;
+    }
+
+    .mobile {
+        display: none;
+    }
 }
 
 @media only screen
-  and (min-width: 1200px) {
-  .desktop {
-    display:block;
-  }
-  .tablet {
-    display:none;
-  }
-  .mobile {
-    display:none;
-  }
+and (min-width: 1200px) {
+    .desktop {
+        display: block;
+    }
+
+    .tablet {
+        display: none;
+    }
+
+    .mobile {
+        display: none;
+    }
 }
 
-
-.footer{
+.footer {
     padding: 20px 10%;
     background-color: #dddddd;
     border-top: #aaaaaa;

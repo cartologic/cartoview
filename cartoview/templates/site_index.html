@@ -2,20 +2,58 @@
 {% load i18n %}
 {% block extra_head %}
     {{ block.super }}
-    <style>
-    #site-banner{
-        background: #0098DB;
-    }
-    </style>
+    {#    <style>#}
+    {#        #site-banner {#}
+    {#            background: #006064;#}
+    {#        }#}
+    {#        #site-banner{#}
+    {#            background-image: url("{{ STATIC_URL }}/cartoview/img/cartoview-egy.png");#}
+    {#            background-size: cover;#}
+    {#            background-repeat: no-repeat;#}
+    {#            width: 100%;#}
+    {#        }#}
+    {#    </style>#}
+    {#    <link href="{{ STATIC_URL }}cartoview/css/cartoview-index.css" rel="stylesheet"/>#}
 {% endblock %}
 {% block hero %}
-  <div id="site-banner" class="jumbotron">
-    <div class="container">
-      <h1>{% trans "Welcome" %}</h1>
-      <p>{% blocktrans %}<a href="http://cartologic.com/cartoview">Cartoview</a> extends GeoNode to create, manage GIS Web Mapping Applications.{% endblocktrans %}</p>
-      <p>{% blocktrans %}If you have any questions about the software or service,  <a href="http://cartologic.com/contact.html">contact us</a>.{% endblocktrans %}</p>
+    <div id="site-banner" class="jumbotron">
+        <div class="container">
+            <h1 style="text-align: center">{% trans "Create GIS Applications" %}</h1>
+            <h3 class="text-center">
+                <span class="label label-success" style="background: #69F0AE">{{ apps_instance_count }}</span> Apps
+                Created
+            </h3>
+            <div class="row text-center" style="margin-top: 30px">
+                {% if not user.is_authenticated %}
+                    <h5>Please Login to Create Apps</h5>
+                    <div class="col-md-2 col-md-offset-4">
+                        <button class="btn btn-primary" data-toggle="modal" data-target="#SigninModal" type="button">
+                            Create New
+                        </button>
+                    </div>
+                {% else %}
+                    <div class="col-md-2 col-md-offset-4">
+                        <a class="btn btn-primary" style="color: white" href="{% url 'app_manager_base_url' %}">
+                            Create New
+                        </a>
+                    </div>
+                {% endif %}
+
+                <div class="col-md-2">
+                    <a class="btn btn-primary" style="color: white" href="{% url 'app_manager_base_url' %}">
+                        Explore
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="margin-top: 20px;">
+            <p class="text-center">{% blocktrans %}
+                <a href="http://cartologic.com/cartoview" class="cartoview_install">Cartoview is open source Install on
+                    your
+                    Platform.</a>
+            {% endblocktrans %}</p>
+        </div>
     </div>
-  </div>
 {% endblock %}
 {% block mainbody %}
     {{ block.super }}
