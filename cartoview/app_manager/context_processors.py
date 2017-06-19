@@ -28,5 +28,5 @@ def site_logo(requets):
         logo = get_object_or_404(Logo, site=Site.objects.get_current())
         print logo.logo.path
         return {'site_logo': logo}
-    except ObjectDoesNotExist:
+    except:
         return {'site_logo': None}
