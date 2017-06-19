@@ -6,6 +6,7 @@ from agon_ratings.models import Rating
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth import get_user_model
 from django.db.models import Count
+from geonode.people.models import Profile
 
 from guardian.shortcuts import get_objects_for_user
 from cartoview.app_manager.models import AppInstance, App
@@ -27,11 +28,42 @@ def dump_json(obj):
     return mark_safe(json.dumps(obj))
 
 
-
 @register.assignment_tag
 def num_ratings(obj):
     ct = ContentType.objects.get_for_model(obj)
     return len(Rating.objects.filter(object_id=obj.pk, content_type=ct))
+
+
+from django import template
+
+register = template.Library()
+
+
+@register.simple_tag
+def layers_counts():
+    return Layer.objects.all().count()
+
+
+@register.simple_tag
+def maps_counts():
+    return Map.objects.all().count()
+
+
+@register.simple_tag
+def apps_counts():
+    return AppInstance.objects.all().count() \
+
+@register.simple_tag
+def users_counts():
+    return Profile.objects.all().count()
+
+
+from geonode.groups.models import Group
+
+
+@register.simple_tag
+def groups_counts():
+    return Group.objects.all().count()
 
 
 @register.assignment_tag(takes_context=True)
@@ -60,8 +92,8 @@ def facets(context):
 
         return facets
 
-    elif facet_type =='appinstances':
-        appinstances= AppInstance.objects.filter(title__icontains=title_filter)
+    elif facet_type == 'appinstances':
+        appinstances = AppInstance.objects.filter(title__icontains=title_filter)
         if settings.RESOURCE_PUBLISHING:
             appinstances = appinstances.filter(is_published=True)
 
@@ -112,6 +144,6 @@ def facets(context):
                 access="private").count()
 
             facets['layer'] = facets['raster'] + \
-                facets['vector'] + facets['remote']
+                              facets['vector'] + facets['remote']
 
     return facets

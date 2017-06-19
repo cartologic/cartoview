@@ -1,7 +1,36 @@
 {% extends 'index.html' %}
 {% load i18n %}
+{% load cartoview_tags %}
 {% block extra_head %}
     {{ block.super }}
+    <style>
+        .block {
+            border: 1px solid red;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .circle {
+            background: red;
+            border-radius: 200px;
+            color: white;
+            height: 200px;
+            font-weight: bold;
+            width: 200px;
+            display: table;
+            margin: 20px auto;
+        }
+
+        .circle p {
+            vertical-align: middle;
+            display: table-cell;
+        }
+
+        .counters {
+            padding: 20px;
+            background: aliceblue;
+        }
+    </style>
     {#    <style>#}
     {#        #site-banner {#}
     {#            background: #006064;#}
@@ -54,7 +83,55 @@
             {% endblocktrans %}</p>
         </div>
     </div>
+    <div class="row counters">
+        <div class="col-md-2 text-center col-md-offset-1">
+            <div class="row">
+                <span class="badge count">{% layers_counts %}</span>
+            </div>
+            Layers
+
+        </div>
+        <div class="col-md-2 text-center">
+            <div class="row ">
+                <span class="badge count">{% maps_counts %}</span>
+            </div>
+            Maps
+        </div>
+        <div class="col-md-2 text-center">
+            <div class="row">
+                <span class="badge count">{% users_counts %}</span>
+            </div>
+            Users
+        </div>
+        <div class="col-md-2 text-center">
+            <div class="row">
+                <span class="badge count">{% groups_counts %}</span>
+            </div>
+            Groups
+        </div>
+        <div class="col-md-2 text-center">
+            <div class="row">
+                <span class="badge count">{% apps_counts %}</span>
+            </div>
+            Apps
+        </div>
+    </div>
 {% endblock %}
 {% block mainbody %}
     {{ block.super }}
+{% endblock %}
+{% block extra_script %}
+    {{ block.super }}
+    <script>
+        $('.count').each(function () {
+            var $this = $(this);
+            $({counter: 0}).animate({counter: $this.text()}, {
+                duration: 1000,
+                easing: 'swing',
+                step: function () {
+                    $this.text(Math.ceil(this.counter));
+                }
+            });
+        });
+    </script>
 {% endblock %}
