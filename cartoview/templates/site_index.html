@@ -15,6 +15,10 @@
             color: #ff8f31;
         }
 
+        .button_shadow {
+            background-color: #0d406d;
+        }
+
         .badge {
             display: inline-block;
             min-width: 10px;
@@ -61,14 +65,18 @@
                     </div>
                 {% else %}
                     <div class="col-md-2 col-md-offset-4">
-                        <a class="btn btn-primary" style="color: white" href="{% url 'app_manager_base_url' %}">
+                        <a class="btn button_shadow btn-primary" style="color: white"
+                           href="{% url 'app_manager_base_url' %}"
+                           role="button">
                             Create New
                         </a>
                     </div>
                 {% endif %}
 
                 <div class="col-md-2">
-                    <a class="btn btn-primary" style="color: white" href="{% url 'app_manager_base_url' %}">
+                    <a class="btn button_shadow btn-primary" style="color: white"
+                       href="{% url 'app_manager_base_url' %}"
+                       role="button">
                         Explore
                     </a>
                 </div>
