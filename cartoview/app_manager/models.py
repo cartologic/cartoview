@@ -167,3 +167,10 @@ signals.pre_save.connect(pre_save_appinstance)
 
 signals.post_save.connect(appinstance_post_save)
 signals.pre_delete.connect(pre_delete_appinstance)
+from django.contrib.sites.models import Site
+
+class Logo(models.Model):
+    site = models.OneToOneField(Site)
+    logo=models.ImageField()
+    def __unicode__(self):
+        return "Site {} Logo: {}".format(self.site.name,self.logo.url)

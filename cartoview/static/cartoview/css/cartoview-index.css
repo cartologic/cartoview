@@ -1,0 +1,16 @@
+.home .jumbotron a {
+    color: #1DE9B6;
+}
+
+.home .jumbotron a:hover {
+    color: #00BFA5;
+}
+
+.home .big-search {
+    background: #333;
+}
+
+.home #datasets a .category:hover {
+    color: #006064;
+}
+

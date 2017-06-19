@@ -1,22 +1,135 @@
 {% extends 'index.html' %}
 {% load i18n %}
+{% load cartoview_tags %}
 {% block extra_head %}
     {{ block.super }}
     <style>
-    #site-banner{
-        background: #0098DB;
-    }
+        .counters {
+            padding: 20px;
+            background: #0e426f;
+            color: white;
+        }
+
+        .counters a {
+
+            color: #ff8f31;
+        }
+
+        .badge {
+            display: inline-block;
+            min-width: 10px;
+            padding: 3px 7px;
+            font-size: 14px;
+            font-weight: bold;
+            color: #fff;
+            line-height: 1;
+            vertical-align: middle;
+            white-space: nowrap;
+            text-align: center;
+            background-color: #3f90d6;
+            border-radius: 10px;
+        }
     </style>
+    {#    <style>#}
+    {#        #site-banner {#}
+    {#            background: #006064;#}
+    {#        }#}
+    {#        #site-banner{#}
+    {#            background-image: url("{{ STATIC_URL }}/cartoview/img/cartoview-egy.png");#}
+    {#            background-size: cover;#}
+    {#            background-repeat: no-repeat;#}
+    {#            width: 100%;#}
+    {#        }#}
+    {#    </style>#}
+    {#    <link href="{{ STATIC_URL }}cartoview/css/cartoview-index.css" rel="stylesheet"/>#}
 {% endblock %}
 {% block hero %}
-  <div id="site-banner" class="jumbotron">
-    <div class="container">
-      <h1>{% trans "Welcome" %}</h1>
-      <p>{% blocktrans %}<a href="http://cartologic.com/cartoview">Cartoview</a> extends GeoNode to create, manage GIS Web Mapping Applications.{% endblocktrans %}</p>
-      <p>{% blocktrans %}If you have any questions about the software or service,  <a href="http://cartologic.com/contact.html">contact us</a>.{% endblocktrans %}</p>
+    <div id="site-banner" style="text-shadow: 2px 2px black;" class="jumbotron">
+        <div class="container">
+            <h1 style="text-align: center;">{% trans "Create GIS Applications" %}</h1>
+            <h3 class="text-center">
+                <span class="label label-success" style="background: #69F0AE">{{ apps_instance_count }}</span> Apps
+                Created
+            </h3>
+            <div class="row text-center" style="margin-top: 30px">
+                {% if not user.is_authenticated %}
+                    <h5>Please Login to Create Apps</h5>
+                    <div class="col-md-2 col-md-offset-4">
+                        <button class="btn btn-primary" data-toggle="modal" data-target="#SigninModal" type="button">
+                            Create New
+                        </button>
+                    </div>
+                {% else %}
+                    <div class="col-md-2 col-md-offset-4">
+                        <a class="btn btn-primary" style="color: white" href="{% url 'app_manager_base_url' %}">
+                            Create New
+                        </a>
+                    </div>
+                {% endif %}
+
+                <div class="col-md-2">
+                    <a class="btn btn-primary" style="color: white" href="{% url 'app_manager_base_url' %}">
+                        Explore
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="margin-top: 20px;padding: 10px">
+            <p class="text-center">{% blocktrans %}
+                <a href="http://cartologic.com/cartoview" class="cartoview_install">Cartoview is open source Install
+                    on your Platform.</a>
+            {% endblocktrans %}</p>
+        </div>
     </div>
-  </div>
+    <div class="row counters">
+        <div class="col-md-2 text-center col-md-offset-1">
+            <div class="row">
+                <span class="badge badge-blue count">{% layers_counts %}</span>
+            </div>
+            <a href="{% url 'layer_browse' %}">Layers</a>
+
+        </div>
+        <div class="col-md-2 text-center">
+            <div class="row ">
+                <span class="badge badge-blue count">{% maps_counts %}</span>
+            </div>
+            <a href="{% url 'maps_browse' %}">Maps</a>
+        </div>
+        <div class="col-md-2 text-center">
+            <div class="row">
+                <span class="badge badge-blue count">{% users_counts %}</span>
+            </div>
+            <a href="{% url 'profile_browse' %}">Users</a>
+        </div>
+        <div class="col-md-2 text-center">
+            <div class="row">
+                <span class="badge badge-blue count">{% groups_counts %}</span>
+            </div>
+            <a href="{% url 'group_list' %}">Groups</a>
+        </div>
+        <div class="col-md-2 text-center">
+            <div class="row">
+                <span class="badge badge-blue count">{% apps_counts %}</span>
+            </div>
+            <a href="{% url 'appinstance_browse' %}">Apps</a>
+        </div>
+    </div>
 {% endblock %}
 {% block mainbody %}
     {{ block.super }}
+{% endblock %}
+{% block extra_script %}
+    {{ block.super }}
+    <script>
+        $('.count').each(function () {
+            var $this = $(this);
+            $({counter: 0}).animate({counter: $this.text()}, {
+                duration: 1000,
+                easing: 'swing',
+                step: function () {
+                    $this.text(Math.ceil(this.counter));
+                }
+            });
+        });
+    </script>
 {% endblock %}
