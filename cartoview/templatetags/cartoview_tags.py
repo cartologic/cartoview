@@ -33,12 +33,6 @@ def num_ratings(obj):
     ct = ContentType.objects.get_for_model(obj)
     return len(Rating.objects.filter(object_id=obj.pk, content_type=ct))
 
-
-from django import template
-
-register = template.Library()
-
-
 @register.simple_tag
 def layers_counts():
     return Layer.objects.all().count()
@@ -52,6 +46,7 @@ def maps_counts():
 @register.simple_tag
 def apps_counts():
     return AppInstance.objects.all().count()
+
 
 @register.simple_tag
 def users_counts():
