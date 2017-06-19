@@ -103,5 +103,5 @@ and (min-width: 1200px) {
 }
 
 body {
-    overflow-x: hidden;
+    overflow-x: hidden!important;
 }
