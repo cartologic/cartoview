@@ -9,6 +9,7 @@
             background: #0e426f;
             color: white;
         }
+
         .counters a {
 
             color: #ff8f31;
@@ -43,9 +44,9 @@
     {#    <link href="{{ STATIC_URL }}cartoview/css/cartoview-index.css" rel="stylesheet"/>#}
 {% endblock %}
 {% block hero %}
-    <div id="site-banner" class="jumbotron">
+    <div id="site-banner" style="text-shadow: 2px 2px black;" class="jumbotron">
         <div class="container">
-            <h1 style="text-align: center">{% trans "Create GIS Applications" %}</h1>
+            <h1 style="text-align: center;">{% trans "Create GIS Applications" %}</h1>
             <h3 class="text-center">
                 <span class="label label-success" style="background: #69F0AE">{{ apps_instance_count }}</span> Apps
                 Created
@@ -75,7 +76,8 @@
         </div>
         <div class="row" style="margin-top: 20px;padding: 10px">
             <p class="text-center">{% blocktrans %}
-                <a href="http://cartologic.com/cartoview" class="cartoview_install">Cartoview is open source Install onyourPlatform.</a>
+                <a href="http://cartologic.com/cartoview" class="cartoview_install">Cartoview is open source Install
+                    on your Platform.</a>
             {% endblocktrans %}</p>
         </div>
     </div>
