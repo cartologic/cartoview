@@ -51,7 +51,7 @@ def maps_counts():
 
 @register.simple_tag
 def apps_counts():
-    return AppInstance.objects.all().count() \
+    return AppInstance.objects.all().count()
 
 @register.simple_tag
 def users_counts():
