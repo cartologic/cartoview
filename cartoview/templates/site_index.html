@@ -50,14 +50,13 @@
 {% block hero %}
     <div id="site-banner" style="text-shadow: 2px 2px black;" class="jumbotron">
         <div class="container">
-            <h1 style="text-align: center;">{% trans "Create GIS Applications" %}</h1>
+            <h1 style="text-align: center;">{% trans "Build Geo Apps" %}</h1>
             <h3 class="text-center">
                 <span class="label label-success count" style="background: #69F0AE">{{ apps_instance_count }}</span> Apps
                 Created
             </h3>
             <div class="row text-center" style="margin-top: 30px">
                 {% if not user.is_authenticated %}
-                    <h5>Please Login to Create Apps</h5>
                     <div class="col-md-2 col-md-offset-4">
                         <a class="btn button_shadow btn-primary" style="color: white"
                            href="{% url 'account_login' %}?next={% url 'app_manager_base_url' %}"
@@ -86,8 +85,8 @@
         </div>
         <div class="row" style="margin-top: 20px;padding: 10px">
             <p class="text-center">{% blocktrans %}
-                <a href="http://cartoview.net" class="cartoview_install">Cartoview is open source Install
-                    on your Platform.</a>
+                <a href="http://cartoview.net" class="cartoview_install">Cartoview is open source. Install on your Platform.
+</a>
             {% endblocktrans %}</p>
         </div>
     </div>
