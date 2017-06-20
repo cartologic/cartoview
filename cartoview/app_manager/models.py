@@ -53,7 +53,8 @@ class App(models.Model):
     version = models.CharField(max_length=10)
     store = models.ForeignKey(AppStore, null=True)
     order = models.IntegerField(null=True, default=0)
-
+    class meta:
+        ordering=['order']
     def __unicode__(self):
         return self.title
 

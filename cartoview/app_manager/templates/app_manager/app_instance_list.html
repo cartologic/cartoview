@@ -8,49 +8,56 @@
 {% block body_class %}appinstances appinstances-list explore{% endblock %}
 
 {% block body %}
-<div class="page-header">
-    <div >
-        <h2>
+    <div class="page-header">
+        <div>
+            <h2>
 
-          {% verbatim %}
-            {{ appTitle }}
-          {% endverbatim %}
+                {% verbatim %}
+                {{ appTitle }}
+                {% endverbatim %}
 
-        </h2>
+            </h2>
+        </div>
+
+        {% if request.user.is_authenticated %}
+            {% verbatim %}
+            <a style=" margin-top: -35px;" class="pull-right btn btn-primary" ng-href="/apps/{{ appName }}/new/">Create
+                New</a>
+            {% endverbatim %}
+        {% else %}
+                {% verbatim %}
+                <a style=" margin-top: -35px;" class="pull-right btn btn-primary"
+                   ng-href="/account/login?next=/apps/{{ appName }}/new/">Create
+                    New</a>
+                {% endverbatim %}
+        {% endif %}
+
     </div>
-
-    {% if request.user.is_authenticated %}
-      {% verbatim %}
-      <a style=" margin-top: -35px;" class="pull-right btn btn-primary" ng-href="/apps/{{ appName }}/new/">Create New</a>
-      {% endverbatim %}
-    {% endif %}
-
-</div>
-  {% with include_type_filter='true' %}
-  {% with facet_type='appinstances' %}
-  {% with header='App Type' %}
-  {% with filter='app__title' %}
-  {% include "app_instance/_search_content.html" %}
-  {% endwith %}
-  {% endwith %}
-  {% endwith %}
-  {% endwith %}
-  {% include "_bulk_permissions_form.html" %}
+    {% with include_type_filter='true' %}
+        {% with facet_type='appinstances' %}
+            {% with header='App Type' %}
+                {% with filter='app__title' %}
+                    {% include "app_instance/_search_content.html" %}
+                {% endwith %}
+            {% endwith %}
+        {% endwith %}
+    {% endwith %}
+    {% include "_bulk_permissions_form.html" %}
 {% endblock %}
 
 {% block extra_script %}
-  {% if GEONODE_SECURITY_ENABLED %}
-    {% include "_permissions_form_js.html" %}
-  {% endif %}
-  <script type="text/javascript">
-      {% if HAYSTACK_SEARCH %}
-          SEARCH_URL = '{% url 'api_get_search' api_name='api' resource_name='appinstances'%}'
-      {% else %}
-          SEARCH_URL = '{% url 'api_dispatch_list' api_name='api' resource_name='appinstances' %}';
-      {% endif %}
-    FILTER_TYPE = 'appinstance';
-  </script>
-  {% with include_spatial='true' %}
-  {% include 'app_instance/search_scripts.html' %}
-  {% endwith %}
+    {% if GEONODE_SECURITY_ENABLED %}
+        {% include "_permissions_form_js.html" %}
+    {% endif %}
+    <script type="text/javascript">
+        {% if HAYSTACK_SEARCH %}
+            SEARCH_URL = '{% url 'api_get_search' api_name='api' resource_name='appinstances'%}'
+        {% else %}
+            SEARCH_URL = '{% url 'api_dispatch_list' api_name='api' resource_name='appinstances' %}';
+        {% endif %}
+        FILTER_TYPE = 'appinstance';
+    </script>
+    {% with include_spatial='true' %}
+        {% include 'app_instance/search_scripts.html' %}
+    {% endwith %}
 {% endblock extra_script %}
