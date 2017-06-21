@@ -1,4 +1,8 @@
-.navbar-inverse .navbar-brand{
-    background-image:  url("../img/cartoview-logo-text-white.png");
+.navbar-inverse .navbar-brand {
+    background-image: url("../img/cartoview-logo-text-white.png");
     background-position: center center;
+}
+
+body {
+    overflow-x: hidden;
 }

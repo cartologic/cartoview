@@ -33,26 +33,43 @@
             background-color: #3f90d6;
             border-radius: 10px;
         }
+
+        .btn-circle {
+            width: 30px;
+            height: 30px;
+            text-align: center;
+            padding: 6px 0;
+            font-size: 12px;
+            line-height: 1.428571429;
+            border-radius: 15px;
+        }
+
+        .btn-circle.btn-lg {
+            width: 50px;
+            height: 50px;
+            padding: 10px 16px;
+            font-size: 18px;
+            line-height: 1.33;
+            border-radius: 25px;
+        }
+
+        .btn-circle.btn-xl {
+            width: 70px;
+            height: 70px;
+            padding: 10px 16px;
+            font-size: 24px;
+            line-height: 1.33;
+            border-radius: 35px;
+        }
     </style>
-    {#    <style>#}
-    {#        #site-banner {#}
-    {#            background: #006064;#}
-    {#        }#}
-    {#        #site-banner{#}
-    {#            background-image: url("{{ STATIC_URL }}/cartoview/img/cartoview-egy.png");#}
-    {#            background-size: cover;#}
-    {#            background-repeat: no-repeat;#}
-    {#            width: 100%;#}
-    {#        }#}
-    {#    </style>#}
-    {#    <link href="{{ STATIC_URL }}cartoview/css/cartoview-index.css" rel="stylesheet"/>#}
 {% endblock %}
 {% block hero %}
     <div id="site-banner" style="text-shadow: 2px 2px black;" class="jumbotron">
         <div class="container">
             <h1 style="text-align: center;">{% trans "Build Geo Apps" %}</h1>
             <h3 class="text-center">
-                <span class="label label-success count" style="background: #69F0AE">{{ apps_instance_count }}</span> Apps
+                <span class="label label-success count" style="background: #69F0AE">{{ apps_instance_count }}</span>
+                Apps
                 Created
             </h3>
             <div class="row text-center" style="margin-top: 30px">
@@ -76,7 +93,7 @@
 
                 <div class="col-md-2">
                     <a class="btn button_shadow btn-primary" style="color: white"
-                       href="{% url 'app_manager_base_url' %}"
+                       href="{% url 'appinstance_browse' %}"
                        role="button">
                         Explore
                     </a>
@@ -85,8 +102,9 @@
         </div>
         <div class="row" style="margin-top: 20px;padding: 10px">
             <p class="text-center">{% blocktrans %}
-                <a href="http://cartoview.net" class="cartoview_install">Cartoview is open source. Install on your Platform.
-</a>
+                <a href="http://cartoview.net" class="cartoview_install">Cartoview is open source. Install on your
+                    Platform.
+                </a>
             {% endblocktrans %}</p>
         </div>
     </div>
@@ -122,6 +140,61 @@
             </div>
             <a href="{% url 'appinstance_browse' %}">Apps</a>
         </div>
+    </div>
+    <div class="row text-center" style="padding: 20px">
+        <h3>HOW IT WORKS</h3>
+        <h5>Just a few Steps from creating your map to creating your App</h5>
+        <div class="row" style="padding: 10px">
+            <div class="col-md-3 text-center">
+                <div class="row">
+            <span class="fa-stack fa-2x">
+              <i class="fa fa-circle fa-stack-2x"></i>
+              <i class="fa fa-pencil fa-stack-1x fa-inverse"></i>
+            </span>
+                </div>
+                <a href="{% url 'account_signup' %}">Register</a>
+
+            </div>
+            <div class="col-md-3 text-center">
+                <div class="row">
+                <span class="fa-stack fa-2x">
+                  <i class="fa fa-circle fa-stack-2x"></i>
+                  <i class="fa fa-upload fa-stack-1x fa-inverse"></i>
+                </span>
+                </div>
+                <a href="{% url 'layer_upload' %}">Upload Layer</a>
+
+            </div>
+            <div class="col-md-3 text-center">
+                <div class="row">
+                <span class="fa-stack fa-2x">
+                  <i class="fa fa-circle fa-stack-2x"></i>
+                  <i class="fa fa-map fa-stack-1x fa-inverse"></i>
+                </span>
+                </div>
+                <a href="{% url 'new_map' %}">Create Map</a>
+
+            </div>
+            <div class="col-md-3 text-center">
+                <div class="row">
+                <span class="fa-stack fa-2x">
+                  <i class="fa fa-circle fa-stack-2x"></i>
+                  <i class="fa fa-plus-square-o fa-stack-1x fa-inverse"></i>
+                </span>
+                </div>
+                {% if not user.is_authenticated %}
+
+                    <a href="{% url 'account_login' %}?next={% url 'app_manager_base_url' %}">Create Application</a>
+
+                {% else %}
+
+                    <a href="{% url 'app_manager_base_url' %}">
+                        Create Application
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+
     </div>
 {% endblock %}
 {% block mainbody %}
