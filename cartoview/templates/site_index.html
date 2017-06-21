@@ -33,6 +33,9 @@
             font-family: sans-serif;
             font-size: x-large;
         }
+    .works a{
+        color:#0D406D;
+    }
     </style>
 {% endblock %}
 {% block hero %}
@@ -116,10 +119,8 @@
         </div>
 
     </div>
-    <div class="row text-center" style="padding: 20px">
-        <h3 style="margin-bottom:20px;color: #2d4af4;">HOW IT WORKS</h3>
-        <h5 style="margin-bottom: 40px;color: #2d4af4;">Just a few Steps from creating your map to creating your
-            App</h5>
+    <div class="row text-center works" style="padding: 20px">
+        <h3 style="margin-bottom: 40px;color: #0D406D;">HOW IT WORKS</h3>
         <div class="row" style="padding: 10px;margin-bottom: 40px">
             <div class="col-xs-12 col-sm-6 col-md-3 text-center">
                 <div class="row icons-spaces">
@@ -145,7 +146,7 @@
                 </div>
                 {% if not user.is_authenticated %}
 
-                    <a href="{% url 'account_login' %}?next={% url 'app_manager_base_url' %}">Create Application</a>
+                    <a href="{% url 'account_login' %}?next={% url 'app_manager_base_url' %}">4. Create Application</a>
 
                 {% else %}
 

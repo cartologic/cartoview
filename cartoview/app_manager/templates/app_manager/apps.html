@@ -35,14 +35,16 @@
                     {% if app.config.active %}
                         <div class="col-xs-12 col-sm-6 col-md-4">
                             <div class="thumbnail">
-                                <img src="{{ STATIC_URL }}{{ app.name }}/logo.png" style="min-height:200px;height:200px;">
+                                <img src="{{ STATIC_URL }}{{ app.name }}/logo.png"
+                                     style="min-height:200px;height:200px;">
                                 <div class="caption">
                                     <h4>{{ app.title }}</h4>
                                     <p>
                                         {% if app.description %}
-                                            {{ app.description|slice:":30" }}
-                                            <a href="javascript:;"  data-placement="bottom" data-trigger="hover" onclick="" data-toggle="popover" title="Description"
-                                               data-content="{{ app.description }}">......</a>
+                                            {{ app.description|slice:":70" }}
+                                            <a href="javascript:;" data-placement="bottom" data-trigger="hover"
+                                               onclick="" data-toggle="popover" title="Description"
+                                               data-content="{{ app.description }}">More</a>
                                         {% else %}
                                             No Description Provided
                                         {% endif %}
@@ -51,57 +53,64 @@
                                     <p>{% if app.single_instance %}
                                         <a href="{% url 'app_manager_base_url' %}{{ app.name }}"
                                            target="_parent" class="btn btn-sm btn-primary"><i
-                                                class="fa fa-fw fa-eye"></i> Explore</a>
+                                                class="fa fa-fw fa-eye"></i>Open</a>
+
                                     {% else %}
                                         <a href="{% url 'appinstance_browse' %}?app__title={{ app.title }}"
                                            target="_parent" class="btn btn-sm btn-primary"><i
                                                 class="fa fa-fw fa-eye"></i> Explore</a>
-                                    {% endif %}
-                                        {% if app.anonymous_urls %}
-                                            {% for key, values in app.anonymous_urls.iteritems %}
-                                                {% url key as the_url %}
-                                                {% if the_url %}
-                                                    <a href="{{ the_url }}" target="_parent"
-                                                       class="btn btn-sm btn-primary"> {{ values }}</a>
-                                                    &nbsp;
-                                                {% endif %}
-                                            {% endfor %}
+                                        {% if not user.is_authenticated %}
+                                                <a class="btn btn-sm btn-primary"
+                                                   href="{% url 'account_login' %}?next={% url ""|add:app.name|add:'.new' %}">
+                                                    Create New
+                                                </a>
                                         {% endif %}
 
-                                        {% if user.user.is_authenticated and app.logged_in_urls %}
-                                            {% for key, values in app.logged_in_urls.iteritems %}
-                                                {% url key as the_url %}
-                                                {% if the_url %}
-                                                    <a href="{{ the_url }}" target="_parent"
-                                                       class="btn btn-sm btn-primary"> {{ values }}</a>
-                                                    &nbsp;
-                                                {% endif %}
-                                            {% endfor %}
-                                        {% endif %}
-                                        {% if user.is_staff and  app.admin_urls %}
-                                            {% for key, values in app.admin_urls.iteritems %}
-                                                {% url key as the_url %}
-                                                {% if the_url %}
-                                                    <a href="{{ the_url }}" target="_parent"
-                                                       class="btn btn-sm btn-primary"> {{ values }}</a>
-                                                    &nbsp;
-                                                {% endif %}
-                                            {% endfor %}
-                                        {% endif %}
+                                    {% endif %}
+                                    {% if app.anonymous_urls %}
+                                        {% for key, values in app.anonymous_urls.iteritems %}
+                                            {% url key as the_url %}
+                                            {% if the_url %}
+                                                <a href="{{ the_url }}" target="_parent"
+                                                   class="btn btn-sm btn-primary"> {{ values }}</a>
+                                                &nbsp;
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endif %}
+
+                                    {% if user.user.is_authenticated and app.logged_in_urls %}
+                                        {% for key, values in app.logged_in_urls.iteritems %}
+                                            {% url key as the_url %}
+                                            {% if the_url %}
+                                                <a href="{{ the_url }}" target="_parent"
+                                                   class="btn btn-sm btn-primary"> {{ values }}</a>
+                                                &nbsp;
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endif %}
+                                    {% if user.is_staff and  app.admin_urls %}
+                                        {% for key, values in app.admin_urls.iteritems %}
+                                            {% url key as the_url %}
+                                            {% if the_url %}
+                                                <a href="{{ the_url }}" target="_parent"
+                                                   class="btn btn-sm btn-primary"> {{ values }}</a>
+                                                &nbsp;
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endif %}
                                     </p>
                                 </div>
                             </div>
                         </div>
-
                     {% endif %}
                 {% endfor %}
             </div>
         </div>
     </div>
     <script
-  src="https://code.jquery.com/jquery-2.2.4.min.js"
-  integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
-  crossorigin="anonymous"></script>
+            src="https://code.jquery.com/jquery-2.2.4.min.js"
+            integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+            crossorigin="anonymous"></script>
     <script>
         $(document).ready(function () {
             $('[data-toggle="popover"]').popover();
