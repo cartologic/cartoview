@@ -41,7 +41,7 @@
                                     <h4>{{ app.title }}</h4>
                                     <p>
                                         {% if app.description %}
-                                            {{ app.description|slice:":70" }}
+                                            {{ app.description|slice:":40" }}
                                             <a href="javascript:;" data-placement="bottom" data-trigger="hover"
                                                onclick="" data-toggle="popover" title="Description"
                                                data-content="{{ app.description }}">More</a>
