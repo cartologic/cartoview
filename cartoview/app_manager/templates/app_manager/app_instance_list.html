@@ -18,7 +18,7 @@
 
             </h2>
         </div>
-        {% if not user.is_authenticated %}
+        {% if not user.is_authenticated and request.GET.app__title %}
             {% verbatim %}
             <a style="margin-top: -35px;" class="pull-right btn btn-primary"
                href="/account/login?next=/apps/{{ appName }}/new">
@@ -26,10 +26,13 @@
             </a>
             {% endverbatim %}
         {% else %}
-            {% verbatim %}
-            <a style=" margin-top: -35px;" class="pull-right btn btn-primary" ng-href="/apps/{{ appName }}/new/">Create
-                New</a>
-            {% endverbatim %}
+            {% if request.GET.app__title %}
+                {% verbatim %}
+                <a style=" margin-top: -35px;" class="pull-right btn btn-primary" ng-href="/apps/{{ appName }}/new/">Create
+                    New</a>
+                {% endverbatim %}
+            {% endif %}
+
         {% endif %}
     </div>
     {% with include_type_filter='true' %}
