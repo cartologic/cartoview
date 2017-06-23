@@ -10,57 +10,32 @@
             color: white;
         }
 
-        .counters a {
+        .center-counter a {
 
             color: #ff8f31;
+            font-size: large;
         }
 
         .button_shadow {
             background-color: #0d406d;
         }
 
-        .badge {
-            display: inline-block;
-            min-width: 10px;
-            padding: 3px 7px;
-            font-size: 14px;
-            font-weight: bold;
-            color: #fff;
-            line-height: 1;
-            vertical-align: middle;
-            white-space: nowrap;
-            text-align: center;
-            background-color: #3f90d6;
-            border-radius: 10px;
+        .icons-spaces {
+            margin-bottom: 20px;
         }
 
-        .btn-circle {
-            width: 30px;
-            height: 30px;
-            text-align: center;
-            padding: 6px 0;
-            font-size: 12px;
-            line-height: 1.428571429;
-            border-radius: 15px;
+        .center-counter {
+            padding-bottom: 10px;
+            color: white;
+            padding-top: 10px;
+            padding-left: 25px;
+            padding-right: 25px;
+            font-family: sans-serif;
+            font-size: x-large;
         }
-
-        .btn-circle.btn-lg {
-            width: 50px;
-            height: 50px;
-            padding: 10px 16px;
-            font-size: 18px;
-            line-height: 1.33;
-            border-radius: 25px;
-        }
-
-        .btn-circle.btn-xl {
-            width: 70px;
-            height: 70px;
-            padding: 10px 16px;
-            font-size: 24px;
-            line-height: 1.33;
-            border-radius: 35px;
-        }
+    .works a{
+        color:#0D406D;
+    }
     </style>
 {% endblock %}
 {% block hero %}
@@ -68,7 +43,7 @@
         <div class="container">
             <h1 style="text-align: center;">{% trans "Build Geo Apps" %}</h1>
             <h3 class="text-center">
-                <span class="label label-success count" style="background: #69F0AE">{{ apps_instance_count }}</span>
+                <span class="count">{{ apps_instance_count }}</span>
                 Apps
                 Created
             </h3>
@@ -108,88 +83,75 @@
             {% endblocktrans %}</p>
         </div>
     </div>
-    <div class="row counters">
-        <div class="col-md-2 text-center col-md-offset-1">
+    <div class="row" style="background: #0d406d;">
+        <div class="col-xs-6 col-sm-6 col-md-2 col-md-offset-1 text-center center-counter">
             <div class="row">
-                <span class="badge badge-blue count">{% layers_counts %}</span>
+                <span class="count">{% layers_counts %}</span>
             </div>
             <a href="{% url 'layer_browse' %}">Layers</a>
-
         </div>
-        <div class="col-md-2 text-center">
-            <div class="row ">
-                <span class="badge badge-blue count">{% maps_counts %}</span>
+        <div class="col-xs-6 col-sm-6 col-md-2 text-center center-counter">
+            <div class="row">
+                <span class="count">{% maps_counts %}</span>
             </div>
+
             <a href="{% url 'maps_browse' %}">Maps</a>
         </div>
-        <div class="col-md-2 text-center">
+        <div class="col-xs-6 col-sm-6 col-md-2 text-center center-counter ">
             <div class="row">
-                <span class="badge badge-blue count">{% users_counts %}</span>
+                <span class="count">{% users_counts %}</span>
             </div>
+
             <a href="{% url 'profile_browse' %}">Users</a>
         </div>
-        <div class="col-md-2 text-center">
+        <div class="col-xs-6 col-sm-6 col-md-2 text-center center-counter ">
             <div class="row">
-                <span class="badge badge-blue count">{% groups_counts %}</span>
+                <span class="count">{% groups_counts %}</span>
             </div>
+
             <a href="{% url 'group_list' %}">Groups</a>
         </div>
-        <div class="col-md-2 text-center">
+        <div class="col-xs-6 col-sm-6  col-md-2 text-center center-counter">
             <div class="row">
-                <span class="badge badge-blue count">{% apps_counts %}</span>
+                <span class="count">{% apps_counts %}</span>
             </div>
             <a href="{% url 'appinstance_browse' %}">Apps</a>
         </div>
+
     </div>
-    <div class="row text-center" style="padding: 20px">
-        <h3>HOW IT WORKS</h3>
-        <h5>Just a few Steps from creating your map to creating your App</h5>
-        <div class="row" style="padding: 10px">
-            <div class="col-md-3 text-center">
-                <div class="row">
-            <span class="fa-stack fa-2x">
-              <i class="fa fa-circle fa-stack-2x"></i>
-              <i class="fa fa-pencil fa-stack-1x fa-inverse"></i>
-            </span>
+    <div class="row text-center works" style="padding: 20px">
+        <h3 style="margin-bottom: 40px;color: #0D406D;">HOW IT WORKS</h3>
+        <div class="row" style="padding: 10px;margin-bottom: 40px">
+            <div class="col-xs-12 col-sm-6 col-md-3 text-center">
+                <div class="row icons-spaces">
+                    <img src="{{ STATIC_URL }}/cartoview/img/edit.png">
                 </div>
-                <a href="{% url 'account_signup' %}">Register</a>
-
+                <a href="{% url 'account_signup' %}">1. Register</a>
             </div>
-            <div class="col-md-3 text-center">
-                <div class="row">
-                <span class="fa-stack fa-2x">
-                  <i class="fa fa-circle fa-stack-2x"></i>
-                  <i class="fa fa-upload fa-stack-1x fa-inverse"></i>
-                </span>
+            <div class="col-xs-12 col-sm-6 col-md-3 text-center">
+                <div class="row icons-spaces">
+                    <img src="{{ STATIC_URL }}/cartoview/img/layers.png">
                 </div>
-                <a href="{% url 'layer_upload' %}">Upload Layer</a>
-
+                <a href="{% url 'layer_upload' %}">2. Upload Layer</a>
             </div>
-            <div class="col-md-3 text-center">
-                <div class="row">
-                <span class="fa-stack fa-2x">
-                  <i class="fa fa-circle fa-stack-2x"></i>
-                  <i class="fa fa-map fa-stack-1x fa-inverse"></i>
-                </span>
+            <div class="col-xs-12 col-sm-6 col-md-3 text-center">
+                <div class="row icons-spaces">
+                    <img src="{{ STATIC_URL }}/cartoview/img/map.png">
                 </div>
-                <a href="{% url 'new_map' %}">Create Map</a>
-
+                <a href="{% url 'new_map' %}">3. Create Map</a>
             </div>
-            <div class="col-md-3 text-center">
-                <div class="row">
-                <span class="fa-stack fa-2x">
-                  <i class="fa fa-circle fa-stack-2x"></i>
-                  <i class="fa fa-plus-square-o fa-stack-1x fa-inverse"></i>
-                </span>
+            <div class="col-xs-12 col-sm-6 col-md-3 text-center">
+                <div class="row icons-spaces">
+                    <img src="{{ STATIC_URL }}/cartoview/img/app.png">
                 </div>
                 {% if not user.is_authenticated %}
 
-                    <a href="{% url 'account_login' %}?next={% url 'app_manager_base_url' %}">Create Application</a>
+                    <a href="{% url 'account_login' %}?next={% url 'app_manager_base_url' %}">4. Create Application</a>
 
                 {% else %}
 
                     <a href="{% url 'app_manager_base_url' %}">
-                        Create Application
+                        4. Create Application
                     </a>
                 {% endif %}
             </div>

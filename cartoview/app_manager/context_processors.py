@@ -10,7 +10,8 @@ def news(requets):
 
 def apps(requets):
     return {'apps': App.objects.all().order_by('order')}
-
+def apps_menu(requets):
+    return {'APPS_MENU': settings.APPS_MENU}
 
 def apps_instance(requets):
     instances = AppInstance.objects.all()

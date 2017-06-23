@@ -18,20 +18,19 @@
 
             </h2>
         </div>
-
-        {% if request.user.is_authenticated %}
+        {% if not user.is_authenticated %}
+            {% verbatim %}
+            <a style="margin-top: -35px;" class="pull-right btn btn-primary"
+               href="/account/login?next=/apps/{{ appName }}/new">
+                Create New
+            </a>
+            {% endverbatim %}
+        {% else %}
             {% verbatim %}
             <a style=" margin-top: -35px;" class="pull-right btn btn-primary" ng-href="/apps/{{ appName }}/new/">Create
                 New</a>
             {% endverbatim %}
-        {% else %}
-                {% verbatim %}
-                <a style=" margin-top: -35px;" class="pull-right btn btn-primary"
-                   ng-href="/account/login?next=/apps/{{ appName }}/new/">Create
-                    New</a>
-                {% endverbatim %}
         {% endif %}
-
     </div>
     {% with include_type_filter='true' %}
         {% with facet_type='appinstances' %}
