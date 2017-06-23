@@ -3,7 +3,7 @@
  */
 'use strict';
 
-(function() {
+(function () {
 
     var module = angular.module('geonode_main_search', [], function ($locationProvider) {
         if (window.navigator.userAgent.indexOf("MSIE") == -1) {
@@ -198,7 +198,7 @@
      * Load data from api and defines the multiple and single choice handlers
      * Syncs the browser url with the selections
      */
-    module.controller('geonode_search_controller', function ($injector, $scope, $location, $http, Configs) {
+    module.controller('geonode_search_controller', function ($injector, $scope, $location, $http, Configs, $parse) {
         $scope.query = $location.search();
         $scope.query.limit = $scope.query.limit || CLIENT_RESULTS_LIMIT;
         $scope.query.offset = $scope.query.offset || 0;
@@ -206,18 +206,30 @@
 
         //Get data from apis and make them available to the page
         function query_api(data) {
-            if(angular.isString(data.app__title)){
+            if (angular.isString(data.app__title)) {
                 $scope.appTitle = data.app__title;
-                $http.get(APPS_ENDPOINT,{params:{title:data.app__title}}).success(function (res) {
-                    $scope.appName = res.objects[0].name;
-                })
             }
-            else{
+            else {
                 delete $scope.appTitle;
             }
             $http.get(Configs.url, {params: data || {}}).success(function (data) {
 
                 $scope.results = data.objects;
+                $scope.get_app_name = function (name, id) {
+                    $http.get(name).success(function (res) {
+                        var title = $parse("_" + id + "_title");
+                        title.assign($scope, res.title);
+                        var name = $parse("_" + id + "_name");
+                        name.assign($scope, res.name);
+
+                    })
+                };
+                $scope.app_title = function (id) {
+                    return $scope.$eval("_" + id + "_title");
+                };
+                $scope.appName = function (id) {
+                    return $scope.$eval("_" + id + "_name");
+                };
                 $scope.total_counts = data.meta.total_count;
                 $scope.$root.query_data = data;
                 if (HAYSTACK_SEARCH) {
