@@ -54,7 +54,7 @@
                                     </p>
                                     <p>{% if app.single_instance %}
                                         <a href="{% url 'app_manager_base_url' %}{{ app.name }}"
-                                           target="_parent" class="btn btn-sm btn-primary">Open <span class="badge">{{ app.appinstance_set.all.count }}</span></a>
+                                           target="_parent" class="btn btn-sm btn-primary">Open</a>
 
                                     {% else %}
                                         <a href="{% url 'appinstance_browse' %}?app__title={{ app.title }}"
