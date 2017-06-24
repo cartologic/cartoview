@@ -10,4 +10,8 @@ def workspace(request):
     apps = AppInstance.objects.filter(owner=request.user)
     layers = Layer.objects.filter(owner=request.user)
     maps = Map.objects.filter(owner=request.user)
-    return render(request, template_name='workspace/workspace.html',context={'my_apps': apps, 'my_layers': layers, 'my_maps': maps})
+    maps_count = Map.objects.all().count()
+    layers_count = Layer.objects.all().count()
+    return render(request, template_name='workspace/workspace.html',
+                  context={'my_apps': apps, 'my_layers': layers, 'my_maps': maps, 'maps_count': maps_count,
+                           'layers_count': layers_count})

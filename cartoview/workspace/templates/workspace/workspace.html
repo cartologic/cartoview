@@ -91,7 +91,7 @@
                     <div class="row" style="padding: 10px">
                         <a href="{% url 'appinstance_browse' %}"
                            class="btn btn-primary" role="button">View All Layers <span
-                                class="badge">{{ my_layers.all.count }}</span></a>
+                                class="badge">{{ layers_count }}</span></a>
                     </div>
                     <div class="row" style="padding: 10px">
                         <a href="{% url 'layer_upload' %}"
@@ -131,7 +131,7 @@
                     <div class="row" style="padding: 10px">
                         <a href="{% url 'maps_browse' %}"
                            class="btn btn-primary" role="button">View All Maps <span
-                                class="badge">{{ my_maps.all.count }}</span></a>
+                                class="badge">{{ maps_count }}</span></a>
                     </div>
                     <div class="row" style="padding: 10px">
                         <a href="{% url 'new_map' %}"
