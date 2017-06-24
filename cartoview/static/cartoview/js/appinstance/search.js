@@ -208,6 +208,9 @@
         function query_api(data) {
             if (angular.isString(data.app__title)) {
                 $scope.appTitle = data.app__title;
+                $http.get(APPS_ENDPOINT,{params:{title:data.app__title}}).success(function (res) {
+                    $scope.app_name = res.objects[0].name;
+                })
             }
             else {
                 delete $scope.appTitle;
