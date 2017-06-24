@@ -8,9 +8,9 @@
     {% include "geonode/app_header.html" %}
     {{ block.super }}
     <style>
-    .buttons{
-        text-align: center;
-    }
+        .buttons {
+            text-align: center;
+        }
     </style>
 {% endblock %}
 {% block body %}
@@ -28,9 +28,6 @@
                                 <img src="{{ app.map.get_thumbnail_url }}" style="min-height:200px;height:200px;">
                                 <div class="caption">
                                     <h3>{{ app.title }}</h3>
-                                    <p><a href="{% url ""|add:app.app.name|add:'.view' instance_id=app.id %}"
-                                          class="btn btn-primary" role="button">View</a>
-                                    </p>
                                 </div>
                             </div>
                         </div>
