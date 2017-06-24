@@ -27,7 +27,7 @@
                             <div class="thumbnail">
                                 <img src="{{ app.map.get_thumbnail_url }}" style="min-height:200px;height:200px;">
                                 <div class="caption">
-                                    <h3>{{ app.title }}</h3>
+                                    <h5>{{ app.title }}</h5>
                                 </div>
                                 <p><a href="{% url ''|add:app.app.name|add:".view" app.id %}"
                                       class="btn btn-primary" role="button">View</a></p>
@@ -67,7 +67,7 @@
                             <div class="thumbnail">
                                 <img src="{{ layer.get_thumbnail_url }}" style="min-height:200px;height:200px;">
                                 <div class="caption">
-                                    <h3>{{ layer.title }}</h3>
+                                    <h5>{{ layer.title }}</h5>
                                     <p><a href="{% url "layer_detail" layername=layer.typename %}"
                                           class="btn btn-primary" role="button">View</a>
                                     </p>
@@ -108,7 +108,7 @@
                             <div class="thumbnail">
                                 <img src="{{ map.get_thumbnail_url }}" style="min-height:200px;height:200px;">
                                 <div class="caption">
-                                    <h3>{{ map.title }}</h3>
+                                    <h5>{{ map.title }}</h5>
                                     <p><a href="{% url "map_view" mapid=map.id %}"
                                           class="btn btn-primary" role="button">View</a>
                                     </p>
