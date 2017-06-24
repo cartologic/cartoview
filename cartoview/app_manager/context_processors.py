@@ -25,9 +25,7 @@ from django.shortcuts import get_list_or_404, get_object_or_404
 
 def site_logo(requets):
     try:
-
         logo = get_object_or_404(Logo, site=Site.objects.get_current())
-        print logo.logo.path
         return {'site_logo': logo}
     except:
         return {'site_logo': None}

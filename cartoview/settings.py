@@ -1,6 +1,6 @@
 from geonode.settings import *
 
-INSTALLED_APPS += ("cartoview", "cartoview.app_manager", "cartoview.user_engage",)
+INSTALLED_APPS += ("cartoview", "cartoview.app_manager", "cartoview.user_engage","cartoview.workspace")
 ROOT_URLCONF = "cartoview.urls"
 import geonode
 import cartoview
