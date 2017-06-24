@@ -14,7 +14,8 @@
             <ul class="dropdown-menu">
                 {% for app in apps|slice:":5" %}
                     {% if app.single_instance %}
-                        <li><a href="{% url 'app_manager_base_url' %}{{ app.name }}" target="_parent">{{ app.title }}</a></li>
+                        <li><a href="{% url 'app_manager_base_url' %}{{ app.name }}"
+                               target="_parent">{{ app.title }}</a></li>
                     {% else %}
                         <li><a href="{% url 'appinstance_browse' %}?app__title={{ app.title }}" target="_parent"
                         >{{ app.title }}</a></li>
@@ -35,4 +36,7 @@
 
     </li>
     {{ block.super }}
+    <li>
+        <a href="{% url 'my_workspace' %}">{% trans "My Workspace" %}</a>
+    </li>
 {% endblock %}

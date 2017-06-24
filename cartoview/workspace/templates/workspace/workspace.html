@@ -1,0 +1,162 @@
+{% extends "app_manager/app_install_base.html" %}
+{% load bootstrap_tags staticfiles %}
+{% load i18n %}
+
+{% block title %} {{ block.super }} - {% trans "Workspace" %} {% endblock %}
+{% block head %}
+    {% include "geonode/ext_header.html" %}
+    {% include "geonode/app_header.html" %}
+    {{ block.super }}
+    <style>
+        .buttons {
+            text-align: center;
+        }
+    </style>
+{% endblock %}
+{% block body %}
+    <div class="page-header">
+        <h2>{{ request.user.username }} Workspace</h2>
+    </div>
+    <div id="page-wrapper">
+        <div class="container-fluid">
+            <div class="row">
+                <h3>My Apps</h3>
+                {% if my_apps.all.count != 0 %}
+                    {% for app in my_apps.all|slice:":3" %}
+                        <div class="col-xs-12 col-sm-12 col-md-3">
+                            <div class="thumbnail">
+                                <img src="{{ app.map.get_thumbnail_url }}" style="min-height:200px;height:200px;">
+                                <div class="caption">
+                                    <h5>{{ app.title }}</h5>
+                                </div>
+                                <p><a href="{% url ''|add:app.app.name|add:".view" app.id %}"
+                                      class="btn btn-primary" role="button">View</a></p>
+                            </div>
+                        </div>
+
+                    {% endfor %}
+                {% else %}
+                    <div class="col-sm-12 col-md-9">
+                        <h4>No Apps Created</h4>
+                    </div>
+                {% endif %}
+
+                <div class="col-xs-12 col-sm-12 col-md-3 buttons pull-right">
+                    <div class="row" style="padding: 10px">
+                        <a href="{% url 'appinstance_browse' %}?owner__username={{ request.user.username }}"
+                           class="btn btn-primary" role="button">View My Apps <span
+                                class="badge">{{ my_apps.all.count }}</span></a>
+                    </div>
+                    <div class="row" style="padding: 10px">
+                        <a href="{% url 'appinstance_browse' %}"
+                           class="btn btn-primary" role="button">View All Apps <span
+                                class="badge">{{ apps.count }}</span></a>
+                    </div>
+                    <div class="row" style="padding: 10px">
+                        <a href="{% url 'app_manager_base_url' %}"
+                           class="btn btn-primary" role="button">Create New</a>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <h3>My Layers</h3>
+                {% if my_layers.all.count != 0 %}
+                    {% for layer in my_layers.all|slice:":3" %}
+                        <div class="col-xs-12 col-sm-12 col-md-3">
+                            <div class="thumbnail">
+                                <img src="{{ layer.get_thumbnail_url }}" style="min-height:200px;height:200px;">
+                                <div class="caption">
+                                    <h5>{{ layer.title }}</h5>
+                                    <p><a href="{% url "layer_detail" layername=layer.typename %}"
+                                          class="btn btn-primary" role="button">View</a>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                    {% endfor %}
+                {% else %}
+                    <div class="col-sm-12 col-md-9">
+                        <h4>No Layers Uploaded</h4>
+                    </div>
+                {% endif %}
+
+                <div class="col-xs-12 col-sm-12 col-md-3 buttons pull-right">
+                    <div class="row" style="padding: 10px">
+                        <a href="{% url 'layer_browse' %}?owner__username={{ request.user.username }}"
+                           class="btn btn-primary" role="button">View My Layers <span
+                                class="badge">{{ my_layers.all.count }}</span></a>
+                    </div>
+                    <div class="row" style="padding: 10px">
+                        <a href="{% url 'appinstance_browse' %}"
+                           class="btn btn-primary" role="button">View All Layers <span
+                                class="badge">{{ my_layers.all.count }}</span></a>
+                    </div>
+                    <div class="row" style="padding: 10px">
+                        <a href="{% url 'layer_upload' %}"
+                           class="btn btn-primary" role="button">Upload New</a>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <h3>My Maps</h3>
+                {% if my_maps.all.count != 0 %}
+                    {% for map in my_maps.all|slice:":3" %}
+                        <div class="col-xs-12 col-sm-12 col-md-3">
+                            <div class="thumbnail">
+                                <img src="{{ map.get_thumbnail_url }}" style="min-height:200px;height:200px;">
+                                <div class="caption">
+                                    <h5>{{ map.title }}</h5>
+                                    <p><a href="{% url "map_view" mapid=map.id %}"
+                                          class="btn btn-primary" role="button">View</a>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="col-sm-12 col-md-9">
+                        <h4>No Maps Created</h4>
+                    </div>
+                {% endif %}
+
+                <div class="col-xs-12 col-sm-12 col-md-3 buttons pull-right">
+                    <div class="row" style="padding: 10px">
+                        <a href="{% url 'maps_browse' %}?owner__username={{ request.user.username }}"
+                           class="btn btn-primary" role="button">View My Maps <span
+                                class="badge">{{ my_maps.all.count }}</span></a>
+                    </div>
+                    <div class="row" style="padding: 10px">
+                        <a href="{% url 'maps_browse' %}"
+                           class="btn btn-primary" role="button">View All Maps <span
+                                class="badge">{{ my_maps.all.count }}</span></a>
+                    </div>
+                    <div class="row" style="padding: 10px">
+                        <a href="{% url 'new_map' %}"
+                           class="btn btn-primary" role="button">Create New</a>
+                    </div>
+                </div>
+            </div>
+            <hr>
+        </div>
+    </div>
+
+{% endblock %}
+{% block extra_script %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.matchHeight/0.7.2/jquery.matchHeight-min.js"></script>
+    <script>
+        $(function () {
+            $('.item').matchHeight({
+                byRow: false,
+                property: 'height',
+                target: null,
+                remove: false
+            });
+            $('[data-toggle="popover"]').popover();
+        });
+    </script>
+{% endblock %}
+
+
