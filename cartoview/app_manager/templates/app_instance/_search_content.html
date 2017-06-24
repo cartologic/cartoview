@@ -11,11 +11,6 @@
             <button type="button" class="btn btn-default" ng-disabled="!cart.getCart().items.length" data-toggle="modal" data-target="#_bulk_permissions">{% trans "Set permissions" %}</button>
           </div>
           {% endif %}
-          {% if facet_type == 'layers' %}
-          <div class="btn-group" role="group">
-            <button type="button" class="btn btn-default" ng-disabled="!cart.getCart().items.length" ng-click="newMap()">{% trans "Create a Map" %}</button>
-          </div>
-          {% endif %}
         </div>
         {% endblock %}
     
@@ -27,16 +22,7 @@
               {% include "search/_text_filter.html" %}
             {% endif  %}
         <div id="slide-pane">
-            {% if SEARCH_FILTERS.TYPE_ENABLED and include_type_filter == 'true' %}
-              {% include "search/_type_filters.html" %}
-            {% endif %}
             {% include "search/_general_filters.html" %}
-            {% if SEARCH_FILTERS.REGION_ENABLED %}
-              {% include "search/_region_filter.html" %}
-            {% endif %}
-            {% if SEARCH_FILTERS.EXTENT_ENABLED %}
-              {% include "search/_extent_filter.html" %}
-            {% endif %}
         </div>
       </div>
     </div>
