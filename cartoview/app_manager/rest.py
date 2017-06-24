@@ -1,7 +1,10 @@
 import json
 from cartoview.app_manager.models import AppInstance, App, AppStore
+from geonode.api.api import ProfileResource
 from geonode.api.resourcebase_api import *
-from .resources import  FileUploadResource
+from geonode.people.models import Profile
+
+from .resources import FileUploadResource
 from tastypie.resources import ModelResource
 from tastypie import fields
 from geonode.maps.models import Map as GeonodeMap, MapLayer as GeonodeMapLayer
@@ -13,9 +16,11 @@ from tastypie.authorization import Authorization
 from taggit.models import Tag
 from tastypie.http import HttpGone
 
+
 class GeonodeMapLayerResource(ModelResource):
     class Meta:
         queryset = GeonodeMapLayer.objects.distinct()
+
 
 class GeonodeMapResource(ModelResource):
     map_layers = fields.ToManyField(GeonodeMapLayerResource, 'layer_set', null=True, full=True)
@@ -32,7 +37,8 @@ class GeonodeLayerResource(ModelResource):
 
 
 class GeonodeLayerAttributeResource(ModelResource):
-    layer = fields.ForeignKey(GeonodeLayerResource,'layer')
+    layer = fields.ForeignKey(GeonodeLayerResource, 'layer')
+
     class Meta:
         queryset = Attribute.objects.all().order_by('display_order')
         filtering = {
@@ -60,13 +66,14 @@ class AppResource(FileUploadResource):
 
     class Meta(FileUploadResource.Meta):
         queryset = App.objects.all().order_by('order')
-        filtering = {"id": ALL, "name": ALL, "title":ALL , "store": ALL_WITH_RELATIONS}
+        filtering = {"id": ALL, "name": ALL, "title": ALL, "store": ALL_WITH_RELATIONS}
         can_edit = True
 
     def _build_url_exp(self, view, single=False):
         name = view + "_app"
         if single:
-            exp = r"^(?P<resource_name>%s)/(?P<pk>\w[\w/-]*)/%s%s$" % (self._meta.resource_name, view, trailing_slash(),)
+            exp = r"^(?P<resource_name>%s)/(?P<pk>\w[\w/-]*)/%s%s$" % (
+                self._meta.resource_name, view, trailing_slash(),)
         else:
             exp = r"^(?P<resource_name>%s)/%s%s$" % (self._meta.resource_name, view, trailing_slash())
         return url(exp, self.wrap_view(view), name=name)
@@ -123,12 +130,13 @@ class AppResource(FileUploadResource):
         self.log_throttled_access(request)
         return self.create_response(request, {'success': True})
 
+
 class AppInstanceResource(ModelResource):
     launch_app_url = fields.CharField(null=True, blank=True)
     edit_url = fields.CharField(null=True, blank=True)
     app = fields.ForeignKey(AppResource, 'app', full=False, null=True)
     map = fields.ForeignKey(GeonodeMapResource, 'map', full=True, null=True)
-    owner = fields.CharField(null=True, blank=True)
+    owner = fields.ForeignKey(ProfileResource, 'owner', full=True, null=True, blank=True)
 
     class Meta(CommonMetaApi):
         filtering = CommonMetaApi.filtering
@@ -140,7 +148,7 @@ class AppInstanceResource(ModelResource):
         resource_name = 'appinstances'
         allowed_methods = ['get', 'post', 'put']
         excludes = ['csw_anytext', 'metadata_xml']
-
+        authorization = Authorization()
 
     def dehydrate_owner(self, bundle):
         return bundle.obj.owner.username
@@ -156,12 +164,20 @@ class AppInstanceResource(ModelResource):
                 return reverse("%s.edit" % bundle.obj.app.name, args=[bundle.obj.pk])
         return None
 
+    def hydrate_owner(self, bundle):
+        print bundle
+        owner, created = Profile.objects.get_or_create(username=bundle.data['owner'])
+        bundle.data['owner'] = owner
+        return bundle
+
     def obj_create(self, bundle, **kwargs):
         """
         A ORM-specific implementation of ``obj_create``.
         """
+        print "?>>>>>", bundle
         bundle.obj = AppInstance()
         bundle.obj.owner = bundle.request.user
+        print bundle.data['appName']
         app_name = bundle.data['appName']
         print app_name
         bundle.obj.app = App.objects.get(name=app_name)
@@ -170,7 +186,6 @@ class AppInstanceResource(ModelResource):
 
         bundle = self.full_hydrate(bundle)
         return self.save(bundle)
-
 
 
 class TagResource(ModelResource):
