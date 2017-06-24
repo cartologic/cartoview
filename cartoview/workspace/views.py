@@ -8,8 +8,6 @@ from geonode.maps.models import Map
 @login_required
 def workspace(request):
     apps = AppInstance.objects.filter(owner=request.user)
-    print ">>>>",apps.all()[0].app
     layers = Layer.objects.filter(owner=request.user)
     maps = Map.objects.filter(owner=request.user)
-    return render(request, template_name='workspace/workspace.html',
-                  context={'my_apps': apps, 'my_layers': layers, 'my_maps': maps})
+    return render(request, template_name='workspace/workspace.html',context={'my_apps': apps, 'my_layers': layers, 'my_maps': maps})
