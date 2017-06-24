@@ -29,6 +29,8 @@
                                 <div class="caption">
                                     <h3>{{ app.title }}</h3>
                                 </div>
+                                <p><a href="{% url ''|add:app.app.name|add:".view" app.id %}"
+                                      class="btn btn-primary" role="button">View</a></p>
                             </div>
                         </div>
 
@@ -39,7 +41,7 @@
                     </div>
                 {% endif %}
 
-                <div class="col-xs-12 col-sm-12 col-md-3 buttons">
+                <div class="col-xs-12 col-sm-12 col-md-3 buttons pull-right">
                     <div class="row" style="padding: 10px">
                         <a href="{% url 'appinstance_browse' %}?owner__username={{ request.user.username }}"
                            class="btn btn-primary" role="button">View My Apps <span
@@ -80,7 +82,7 @@
                     </div>
                 {% endif %}
 
-                <div class="col-xs-12 col-sm-12 col-md-3 buttons">
+                <div class="col-xs-12 col-sm-12 col-md-3 buttons pull-right">
                     <div class="row" style="padding: 10px">
                         <a href="{% url 'layer_browse' %}?owner__username={{ request.user.username }}"
                            class="btn btn-primary" role="button">View My Layers <span
@@ -120,7 +122,7 @@
                     </div>
                 {% endif %}
 
-                <div class="col-xs-12 col-sm-12 col-md-3 buttons">
+                <div class="col-xs-12 col-sm-12 col-md-3 buttons pull-right">
                     <div class="row" style="padding: 10px">
                         <a href="{% url 'maps_browse' %}?owner__username={{ request.user.username }}"
                            class="btn btn-primary" role="button">View My Maps <span
