@@ -2,6 +2,10 @@ import os
 import sys
 import importlib
 from cartoview.app_manager.config import AppsConfig
+import logging
+
+logger = logging.getLogger(__name__)
+
 # BASE_DIR must be defined in project.settings
 APPS_DIR = os.path.abspath(os.path.join(BASE_DIR, "apps"))
 if not os.path.exists(APPS_DIR):
@@ -9,8 +13,7 @@ if not os.path.exists(APPS_DIR):
 if APPS_DIR not in sys.path:
     sys.path.append(APPS_DIR)
 
-
-apps_file_path =  os.path.join(APPS_DIR, "apps.yml")
+apps_file_path = os.path.join(APPS_DIR, "apps.yml")
 apps_config = AppsConfig(apps_file_path)
 CARTOVIEW_APPS = ()
 for app_config in apps_config:
@@ -26,8 +29,7 @@ for app_config in apps_config:
                 execfile(app_settings_file)
             if app_config.name not in CARTOVIEW_APPS:
                 CARTOVIEW_APPS += (app_config.name,)
-        except:
-            # TODO: log the error
-            pass
+        except Exception as e:
+            logger.error(e.message)
 
 INSTALLED_APPS = INSTALLED_APPS + CARTOVIEW_APPS
