@@ -33,6 +33,7 @@ def num_ratings(obj):
     ct = ContentType.objects.get_for_model(obj)
     return len(Rating.objects.filter(object_id=obj.pk, content_type=ct))
 
+
 @register.simple_tag
 def layers_counts():
     return Layer.objects.all().count()
@@ -50,7 +51,7 @@ def apps_counts():
 
 @register.simple_tag
 def users_counts():
-    return Profile.objects.all().count()
+    return Profile.objects.exclude(username="AnonymousUser").count()
 
 
 from geonode.groups.models import Group
@@ -58,7 +59,7 @@ from geonode.groups.models import Group
 
 @register.simple_tag
 def groups_counts():
-    return Group.objects.all().count()
+    return Group.objects.exclude(name="anonymous").count()
 
 
 @register.assignment_tag(takes_context=True)
