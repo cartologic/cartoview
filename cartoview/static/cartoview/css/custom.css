@@ -8,7 +8,7 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6,p {
-    word-wrap: normal;
+    word-wrap: break-word;
     word-break: break-all;
-    white-space: normal;
+    white-space: pre-line;
 }
