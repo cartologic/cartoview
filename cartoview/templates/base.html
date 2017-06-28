@@ -5,6 +5,12 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width initial-scale = 1.0 maximum-scale=1.0 user-scalable=no"/>
+    <meta Http-Equiv="Cache-Control" Content="no-cache">
+    <meta Http-Equiv="Pragma" Content="no-cache">
+    <meta Http-Equiv="Expires" Content="0">
+    <meta Http-Equiv="Pragma-directive: no-cache">
+    <meta Http-Equiv="Cache-directive: no-cache">
     <title>{% block title %}{{ SITE_NAME }}{% endblock %}</title>
     {% block head %}
         {% if DEBUG_STATIC %}
@@ -145,6 +151,25 @@
                 </ul>
             </div> <!--/.nav-collapse -->
         </div>
+        {% if latest_posts and POSTS_PANEL %}
+            <div class="row" style="background: white;border-bottom: 1px solid darkgray;">
+                <div class="col-xs-4 col-sm-2 col-md-2 col-lg-2" style="text-align: center">
+                    <span>Latest Posts</span>
+                </div>
+                <div class="col-xs-8 col-sm-10 col-md-10 col-lg-10"
+                     style="padding: 0px;border-left: 1px solid #b9b7ac;">
+                    <marquee behavior="scroll" direction="left">{% for post in latest_posts %}
+                        <a href="{{ post.get_absolute_url }}"
+                           style="color: #000000;margin-right: 70px">{{ post.title }}</a>
+                    {% empty %}
+                        No Posts For Now
+                    {% endfor %}
+                    </marquee>
+                </div>
+            </div>
+        {% endif %}
+
+
     </nav>
 {% endblock header %}
 <!-- End of Navbar -->
@@ -315,13 +340,13 @@
             background-position: center center;
         }
     {% else %}
-    .navbar-inverse .navbar-brand {
-    background-image: url({{ STATIC_URL }}cartoview/img/cartoview-logo-text-white.png);
-    background-position: center center;
-    }
-    body{
-    overflow-x: hidden;
-    }
+        .navbar-inverse .navbar-brand {
+            background-image: url({{ STATIC_URL }}cartoview/img/cartoview-logo-text-white.png);
+            background-position: center center;
+        }
+        body {
+            overflow-x: hidden;
+        }
     {% endif %}
 
 </style>
