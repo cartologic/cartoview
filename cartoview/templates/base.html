@@ -45,7 +45,9 @@
           title="GeoNode Search"/>
 </head>
 
-<body class="{% block body_class %}{% endblock %}">
+<body class="{% block body_class %}{% endblock %}" {% block bodyAttrs %}
+
+{% endblock %}>
 <!-- Navbar -->
 {% block header %}
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -330,6 +332,8 @@
 {% endif %}
 <script src="{{ STATIC_URL }}geonode/js/utils/utils.js?v={{ VERSION }}"></script>
 <script src="{{ STATIC_URL }}geonode/js/base/base.js?v={{ VERSION }}"></script>
+<script src="{{ STATIC_URL }}vendor/angular-img-fallback/angular.dcb-img-fallback.min.js"></script>
+
 {% include 'autocomplete_light/static.html' %}
 <script type="text/javascript" src="{% url 'django.views.i18n.javascript_catalog' %}"></script>
 {#<link href="{{ STATIC_URL }}cartoview/css/cartoview.css" rel="stylesheet"/>#}

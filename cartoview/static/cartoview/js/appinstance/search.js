@@ -218,21 +218,6 @@
             $http.get(Configs.url, {params: data || {}}).success(function (data) {
 
                 $scope.results = data.objects;
-                $scope.get_app_name = function (name, id) {
-                    $http.get(name).success(function (res) {
-                        var title = $parse("_" + id + "_title");
-                        title.assign($scope, res.title);
-                        var name = $parse("_" + id + "_name");
-                        name.assign($scope, res.name);
-
-                    })
-                };
-                $scope.app_title = function (id) {
-                    return $scope.$eval("_" + id + "_title");
-                };
-                $scope.appName = function (id) {
-                    return $scope.$eval("_" + id + "_name");
-                };
                 $scope.total_counts = data.meta.total_count;
                 $scope.$root.query_data = data;
                 if (HAYSTACK_SEARCH) {

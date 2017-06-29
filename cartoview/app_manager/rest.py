@@ -134,14 +134,14 @@ class AppResource(FileUploadResource):
 class AppInstanceResource(ModelResource):
     launch_app_url = fields.CharField(null=True, blank=True)
     edit_url = fields.CharField(null=True, blank=True)
-    app = fields.ForeignKey(AppResource, 'app', full=False, null=True)
+    app = fields.ForeignKey(AppResource, 'app', full=True, null=True)
     map = fields.ForeignKey(GeonodeMapResource, 'map', full=True, null=True)
     owner = fields.ForeignKey(ProfileResource, 'owner', full=True, null=True, blank=True)
 
     class Meta(CommonMetaApi):
         filtering = CommonMetaApi.filtering
         always_return_data = True
-        filtering.update({'app': ALL_WITH_RELATIONS})
+        filtering.update({'app': ALL_WITH_RELATIONS, 'featured': ALL})
         queryset = AppInstance.objects.distinct().order_by('-date')
         if settings.RESOURCE_PUBLISHING:
             queryset = queryset.filter(is_published=True)
