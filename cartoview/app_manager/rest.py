@@ -191,3 +191,67 @@ class AppInstanceResource(ModelResource):
 class TagResource(ModelResource):
     class Meta:
         queryset = Tag.objects.all()
+
+
+def nFilter(filters, objects_list):
+    return filter(lambda d: all(f(d) for f in filters), objects_list)
+
+
+def build_filters(filters):
+    filter_functions = []
+    for f in filters.items():
+        filter_functions.append(lambda obj_dict: obj_dict[f[0]] == f[1])
+    return filter_functions
+
+
+def get_item_data(item):
+    urls = dict(details=item.detail_url, )
+    item_data = dict(
+        id=item.id,
+        title=item.title,
+        abstract=item.abstract,
+        thumbnail=item.thumbnail_url,
+        urls=urls,
+        owner=item.owner.username,
+        type="layer"
+    )
+    if hasattr(item, 'appinstance'):
+        urls["view"] = reverse('%s.view' % item.appinstance.app.name, args=[str(item.appinstance.id)])
+        if item.appinstance.map and item.thumbnail_url is None:
+            item_data["thumbnail"] = item.appinstance.map.thumbnail_url
+        item_data["type"] = "app"
+        if item.appinstance.app is not None:
+            item_data["app"] = item.appinstance.app.title
+    elif hasattr(item, 'document'):
+        urls["download"] = reverse('document_download', None, [str(item.id)])
+        item_data["type"] = "doc"
+    elif hasattr(item, 'map'):
+        urls["view"] = reverse('map_view', None, [str(item.id)])
+        item_data["type"] = "map"
+    return item_data
+
+
+from django.views.decorators.http import require_http_methods
+
+
+@require_http_methods(["GET", ])
+def all_resources(request):
+    allowed_filters = ['type', 'owner', 'id']
+    permitted_ids = get_objects_for_user(request.user, 'base.view_resourcebase').values('id')
+    qs = ResourceBase.objects.filter(id__in=permitted_ids).filter(title__isnull=False)
+    items = []
+    for item in qs:
+        items.append(get_item_data(item))
+
+    if request.GET:
+        filters = {}
+        for key in request.GET.keys():
+            if key in allowed_filters:
+                filters.update({key: request.GET.get(key, None)})
+        filters = build_filters(filters)
+        filtered_list = nFilter(filters, items)
+        res_json = json.dumps(filtered_list)
+        return HttpResponse(res_json, content_type="text/json")
+    else:
+        res_json = json.dumps(items)
+        return HttpResponse(res_json, content_type="text/json")
