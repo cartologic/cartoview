@@ -232,6 +232,7 @@ def get_item_data(item):
         item_data["type"] = "app"
         if item.appinstance.app is not None:
             item_data["app"] = item.appinstance.app.title
+            item_data["app_name"] = item.appinstance.app.name
     elif hasattr(item, 'document'):
         urls["download"] = reverse('document_download', None, [str(item.id)])
         item_data["type"] = "doc"

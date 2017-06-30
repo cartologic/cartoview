@@ -161,9 +161,10 @@
                 <div ng-controller="featuredappsCtrl">
                     <div ng-repeat="item in featuredApps | limitTo:4">
                         <div class="col-md-3">
-                            <a href="{{ item.detail_url }}"><img ng-src="{{ item.thumbnail_url || item.map.thumbnail_url }}"
-                                                                 fallback-src="/static/{{ item.app.name }}/logo.png"
-                                                                 loading-src/></a>
+                            <a href="{{ item.urls.view || item.urls.details }}"><img
+                                    ng-src="{{ item.thumbnail}}"
+                                    fallback-src="/static/{{ item.app_name }}/logo.png"
+                                    loading-src/></a>
                             <h4>{{ item.title | limitTo: 20 }}{{item.title.length > 20 ? '...' : ''}}</h4>
                         </div>
                     </div>
@@ -195,17 +196,16 @@
     </script>
     <script>
         (function () {
-            FEATURED_URL = '{% url 'api_dispatch_list' api_name='api' resource_name='featured' %}';
+            FEATURED_URL = '{% url 'cartoview_all_resources' %}';
             var app = angular.module('featured', ['dcbImgFallback']);
             app.controller('featuredappsCtrl', function ($scope, $http) {
-                $http.get("/api/appinstances/?featured=true").then(function (response) {
-                    console.log(response.data.objects);
-                    $scope.featuredApps = response.data.objects;
+                $http.get(FEATURED_URL + "?type=app&featured=true").then(function (response) {
+                    $scope.featuredApps = response.data;
                 });
             });
             app.controller('featuredCtrl', function ($scope, $http) {
-                $http.get(FEATURED_URL).then(function (response) {
-                    $scope.featured = response.data.objects;
+                $http.get(FEATURED_URL + "?featured=true&not_app=true").then(function (response) {
+                    $scope.featured = response.data;
                 });
             });
         })();

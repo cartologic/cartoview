@@ -195,7 +195,7 @@
                         <div ng-controller="featuredCtrl">
                             <div ng-repeat="item in featured | limitTo:4">
                                 <div class="col-md-3">
-                                    <a href="{{ item.detail_url }}"><img ng-src="{{ item.thumbnail_url }}" fallback-src loading-src /></a>
+                                    <a href="{{ item.urls.details }}"><img ng-src="{{ item.thumbnail }}" fallback-src loading-src /></a>
                                     <h4>{{ item.title | limitTo: 20 }}{{item.title.length > 20 ? '...' : ''}}</h4>
                                 </div>
                             </div>
