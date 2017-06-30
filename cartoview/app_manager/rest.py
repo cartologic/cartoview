@@ -198,13 +198,12 @@ class TagResource(ModelResource):
 # Code to remember :D
 def nFilter(filters, objects_list):
     for f in filters.items():
-        print type(f)
         objects_list = filter(build_filter(f), objects_list)
     return objects_list
 
 
 def build_filter(filter):
-    return lambda obj_dict: obj_dict[filter[0]] == filter[1]
+    return lambda obj_dict: obj_dict[filter[0]] == obj_dict[filter[0]].__class__(filter[1])
 
 
 def get_item_data(item):
