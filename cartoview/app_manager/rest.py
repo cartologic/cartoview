@@ -1,4 +1,6 @@
 import json
+from itertools import ifilter
+
 from cartoview.app_manager.models import AppInstance, App, AppStore
 from geonode.api.api import ProfileResource
 from geonode.api.resourcebase_api import *
@@ -193,15 +195,16 @@ class TagResource(ModelResource):
         queryset = Tag.objects.all()
 
 
+# Code to remember :D
 def nFilter(filters, objects_list):
-    return filter(lambda d: all(f(d) for f in filters), objects_list)
-
-
-def build_filters(filters):
-    filter_functions = []
     for f in filters.items():
-        filter_functions.append(lambda obj_dict: obj_dict[f[0]] == f[1])
-    return filter_functions
+        print type(f)
+        objects_list = filter(build_filter(f), objects_list)
+    return objects_list
+
+
+def build_filter(filter):
+    return lambda obj_dict: obj_dict[filter[0]] == filter[1]
 
 
 def get_item_data(item):
@@ -235,7 +238,7 @@ from django.views.decorators.http import require_http_methods
 
 
 @require_http_methods(["GET", ])
-def all_resources(request):
+def all_resources_rest(request):
     allowed_filters = ['type', 'owner', 'id']
     permitted_ids = get_objects_for_user(request.user, 'base.view_resourcebase').values('id')
     qs = ResourceBase.objects.filter(id__in=permitted_ids).filter(title__isnull=False)
@@ -248,7 +251,6 @@ def all_resources(request):
         for key in request.GET.keys():
             if key in allowed_filters:
                 filters.update({key: request.GET.get(key, None)})
-        filters = build_filters(filters)
         filtered_list = nFilter(filters, items)
         res_json = json.dumps(filtered_list)
         return HttpResponse(res_json, content_type="text/json")
