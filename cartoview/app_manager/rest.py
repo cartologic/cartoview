@@ -203,7 +203,13 @@ def nFilter(filters, objects_list):
 
 
 def build_filter(filter):
-    return lambda obj_dict: obj_dict[filter[0]] == obj_dict[filter[0]].__class__(filter[1])
+    key = filter[0]
+    value = filter[1]
+    if key == 'not_app':
+        return lambda obj_dict: obj_dict['type'] == 'map' or obj_dict['type'] == 'layer' or obj_dict['type'] == 'doc'
+    if key == 'featured':
+        return lambda obj_dict: obj_dict[key] == json.loads(value)
+    return lambda obj_dict: obj_dict[key] == obj_dict[key].__class__(value)
 
 
 def get_item_data(item):
@@ -214,6 +220,7 @@ def get_item_data(item):
         abstract=item.abstract,
         thumbnail=item.thumbnail_url,
         urls=urls,
+        featured=item.featured,
         owner=item.owner.username,
         type="layer"
     )
@@ -238,7 +245,8 @@ from django.views.decorators.http import require_http_methods
 
 @require_http_methods(["GET", ])
 def all_resources_rest(request):
-    allowed_filters = ['type', 'owner', 'id']
+    # this filter is exact filter
+    allowed_filters = ['type', 'owner', 'id', 'not_app', 'featured']
     permitted_ids = get_objects_for_user(request.user, 'base.view_resourcebase').values('id')
     qs = ResourceBase.objects.filter(id__in=permitted_ids).filter(title__isnull=False)
     items = []
