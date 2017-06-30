@@ -4,12 +4,6 @@
 {% block extra_head %}
     {{ block.super }}
     <style>
-        .counters {
-            padding: 20px;
-            background: #0e426f;
-            color: white;
-        }
-
         .center-counter a {
 
             color: #ff8f31;
@@ -33,9 +27,10 @@
             font-family: sans-serif;
             font-size: x-large;
         }
-    .works a{
-        color:#0D406D;
-    }
+
+        .works a {
+            color: #0D406D;
+        }
     </style>
 {% endblock %}
 {% block hero %}
@@ -158,6 +153,28 @@
         </div>
 
     </div>
+    <section id="showcase">
+        <div class="container">
+            <div class="row">
+                <h2>Featured Apps</h2>
+                {% verbatim %}
+                <div ng-controller="featuredappsCtrl">
+                    <div ng-repeat="item in featuredApps | limitTo:4">
+                        <div class="col-md-3">
+                            <a href="{{ item.detail_url }}"><img ng-src="{{ item.thumbnail_url || item.map.thumbnail_url }}"
+                                                                 fallback-src="/static/{{ item.app.name }}/logo.png"
+                                                                 loading-src/></a>
+                            <h4>{{ item.title | limitTo: 20 }}{{item.title.length > 20 ? '...' : ''}}</h4>
+                        </div>
+                    </div>
+                </div>
+                {% endverbatim %}
+            </div>
+            <p><a href="{% url 'appinstance_browse' %}">
+                Explore all
+            </a></p>
+        </div>
+    </section>
 {% endblock %}
 {% block mainbody %}
     {{ block.super }}
@@ -175,5 +192,23 @@
                 }
             });
         });
+    </script>
+    <script>
+        (function () {
+            FEATURED_URL = '{% url 'api_dispatch_list' api_name='api' resource_name='featured' %}';
+            var app = angular.module('featured', ['dcbImgFallback']);
+            app.controller('featuredappsCtrl', function ($scope, $http) {
+                $http.get("/api/appinstances/?featured=true").then(function (response) {
+                    console.log(response.data.objects);
+                    $scope.featuredApps = response.data.objects;
+                });
+            });
+            app.controller('featuredCtrl', function ($scope, $http) {
+                $http.get(FEATURED_URL).then(function (response) {
+                    $scope.featured = response.data.objects;
+                });
+            });
+        })();
+
     </script>
 {% endblock %}

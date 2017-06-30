@@ -1,4 +1,6 @@
 import json
+from itertools import ifilter
+
 from cartoview.app_manager.models import AppInstance, App, AppStore
 from geonode.api.api import ProfileResource
 from geonode.api.resourcebase_api import *
@@ -134,14 +136,14 @@ class AppResource(FileUploadResource):
 class AppInstanceResource(ModelResource):
     launch_app_url = fields.CharField(null=True, blank=True)
     edit_url = fields.CharField(null=True, blank=True)
-    app = fields.ForeignKey(AppResource, 'app', full=False, null=True)
+    app = fields.ForeignKey(AppResource, 'app', full=True, null=True)
     map = fields.ForeignKey(GeonodeMapResource, 'map', full=True, null=True)
     owner = fields.ForeignKey(ProfileResource, 'owner', full=True, null=True, blank=True)
 
     class Meta(CommonMetaApi):
         filtering = CommonMetaApi.filtering
         always_return_data = True
-        filtering.update({'app': ALL_WITH_RELATIONS})
+        filtering.update({'app': ALL_WITH_RELATIONS, 'featured': ALL})
         queryset = AppInstance.objects.distinct().order_by('-date')
         if settings.RESOURCE_PUBLISHING:
             queryset = queryset.filter(is_published=True)
@@ -191,3 +193,74 @@ class AppInstanceResource(ModelResource):
 class TagResource(ModelResource):
     class Meta:
         queryset = Tag.objects.all()
+
+
+# Code to remember :D
+def nFilter(filters, objects_list):
+    for f in filters.items():
+        objects_list = filter(build_filter(f), objects_list)
+    return objects_list
+
+
+def build_filter(filter):
+    key = filter[0]
+    value = filter[1]
+    if key == 'not_app':
+        return lambda obj_dict: obj_dict['type'] == 'map' or obj_dict['type'] == 'layer' or obj_dict['type'] == 'doc'
+    if key == 'featured':
+        return lambda obj_dict: obj_dict[key] == json.loads(value)
+    return lambda obj_dict: obj_dict[key] == obj_dict[key].__class__(value)
+
+
+def get_item_data(item):
+    urls = dict(details=item.detail_url, )
+    item_data = dict(
+        id=item.id,
+        title=item.title,
+        abstract=item.abstract,
+        thumbnail=item.thumbnail_url,
+        urls=urls,
+        featured=item.featured,
+        owner=item.owner.username,
+        type="layer"
+    )
+    if hasattr(item, 'appinstance'):
+        urls["view"] = reverse('%s.view' % item.appinstance.app.name, args=[str(item.appinstance.id)])
+        if item.appinstance.map and item.thumbnail_url is None:
+            item_data["thumbnail"] = item.appinstance.map.thumbnail_url
+        item_data["type"] = "app"
+        if item.appinstance.app is not None:
+            item_data["app"] = item.appinstance.app.title
+    elif hasattr(item, 'document'):
+        urls["download"] = reverse('document_download', None, [str(item.id)])
+        item_data["type"] = "doc"
+    elif hasattr(item, 'map'):
+        urls["view"] = reverse('map_view', None, [str(item.id)])
+        item_data["type"] = "map"
+    return item_data
+
+
+from django.views.decorators.http import require_http_methods
+
+
+@require_http_methods(["GET", ])
+def all_resources_rest(request):
+    # this filter is exact filter
+    allowed_filters = ['type', 'owner', 'id', 'not_app', 'featured']
+    permitted_ids = get_objects_for_user(request.user, 'base.view_resourcebase').values('id')
+    qs = ResourceBase.objects.filter(id__in=permitted_ids).filter(title__isnull=False)
+    items = []
+    for item in qs:
+        items.append(get_item_data(item))
+
+    if request.GET:
+        filters = {}
+        for key in request.GET.keys():
+            if key in allowed_filters:
+                filters.update({key: request.GET.get(key, None)})
+        filtered_list = nFilter(filters, items)
+        res_json = json.dumps(filtered_list)
+        return HttpResponse(res_json, content_type="text/json")
+    else:
+        res_json = json.dumps(items)
+        return HttpResponse(res_json, content_type="text/json")

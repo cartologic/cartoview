@@ -14,11 +14,12 @@ from django.apps import apps
 from django.conf import settings
 from django.core import management
 from .config import App as AppConfig, AppsConfig
-reload(pkg_resources)
 
+reload(pkg_resources)
 
 current_folder = os.path.abspath(os.path.dirname(__file__))
 temp_dir = os.path.join(current_folder, 'temp')
+
 
 class AppAlreadyInstalledException(BaseException):
     message = "Application is already installed."
@@ -28,6 +29,7 @@ class AppInstaller:
     """
 
     """
+
     def __init__(self, name, store_id=None, version=None):
         self.app_dir = os.path.join(settings.APPS_DIR, name)
         self.name = name
@@ -71,7 +73,7 @@ class AppInstaller:
             shutil.rmtree(extract_to)
         finally:
             zip_ref.close()
-    
+
     def add_app(self, installer):
 
         # save app configuration
@@ -160,7 +162,6 @@ class AppInstaller:
         app = App.objects.get(name=self.name)
         app.delete()
 
-
         app_config = app.apps_config.get_by_name(self.name)
         del app.apps_config[app_config]
         app.apps_config.save()
@@ -169,6 +170,7 @@ class AppInstaller:
         shutil.rmtree(app_dir)
         if restart:
             finalize_setup()
+
 
 def finalize_setup():
     install_app_batch = getattr(settings, 'CARTOVIEW_INSTALL_APP_BAT', None)
@@ -179,10 +181,8 @@ def finalize_setup():
             log_file = os.path.join(working_dir, "install_app_log.txt")
             with open(log_file, 'a') as log:
                 p = Popen(install_app_batch, stdout=log, stderr=log, shell=True, cwd=working_dir)
-            # stdout, stderr = p.communicate()
+                # stdout, stderr = p.communicate()
 
         from threading import Timer
         timer = Timer(0.1, _finalize_setup)
         timer.start()
-
-
