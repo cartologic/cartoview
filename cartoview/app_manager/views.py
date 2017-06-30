@@ -57,7 +57,7 @@ def get_apps_names():
 
 def installed_apps():
     from .models import App
-    apps = App.objects.filter()
+    apps = App.objects.filter().order_by('order')
     return apps
 
 @staff_member_required
