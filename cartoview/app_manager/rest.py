@@ -206,9 +206,10 @@ def build_filter(filter):
     key = filter[0]
     value = filter[1]
     if key == 'not_app':
-        return lambda obj_dict: obj_dict['type'] == 'map' or obj_dict['type'] == 'layer' or obj_dict['type'] == 'doc'
-    if key == 'featured':
+        return lambda obj_dict: obj_dict['type'] in ['map','layer','doc']
+    elif key == 'featured':
         return lambda obj_dict: obj_dict[key] == json.loads(value)
+
     return lambda obj_dict: obj_dict[key] == obj_dict[key].__class__(value)
 
 
