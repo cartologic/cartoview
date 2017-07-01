@@ -1,5 +1,4 @@
-from tastypie.resources import Resource, ModelResource
-from django.conf.urls import url
+from tastypie.resources import Resource
 from django.shortcuts import render
 from django.forms.models import modelform_factory
 from django.db import models
@@ -9,6 +8,8 @@ from serializers import HTMLSerializer, MultipartFormSerializer
 from tastypie.authorization import Authorization
 
 from geonode.api.resourcebase_api import *
+
+
 class BaseResource(Resource):
     class Meta:
         always_return_data = True
@@ -37,17 +38,18 @@ class BaseModelResource(ModelResource):
         return [url(r"^(?P<resource_name>%s)/edit/(?P<pk>.*?)/$" % self._meta.resource_name, self.wrap_view('edit')),
                 url(r"^(?P<resource_name>%s)/new/$" % self._meta.resource_name, self.wrap_view('new_item'))]
 
-
     def new_item(self, request, **kwargs):
         self.method_check(request, allowed=['get'])
         form = self.get_form()
-        return render(request,'app_manager/rest_api/edit.html',{'form': form, 'operation': 'add', 'resource_uri' : self.get_resource_uri()})
+        return render(request, 'app_manager/rest_api/edit.html',
+                      {'form': form, 'operation': 'add', 'resource_uri': self.get_resource_uri()})
 
     def edit(self, request, pk, **kwargs):
         self.method_check(request, allowed=['get'])
         obj = self._meta.object_class.objects.get(id=pk)
         form = self.get_form(obj)
-        return render(request,'app_manager/rest_api/edit.html',{'form':form , 'operation': 'edit', 'resource_uri' : self.get_resource_uri()})
+        return render(request, 'app_manager/rest_api/edit.html',
+                      {'form': form, 'operation': 'edit', 'resource_uri': self.get_resource_uri()})
 
 
 class FileUploadResource(BaseModelResource):
@@ -58,13 +60,12 @@ class FileUploadResource(BaseModelResource):
         bundle = super(FileUploadResource, self).obj_create(bundle, **kwargs)
         for f in bundle.obj._meta.fields:
             if isinstance(f, models.FileField):
-                file = bundle.request.FILES.get(f.name,None)
+                file = bundle.request.FILES.get(f.name, None)
                 if file:
                     f.save_form_data(bundle.obj, file)
         return bundle
 
     def deserialize(self, request, data, format='application/json'):
-        deserialized = self._meta.serializer.deserialize(data, request=request, format=request.META.get('CONTENT_TYPE', 'application/json'))
+        deserialized = self._meta.serializer.deserialize(data, request=request,
+                                                         format=request.META.get('CONTENT_TYPE', 'application/json'))
         return deserialized
-
-

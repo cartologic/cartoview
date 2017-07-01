@@ -37,6 +37,7 @@ temp_dir = os.path.join(current_folder, 'temp')
 if not os.path.exists(temp_dir):
     os.makedirs(temp_dir)
 
+# TODO: Review the following function Legacy?!!!
 def save_thumbnail(filename, image):
     thumb_folder = 'thumbs'
     upload_path = os.path.join(settings.MEDIA_ROOT, thumb_folder)
@@ -52,19 +53,21 @@ def save_thumbnail(filename, image):
 
     return url
 
+
 def get_apps_names():
     return [n for n in os.listdir(settings.APPS_DIR) if os.path.isdir(os.path.join(settings.APPS_DIR, n))]
+
 
 def installed_apps():
     from .models import App
     apps = App.objects.filter().order_by('order')
     return apps
 
+
 @staff_member_required
 def manage_apps(request):
     apps = App.objects.all()
     site_apps = {}
-
 
     context = {
         'apps': apps,
@@ -72,9 +75,6 @@ def manage_apps(request):
     }
     print context["site_apps"]
     return render(request, 'app_manager/manage.html', context)
-
-
-
 
 
 def index(request):
@@ -116,9 +116,7 @@ def install_app(request, store_id, app_name, version):
     except Exception as ex:
         response_data["messages"].append({"type": "error", "msg": ex.message})
 
-
     return HttpResponse(json.dumps(response_data), content_type="application/json")
-
 
 
 @staff_member_required
@@ -135,7 +133,6 @@ def uninstall_app(request, store_id, app_name):
     except Exception as ex:
         response_data["errors"].append(ex.message)
     return HttpResponse(json.dumps(response_data), content_type="application/json")
-
 
 
 @login_required

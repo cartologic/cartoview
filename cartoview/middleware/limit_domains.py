@@ -1,5 +1,6 @@
-from django.contrib.sites.models import Site
-from django.http import Http404
+# TODO: Review the following code behavior
+# from django.contrib.sites.models import Site
+# from django.http import Http404
 
 
 class LimitDomainsMiddleware(object):
