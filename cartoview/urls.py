@@ -1,6 +1,4 @@
 from django.conf.urls import patterns, url, include
-from django.views.generic import TemplateView
-
 from geonode.urls import urlpatterns
 from cartoview.app_manager.rest import AppInstanceResource, AppResource
 from cartoview.views import index as cartoview_index, check_version

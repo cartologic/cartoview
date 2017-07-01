@@ -49,7 +49,7 @@ urlpatterns = patterns('cartoview.app_manager',
                        url(r'^save_app_orders/$', save_app_orders, name='save_app_orders'),
                        url(r'^(?P<appinstanceid>\d+)/remove$', appinstance_remove, name="appinstance_remove"),
                        (r'^rest/', include(rest_api.urls)),
-                       url(r'^allresources/api$', all_resources_rest),
+                       url(r'^allresources/api$', all_resources_rest,name="cartoview_all_resources"),
                        )
 
 

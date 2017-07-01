@@ -1,11 +1,8 @@
 import json
-from itertools import ifilter
-
 from cartoview.app_manager.models import AppInstance, App, AppStore
 from geonode.api.api import ProfileResource
 from geonode.api.resourcebase_api import *
 from geonode.people.models import Profile
-
 from .resources import FileUploadResource
 from tastypie.resources import ModelResource
 from tastypie import fields
@@ -13,7 +10,6 @@ from geonode.maps.models import Map as GeonodeMap, MapLayer as GeonodeMapLayer
 from geonode.layers.models import Layer, Attribute
 from tastypie.constants import ALL_WITH_RELATIONS, ALL
 from django.core.urlresolvers import reverse
-from tastypie.authentication import Authentication
 from tastypie.authorization import Authorization
 from taggit.models import Tag
 from tastypie.http import HttpGone
@@ -206,7 +202,7 @@ def build_filter(filter):
     key = filter[0]
     value = filter[1]
     if key == 'not_app':
-        return lambda obj_dict: obj_dict['type'] in ['map','layer','doc']
+        return lambda obj_dict: obj_dict['type'] in ['map', 'layer', 'doc']
     elif key == 'featured':
         return lambda obj_dict: obj_dict[key] == json.loads(value)
 
@@ -232,6 +228,7 @@ def get_item_data(item):
         item_data["type"] = "app"
         if item.appinstance.app is not None:
             item_data["app"] = item.appinstance.app.title
+            item_data["app_name"] = item.appinstance.app.name
     elif hasattr(item, 'document'):
         urls["download"] = reverse('document_download', None, [str(item.id)])
         item_data["type"] = "doc"

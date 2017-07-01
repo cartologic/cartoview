@@ -1,3 +1,4 @@
+# TODO: Review this file. Legacy??!
 from django import forms
 from modeltranslation.forms import TranslationModelForm
 from geonode.base.forms import ResourceBaseForm
@@ -30,13 +31,10 @@ class AppForm(ModelForm):
 class AppInstanceForm(TranslationModelForm):
     class Meta:
         model = AppInstance
-        fields = ['title', 'abstract',]
+        fields = ['title', 'abstract', ]
 
 
 class AppInstanceEditForm(ResourceBaseForm):
     class Meta(ResourceBaseForm.Meta):
         model = AppInstance
         exclude = ResourceBaseForm.Meta.exclude
-
-
-

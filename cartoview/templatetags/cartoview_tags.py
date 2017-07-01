@@ -1,17 +1,13 @@
 import json
-from itertools import chain
 from django import template
-
 from agon_ratings.models import Rating
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth import get_user_model
 from django.db.models import Count
 from geonode.people.models import Profile
-
 from guardian.shortcuts import get_objects_for_user
 from cartoview.app_manager.models import AppInstance, App
 from geonode import settings
-
 from geonode.layers.models import Layer
 from geonode.maps.models import Map
 from geonode.documents.models import Document
