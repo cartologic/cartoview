@@ -14,6 +14,10 @@ def apps_menu(request):
     return {'APPS_MENU': settings.APPS_MENU}
 
 
+def workspace(request):
+    return {'WORKSPACE_ENABLED': settings.WORKSPACE_ENABLED}
+
+
 def apps_instance(request):
     instances = AppInstance.objects.all()
     num = AppInstance.objects.all().count()

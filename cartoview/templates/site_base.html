@@ -36,7 +36,10 @@
 
     </li>
     {{ block.super }}
-    <li>
-        <a href="{% url 'my_workspace' %}">{% trans "Workspace" %}</a>
-    </li>
+    {% if WORKSPACE_ENABLED %}
+        <li>
+            <a href="{% url 'my_workspace' %}">{% trans "Workspace" %}</a>
+        </li>
+    {% endif %}
+
 {% endblock %}
