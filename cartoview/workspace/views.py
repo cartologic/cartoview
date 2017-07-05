@@ -1,7 +1,8 @@
 from account.decorators import login_required
+from django.core.urlresolvers import reverse_lazy
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
-from cartoview.app_manager.models import App, AppInstance
-from geonode.api.api import GroupResource
+from cartoview.app_manager.models import AppInstance
 from geonode.documents.models import Document
 from geonode.groups.models import GroupProfile
 from geonode.layers.models import Layer
@@ -24,3 +25,8 @@ def workspace(request):
                   context={'my_apps': apps, 'my_layers': layers, 'my_maps': maps, 'maps_count': maps_count,
                            'layers_count': layers_count, "groups": groups, "groups_count": groups_count,
                            "documents": documents, "documents_count": documents_count})
+
+
+@login_required
+def my_activities(request):
+    return HttpResponseRedirect(reverse_lazy('user-activity', kwargs={'actor': request.user.username}))
