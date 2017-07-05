@@ -38,15 +38,7 @@
     {{ block.super }}
     {% if WORKSPACE_ENABLED %}
         <li>
-            <a href="#" data-toggle="dropdown" role="button"
-               aria-haspopup="true" aria-expanded="false">{% trans "Workspace" %}<i
-                    class="fa fa-angle-down fa-lg"></i></a>
-            <ul class="dropdown-menu">
-                <li><a href="{% url 'my_workspace' %}" target="_parent">{% trans "Inbox" %}</a>
-                </li>
-                <li><a href="{% url 'my_activities' %}" target="_parent">{% trans "Activities" %}</a>
-                </li>
-            </ul>
+            <a href="{% url 'my_workspace' %}">{% trans "Workspace" %}</a>
         </li>
     {% endif %}
 

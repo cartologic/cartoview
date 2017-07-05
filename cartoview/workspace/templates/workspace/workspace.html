@@ -15,7 +15,22 @@
 {% endblock %}
 {% block body %}
     <div class="page-header">
-        <h2>{{ request.user.username }} Workspace</h2>
+        <a class="btn button_shadow btn-primary " style="color: white;margin-right: 10px"
+           href="{% url 'user-activity' actor=request.user.username %}"
+           role="button">
+            Activities
+        </a>
+
+        <a class="btn button_shadow btn-primary " style="color: white;margin-right: 10px"
+           href="{% url 'profile_detail' username=request.user.username %}"
+           role="button">
+            Profile
+        </a>
+        <a class="btn button_shadow btn-primary " style="color: white;margin-right: 10px"
+           href="{% url 'messages_inbox' %}"
+           role="button">
+            Inbox
+        </a>
     </div>
     <div id="page-wrapper">
         <div class="container-fluid" ng-app="workspace">
