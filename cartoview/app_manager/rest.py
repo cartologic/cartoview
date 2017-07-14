@@ -19,7 +19,7 @@ class GeonodeMapLayerResource(ModelResource):
     class Meta:
         queryset = GeonodeMapLayer.objects.distinct()
 
-
+#TODO: remove this Resource
 class GeonodeMapResource(ModelResource):
     map_layers = fields.ToManyField(GeonodeMapLayerResource, 'layer_set', null=True, full=True)
 
