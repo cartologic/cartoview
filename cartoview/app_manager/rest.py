@@ -1,7 +1,7 @@
 import json
 from cartoview.app_manager.models import AppInstance, App, AppStore
 from geonode.api.api import ProfileResource
-from geonode.api.resourcebase_api import *
+from geonode.api.resourcebase_api import CommonMetaApi
 from geonode.people.models import Profile
 from .resources import FileUploadResource
 from tastypie.resources import ModelResource
@@ -14,27 +14,32 @@ from tastypie.authorization import Authorization
 from taggit.models import Tag
 from tastypie.http import HttpGone
 from django.views.decorators.http import require_http_methods
+from django.conf import settings
+from tastypie.utils import trailing_slash
+from django.conf.urls import url
+from django.core.exceptions import ObjectDoesNotExist
+from django.http import HttpResponse
 
 
 class GeonodeMapLayerResource(ModelResource):
+
     class Meta:
         queryset = GeonodeMapLayer.objects.distinct()
+
 
 # TODO: remove this Resource
 
 
 class GeonodeMapResource(ModelResource):
     map_layers = fields.ToManyField(
-        GeonodeMapLayerResource,
-        'layer_set',
-        null=True,
-        full=True)
+        GeonodeMapLayerResource, 'layer_set', null=True, full=True)
 
     class Meta(CommonMetaApi):
         queryset = GeonodeMap.objects.distinct().order_by('-date')
 
 
 class GeonodeLayerResource(ModelResource):
+
     class Meta:
         queryset = Layer.objects.all()
         excludes = ['csw_anytext', 'metadata_xml']
@@ -54,6 +59,7 @@ class GeonodeLayerAttributeResource(ModelResource):
 
 
 class AppStoreResource(FileUploadResource):
+
     class Meta(FileUploadResource.Meta):
         queryset = AppStore.objects.all()
 
@@ -75,7 +81,8 @@ class AppResource(FileUploadResource):
             "id": ALL,
             "name": ALL,
             "title": ALL,
-            "store": ALL_WITH_RELATIONS}
+            "store": ALL_WITH_RELATIONS
+        }
         can_edit = True
 
     def _build_url_exp(self, view, single=False):
@@ -149,11 +156,7 @@ class AppInstanceResource(ModelResource):
     app = fields.ForeignKey(AppResource, 'app', full=True, null=True)
     map = fields.ForeignKey(GeonodeMapResource, 'map', full=True, null=True)
     owner = fields.ForeignKey(
-        ProfileResource,
-        'owner',
-        full=True,
-        null=True,
-        blank=True)
+        ProfileResource, 'owner', full=True, null=True, blank=True)
 
     class Meta(CommonMetaApi):
         filtering = CommonMetaApi.filtering
@@ -173,20 +176,14 @@ class AppInstanceResource(ModelResource):
     def dehydrate_launch_app_url(self, bundle):
         if bundle.obj.app is not None:
             return reverse(
-                "%s.view" %
-                bundle.obj.app.name,
-                args=[
-                    bundle.obj.pk])
+                "%s.view" % bundle.obj.app.name, args=[bundle.obj.pk])
         return None
 
     def dehydrate_edit_url(self, bundle):
         if bundle.obj.owner == bundle.request.user:
             if bundle.obj.app is not None:
                 return reverse(
-                    "%s.edit" %
-                    bundle.obj.app.name,
-                    args=[
-                        bundle.obj.pk])
+                    "%s.edit" % bundle.obj.app.name, args=[bundle.obj.pk])
         return None
 
     def hydrate_owner(self, bundle):
@@ -215,6 +212,7 @@ class AppInstanceResource(ModelResource):
 
 
 class TagResource(ModelResource):
+
     class Meta:
         queryset = Tag.objects.all()
 
@@ -238,7 +236,8 @@ def build_filter(filter):
 
 
 def get_item_data(item):
-    urls = dict(details=item.detail_url, )
+    urls = dict(
+        details=item.detail_url,)
     item_data = dict(
         id=item.id,
         title=item.title,
@@ -247,11 +246,11 @@ def get_item_data(item):
         urls=urls,
         featured=item.featured,
         owner=item.owner.username,
-        type="layer"
-    )
+        type="layer")
     if hasattr(item, 'appinstance'):
-        urls["view"] = reverse('%s.view' % item.appinstance.app.name, args=[
-                               str(item.appinstance.id)])
+        urls["view"] = reverse(
+            '%s.view' % item.appinstance.app.name,
+            args=[str(item.appinstance.id)])
         if item.appinstance.map and item.thumbnail_url is None:
             item_data["thumbnail"] = item.appinstance.map.thumbnail_url
         item_data["type"] = "app"
@@ -267,14 +266,15 @@ def get_item_data(item):
     return item_data
 
 
-@require_http_methods(["GET", ])
+@require_http_methods([
+    "GET",
+])
 def all_resources_rest(request):
     # this filter is exact filter
     allowed_filters = ['type', 'owner', 'id', 'not_app', 'featured']
-    permitted_ids = get_objects_for_user(
-        request.user, 'base.view_resourcebase').values('id')
-    qs = ResourceBase.objects.filter(
-        id__in=permitted_ids).filter(
+    permitted_ids = get_objects_for_user(request.user,
+                                         'base.view_resourcebase').values('id')
+    qs = ResourceBase.objects.filter(id__in=permitted_ids).filter(
         title__isnull=False)
     items = []
     for item in qs:

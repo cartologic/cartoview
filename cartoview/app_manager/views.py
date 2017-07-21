@@ -63,11 +63,9 @@ def save_thumbnail(filename, image):
 
 def get_apps_names():
     return [
-        n for n in os.listdir(
-            settings.APPS_DIR) if os.path.isdir(
-            os.path.join(
-                settings.APPS_DIR,
-                n))]
+        n for n in os.listdir(settings.APPS_DIR)
+        if os.path.isdir(os.path.join(settings.APPS_DIR, n))
+    ]
 
 
 def installed_apps():
@@ -115,10 +113,7 @@ def index(request):
 @staff_member_required
 @require_POST
 def install_app(request, store_id, app_name, version):
-    response_data = {
-        'success': False,
-        'messages': []
-    }
+    response_data = {'success': False, 'messages': []}
     try:
         installer = AppInstaller(app_name, store_id, version)
         # installedApps = installer.install()
@@ -128,17 +123,13 @@ def install_app(request, store_id, app_name, version):
         response_data["messages"].append({"type": "error", "msg": ex.message})
 
     return HttpResponse(
-        json.dumps(response_data),
-        content_type="application/json")
+        json.dumps(response_data), content_type="application/json")
 
 
 @staff_member_required
 @require_POST
 def uninstall_app(request, store_id, app_name):
-    response_data = {
-        "success": False,
-        "errors": []
-    }
+    response_data = {"success": False, "errors": []}
     try:
         installer = AppInstaller(app_name, store_id)
         installer.uninstall()
@@ -146,40 +137,39 @@ def uninstall_app(request, store_id, app_name):
     except Exception as ex:
         response_data["errors"].append(ex.message)
     return HttpResponse(
-        json.dumps(response_data),
-        content_type="application/json")
+        json.dumps(response_data), content_type="application/json")
 
 
 @login_required
 def move_up(request, app_id):
     app = App.objects.get(id=app_id)
-    prev_app = App.objects.get(
-        order=App.objects.filter(
-            order__lt=app.order).aggregate(
-            Max('order'))['order__max'])
+    prev_app = App.objects.get(order=App.objects.filter(
+        order__lt=app.order).aggregate(Max('order'))['order__max'])
     order = app.order
     app.order = prev_app.order
     prev_app.order = order
     app.save()
     prev_app.save()
-    return HttpResponse(json.dumps(
-        {"success": True}), content_type="application/json")
+    return HttpResponse(
+        json.dumps({
+            "success": True
+        }), content_type="application/json")
 
 
 @login_required
 def move_down(request, app_id):
     app = App.objects.get(id=app_id)
-    next_app = App.objects.get(
-        order=App.objects.filter(
-            order__gt=app.order).aggregate(
-            Min('order'))['order__min'])
+    next_app = App.objects.get(order=App.objects.filter(
+        order__gt=app.order).aggregate(Min('order'))['order__min'])
     order = app.order
     app.order = next_app.order
     next_app.order = order
     app.save()
     next_app.save()
-    return HttpResponse(json.dumps(
-        {"success": True}), content_type="application/json")
+    return HttpResponse(
+        json.dumps({
+            "success": True
+        }), content_type="application/json")
 
 
 def save_app_orders(request):
@@ -206,23 +196,25 @@ def save_app_orders(request):
             except BaseException:
                 ajax_vars = {'success': False}
                 return HttpResponse(
-                    json.dumps(ajax_vars),
-                    content_type="application/json")
+                    json.dumps(ajax_vars), content_type="application/json")
 
     return HttpResponse(json.dumps(ajax_vars), content_type="application/json")
 
 
-def _resolve_appinstance(
-        request,
-        appinstanceid,
-        permission='base.change_resourcebase',
-        msg=_PERMISSION_MSG_GENERIC,
-        **kwargs):
+def _resolve_appinstance(request,
+                         appinstanceid,
+                         permission='base.change_resourcebase',
+                         msg=_PERMISSION_MSG_GENERIC,
+                         **kwargs):
     """
     Resolve the document by the provided primary key and check the optional permission.
     """
-    return resolve_object(request, AppInstance, {'pk': appinstanceid},
-                          permission=permission, permission_msg=msg, **kwargs)
+    return resolve_object(
+        request,
+        AppInstance, {'pk': appinstanceid},
+        permission=permission,
+        permission_msg=msg,
+        **kwargs)
 
 
 def appinstance_detail(request, appinstanceid):
@@ -231,47 +223,46 @@ def appinstance_detail(request, appinstanceid):
     """
     appinstance = None
     try:
-        appinstance = _resolve_appinstance(
-            request,
-            appinstanceid,
-            'base.view_resourcebase',
-            _PERMISSION_MSG_VIEW)
+        appinstance = _resolve_appinstance(request, appinstanceid,
+                                           'base.view_resourcebase',
+                                           _PERMISSION_MSG_VIEW)
 
     except Http404:
         return HttpResponse(
-            loader.render_to_string(
-                '404.html', RequestContext(
-                    request, {
-                    })), status=404)
+            loader.render_to_string('404.html', RequestContext(request, {})),
+            status=404)
 
     except PermissionDenied:
         return HttpResponse(
             loader.render_to_string(
-                '401.html', RequestContext(
-                    request, {
-                        'error_message': _("You are not allowed to view this document.")})), status=403)
+                '401.html',
+                RequestContext(request, {
+                    'error_message':
+                    _("You are not allowed to view this document.")
+                })),
+            status=403)
 
     if appinstance is None:
         return HttpResponse(
-            'An unknown error has occured.',
-            mimetype="text/plain",
-            status=401
-        )
+            'An unknown error has occured.', mimetype="text/plain", status=401)
 
     else:
         if request.user != appinstance.owner and not request.user.is_superuser:
-            AppInstance.objects.filter(
-                id=appinstance.id).update(
+            AppInstance.objects.filter(id=appinstance.id).update(
                 popular_count=F('popular_count') + 1)
         # appinstance_links = appinstance.link_set.filter(link_type__in=['appinstance_view', 'appinstance_edit'])
         set_thumbnail_link = appinstance.link_set.filter(
             link_type='appinstance_thumbnail')
         context_dict = {
-            'perms_list': get_perms(request.user, appinstance.get_self_resource()),
-            'permissions_json': _perms_info_json(appinstance),
-            'resource': appinstance,
+            'perms_list':
+                get_perms(request.user, appinstance.get_self_resource()),
+            'permissions_json':
+                _perms_info_json(appinstance),
+            'resource':
+                appinstance,
             # 'appinstance_links': appinstance_links,
-            'set_thumbnail_link': set_thumbnail_link
+            'set_thumbnail_link':
+                set_thumbnail_link
             # 'imgtypes': IMGTYPES,
             # 'related': related
         }
@@ -289,44 +280,38 @@ def appinstance_detail(request, appinstanceid):
             except BaseException:
                 print "Exif extraction failed."
 
-        return render_to_response(
-            "app_manager/appinstance_detail.html",
-            RequestContext(request, context_dict))
+        return render_to_response("app_manager/appinstance_detail.html",
+                                  RequestContext(request, context_dict))
 
 
 @login_required
-def appinstance_metadata(
-        request,
-        appinstanceid,
-        template='app_manager/appinstance_metadata.html'):
+def appinstance_metadata(request,
+                         appinstanceid,
+                         template='app_manager/appinstance_metadata.html'):
     appinstance = None
     try:
-        appinstance = _resolve_appinstance(
-            request,
-            appinstanceid,
-            'base.change_resourcebase_metadata',
-            _PERMISSION_MSG_METADATA)
+        appinstance = _resolve_appinstance(request, appinstanceid,
+                                           'base.change_resourcebase_metadata',
+                                           _PERMISSION_MSG_METADATA)
 
     except Http404:
         return HttpResponse(
-            loader.render_to_string(
-                '404.html', RequestContext(
-                    request, {
-                    })), status=404)
+            loader.render_to_string('404.html', RequestContext(request, {})),
+            status=404)
 
     except PermissionDenied:
         return HttpResponse(
             loader.render_to_string(
-                '401.html', RequestContext(
-                    request, {
-                        'error_message': _("You are not allowed to edit this instance.")})), status=403)
+                '401.html',
+                RequestContext(request, {
+                    'error_message':
+                    _("You are not allowed to edit this instance.")
+                })),
+            status=403)
 
     if appinstance is None:
         return HttpResponse(
-            'An unknown error has occured.',
-            mimetype="text/plain",
-            status=401
-        )
+            'An unknown error has occured.', mimetype="text/plain", status=401)
 
     else:
         poc = appinstance.poc
@@ -335,11 +320,12 @@ def appinstance_metadata(
 
         if request.method == "POST":
             appinstance_form = AppInstanceEditForm(
+                request.POST, instance=appinstance, prefix="resource")
+            category_form = CategoryForm(
                 request.POST,
-                instance=appinstance,
-                prefix="resource")
-            category_form = CategoryForm(request.POST, prefix="category_choice_field", initial=int(
-                request.POST["category_choice_field"]) if "category_choice_field" in request.POST else None)
+                prefix="category_choice_field",
+                initial=int(request.POST["category_choice_field"])
+                if "category_choice_field" in request.POST else None)
         else:
             appinstance_form = AppInstanceEditForm(
                 instance=appinstance, prefix="resource")
@@ -358,9 +344,7 @@ def appinstance_metadata(
             if new_poc is None:
                 if poc is None:
                     poc_form = ProfileForm(
-                        request.POST,
-                        prefix="poc",
-                        instance=poc)
+                        request.POST, prefix="poc", instance=poc)
                 else:
                     poc_form = ProfileForm(request.POST, prefix="poc")
                 if poc_form.is_valid():
@@ -376,8 +360,8 @@ def appinstance_metadata(
 
             if new_author is None:
                 if metadata_author is None:
-                    author_form = ProfileForm(request.POST, prefix="author",
-                                              instance=metadata_author)
+                    author_form = ProfileForm(
+                        request.POST, prefix="author", instance=metadata_author)
                 else:
                     author_form = ProfileForm(request.POST, prefix="author")
                 if author_form.is_valid():
@@ -396,16 +380,11 @@ def appinstance_metadata(
                 the_appinstance.poc = new_poc
                 the_appinstance.metadata_author = new_author
                 the_appinstance.keywords.add(*new_keywords)
-                AppInstance.objects.filter(
-                    id=the_appinstance.id).update(
+                AppInstance.objects.filter(id=the_appinstance.id).update(
                     category=new_category)
 
                 return HttpResponseRedirect(
-                    reverse(
-                        'appinstance_detail',
-                        args=(
-                            appinstance.id,
-                        )))
+                    reverse('appinstance_detail', args=(appinstance.id,)))
             else:
                 the_appinstance = appinstance_form.save()
                 if new_poc is None:
@@ -413,16 +392,11 @@ def appinstance_metadata(
                 if new_author is None:
                     the_appinstance.metadata_author = appinstance.owner
                 the_appinstance.keywords.add(*new_keywords)
-                AppInstance.objects.filter(
-                    id=the_appinstance.id).update(
+                AppInstance.objects.filter(id=the_appinstance.id).update(
                     category=new_category)
 
                 return HttpResponseRedirect(
-                    reverse(
-                        'appinstance_detail',
-                        args=(
-                            appinstance.id,
-                        )))
+                    reverse('appinstance_detail', args=(appinstance.id,)))
 
         if poc is not None:
             appinstance_form.fields['poc'].initial = poc.id
@@ -432,34 +406,33 @@ def appinstance_metadata(
             poc_form = ProfileForm(prefix="poc")
             poc_form.hidden = True
         if metadata_author is not None:
-            appinstance_form.fields['metadata_author'].initial = metadata_author.id
+            appinstance_form.fields[
+                'metadata_author'].initial = metadata_author.id
             author_form = ProfileForm(prefix="author")
             author_form.hidden = True
         else:
             author_form = ProfileForm(prefix="author")
             author_form.hidden = True
 
-        return render_to_response(template, RequestContext(request, {
-            "appinstance": appinstance,
-            "appinstance_form": appinstance_form,
-            "poc_form": poc_form,
-            "author_form": author_form,
-            "category_form": category_form,
-        }))
+        return render_to_response(template,
+                                  RequestContext(request, {
+                                      "appinstance": appinstance,
+                                      "appinstance_form": appinstance_form,
+                                      "poc_form": poc_form,
+                                      "author_form": author_form,
+                                      "category_form": category_form,
+                                  }))
 
 
 def appinstance_remove(request, appinstanceid):
     try:
-        appinstance = _resolve_appinstance(
-            request,
-            appinstanceid,
-            'base.delete_resourcebase',
-            _PERMISSION_MSG_DELETE)
+        appinstance = _resolve_appinstance(request, appinstanceid,
+                                           'base.delete_resourcebase',
+                                           _PERMISSION_MSG_DELETE)
         appinstance.delete()
         return HttpResponseRedirect(reverse('appinstance_browse'))
     except PermissionDenied:
         return HttpResponse(
             'You are not allowed to delete this Instance',
             mimetype="text/plain",
-            status=401
-        )
+            status=401)

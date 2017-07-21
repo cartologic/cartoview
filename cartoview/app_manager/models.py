@@ -31,6 +31,7 @@ class AppStore(models.Model):
 
 
 class App(models.Model):
+
     def only_filename(instance, filename):
         return filename
 

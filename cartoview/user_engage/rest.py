@@ -15,6 +15,7 @@ import os
 
 
 class MultipartFormSerializer(Serializer):
+
     def __init__(self, *args, **kwargs):
         self.content_types['file_upload'] = 'multipart/form-data'
         self.formats.append('file_upload')
@@ -50,16 +51,13 @@ class MultipartFormSerializer(Serializer):
                 "The format indicated '%s' had no available deserialization method. Please check your ``formats`` and ``content_types`` on your Serializer." %
                 format)
 
-        if isinstance(
-                content,
-                six.binary_type) and desired_format != 'file_upload':
+        if isinstance(content,
+                      six.binary_type) and desired_format != 'file_upload':
             content = force_text(content)
 
-        deserialized = getattr(
-            self, "from_%s" %
-            desired_format)(
-            content, {
-                'request': request})
+        deserialized = getattr(self, "from_%s" % desired_format)(content, {
+            'request': request
+        })
         return deserialized
 
 
@@ -81,9 +79,7 @@ class ImageResource(FileUploadResource):
     def dehydrate_user(self, bundle):
         return dict(
             username=bundle.obj.user.username,
-            avatar=avatar_url(
-                bundle.obj.user,
-                60))
+            avatar=avatar_url(bundle.obj.user, 60))
 
     def dehydrate_thumbnail(self, bundle):
         if bundle.obj.image is None or bool(bundle.obj.image) == False:
@@ -105,8 +101,9 @@ class ImageResource(FileUploadResource):
             image = PILImage.open(bundle.obj.image.file)
             image.thumbnail(THUMBNAIL_SIZE, PILImage.ANTIALIAS)
             image.save(thumbnail_filename)
-        return "%s/user_engage/images/thumbnails/%s/%s" % (
-            settings.MEDIA_URL, thumbnail_dir_name, image_filename)
+        return "%s/user_engage/images/thumbnails/%s/%s" % (settings.MEDIA_URL,
+                                                           thumbnail_dir_name,
+                                                           image_filename)
 
 
 class CommentResource(ModelResource):
@@ -125,6 +122,4 @@ class CommentResource(ModelResource):
     def dehydrate_user(self, bundle):
         return dict(
             username=bundle.obj.user.username,
-            avatar=avatar_url(
-                bundle.obj.user,
-                60))
+            avatar=avatar_url(bundle.obj.user, 60))

@@ -92,8 +92,8 @@ def facets(context):
         if not settings.SKIP_PERMS_FILTER:
             appinstances = appinstances.filter(id__in=authorized)
 
-        counts = appinstances.values(
-            'app__title').annotate(count=Count('app__name'))
+        counts = appinstances.values('app__title').annotate(
+            count=Count('app__name'))
         facets = dict([(count['app__title'], count['count'])
                        for count in counts])
         return facets

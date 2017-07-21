@@ -25,8 +25,8 @@ def apps_instance(request):
     num = AppInstance.objects.all().count()
     return {
         'apps_instance_count': num,
-        'instances': instances.order_by('app__order')[
-            :5]}
+        'instances': instances.order_by('app__order')[:5]
+    }
 
 
 def site_logo(request):

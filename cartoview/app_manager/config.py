@@ -3,6 +3,7 @@ import os
 
 
 class Item(yaml.YAMLObject):
+
     def __init__(self, **kwargs):
         for key, value in kwargs.iteritems():
             setattr(self, key, value)
@@ -15,6 +16,7 @@ class Item(yaml.YAMLObject):
 
 
 class Collection(object):
+
     def __init__(self, file_path=None, items=None):
         self._items = []
         if items is None:
@@ -63,8 +65,10 @@ class Collection(object):
         return self
 
     def _save(self, yaml_file):
-        yaml.dump([item.__dict__ for item in self._items],
-                  yaml_file, default_flow_style=False)
+        yaml.dump(
+            [item.__dict__ for item in self._items],
+            yaml_file,
+            default_flow_style=False)
 
     def save(self):
         self.default_sort()
@@ -73,6 +77,7 @@ class Collection(object):
 
 
 class App(Item):
+
     def __init__(self, **kwargs):
         super(App, self).__init__(**kwargs)
         self.name = str(self.name)
@@ -85,6 +90,7 @@ class App(Item):
 
 
 class AppsConfig(Collection):
+
     def __init__(self, file_path=None, items=None):
         if file_path is None:
             from django.conf import settings

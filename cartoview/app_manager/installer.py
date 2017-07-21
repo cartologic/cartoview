@@ -36,8 +36,8 @@ class AppInstaller:
                 "latest_version"]["version"] == version:
             self.version = self.info["latest_version"]
         else:
-            data = self._request_rest_data(
-                "appversion/?app__name=", name, "&version=", version)
+            data = self._request_rest_data("appversion/?app__name=", name,
+                                           "&version=", version)
             self.version = data['objects'][0]
 
     def _request_rest_data(self, *args):
@@ -45,8 +45,8 @@ class AppInstaller:
         get app information form app store rest url
         """
         try:
-            q = requests.get(self.store.url +
-                             ''.join([str(item) for item in args]))
+            q = requests.get(self.store.url + ''.join(
+                [str(item) for item in args]))
             return q.json()
         except BaseException:
             return None
@@ -174,6 +174,7 @@ class AppInstaller:
 def finalize_setup():
     install_app_batch = getattr(settings, 'CARTOVIEW_INSTALL_APP_BAT', None)
     if install_app_batch:
+
         def _finalize_setup():
             from subprocess import Popen
             working_dir = os.path.dirname(install_app_batch)

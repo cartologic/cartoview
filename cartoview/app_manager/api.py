@@ -31,8 +31,11 @@ class BaseApi(TastypieApi):
             api_pattern = '(?P<api_name>)'
             top_level = r"^$"
 
-        pattern_list = [url(top_level, self.wrap_view(
-            'top_level'), name="%s_rest_url" % self.app_name), ]
+        pattern_list = [
+            url(top_level,
+                self.wrap_view('top_level'),
+                name="%s_rest_url" % self.app_name),
+        ]
 
         for name in sorted(self._registry.keys()):
             resource = self._registry[name]
@@ -44,7 +47,8 @@ class BaseApi(TastypieApi):
         overridden_urls = self.override_urls()
         if overridden_urls:
             warnings.warn(
-                "'override_urls' is a deprecated method & will be removed by v1.0.0. Please rename your method to ``prepend_urls``.")
+                "'override_urls' is a deprecated method & will be removed by v1.0.0. Please rename your method to ``prepend_urls``."
+            )
             urlpatterns += overridden_urls
 
         urlpatterns += patterns('', *pattern_list)
@@ -52,6 +56,7 @@ class BaseApi(TastypieApi):
 
 
 class Api():
+
     def __init__(self):
         self.apis = {}
 
@@ -70,16 +75,19 @@ class Api():
     @property
     def urls(self):
         pattern_list = [
-            url(r'^$', 'cartoview.app_manager.api.home', name='cartoview_rest_url'), ]
+            url(r'^$',
+                'cartoview.app_manager.api.home',
+                name='cartoview_rest_url'),
+        ]
         for name in sorted(self.apis.keys()):
-            pattern_list.append(url(r"^%s/" %
-                                    name, include(self.apis[name].urls)))
+            pattern_list.append(
+                url(r"^%s/" % name, include(self.apis[name].urls)))
         self.urlpatterns = patterns('', *pattern_list)
         return self.urlpatterns
 
     def register_app_urls(self, app_name):
-        self.urlpatterns.append(url(r"^%s/" %
-                                    app_name, include(self.apis[app_name].urls)))
+        self.urlpatterns.append(
+            url(r"^%s/" % app_name, include(self.apis[app_name].urls)))
 
 
 rest_api = Api()

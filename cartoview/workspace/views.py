@@ -31,4 +31,5 @@ def workspace(request):
             "groups": groups,
             "groups_count": groups_count,
             "documents": documents,
-            "documents_count": documents_count})
+            "documents_count": documents_count
+        })

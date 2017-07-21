@@ -92,10 +92,7 @@ def setup_geoserver(options):
     jetty_runner = download_dir / os.path.basename(JETTY_RUNNER_URL)
 
     grab(
-        options.get(
-            'geoserver',
-            GEOSERVER_URL),
-        geoserver_bin,
+        options.get('geoserver', GEOSERVER_URL), geoserver_bin,
         "geoserver binary")
     grab(options.get('jetty', JETTY_RUNNER_URL), jetty_runner, "jetty runner")
 
@@ -169,11 +166,14 @@ def win_install_deps(options):
         download_dir.makedirs()
     win_packages = {
         # required by transifex-client
-        "Py2exe": "http://superb-dca2.dl.sourceforge.net/project/py2exe/py2exe/0.6.9/py2exe-0.6.9.win32-py2.7.exe",
-        "Nose": "https://s3.amazonaws.com/geonodedeps/nose-1.3.3.win32-py2.7.exe",
+        "Py2exe":
+            "http://superb-dca2.dl.sourceforge.net/project/py2exe/py2exe/0.6.9/py2exe-0.6.9.win32-py2.7.exe",
+        "Nose":
+            "https://s3.amazonaws.com/geonodedeps/nose-1.3.3.win32-py2.7.exe",
         # the wheel 1.9.4 installs but pycsw wants 1.9.3, which fails to compile
         # when pycsw bumps their pyproj to 1.9.4 this can be removed.
-        "PyProj": "https://pyproj.googlecode.com/files/pyproj-1.9.3.win32-py2.7.exe"
+        "PyProj":
+            "https://pyproj.googlecode.com/files/pyproj-1.9.3.win32-py2.7.exe"
     }
     failed = False
     for package, url in win_packages.iteritems():
@@ -194,9 +194,8 @@ def win_install_deps(options):
         print "Windows dependencies now complete.  Run pip install -e geonode --use-mirrors"
 
 
-@cmdopts([
-    ('version=', 'v', 'Legacy GeoNode version of the existing database.')
-])
+@cmdopts([('version=', 'v',
+           'Legacy GeoNode version of the existing database.')])
 @task
 def upgradedb(options):
     """
@@ -286,14 +285,12 @@ def package(options):
 
 
 @task
-@needs(['start_geoserver',
-        'sync',
-        'start_django'])
-@cmdopts([
-    ('bind=', 'b', 'Bind server to provided IP address and port number.'),
-    ('java_path=', 'j', 'Full path to java install for Windows'),
-    ('foreground', 'f', 'Do not run in background but in foreground')
-], share_with=['start_django', 'start_geoserver'])
+@needs(['start_geoserver', 'sync', 'start_django'])
+@cmdopts(
+    [('bind=', 'b', 'Bind server to provided IP address and port number.'),
+     ('java_path=', 'j', 'Full path to java install for Windows'),
+     ('foreground', 'f', 'Do not run in background but in foreground')],
+    share_with=['start_django', 'start_geoserver'])
 def start():
     """
     Start GeoNode (Django, GeoServer & Client)
@@ -329,9 +326,8 @@ def stop():
     stop_django()
 
 
-@cmdopts([
-    ('bind=', 'b', 'Bind server to provided IP address and port number.')
-])
+@cmdopts([('bind=', 'b',
+           'Bind server to provided IP address and port number.')])
 @task
 def start_django():
     """
@@ -342,9 +338,7 @@ def start_django():
     sh('python manage.py runserver %s %s' % (bind, foreground))
 
 
-@cmdopts([
-    ('java_path=', 'j', 'Full path to java install for Windows')
-])
+@cmdopts([('java_path=', 'j', 'Full path to java install for Windows')])
 @task
 def start_geoserver(options):
     """
@@ -380,6 +374,7 @@ def start_geoserver(options):
                 print "Chances are that you have Geoserver currently running.  You \
                         can either stop all servers with paver stop or start only \
                         the django application with paver start_django."
+
                 sys.exit(1)
             loggernullpath = "../../downloaded/null.txt"
 
@@ -398,6 +393,7 @@ def start_geoserver(options):
                 print "Paver cannot find java in the Windows Environment.  \
                 Please provide the --java_path flag with your full path to \
                 java.exe e.g. --java_path=C:/path/to/java/bin/java.exe"
+
                 sys.exit(1)
             # if there are spaces
             javapath = 'START /B "" "' + javapath_opt + '"'
@@ -410,8 +406,7 @@ def start_geoserver(options):
             ' -jar %(jetty_runner)s'
             ' --log %(log_file)s'
             ' %(config)s'
-            ' > %(loggernullpath)s &' % locals()
-        ))
+            ' > %(loggernullpath)s &' % locals()))
 
     info('Starting GeoServer on %s' % url)
 
@@ -443,9 +438,7 @@ def test_javascript(options):
 
 
 @task
-@cmdopts([
-    ('name=', 'n', 'Run specific tests.')
-])
+@cmdopts([('name=', 'n', 'Run specific tests.')])
 def test_integration(options):
     """
     Run GeoNode's Integration test suite against the external apps
@@ -581,7 +574,7 @@ def deb(options):
             # A local installable package
             sh('debuild -uc -us -A')
         elif key is None and ppa is not None:
-                # A sources package, signed by daemon
+            # A sources package, signed by daemon
             sh('debuild -S')
         elif key is not None and ppa is None:
             # A signed installable package
@@ -602,10 +595,11 @@ def publish():
         print "You need to set the GPG_KEY_GEONODE environment variable"
         return
 
-    call_task('deb', options={
-        'key': key,
-        'ppa': 'geonode/testing',
-    })
+    call_task(
+        'deb', options={
+            'key': key,
+            'ppa': 'geonode/testing',
+        })
 
     version, simple_version = versions()
     sh('git add package/debian/changelog')
@@ -654,20 +648,29 @@ def kill(arg1, arg2):
 
     while running and time.time() - t0 < time_out:
         if os.name == 'nt':
-            p = Popen('tasklist | find "%s"' % arg1, shell=True,
-                      stdin=PIPE, stdout=PIPE, stderr=PIPE, close_fds=False)
+            p = Popen(
+                'tasklist | find "%s"' % arg1,
+                shell=True,
+                stdin=PIPE,
+                stdout=PIPE,
+                stderr=PIPE,
+                close_fds=False)
         else:
-            p = Popen('ps aux | grep %s' % arg1, shell=True,
-                      stdin=PIPE, stdout=PIPE, stderr=PIPE, close_fds=True)
+            p = Popen(
+                'ps aux | grep %s' % arg1,
+                shell=True,
+                stdin=PIPE,
+                stdout=PIPE,
+                stderr=PIPE,
+                close_fds=True)
 
         lines = p.stdout.readlines()
 
         running = False
         for line in lines:
             # this kills all java.exe and python including self in windows
-            if ('%s' %
-                arg2 in line) or (os.name == 'nt' and '%s' %
-                                  arg1 in line):
+            if ('%s' % arg2 in line) or (os.name == 'nt' and
+                                         '%s' % arg1 in line):
                 running = True
 
                 # Get pid
@@ -687,8 +690,8 @@ def kill(arg1, arg2):
 
     if running:
         raise Exception('Could not stop %s: '
-                        'Running processes are\n%s'
-                        % (arg1, '\n'.join([l.strip() for l in lines])))
+                        'Running processes are\n%s' %
+                        (arg1, '\n'.join([l.strip() for l in lines])))
 
 
 def waitfor(url, timeout=300):

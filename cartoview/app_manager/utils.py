@@ -27,7 +27,9 @@ from geonode.api.resourcebase_api import LayerResource
 from geonode.maps.models import Map
 
 
-@require_http_methods(["POST", ])
+@require_http_methods([
+    "POST",
+])
 def settings_api(request):
     result = {}
     data = request.POST.getlist('attributes')
@@ -36,12 +38,13 @@ def settings_api(request):
             result[attr] = getattr(settings, attr)
         else:
             return HttpResponse(
-                "{} Not Found in settings".format(attr),
-                status=404)
+                "{} Not Found in settings".format(attr), status=404)
     return JsonResponse(result)
 
 
-@require_http_methods(["GET", ])
+@require_http_methods([
+    "GET",
+])
 def map_layers(request):
     map_id = request.GET.get('id', None)
     if map_id:

@@ -3,7 +3,7 @@ from setuptools import find_packages
 try:
     import pypandoc
     long_description = pypandoc.convert('README.md', 'rst')
-except(IOError, ImportError):
+except (IOError, ImportError):
     long_description = open('README.md').read()
 setup(
     name='cartoview',

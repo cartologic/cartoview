@@ -37,14 +37,10 @@ def send_request(request, url, requests_args=None):
     # url = "https://ao82912.maps.arcgis.com" if url == "" else "https://ao82912.maps.arcgis.com/" + url
     print url
     response = requests.request(
-        request.method,
-        url,
-        stream=True,
-        **requests_args)
+        request.method, url, stream=True, **requests_args)
 
     proxy_response = HttpResponse(
-        response.content,
-        status=response.status_code)
+        response.content, status=response.status_code)
 
     excluded_headers = set([
         # Hop-by-hop headers
@@ -52,8 +48,13 @@ def send_request(request, url, requests_args=None):
         # Certain response headers should NOT be just tunneled through.  These
         # are they.  For more info, see:
         # http://www.w3.org/Protocols/rfc2616/rfc2616-sec13.html#sec13.5.1
-        'connection', 'keep-alive', 'proxy-authenticate',
-        'proxy-authorization', 'te', 'trailers', 'transfer-encoding',
+        'connection',
+        'keep-alive',
+        'proxy-authenticate',
+        'proxy-authorization',
+        'te',
+        'trailers',
+        'transfer-encoding',
         'upgrade',
 
         # Although content-encoding is not listed among the hop-by-hop headers,
