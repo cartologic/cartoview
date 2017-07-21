@@ -8,7 +8,7 @@ import pkg_resources
 from StringIO import StringIO
 from .models import AppStore, App, AppTag
 from django.conf import settings
-
+from .config import App as AppConfig
 reload(pkg_resources)
 
 current_folder = os.path.abspath(os.path.dirname(__file__))
