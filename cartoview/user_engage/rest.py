@@ -1,6 +1,6 @@
 from cartoview.app_manager.resources import FileUploadResource
 from tastypie.resources import ModelResource
-from .models import *
+from .models import Comment, Image
 from tastypie.authorization import Authorization
 from tastypie import fields
 from avatar.templatetags.avatar_tags import avatar_url
@@ -48,7 +48,9 @@ class MultipartFormSerializer(Serializer):
 
         if desired_format is None:
             raise UnsupportedFormat(
-                "The format indicated '%s' had no available deserialization method. Please check your ``formats`` and ``content_types`` on your Serializer." %
+                "The format indicated '%s' had no available deserialization\
+                 method. Please check your ``formats`` and ``content_types``\
+                  on your Serializer." %
                 format)
 
         if isinstance(content,
@@ -82,7 +84,7 @@ class ImageResource(FileUploadResource):
             avatar=avatar_url(bundle.obj.user, 60))
 
     def dehydrate_thumbnail(self, bundle):
-        if bundle.obj.image is None or bool(bundle.obj.image) == False:
+        if bundle.obj.image is None or bool(bundle.obj.image) is False:
             return None
         size = bundle.request.GET.get('thumbnailSize', '80,80')
         THUMBNAIL_SIZE = [int(d) for d in size.split(",")]

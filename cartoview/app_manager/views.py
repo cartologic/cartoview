@@ -15,7 +15,8 @@ from geonode.base.forms import CategoryForm
 from geonode.base.models import TopicCategory
 from geonode.people.forms import ProfileForm
 from geonode.security.views import _perms_info_json
-from models import *
+from django.core.urlresolvers import reverse
+from models import App, AppInstance
 from django.conf import settings
 
 import json
@@ -207,7 +208,8 @@ def _resolve_appinstance(request,
                          msg=_PERMISSION_MSG_GENERIC,
                          **kwargs):
     """
-    Resolve the document by the provided primary key and check the optional permission.
+    Resolve the document by the provided primary key
+    and check the optional permission.
     """
     return resolve_object(
         request,
@@ -250,7 +252,6 @@ def appinstance_detail(request, appinstanceid):
         if request.user != appinstance.owner and not request.user.is_superuser:
             AppInstance.objects.filter(id=appinstance.id).update(
                 popular_count=F('popular_count') + 1)
-        # appinstance_links = appinstance.link_set.filter(link_type__in=['appinstance_view', 'appinstance_edit'])
         set_thumbnail_link = appinstance.link_set.filter(
             link_type='appinstance_thumbnail')
         context_dict = {
@@ -267,11 +268,11 @@ def appinstance_detail(request, appinstanceid):
             # 'related': related
         }
 
-        if geonode_settings.SOCIAL_ORIGINS:
+        if settings.SOCIAL_ORIGINS:
             context_dict["social_links"] = build_social_links(
                 request, appinstance)
 
-        if getattr(geonode_settings, 'EXIF_ENABLED', False):
+        if getattr(settings, 'EXIF_ENABLED', False):
             try:
                 from geonode.contrib.exif.utils import exif_extract_dict
                 exif = exif_extract_dict(appinstance)
@@ -353,7 +354,8 @@ def appinstance_metadata(request,
                         errors = poc_form._errors.setdefault(
                             'profile', ErrorList())
                         errors.append(
-                            _('You must set a point of contact for this resource'))
+                            _('You must set a point of contact for this\
+                             resource'))
                         poc = None
                 if poc_form.has_changed and poc_form.is_valid():
                     new_poc = poc_form.save()
@@ -361,7 +363,8 @@ def appinstance_metadata(request,
             if new_author is None:
                 if metadata_author is None:
                     author_form = ProfileForm(
-                        request.POST, prefix="author", instance=metadata_author)
+                        request.POST, prefix="author",
+                        instance=metadata_author)
                 else:
                     author_form = ProfileForm(request.POST, prefix="author")
                 if author_form.is_valid():

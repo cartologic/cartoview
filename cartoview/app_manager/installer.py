@@ -137,9 +137,11 @@ class AppInstaller:
 
     def uninstall(self, restart=True):
         """
-        angular.forEach(app.store.installedApps.objects, function(installedApp){
+        angular.forEach(app.store.installedApps.objects,
+         function(installedApp{
                 var currentApp = appsHash[installedApp.name];
-                if(dependents.indexOf(currentApp) == -1 && currentApp.latest_version.dependencies[app.name]){
+                if(dependents.indexOf(currentApp) == -1 &&
+                 currentApp.latest_version.dependencies[app.name]){
                     dependents.push(currentApp)
                     _getDependents(currentApp, appsHash, dependents)
                 }

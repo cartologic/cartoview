@@ -21,7 +21,8 @@ def send_request(request, url, requests_args=None):
     if 'params' not in requests_args:
         requests_args['params'] = QueryDict('', mutable=True)
 
-    # Overwrite any headers and params from the incoming request with explicitly
+    # Overwrite any headers and params
+    # from the incoming request with explicitly
     # specified values for the requests library.
     headers.update(requests_args['headers'])
     params.update(requests_args['params'])
@@ -34,7 +35,8 @@ def send_request(request, url, requests_args=None):
 
     requests_args['headers'] = headers
     requests_args['params'] = params
-    # url = "https://ao82912.maps.arcgis.com" if url == "" else "https://ao82912.maps.arcgis.com/" + url
+    # url = "https://ao82912.maps.arcgis.com" \
+    # if url == "" else "https://ao82912.maps.arcgis.com/" + url
     print url
     response = requests.request(
         request.method, url, stream=True, **requests_args)

@@ -51,7 +51,9 @@ class MultipartFormSerializer(HTMLSerializer):
 
         if desired_format is None:
             raise UnsupportedFormat(
-                "The format indicated '%s' had no available deserialization method. Please check your ``formats`` and ``content_types`` on your Serializer." %
+                "The format indicated '%s' had no available deserialization\
+                 method. Please check your ``formats`` and ``content_types``\
+                  on your Serializer." %
                 format)
 
         if isinstance(content,

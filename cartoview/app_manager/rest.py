@@ -19,6 +19,8 @@ from tastypie.utils import trailing_slash
 from django.conf.urls import url
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse
+from guardian.shortcuts import get_objects_for_user
+from geonode.base.models import ResourceBase
 
 
 class GeonodeMapLayerResource(ModelResource):

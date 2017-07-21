@@ -47,8 +47,11 @@ class BaseApi(TastypieApi):
         overridden_urls = self.override_urls()
         if overridden_urls:
             warnings.warn(
-                "'override_urls' is a deprecated method & will be removed by v1.0.0. Please rename your method to ``prepend_urls``."
+                "'override_urls' is a deprecated method & \
+                will be removed by v1.0.0.\
+                 Please rename your method to ``prepend_urls``."
             )
+
             urlpatterns += overridden_urls
 
         urlpatterns += patterns('', *pattern_list)
