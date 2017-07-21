@@ -35,21 +35,31 @@ class BaseModelResource(ModelResource):
         return form(instance=obj)
 
     def prepend_urls(self):
-        return [url(r"^(?P<resource_name>%s)/edit/(?P<pk>.*?)/$" % self._meta.resource_name, self.wrap_view('edit')),
-                url(r"^(?P<resource_name>%s)/new/$" % self._meta.resource_name, self.wrap_view('new_item'))]
+        return [
+            url(
+                r"^(?P<resource_name>%s)/edit/(?P<pk>.*?)/$" %
+                self._meta.resource_name, self.wrap_view('edit')), url(
+                r"^(?P<resource_name>%s)/new/$" %
+                self._meta.resource_name, self.wrap_view('new_item'))]
 
     def new_item(self, request, **kwargs):
         self.method_check(request, allowed=['get'])
         form = self.get_form()
-        return render(request, 'app_manager/rest_api/edit.html',
-                      {'form': form, 'operation': 'add', 'resource_uri': self.get_resource_uri()})
+        return render(request,
+                      'app_manager/rest_api/edit.html',
+                      {'form': form,
+                       'operation': 'add',
+                       'resource_uri': self.get_resource_uri()})
 
     def edit(self, request, pk, **kwargs):
         self.method_check(request, allowed=['get'])
         obj = self._meta.object_class.objects.get(id=pk)
         form = self.get_form(obj)
-        return render(request, 'app_manager/rest_api/edit.html',
-                      {'form': form, 'operation': 'edit', 'resource_uri': self.get_resource_uri()})
+        return render(request,
+                      'app_manager/rest_api/edit.html',
+                      {'form': form,
+                       'operation': 'edit',
+                       'resource_uri': self.get_resource_uri()})
 
 
 class FileUploadResource(BaseModelResource):
@@ -66,6 +76,7 @@ class FileUploadResource(BaseModelResource):
         return bundle
 
     def deserialize(self, request, data, format='application/json'):
-        deserialized = self._meta.serializer.deserialize(data, request=request,
-                                                         format=request.META.get('CONTENT_TYPE', 'application/json'))
+        deserialized = self._meta.serializer.deserialize(
+            data, request=request, format=request.META.get(
+                'CONTENT_TYPE', 'application/json'))
         return deserialized

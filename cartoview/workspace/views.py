@@ -19,7 +19,16 @@ def workspace(request):
     documents_count = Document.objects.all().count()
     groups = owner.group_list_all()
     groups_count = GroupProfile.objects.all().count()
-    return render(request, template_name='workspace/workspace.html',
-                  context={'my_apps': apps, 'my_layers': layers, 'my_maps': maps, 'maps_count': maps_count,
-                           'layers_count': layers_count, "groups": groups, "groups_count": groups_count,
-                           "documents": documents, "documents_count": documents_count})
+    return render(
+        request,
+        template_name='workspace/workspace.html',
+        context={
+            'my_apps': apps,
+            'my_layers': layers,
+            'my_maps': maps,
+            'maps_count': maps_count,
+            'layers_count': layers_count,
+            "groups": groups,
+            "groups_count": groups_count,
+            "documents": documents,
+            "documents_count": documents_count})

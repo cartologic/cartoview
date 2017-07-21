@@ -13,15 +13,22 @@ from django.core.urlresolvers import reverse
 from tastypie.authorization import Authorization
 from taggit.models import Tag
 from tastypie.http import HttpGone
+from django.views.decorators.http import require_http_methods
 
 
 class GeonodeMapLayerResource(ModelResource):
     class Meta:
         queryset = GeonodeMapLayer.objects.distinct()
 
-#TODO: remove this Resource
+# TODO: remove this Resource
+
+
 class GeonodeMapResource(ModelResource):
-    map_layers = fields.ToManyField(GeonodeMapLayerResource, 'layer_set', null=True, full=True)
+    map_layers = fields.ToManyField(
+        GeonodeMapLayerResource,
+        'layer_set',
+        null=True,
+        full=True)
 
     class Meta(CommonMetaApi):
         queryset = GeonodeMap.objects.distinct().order_by('-date')
@@ -64,7 +71,11 @@ class AppResource(FileUploadResource):
 
     class Meta(FileUploadResource.Meta):
         queryset = App.objects.all().order_by('order')
-        filtering = {"id": ALL, "name": ALL, "title": ALL, "store": ALL_WITH_RELATIONS}
+        filtering = {
+            "id": ALL,
+            "name": ALL,
+            "title": ALL,
+            "store": ALL_WITH_RELATIONS}
         can_edit = True
 
     def _build_url_exp(self, view, single=False):
@@ -73,7 +84,8 @@ class AppResource(FileUploadResource):
             exp = r"^(?P<resource_name>%s)/(?P<pk>\w[\w/-]*)/%s%s$" % (
                 self._meta.resource_name, view, trailing_slash(),)
         else:
-            exp = r"^(?P<resource_name>%s)/%s%s$" % (self._meta.resource_name, view, trailing_slash())
+            exp = r"^(?P<resource_name>%s)/%s%s$" % (self._meta.resource_name,
+                                                     view, trailing_slash())
         return url(exp, self.wrap_view(view), name=name)
 
     def prepend_urls(self):
@@ -96,8 +108,10 @@ class AppResource(FileUploadResource):
         self.is_authenticated(request)
         self.throttle_check(request)
         try:
-            bundle = self.build_bundle(data={'pk': kwargs['pk']}, request=request)
-            app = self.cached_obj_get(bundle=bundle, **self.remove_api_resource_names(kwargs))
+            bundle = self.build_bundle(
+                data={'pk': kwargs['pk']}, request=request)
+            app = self.cached_obj_get(
+                bundle=bundle, **self.remove_api_resource_names(kwargs))
             app.config.active = active
             app.apps_config.save()
         except ObjectDoesNotExist:
@@ -134,7 +148,12 @@ class AppInstanceResource(ModelResource):
     edit_url = fields.CharField(null=True, blank=True)
     app = fields.ForeignKey(AppResource, 'app', full=True, null=True)
     map = fields.ForeignKey(GeonodeMapResource, 'map', full=True, null=True)
-    owner = fields.ForeignKey(ProfileResource, 'owner', full=True, null=True, blank=True)
+    owner = fields.ForeignKey(
+        ProfileResource,
+        'owner',
+        full=True,
+        null=True,
+        blank=True)
 
     class Meta(CommonMetaApi):
         filtering = CommonMetaApi.filtering
@@ -153,18 +172,27 @@ class AppInstanceResource(ModelResource):
 
     def dehydrate_launch_app_url(self, bundle):
         if bundle.obj.app is not None:
-            return reverse("%s.view" % bundle.obj.app.name, args=[bundle.obj.pk])
+            return reverse(
+                "%s.view" %
+                bundle.obj.app.name,
+                args=[
+                    bundle.obj.pk])
         return None
 
     def dehydrate_edit_url(self, bundle):
         if bundle.obj.owner == bundle.request.user:
             if bundle.obj.app is not None:
-                return reverse("%s.edit" % bundle.obj.app.name, args=[bundle.obj.pk])
+                return reverse(
+                    "%s.edit" %
+                    bundle.obj.app.name,
+                    args=[
+                        bundle.obj.pk])
         return None
 
     def hydrate_owner(self, bundle):
         print bundle
-        owner, created = Profile.objects.get_or_create(username=bundle.data['owner'])
+        owner, created = Profile.objects.get_or_create(
+            username=bundle.data['owner'])
         bundle.data['owner'] = owner
         return bundle
 
@@ -222,7 +250,8 @@ def get_item_data(item):
         type="layer"
     )
     if hasattr(item, 'appinstance'):
-        urls["view"] = reverse('%s.view' % item.appinstance.app.name, args=[str(item.appinstance.id)])
+        urls["view"] = reverse('%s.view' % item.appinstance.app.name, args=[
+                               str(item.appinstance.id)])
         if item.appinstance.map and item.thumbnail_url is None:
             item_data["thumbnail"] = item.appinstance.map.thumbnail_url
         item_data["type"] = "app"
@@ -238,15 +267,15 @@ def get_item_data(item):
     return item_data
 
 
-from django.views.decorators.http import require_http_methods
-
-
 @require_http_methods(["GET", ])
 def all_resources_rest(request):
     # this filter is exact filter
     allowed_filters = ['type', 'owner', 'id', 'not_app', 'featured']
-    permitted_ids = get_objects_for_user(request.user, 'base.view_resourcebase').values('id')
-    qs = ResourceBase.objects.filter(id__in=permitted_ids).filter(title__isnull=False)
+    permitted_ids = get_objects_for_user(
+        request.user, 'base.view_resourcebase').values('id')
+    qs = ResourceBase.objects.filter(
+        id__in=permitted_ids).filter(
+        title__isnull=False)
     items = []
     for item in qs:
         items.append(get_item_data(item))

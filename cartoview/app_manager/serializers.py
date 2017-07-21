@@ -10,8 +10,13 @@ class HTMLSerializer(Serializer):
     def to_html(self, data, options=None):
         options = options or {}
         data = self.to_simple(data, options)
-        json_data = json.dumps(data, cls=json.JSONEncoder, indent=4, sort_keys=True)
-        return render_to_string('app_manager/rest_api/base.html', {'json_data': json_data})
+        json_data = json.dumps(
+            data,
+            cls=json.JSONEncoder,
+            indent=4,
+            sort_keys=True)
+        return render_to_string(
+            'app_manager/rest_api/base.html', {'json_data': json_data})
 
 
 class MultipartFormSerializer(HTMLSerializer):
@@ -47,10 +52,17 @@ class MultipartFormSerializer(HTMLSerializer):
 
         if desired_format is None:
             raise UnsupportedFormat(
-                "The format indicated '%s' had no available deserialization method. Please check your ``formats`` and ``content_types`` on your Serializer." % format)
+                "The format indicated '%s' had no available deserialization method. Please check your ``formats`` and ``content_types`` on your Serializer." %
+                format)
 
-        if isinstance(content, six.binary_type) and desired_format != 'file_upload':
+        if isinstance(
+                content,
+                six.binary_type) and desired_format != 'file_upload':
             content = force_text(content)
 
-        deserialized = getattr(self, "from_%s" % desired_format)(content, {'request': request})
+        deserialized = getattr(
+            self, "from_%s" %
+            desired_format)(
+            content, {
+                'request': request})
         return deserialized

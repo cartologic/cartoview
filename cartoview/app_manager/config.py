@@ -1,6 +1,5 @@
 import yaml
 import os
-from django.conf import settings
 
 
 class Item(yaml.YAMLObject):
@@ -9,7 +8,8 @@ class Item(yaml.YAMLObject):
             setattr(self, key, value)
 
     # __getattr__ is called if the object doesn't have the attribute as member
-    # this to avoid "object has no attribute" error and make the object acts like javascript
+    # this to avoid "object has no attribute" error and make the object acts
+    # like javascript
     def __getattr__(self, name):
         return None
 
@@ -41,7 +41,6 @@ class Collection(object):
     def __delitem__(self, item):
         self._items.remove(item)
 
-
     def default_sort(self):
         return self
 
@@ -63,10 +62,9 @@ class Collection(object):
                 return self._load(f)
         return self
 
-
     def _save(self, yaml_file):
-        yaml.dump([item.__dict__ for item in self._items], yaml_file, default_flow_style=False)
-
+        yaml.dump([item.__dict__ for item in self._items],
+                  yaml_file, default_flow_style=False)
 
     def save(self):
         self.default_sort()

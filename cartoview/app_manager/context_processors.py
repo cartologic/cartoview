@@ -1,5 +1,7 @@
 from cartoview.app_manager.models import App, AppInstance, Logo
 from django.conf import settings
+from django.contrib.sites.models import Site
+from django.shortcuts import get_object_or_404
 
 
 def news(request):
@@ -21,16 +23,15 @@ def workspace(request):
 def apps_instance(request):
     instances = AppInstance.objects.all()
     num = AppInstance.objects.all().count()
-    return {'apps_instance_count': num, 'instances': instances.order_by('app__order')[:5]}
-
-
-from django.contrib.sites.models import Site
-from django.shortcuts import get_object_or_404
+    return {
+        'apps_instance_count': num,
+        'instances': instances.order_by('app__order')[
+            :5]}
 
 
 def site_logo(request):
     try:
         logo = get_object_or_404(Logo, site=Site.objects.get_current())
         return {'site_logo': logo}
-    except:
+    except BaseException:
         return {'site_logo': None}

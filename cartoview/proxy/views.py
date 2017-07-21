@@ -36,7 +36,11 @@ def send_request(request, url, requests_args=None):
     requests_args['params'] = params
     # url = "https://ao82912.maps.arcgis.com" if url == "" else "https://ao82912.maps.arcgis.com/" + url
     print url
-    response = requests.request(request.method, url, stream=True, **requests_args)
+    response = requests.request(
+        request.method,
+        url,
+        stream=True,
+        **requests_args)
 
     proxy_response = HttpResponse(
         response.content,
@@ -83,11 +87,11 @@ def get_headers(environ):
     """
     headers = {}
     for key, value in environ.iteritems():
-        # Sometimes, things don't like when you send the requesting host through.
+        # Sometimes, things don't like when you send the requesting host
+        # through.
         if key.startswith('HTTP_') and key != 'HTTP_HOST':
             headers[key[5:].replace('_', '-')] = value
         elif key in ('CONTENT_TYPE', 'CONTENT_LENGTH'):
             headers[key.replace('_', '-')] = value
 
     return headers
-

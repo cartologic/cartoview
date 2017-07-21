@@ -1,17 +1,18 @@
-from cartoview.app_manager.resources import BaseModelResource, FileUploadResource
-from tastypie.resources import Resource, ModelResource
+from cartoview.app_manager.resources import FileUploadResource
+from tastypie.resources import ModelResource
 from .models import *
-from tastypie.constants import ALL_WITH_RELATIONS, ALL
 from tastypie.authorization import Authorization
 from tastypie import fields
 from avatar.templatetags.avatar_tags import avatar_url
 from tastypie.serializers import Serializer
-from tastypie.exceptions import BadRequest, UnsupportedFormat
-from django.utils.encoding import force_text, smart_bytes
+from tastypie.exceptions import UnsupportedFormat
+from django.utils.encoding import force_text
 from django.utils import six
+from tastypie.constants import ALL
 from PIL import Image as PILImage
 from django.conf import settings
 import os
+
 
 class MultipartFormSerializer(Serializer):
     def __init__(self, *args, **kwargs):
@@ -29,7 +30,7 @@ class MultipartFormSerializer(Serializer):
         return deserialized
 
     # add request param to extract files
-    def deserialize(self, content, request= None, format='application/json'):
+    def deserialize(self, content, request=None, format='application/json'):
         """
         Given some data and a format, calls the correct method to deserialize
         the data and returns the result.
@@ -45,12 +46,20 @@ class MultipartFormSerializer(Serializer):
                     break
 
         if desired_format is None:
-            raise UnsupportedFormat("The format indicated '%s' had no available deserialization method. Please check your ``formats`` and ``content_types`` on your Serializer." % format)
+            raise UnsupportedFormat(
+                "The format indicated '%s' had no available deserialization method. Please check your ``formats`` and ``content_types`` on your Serializer." %
+                format)
 
-        if isinstance(content, six.binary_type) and desired_format != 'file_upload':
+        if isinstance(
+                content,
+                six.binary_type) and desired_format != 'file_upload':
             content = force_text(content)
 
-        deserialized = getattr(self, "from_%s" % desired_format)(content, {'request': request})
+        deserialized = getattr(
+            self, "from_%s" %
+            desired_format)(
+            content, {
+                'request': request})
         return deserialized
 
 
@@ -69,9 +78,12 @@ class ImageResource(FileUploadResource):
         bundle.obj.user = bundle.request.user
         return super(ImageResource, self).save(bundle, skip_errors)
 
-
     def dehydrate_user(self, bundle):
-        return dict(username=bundle.obj.user.username, avatar=avatar_url(bundle.obj.user, 60))
+        return dict(
+            username=bundle.obj.user.username,
+            avatar=avatar_url(
+                bundle.obj.user,
+                60))
 
     def dehydrate_thumbnail(self, bundle):
         if bundle.obj.image is None or bool(bundle.obj.image) == False:
@@ -79,16 +91,23 @@ class ImageResource(FileUploadResource):
         size = bundle.request.GET.get('thumbnailSize', '80,80')
         THUMBNAIL_SIZE = [int(d) for d in size.split(",")]
         image_filename = os.path.basename(bundle.obj.image.file.name)
-        thumbnail_dir_name = "%dx%d" % (THUMBNAIL_SIZE[0],THUMBNAIL_SIZE[1],)
-        thumbnail_dir = os.path.join(settings.MEDIA_ROOT, 'user_engage' , 'images' ,'thumbnails', thumbnail_dir_name)
-        thumbnail_filename = os.path.join(thumbnail_dir , image_filename)
+        thumbnail_dir_name = "%dx%d" % (THUMBNAIL_SIZE[0], THUMBNAIL_SIZE[1],)
+        thumbnail_dir = os.path.join(
+            settings.MEDIA_ROOT,
+            'user_engage',
+            'images',
+            'thumbnails',
+            thumbnail_dir_name)
+        thumbnail_filename = os.path.join(thumbnail_dir, image_filename)
         if not os.path.exists(thumbnail_filename):
             if not os.path.exists(thumbnail_dir):
                 os.makedirs(thumbnail_dir)
             image = PILImage.open(bundle.obj.image.file)
             image.thumbnail(THUMBNAIL_SIZE, PILImage.ANTIALIAS)
             image.save(thumbnail_filename)
-        return "%s/user_engage/images/thumbnails/%s/%s"  % (settings.MEDIA_URL, thumbnail_dir_name, image_filename)
+        return "%s/user_engage/images/thumbnails/%s/%s" % (
+            settings.MEDIA_URL, thumbnail_dir_name, image_filename)
+
 
 class CommentResource(ModelResource):
     user = fields.DictField(readonly=True)
@@ -104,4 +123,8 @@ class CommentResource(ModelResource):
         return super(CommentResource, self).save(bundle, skip_errors)
 
     def dehydrate_user(self, bundle):
-        return dict(username=bundle.obj.user.username, avatar=avatar_url(bundle.obj.user, 60))
+        return dict(
+            username=bundle.obj.user.username,
+            avatar=avatar_url(
+                bundle.obj.user,
+                60))

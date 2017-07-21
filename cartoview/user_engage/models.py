@@ -2,6 +2,7 @@ from django.contrib.gis.db import models
 from django.conf import settings
 UserModel = settings.AUTH_USER_MODEL
 
+
 class BasicModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

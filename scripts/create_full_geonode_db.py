@@ -1,7 +1,11 @@
 import sys
 import os
 
-geonode_path = os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(__file__)), '../geonode'))
+geonode_path = os.path.abspath(
+    os.path.join(
+        os.path.dirname(
+            os.path.dirname(__file__)),
+        '../geonode'))
 sys.path.append(geonode_path)
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 
@@ -26,8 +30,9 @@ from geonode.tasks.deletion import delete_layer
 def get_random_user():
     """ Get a random user """
     users_count = Profile.objects.all().count()
-    random_index = randint(0, users_count -1)
+    random_index = randint(0, users_count - 1)
     return Profile.objects.all()[random_index]
+
 
 def assign_random_category(resource):
     """ Assign a random category to a resource """
@@ -35,11 +40,13 @@ def assign_random_category(resource):
     tc = TopicCategory.objects.all()[random_index]
     resource.category = tc
     resource.save()
-    
+
+
 def assign_keywords(resource):
     """ Assigns up to 5 keywords to resource """
     for i in range(0, randint(0, 5)):
         resource.keywords.add('keyword_%s' % randint(0, n_keywords))
+
 
 def assign_regions(resource):
     """ Assign up to 5 regions to resource """
@@ -48,12 +55,14 @@ def assign_regions(resource):
         region = Region.objects.all()[random_index]
         resource.regions.add(region)
 
+
 def create_users(n_users):
     """ Create n users in the database """
     for i in range(0, n_users):
         user = Profile()
         user.username = 'user_%s' % i
         user.save()
+
 
 def set_resource(resource):
     """ Assign poc, metadata_author, category and regions to resource """
@@ -62,27 +71,29 @@ def set_resource(resource):
     assign_random_category(resource)
     assign_regions(resource)
 
+
 def create_document(number):
     """ Creates a new document """
     file_list = glob.glob('%s*.jpg' % doc_path)
-    random_index = randint(0, len(file_list) -1)
+    random_index = randint(0, len(file_list) - 1)
     file_uri = file_list[random_index]
     title = 'Document N. %s' % number
     img_filename = '%s_img.jpg' % number
     doc = Document(title=title, owner=get_random_user())
     doc.save()
     with open(file_uri, 'r') as f:
-        img_file = File(f) 
+        img_file = File(f)
         doc.doc_file.save(img_filename, img_file, True)
     assign_keywords(doc)
     # regions
     resource = doc.get_self_resource()
     set_resource(resource)
 
+
 def create_layer(number):
     """ Creates a new layer """
     file_list = glob.glob('%s*.shp' % shp_path)
-    random_index = randint(0, len(file_list) -1)
+    random_index = randint(0, len(file_list) - 1)
     file_uri = file_list[random_index]
     layer = file_upload(file_uri)
     # keywords
@@ -90,6 +101,7 @@ def create_layer(number):
     # other stuff
     resource = layer.get_self_resource()
     set_resource(resource)
+
 
 # in doc_path set a path containing *.jpg files
 # in shp_path set a path containing *.shp files
@@ -104,7 +116,9 @@ n_docs = 500
 Tag.objects.all().delete()
 
 # 1. create users
-Profile.objects.exclude(username='admin').exclude(username='AnonymousUser').delete()
+Profile.objects.exclude(
+    username='admin').exclude(
+        username='AnonymousUser').delete()
 create_users(n_users)
 
 # 2. create documents
@@ -121,4 +135,3 @@ for layer in Layer.objects.all():
 for l in range(0, n_layers):
     t = Timer(lambda: create_layer(l))
     print 'Layer %s generated in: %s' % (l, t.timeit(number=1))
-

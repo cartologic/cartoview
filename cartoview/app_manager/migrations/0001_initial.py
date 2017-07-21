@@ -18,7 +18,8 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='App',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('id', models.AutoField(verbose_name='ID',
+                                        serialize=False, auto_created=True, primary_key=True)),
                 ('name', models.CharField(max_length=200, null=True, blank=True)),
                 ('title', models.CharField(max_length=200, null=True, blank=True)),
                 ('description', models.TextField(null=True, blank=True)),
@@ -27,23 +28,29 @@ class Migration(migrations.Migration):
                 ('author', models.CharField(max_length=200, null=True, blank=True)),
                 ('author_website', models.URLField(null=True, blank=True)),
                 ('license', models.CharField(max_length=200, null=True, blank=True)),
-                ('date_installed', models.DateTimeField(auto_now_add=True, verbose_name=b'Date Installed', null=True)),
+                ('date_installed', models.DateTimeField(
+                    auto_now_add=True, verbose_name=b'Date Installed', null=True)),
                 ('single_instance', models.BooleanField(default=False)),
                 ('owner_url', models.URLField(null=True, blank=True)),
                 ('help_url', models.URLField(null=True, blank=True)),
-                ('app_img_url', models.TextField(max_length=1000, null=True, blank=True)),
+                ('app_img_url', models.TextField(
+                    max_length=1000, null=True, blank=True)),
                 ('rating', models.IntegerField(default=0, null=True, blank=True)),
-                ('contact_name', models.CharField(max_length=200, null=True, blank=True)),
-                ('contact_email', models.EmailField(max_length=254, null=True, blank=True)),
+                ('contact_name', models.CharField(
+                    max_length=200, null=True, blank=True)),
+                ('contact_email', models.EmailField(
+                    max_length=254, null=True, blank=True)),
                 ('version', models.CharField(max_length=10)),
                 ('order', models.IntegerField(default=0, null=True)),
-                ('installed_by', models.ForeignKey(blank=True, to=settings.AUTH_USER_MODEL, null=True)),
+                ('installed_by', models.ForeignKey(
+                    blank=True, to=settings.AUTH_USER_MODEL, null=True)),
             ],
         ),
         migrations.CreateModel(
             name='AppInstance',
             fields=[
-                ('resourcebase_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='base.ResourceBase')),
+                ('resourcebase_ptr', models.OneToOneField(parent_link=True, auto_created=True,
+                                                          primary_key=True, serialize=False, to='base.ResourceBase')),
                 ('config', models.TextField(null=True, blank=True)),
                 ('app', models.ForeignKey(blank=True, to='app_manager.App', null=True)),
                 ('map', models.ForeignKey(blank=True, to='maps.Map', null=True)),
@@ -56,7 +63,8 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='AppStore',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('id', models.AutoField(verbose_name='ID',
+                                        serialize=False, auto_created=True, primary_key=True)),
                 ('name', models.CharField(max_length=256)),
                 ('url', models.URLField(verbose_name=b'App Store URL')),
                 ('is_default', models.BooleanField(default=False)),
@@ -65,14 +73,17 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='AppTag',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('name', models.CharField(max_length=200, unique=True, null=True, blank=True)),
+                ('id', models.AutoField(verbose_name='ID',
+                                        serialize=False, auto_created=True, primary_key=True)),
+                ('name', models.CharField(max_length=200,
+                                          unique=True, null=True, blank=True)),
             ],
         ),
         migrations.CreateModel(
             name='Logo',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('id', models.AutoField(verbose_name='ID',
+                                        serialize=False, auto_created=True, primary_key=True)),
                 ('logo', models.ImageField(upload_to=b'')),
                 ('site', models.OneToOneField(to='sites.Site')),
             ],

@@ -2,7 +2,7 @@ from django.conf import settings as geonode_settings
 from django.contrib.gis.db import models
 from django.core.urlresolvers import reverse
 from django.db.models import signals
-
+from django.contrib.sites.models import Site
 # Create your models here.
 from geonode.base.models import ResourceBase, resourcebase_post_save
 from geonode.security.models import remove_object_permissions
@@ -10,11 +10,13 @@ from geonode.maps.models import Map as GeonodeMap
 import json
 from .config import AppsConfig
 
+
 class AppTag(models.Model):
     name = models.CharField(max_length=200, unique=True, null=True, blank=True)
 
     def __unicode__(self):
         return self.name
+
 
 class AppStore(models.Model):
     """
@@ -41,9 +43,12 @@ class App(models.Model):
     author_website = models.URLField(null=True, blank=True)
     license = models.CharField(max_length=200, null=True, blank=True)
     tags = models.ManyToManyField(AppTag, blank=True)
-    date_installed = models.DateTimeField('Date Installed', auto_now_add=True, null=True)
-    installed_by = models.ForeignKey(geonode_settings.AUTH_USER_MODEL, null=True, blank=True)
-    single_instance = models.BooleanField(default=False, null=False, blank=False)
+    date_installed = models.DateTimeField(
+        'Date Installed', auto_now_add=True, null=True)
+    installed_by = models.ForeignKey(
+        geonode_settings.AUTH_USER_MODEL, null=True, blank=True)
+    single_instance = models.BooleanField(
+        default=False, null=False, blank=False)
     owner_url = models.URLField(null=True, blank=True)
     help_url = models.URLField(null=True, blank=True)
     app_img_url = models.TextField(max_length=1000, blank=True, null=True)
@@ -53,8 +58,10 @@ class App(models.Model):
     version = models.CharField(max_length=10)
     store = models.ForeignKey(AppStore, null=True)
     order = models.IntegerField(null=True, default=0)
+
     class meta:
-        ordering=['order']
+        ordering = ['order']
+
     def __unicode__(self):
         return self.title
 
@@ -62,14 +69,14 @@ class App(models.Model):
     def settings_url(self):
         try:
             return reverse("%s_settings" % self.name)
-        except:
+        except BaseException:
             return None
 
     @property
     def new_url(self):
         try:
             return reverse("%s.new" % self.name)
-        except:
+        except BaseException:
             return None
 
     _apps_config = None
@@ -110,7 +117,7 @@ class AppInstance(ResourceBase):
     def config_obj(self):
         try:
             return json.loads(self.config)
-        except:
+        except BaseException:
             return None
 
     @property
@@ -168,10 +175,11 @@ signals.pre_save.connect(pre_save_appinstance)
 
 signals.post_save.connect(appinstance_post_save)
 signals.pre_delete.connect(pre_delete_appinstance)
-from django.contrib.sites.models import Site
+
 
 class Logo(models.Model):
     site = models.OneToOneField(Site)
-    logo=models.ImageField()
+    logo = models.ImageField()
+
     def __unicode__(self):
-        return "Site {} Logo: {}".format(self.site.name,self.logo.url)
+        return "Site {} Logo: {}".format(self.site.name, self.logo.url)

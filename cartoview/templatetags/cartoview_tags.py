@@ -12,9 +12,10 @@ from geonode.layers.models import Layer
 from geonode.maps.models import Map
 from geonode.documents.models import Document
 from geonode.groups.models import GroupProfile
+from django.utils.safestring import mark_safe
+from geonode.groups.models import Group
 
 register = template.Library()
-from django.utils.safestring import mark_safe
 
 
 @register.filter()
@@ -50,9 +51,6 @@ def users_counts():
     return Profile.objects.exclude(username="AnonymousUser").count()
 
 
-from geonode.groups.models import Group
-
-
 @register.simple_tag
 def groups_counts():
     return Group.objects.exclude(name="anonymous").count()
@@ -80,20 +78,24 @@ def facets(context):
             documents = documents.filter(id__in=authorized)
 
         counts = documents.values('doc_type').annotate(count=Count('doc_type'))
-        facets = dict([(count['doc_type'], count['count']) for count in counts])
+        facets = dict([(count['doc_type'], count['count'])
+                       for count in counts])
 
         return facets
 
     elif facet_type == 'appinstances':
-        appinstances = AppInstance.objects.filter(title__icontains=title_filter)
+        appinstances = AppInstance.objects.filter(
+            title__icontains=title_filter)
         if settings.RESOURCE_PUBLISHING:
             appinstances = appinstances.filter(is_published=True)
 
         if not settings.SKIP_PERMS_FILTER:
             appinstances = appinstances.filter(id__in=authorized)
 
-        counts = appinstances.values('app__title').annotate(count=Count('app__name'))
-        facets = dict([(count['app__title'], count['count']) for count in counts])
+        counts = appinstances.values(
+            'app__title').annotate(count=Count('app__name'))
+        facets = dict([(count['app__title'], count['count'])
+                       for count in counts])
         return facets
 
     else:
@@ -107,7 +109,8 @@ def facets(context):
             layers = layers.filter(id__in=authorized)
 
         counts = layers.values('storeType').annotate(count=Count('storeType'))
-        count_dict = dict([(count['storeType'], count['count']) for count in counts])
+        count_dict = dict([(count['storeType'], count['count'])
+                           for count in counts])
 
         facets = {
             'raster': count_dict.get('coverageStore', 0),
@@ -136,6 +139,6 @@ def facets(context):
                 access="private").count()
 
             facets['layer'] = facets['raster'] + \
-                              facets['vector'] + facets['remote']
+                facets['vector'] + facets['remote']
 
     return facets

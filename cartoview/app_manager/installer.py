@@ -1,5 +1,4 @@
 import os
-import re
 import shutil
 import zipfile
 import tempfile
@@ -8,12 +7,7 @@ import importlib
 import pkg_resources
 from StringIO import StringIO
 from .models import AppStore, App, AppTag
-from django.db.models import Max, Min, F
-from collections import OrderedDict
-from django.apps import apps
 from django.conf import settings
-from django.core import management
-from .config import App as AppConfig, AppsConfig
 
 reload(pkg_resources)
 
@@ -38,10 +32,12 @@ class AppInstaller:
         else:
             self.store = AppStore.objects.get(id=store_id)
         self.info = self._request_rest_data("app/?name=", name)['objects'][0]
-        if version is None or version == 'latest' or self.info["latest_version"]["version"] == version:
+        if version is None or version == 'latest' or self.info[
+                "latest_version"]["version"] == version:
             self.version = self.info["latest_version"]
         else:
-            data = self._request_rest_data("appversion/?app__name=", name, "&version=", version)
+            data = self._request_rest_data(
+                "appversion/?app__name=", name, "&version=", version)
             self.version = data['objects'][0]
 
     def _request_rest_data(self, *args):
@@ -49,9 +45,10 @@ class AppInstaller:
         get app information form app store rest url
         """
         try:
-            q = requests.get(self.store.url + ''.join([str(item) for item in args]))
+            q = requests.get(self.store.url +
+                             ''.join([str(item) for item in args]))
             return q.json()
-        except:
+        except BaseException:
             return None
 
     def _download_app(self):
@@ -64,7 +61,8 @@ class AppInstaller:
             extract_to = tempfile.mkdtemp(dir=temp_dir)
             zip_ref.extractall(extract_to)
             if self.upgrade and os.path.exists(self.app_dir):
-                # move old version to temporary dir so that we can restore in case of failure
+                # move old version to temporary dir so that we can restore in
+                # case of failure
                 old_version_temp_dir = tempfile.mkdtemp(dir=temp_dir)
                 shutil.move(self.app_dir, old_version_temp_dir)
             self.old_app_temp_dir = os.path.join(extract_to, self.name)
@@ -103,7 +101,7 @@ class AppInstaller:
                 tag = AppTag(name=tag_name)
                 tag.save()
                 app.tags.add(tag)
-            except:
+            except BaseException:
                 pass
 
         return app
@@ -118,7 +116,8 @@ class AppInstaller:
                 raise AppAlreadyInstalledException()
         installedApps = []
         for name, version in self.version["dependencies"].items():
-            # use try except because AppInstaller.__init__ will handle upgrade if version not match
+            # use try except because AppInstaller.__init__ will handle upgrade
+            # if version not match
             try:
                 app_installer = AppInstaller(name, self.store.id, version)
                 installedApps += app_installer.install(restart=False)
@@ -180,7 +179,18 @@ def finalize_setup():
             working_dir = os.path.dirname(install_app_batch)
             log_file = os.path.join(working_dir, "install_app_log.txt")
             with open(log_file, 'a') as log:
-                p = Popen(install_app_batch, stdout=log, stderr=log, shell=True, cwd=working_dir)
+                # p = Popen(
+                #     install_app_batch,
+                #     stdout=log,
+                #     stderr=log,
+                #     shell=True,
+                #     cwd=working_dir)
+                Popen(
+                    install_app_batch,
+                    stdout=log,
+                    stderr=log,
+                    shell=True,
+                    cwd=working_dir)
                 # stdout, stderr = p.communicate()
 
         from threading import Timer

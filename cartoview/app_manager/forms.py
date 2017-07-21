@@ -1,5 +1,4 @@
 # TODO: Review this file. Legacy??!
-from django import forms
 from modeltranslation.forms import TranslationModelForm
 from geonode.base.forms import ResourceBaseForm
 
@@ -7,7 +6,7 @@ __author__ = 'Amr'
 
 from django.forms import ModelForm, FileField
 from models import *
-from django.utils.translation import ugettext, ugettext_lazy as _
+from django.utils.translation import ugettext_lazy as _
 
 
 class AppInstallerForm(ModelForm):

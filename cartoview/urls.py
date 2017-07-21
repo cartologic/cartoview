@@ -10,7 +10,8 @@ api.register(AppResource())
 
 urlpatterns = patterns('',
                        url(r'^/?$', cartoview_index, name='home'),
-                       url(r'^check-version/$', check_version, name='check_version'),
+                       url(r'^check-version/$', check_version,
+                           name='check_version'),
                        url(r'^settings/api$', settings_api, name='settings-api'),
                        url(r'', include(api.urls)),
                        (r'^apps/', include('cartoview.app_manager.urls')),

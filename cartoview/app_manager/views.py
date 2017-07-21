@@ -38,6 +38,8 @@ if not os.path.exists(temp_dir):
     os.makedirs(temp_dir)
 
 # TODO: Review the following function Legacy?!!!
+
+
 def save_thumbnail(filename, image):
     thumb_folder = 'thumbs'
     upload_path = os.path.join(settings.MEDIA_ROOT, thumb_folder)
@@ -48,14 +50,24 @@ def save_thumbnail(filename, image):
         thumbnail = File(f)
         thumbnail.write(image)
 
-    url_path = os.path.join(settings.MEDIA_URL, thumb_folder, filename).replace('\\', '/')
+    url_path = os.path.join(
+        settings.MEDIA_URL,
+        thumb_folder,
+        filename).replace(
+        '\\',
+        '/')
     url = urljoin(settings.SITEURL, url_path)
 
     return url
 
 
 def get_apps_names():
-    return [n for n in os.listdir(settings.APPS_DIR) if os.path.isdir(os.path.join(settings.APPS_DIR, n))]
+    return [
+        n for n in os.listdir(
+            settings.APPS_DIR) if os.path.isdir(
+            os.path.join(
+                settings.APPS_DIR,
+                n))]
 
 
 def installed_apps():
@@ -67,8 +79,6 @@ def installed_apps():
 @staff_member_required
 def manage_apps(request):
     apps = App.objects.all()
-    site_apps = {}
-
     context = {
         'apps': apps,
         'site_apps': get_apps_names(),
@@ -111,12 +121,15 @@ def install_app(request, store_id, app_name, version):
     }
     try:
         installer = AppInstaller(app_name, store_id, version)
-        installedApps = installer.install()
+        # installedApps = installer.install()
+        installer.install()
         response_data["success"] = True
     except Exception as ex:
         response_data["messages"].append({"type": "error", "msg": ex.message})
 
-    return HttpResponse(json.dumps(response_data), content_type="application/json")
+    return HttpResponse(
+        json.dumps(response_data),
+        content_type="application/json")
 
 
 @staff_member_required
@@ -132,31 +145,41 @@ def uninstall_app(request, store_id, app_name):
         response_data["success"] = True
     except Exception as ex:
         response_data["errors"].append(ex.message)
-    return HttpResponse(json.dumps(response_data), content_type="application/json")
+    return HttpResponse(
+        json.dumps(response_data),
+        content_type="application/json")
 
 
 @login_required
 def move_up(request, app_id):
     app = App.objects.get(id=app_id)
-    prev_app = App.objects.get(order=App.objects.filter(order__lt=app.order).aggregate(Max('order'))['order__max'])
+    prev_app = App.objects.get(
+        order=App.objects.filter(
+            order__lt=app.order).aggregate(
+            Max('order'))['order__max'])
     order = app.order
     app.order = prev_app.order
     prev_app.order = order
     app.save()
     prev_app.save()
-    return HttpResponse(json.dumps({"success": True}), content_type="application/json")
+    return HttpResponse(json.dumps(
+        {"success": True}), content_type="application/json")
 
 
 @login_required
 def move_down(request, app_id):
     app = App.objects.get(id=app_id)
-    next_app = App.objects.get(order=App.objects.filter(order__gt=app.order).aggregate(Min('order'))['order__min'])
+    next_app = App.objects.get(
+        order=App.objects.filter(
+            order__gt=app.order).aggregate(
+            Min('order'))['order__min'])
     order = app.order
     app.order = next_app.order
     next_app.order = order
     app.save()
     next_app.save()
-    return HttpResponse(json.dumps({"success": True}), content_type="application/json")
+    return HttpResponse(json.dumps(
+        {"success": True}), content_type="application/json")
 
 
 def save_app_orders(request):
@@ -180,15 +203,21 @@ def save_app_orders(request):
                     app.in_menu = False
                     app.save()
                 ajax_vars = {'success': True}
-            except:
+            except BaseException:
                 ajax_vars = {'success': False}
-                return HttpResponse(json.dumps(ajax_vars), content_type="application/json")
+                return HttpResponse(
+                    json.dumps(ajax_vars),
+                    content_type="application/json")
 
     return HttpResponse(json.dumps(ajax_vars), content_type="application/json")
 
 
-def _resolve_appinstance(request, appinstanceid, permission='base.change_resourcebase',
-                         msg=_PERMISSION_MSG_GENERIC, **kwargs):
+def _resolve_appinstance(
+        request,
+        appinstanceid,
+        permission='base.change_resourcebase',
+        msg=_PERMISSION_MSG_GENERIC,
+        **kwargs):
     """
     Resolve the document by the provided primary key and check the optional permission.
     """
@@ -231,9 +260,12 @@ def appinstance_detail(request, appinstanceid):
 
     else:
         if request.user != appinstance.owner and not request.user.is_superuser:
-            AppInstance.objects.filter(id=appinstance.id).update(popular_count=F('popular_count') + 1)
+            AppInstance.objects.filter(
+                id=appinstance.id).update(
+                popular_count=F('popular_count') + 1)
         # appinstance_links = appinstance.link_set.filter(link_type__in=['appinstance_view', 'appinstance_edit'])
-        set_thumbnail_link = appinstance.link_set.filter(link_type='appinstance_thumbnail')
+        set_thumbnail_link = appinstance.link_set.filter(
+            link_type='appinstance_thumbnail')
         context_dict = {
             'perms_list': get_perms(request.user, appinstance.get_self_resource()),
             'permissions_json': _perms_info_json(appinstance),
@@ -245,7 +277,8 @@ def appinstance_detail(request, appinstanceid):
         }
 
         if geonode_settings.SOCIAL_ORIGINS:
-            context_dict["social_links"] = build_social_links(request, appinstance)
+            context_dict["social_links"] = build_social_links(
+                request, appinstance)
 
         if getattr(geonode_settings, 'EXIF_ENABLED', False):
             try:
@@ -253,7 +286,7 @@ def appinstance_detail(request, appinstanceid):
                 exif = exif_extract_dict(appinstance)
                 if exif:
                     context_dict['exif_data'] = exif
-            except:
+            except BaseException:
                 print "Exif extraction failed."
 
         return render_to_response(
@@ -305,13 +338,11 @@ def appinstance_metadata(
                 request.POST,
                 instance=appinstance,
                 prefix="resource")
-            category_form = CategoryForm(
-                request.POST,
-                prefix="category_choice_field",
-                initial=int(
-                    request.POST["category_choice_field"]) if "category_choice_field" in request.POST else None)
+            category_form = CategoryForm(request.POST, prefix="category_choice_field", initial=int(
+                request.POST["category_choice_field"]) if "category_choice_field" in request.POST else None)
         else:
-            appinstance_form = AppInstanceEditForm(instance=appinstance, prefix="resource")
+            appinstance_form = AppInstanceEditForm(
+                instance=appinstance, prefix="resource")
             category_form = CategoryForm(
                 prefix="category_choice_field",
                 initial=topic_category.id if topic_category else None)
@@ -335,8 +366,10 @@ def appinstance_metadata(
                 if poc_form.is_valid():
                     if len(poc_form.cleaned_data['profile']) == 0:
                         # FIXME use form.add_error in django > 1.7
-                        errors = poc_form._errors.setdefault('profile', ErrorList())
-                        errors.append(_('You must set a point of contact for this resource'))
+                        errors = poc_form._errors.setdefault(
+                            'profile', ErrorList())
+                        errors.append(
+                            _('You must set a point of contact for this resource'))
                         poc = None
                 if poc_form.has_changed and poc_form.is_valid():
                     new_poc = poc_form.save()
@@ -350,8 +383,10 @@ def appinstance_metadata(
                 if author_form.is_valid():
                     if len(author_form.cleaned_data['profile']) == 0:
                         # FIXME use form.add_error in django > 1.7
-                        errors = author_form._errors.setdefault('profile', ErrorList())
-                        errors.append(_('You must set an author for this resource'))
+                        errors = author_form._errors.setdefault(
+                            'profile', ErrorList())
+                        errors.append(
+                            _('You must set an author for this resource'))
                         metadata_author = None
                 if author_form.has_changed and author_form.is_valid():
                     new_author = author_form.save()
@@ -361,7 +396,9 @@ def appinstance_metadata(
                 the_appinstance.poc = new_poc
                 the_appinstance.metadata_author = new_author
                 the_appinstance.keywords.add(*new_keywords)
-                AppInstance.objects.filter(id=the_appinstance.id).update(category=new_category)
+                AppInstance.objects.filter(
+                    id=the_appinstance.id).update(
+                    category=new_category)
 
                 return HttpResponseRedirect(
                     reverse(
@@ -376,7 +413,9 @@ def appinstance_metadata(
                 if new_author is None:
                     the_appinstance.metadata_author = appinstance.owner
                 the_appinstance.keywords.add(*new_keywords)
-                AppInstance.objects.filter(id=the_appinstance.id).update(category=new_category)
+                AppInstance.objects.filter(
+                    id=the_appinstance.id).update(
+                    category=new_category)
 
                 return HttpResponseRedirect(
                     reverse(

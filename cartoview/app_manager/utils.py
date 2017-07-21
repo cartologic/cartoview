@@ -35,16 +35,17 @@ def settings_api(request):
         if hasattr(settings, attr):
             result[attr] = getattr(settings, attr)
         else:
-            return HttpResponse("{} Not Found in settings".format(attr), status=404)
+            return HttpResponse(
+                "{} Not Found in settings".format(attr),
+                status=404)
     return JsonResponse(result)
-
 
 
 @require_http_methods(["GET", ])
 def map_layers(request):
     map_id = request.GET.get('id', None)
     if map_id:
-        resource=LayerResource()
+        resource = LayerResource()
         serializer = Serializer()
         result = {}
         map_obj = get_object_or_404(Map, id=map_id)
@@ -61,6 +62,6 @@ def map_layers(request):
             dehydrated_obj = resource.full_dehydrate(bundle)
             result['objects'].append(dehydrated_obj)
         data = serializer.serialize(result)
-        return HttpResponse(data,content_type='application/json')
+        return HttpResponse(data, content_type='application/json')
     else:
         return HttpResponse("not enough pramters", status=400)
