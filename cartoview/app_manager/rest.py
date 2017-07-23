@@ -253,7 +253,7 @@ def get_item_data(item):
         urls["view"] = reverse(
             '%s.view' % item.appinstance.app.name,
             args=[str(item.appinstance.id)])
-        if item.appinstance.map and item.thumbnail_url is None:
+        if item.appinstance.map and item.thumbnail_url == "":
             item_data["thumbnail"] = item.appinstance.map.thumbnail_url
         item_data["type"] = "app"
         if item.appinstance.app is not None:
