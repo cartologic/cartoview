@@ -208,7 +208,7 @@
         function query_api(data) {
             if (angular.isString(data.app__title)) {
                 $scope.appTitle = data.app__title;
-                $http.get(APPS_ENDPOINT,{params:{title:data.app__title}}).success(function (res) {
+                $http.get(APPS_ENDPOINT, {params: {title: data.app__title}}).success(function (res) {
                     $scope.app_name = res.objects[0].name;
                 })
             }
@@ -217,7 +217,10 @@
             }
             $http.get(Configs.url, {params: data || {}}).success(function (data) {
 
-                $scope.results = data.objects;
+                $scope.results = data.objects.sort(function (x, y) {
+                    return (x.featured === y.featured) ? 0 : x.featured ? -1 : 1;
+                });
+                console.log($scope.results)
                 $scope.total_counts = data.meta.total_count;
                 $scope.$root.query_data = data;
                 if (HAYSTACK_SEARCH) {
