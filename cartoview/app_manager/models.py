@@ -171,17 +171,7 @@ def appinstance_post_save(instance, *args, **kwargs):
     resourcebase_post_save(instance, args, kwargs)
 
 
-def pre_save_app(instance, sender, **kwargs):
-    if not isinstance(instance, App):
-        return
-    if instance.order is None or instance.order == 0:
-        apps=App.objects.all()
-        max_value=apps.aggregate(Max('order'))['order__max'] if apps.exists() else 0
-        instance.order=max_value+1
-
-
 signals.pre_save.connect(pre_save_appinstance)
-signals.pre_save.connect(pre_save_app)
 # signals.post_save.connect(create_thumbnail)
 
 signals.post_save.connect(appinstance_post_save)

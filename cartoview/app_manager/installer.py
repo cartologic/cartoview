@@ -83,9 +83,11 @@ class AppInstaller:
         if created:
             if app.order is None or app.order == 0:
                 apps = App.objects.all()
-                max_value = apps.aggregate(Max('order'))['order__max'] if apps.exists() else 0
+                max_value = apps.aggregate(
+                    Max('order'))['order__max'] if apps.exists() else 0
                 app.order = max_value + 1
-            app_config = AppConfig(name=self.name, active=True,order=app.order)
+            app_config = AppConfig(
+                name=self.name, active=True, order=app.order)
             app.apps_config.append(app_config)
             app.apps_config.save()
             app.order = app_config.order

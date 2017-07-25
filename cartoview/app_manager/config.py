@@ -100,7 +100,6 @@ class AppsConfig(Collection):
 
     def append(self, item):
         if item.order is None:
-            print item.name
             item.order = 0
         else:
             item.order = int(item.order)

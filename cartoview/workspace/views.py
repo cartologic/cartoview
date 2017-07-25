@@ -26,7 +26,7 @@ def workspace(request):
         context={
             'my_apps': apps,
             'my_layers': layers,
-            'created_apps':created_apps,
+            'created_apps': created_apps,
             'my_maps': maps,
             'maps_count': maps_count,
             'layers_count': layers_count,
