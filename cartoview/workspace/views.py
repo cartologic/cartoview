@@ -11,6 +11,7 @@ from geonode.maps.models import Map
 def workspace(request):
     owner = request.user
     apps = AppInstance.objects.filter(owner=owner)
+    created_apps = AppInstance.objects.all()
     layers = Layer.objects.filter(owner=owner)
     maps = Map.objects.filter(owner=owner)
     maps_count = Map.objects.all().count()
@@ -25,6 +26,7 @@ def workspace(request):
         context={
             'my_apps': apps,
             'my_layers': layers,
+            'created_apps':created_apps,
             'my_maps': maps,
             'maps_count': maps_count,
             'layers_count': layers_count,
