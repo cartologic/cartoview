@@ -61,7 +61,7 @@ def map_layers(request):
         result['meta']['total_count'] = len(layers)
         result['objects'] = []
         for layer in layers:
-            bundle = resource.build_bundle(obj=layer)
+            bundle = resource.build_bundle(obj=layer,request=request)
             dehydrated_obj = resource.full_dehydrate(bundle)
             result['objects'].append(dehydrated_obj)
         data = serializer.serialize(result)
