@@ -6,6 +6,9 @@ import requests
 import importlib
 import pkg_resources
 from StringIO import StringIO
+
+from django.db.models import Max
+
 from .models import AppStore, App, AppTag
 from django.conf import settings
 from .config import App as AppConfig
@@ -78,7 +81,11 @@ class AppInstaller:
         info = installer.info
         app, created = App.objects.get_or_create(name=self.name)
         if created:
-            app_config = AppConfig(name=self.name, active=True)
+            if app.order is None or app.order == 0:
+                apps = App.objects.all()
+                max_value = apps.aggregate(Max('order'))['order__max'] if apps.exists() else 0
+                app.order = max_value + 1
+            app_config = AppConfig(name=self.name, active=True,order=app.order)
             app.apps_config.append(app_config)
             app.apps_config.save()
             app.order = app_config.order
@@ -199,3 +206,4 @@ def finalize_setup():
         from threading import Timer
         timer = Timer(0.1, _finalize_setup)
         timer.start()
+# TODO: add function to fix ordering in cartoview (old versions)

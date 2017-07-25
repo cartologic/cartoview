@@ -9,6 +9,7 @@ from geonode.security.models import remove_object_permissions
 from geonode.maps.models import Map as GeonodeMap
 import json
 from .config import AppsConfig
+from django.db.models import Max
 
 
 class AppTag(models.Model):
@@ -31,7 +32,6 @@ class AppStore(models.Model):
 
 
 class App(models.Model):
-
     def only_filename(instance, filename):
         return filename
 
@@ -171,7 +171,17 @@ def appinstance_post_save(instance, *args, **kwargs):
     resourcebase_post_save(instance, args, kwargs)
 
 
+def pre_save_app(instance, sender, **kwargs):
+    if not isinstance(instance, App):
+        return
+    if instance.order is None or instance.order == 0:
+        apps=App.objects.all()
+        max_value=apps.aggregate(Max('order'))['order__max'] if apps.exists() else 0
+        instance.order=max_value+1
+
+
 signals.pre_save.connect(pre_save_appinstance)
+signals.pre_save.connect(pre_save_app)
 # signals.post_save.connect(create_thumbnail)
 
 signals.post_save.connect(appinstance_post_save)

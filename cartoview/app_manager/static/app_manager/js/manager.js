@@ -76,6 +76,7 @@
         var service = this;
         // get the apps required to install this app
         var _getDependencies = function(app, appsHash, dependencies){
+
             angular.forEach(app.latest_version.dependencies, function(version, name){
                 if(appsHash[name] && appsHash[name].installedApp){
 
