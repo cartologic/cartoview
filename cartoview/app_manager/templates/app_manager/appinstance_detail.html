@@ -31,9 +31,20 @@
 
 <div class="row">
   <div class="col-md-8">
+      <div class="row" ng-app="app_details">
+        <div class="col-xs-12 col-sm-12 col-md-6 col-md-offset-3">
+          {% if resource.thumbnail_url != "" %}
+          <img class="img-responsive" style="min-height:200px;width:100%" src={{ resource.thumbnail_url }}  fallback-src="{{STATIC_URL}}{{ resource.app.name }}/logo.png">
+          {% else %}
+          <img class="img-responsive" style="min-height:200px;width:100%" src={{ resource.map.thumbnail_url }}  fallback-src="{{STATIC_URL}}{{ resource.app.name }}/logo.png">
+          {% endif %}
+
+
+        </div>
+      </div>
     {% if "download_resourcebase" in perms_list %}
     {%  endif %}
-       
+
     <div class="documents-actions">
       {% include "_actions.html" %}
     </div>
@@ -44,11 +55,11 @@
       {% block social_links %}
         {% include "social_links.html" %}
       {% endblock %}
-        
+
       <article id="comments" class="tab-pane">
       {% include "_comments.html" %}
       </article>
-        
+
       <article id="rate" class="tab-pane">
         <!-- TODO: Move this to a reusable template snippet -->
         {% if request.user.is_authenticated %}
@@ -166,7 +177,10 @@
   js = d.createElement(s); js.id = id;
   js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
   fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));</script>
+}(document, 'script', 'facebook-jssdk'));
+
+</script>
+
 {% endif %}
     {% if request.user.is_authenticated %}
         {% user_rating_js request.user resource "appinstance" %}
@@ -185,4 +199,7 @@
         {% endif %}
     </script>
     {% include "_permissions_form_js.html" %}
+    <script type="text/javascript">
+      var detailsApp=angular.module('app_details', ['dcbImgFallback']);
+    </script>
 {% endblock extra_script %}

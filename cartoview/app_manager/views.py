@@ -1,29 +1,30 @@
-import os
 import importlib
+import json
+import os
 from urlparse import urljoin
-from django.contrib.auth.decorators import login_required
-from django.contrib.admin.views.decorators import staff_member_required
-from django.views.decorators.http import require_POST
-from django.core.exceptions import PermissionDenied
-from django.db.models import Max, Min, F
-from django.forms.util import ErrorList
-from django.http import HttpResponse, Http404, HttpResponseRedirect
-from django.shortcuts import render, render_to_response
-from guardian.shortcuts import get_perms
+
 from cartoview.app_manager.forms import AppInstanceEditForm
+from django.conf import settings
+from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib.auth.decorators import login_required
+from django.core.exceptions import PermissionDenied
+from django.core.files import File
+from django.core.urlresolvers import reverse
+from django.db.models import F, Max, Min
+from django.forms.util import ErrorList
+from django.http import Http404, HttpResponse, HttpResponseRedirect
+from django.shortcuts import render, render_to_response
+from django.template import RequestContext, loader
+from django.utils.translation import ugettext as _
+from django.views.decorators.http import require_POST
 from geonode.base.forms import CategoryForm
 from geonode.base.models import TopicCategory
 from geonode.people.forms import ProfileForm
 from geonode.security.views import _perms_info_json
-from django.core.urlresolvers import reverse
+from geonode.utils import build_social_links, resolve_object
+from guardian.shortcuts import get_perms
 from models import App, AppInstance
-from django.conf import settings
 
-import json
-from geonode.utils import resolve_object, build_social_links
-from django.utils.translation import ugettext as _
-from django.template import RequestContext, loader
-from django.core.files import File
 from .installer import AppInstaller
 
 _PERMISSION_MSG_DELETE = _("You are not permitted to delete this document")
