@@ -17,6 +17,8 @@
 #
 #########################################################################
 
+import fileinput
+import glob
 import os
 import re
 import shutil
@@ -25,13 +27,10 @@ import time
 import urllib
 import urllib2
 import zipfile
-import glob
-import fileinput
-from setuptools.command import easy_install
 
-from paver.easy import task, options, cmdopts, needs
-from paver.easy import path, sh, info, call_task
-from paver.easy import BuildFailure
+from paver.easy import (BuildFailure, call_task, cmdopts, info, needs, options,
+                        path, sh, task)
+from setuptools.command import easy_install
 
 try:
     from cartoview.settings import GEONODE_APPS

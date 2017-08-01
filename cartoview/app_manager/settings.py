@@ -1,11 +1,17 @@
+import importlib
+import logging
 import os
 import sys
-import importlib
+from sys import stdout
+
 from cartoview.app_manager.config import AppsConfig
-import logging
 
+formatter = logging.Formatter(
+    '[%(asctime)s] p%(process)s  { %(name)s %(pathname)s:%(lineno)d} %(levelname)s - %(message)s', '%m-%d %H:%M:%S')
 logger = logging.getLogger(__name__)
-
+handler = logging.StreamHandler(stdout)
+handler.setFormatter(formatter)
+logger.addHandler(handler)
 # BASE_DIR must be defined in project.settings
 APPS_DIR = os.path.abspath(os.path.join(BASE_DIR, "apps"))
 if not os.path.exists(APPS_DIR):

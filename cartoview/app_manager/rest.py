@@ -1,26 +1,29 @@
 import json
-from cartoview.app_manager.models import AppInstance, App, AppStore
-from geonode.api.api import ProfileResource
-from geonode.api.resourcebase_api import CommonMetaApi
-from geonode.people.models import Profile
-from .resources import FileUploadResource
-from tastypie.resources import ModelResource
-from tastypie import fields
-from geonode.maps.models import Map as GeonodeMap, MapLayer as GeonodeMapLayer
-from geonode.layers.models import Layer, Attribute
-from tastypie.constants import ALL_WITH_RELATIONS, ALL
-from django.core.urlresolvers import reverse
-from tastypie.authorization import Authorization
-from taggit.models import Tag
-from tastypie.http import HttpGone
-from django.views.decorators.http import require_http_methods
+
+from cartoview.app_manager.models import App, AppInstance, AppStore
 from django.conf import settings
-from tastypie.utils import trailing_slash
 from django.conf.urls import url
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.urlresolvers import reverse
 from django.http import HttpResponse
-from guardian.shortcuts import get_objects_for_user
+from django.views.decorators.http import require_http_methods
+from geonode.api.api import ProfileResource
+from geonode.api.resourcebase_api import CommonMetaApi
 from geonode.base.models import ResourceBase
+from geonode.layers.models import Attribute, Layer
+from geonode.maps.models import Map as GeonodeMap
+from geonode.maps.models import MapLayer as GeonodeMapLayer
+from geonode.people.models import Profile
+from guardian.shortcuts import get_objects_for_user
+from taggit.models import Tag
+from tastypie import fields
+from tastypie.authorization import Authorization
+from tastypie.constants import ALL, ALL_WITH_RELATIONS
+from tastypie.http import HttpGone
+from tastypie.resources import ModelResource
+from tastypie.utils import trailing_slash
+
+from .resources import FileUploadResource
 
 
 class GeonodeMapLayerResource(ModelResource):
@@ -199,12 +202,9 @@ class AppInstanceResource(ModelResource):
         """
         A ORM-specific implementation of ``obj_create``.
         """
-        print "?>>>>>", bundle
         bundle.obj = AppInstance()
         bundle.obj.owner = bundle.request.user
-        print bundle.data['appName']
         app_name = bundle.data['appName']
-        print app_name
         bundle.obj.app = App.objects.get(name=app_name)
         for key, value in kwargs.items():
             setattr(bundle.obj, key, value)
