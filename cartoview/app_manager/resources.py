@@ -1,10 +1,10 @@
-from tastypie.resources import Resource, ModelResource
-from django.shortcuts import render
-from django.forms.models import modelform_factory
+from django.conf.urls import url
 from django.db import models
+from django.forms.models import modelform_factory
+from django.shortcuts import render
 from serializers import HTMLSerializer, MultipartFormSerializer
 from tastypie.authorization import Authorization
-from django.conf.urls import url
+from tastypie.resources import ModelResource, Resource
 
 
 class BaseResource(Resource):

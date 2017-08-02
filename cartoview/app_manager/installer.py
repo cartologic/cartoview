@@ -1,19 +1,29 @@
+import importlib
+import logging
 import os
 import shutil
-import zipfile
 import tempfile
-import requests
-import importlib
-import pkg_resources
+import zipfile
 from StringIO import StringIO
+from sys import stdout
 
+import pkg_resources
+import requests
+
+from django.conf import settings
 from django.db.models import Max
 
-from .models import AppStore, App, AppTag
-from django.conf import settings
 from .config import App as AppConfig
-reload(pkg_resources)
+from .models import App, AppStore, AppTag
 
+reload(pkg_resources)
+formatter = logging.Formatter(
+    '[%(asctime)s] p%(process)s  { %(name)s %(pathname)s:%(lineno)d} \
+                            %(levelname)s - %(message)s', '%m-%d %H:%M:%S')
+logger = logging.getLogger(__name__)
+handler = logging.StreamHandler(stdout)
+handler.setFormatter(formatter)
+logger.addHandler(handler)
 current_folder = os.path.abspath(os.path.dirname(__file__))
 temp_dir = os.path.join(current_folder, 'temp')
 
@@ -51,7 +61,8 @@ class AppInstaller:
             q = requests.get(self.store.url + ''.join(
                 [str(item) for item in args]))
             return q.json()
-        except BaseException:
+        except BaseException as e:
+            logger.error(e.message)
             return None
 
     def _download_app(self):
@@ -110,8 +121,8 @@ class AppInstaller:
                 tag = AppTag(name=tag_name)
                 tag.save()
                 app.tags.add(tag)
-            except BaseException:
-                pass
+            except BaseException as e:
+                logger.error(e.message)
 
         return app
 
@@ -130,8 +141,8 @@ class AppInstaller:
             try:
                 app_installer = AppInstaller(name, self.store.id, version)
                 installedApps += app_installer.install(restart=False)
-            except AppAlreadyInstalledException:
-                pass
+            except AppAlreadyInstalledException as e:
+                logger.error(e.message)
         self._download_app()
         reload(pkg_resources)
         try:
@@ -141,7 +152,7 @@ class AppInstaller:
             if restart:
                 finalize_setup()
         except Exception as ex:
-            print ex.message
+            logger.error(ex.message)
         return installedApps
 
     def uninstall(self, restart=True):

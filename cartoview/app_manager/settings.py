@@ -7,7 +7,8 @@ from sys import stdout
 from cartoview.app_manager.config import AppsConfig
 
 formatter = logging.Formatter(
-    '[%(asctime)s] p%(process)s  { %(name)s %(pathname)s:%(lineno)d} %(levelname)s - %(message)s', '%m-%d %H:%M:%S')
+    '[%(asctime)s] p%(process)s  { %(name)s %(pathname)s:%(lineno)d} \
+                            %(levelname)s - %(message)s', '%m-%d %H:%M:%S')
 logger = logging.getLogger(__name__)
 handler = logging.StreamHandler(stdout)
 handler.setFormatter(formatter)

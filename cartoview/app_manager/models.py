@@ -1,15 +1,26 @@
+import json
+import logging
+from sys import stdout
+
 from django.conf import settings as geonode_settings
 from django.contrib.gis.db import models
+from django.contrib.sites.models import Site
 from django.core.urlresolvers import reverse
 from django.db.models import signals
-from django.contrib.sites.models import Site
 # Create your models here.
 from geonode.base.models import ResourceBase, resourcebase_post_save
-from geonode.security.models import remove_object_permissions
 from geonode.maps.models import Map as GeonodeMap
-import json
+from geonode.security.models import remove_object_permissions
+
 from .config import AppsConfig
-from django.db.models import Max
+
+formatter = logging.Formatter(
+    '[%(asctime)s] p%(process)s  { %(name)s %(pathname)s:%(lineno)d} \
+                            %(levelname)s - %(message)s', '%m-%d %H:%M:%S')
+logger = logging.getLogger(__name__)
+handler = logging.StreamHandler(stdout)
+handler.setFormatter(formatter)
+logger.addHandler(handler)
 
 
 class AppTag(models.Model):
@@ -70,14 +81,16 @@ class App(models.Model):
     def settings_url(self):
         try:
             return reverse("%s_settings" % self.name)
-        except BaseException:
+        except BaseException as e:
+            logger.error(e.message)
             return None
 
     @property
     def new_url(self):
         try:
             return reverse("%s.new" % self.name)
-        except BaseException:
+        except BaseException as e:
+            logger.error(e.message)
             return None
 
     _apps_config = None
@@ -118,7 +131,8 @@ class AppInstance(ResourceBase):
     def config_obj(self):
         try:
             return json.loads(self.config)
-        except BaseException:
+        except BaseException as e:
+            logger.error(e.message)
             return None
 
     @property

@@ -1,6 +1,8 @@
 import importlib
 import json
+import logging
 import os
+from sys import stdout
 from urlparse import urljoin
 
 from cartoview.app_manager.forms import AppInstanceEditForm
@@ -27,6 +29,13 @@ from models import App, AppInstance
 
 from .installer import AppInstaller
 
+formatter = logging.Formatter(
+    '[%(asctime)s] p%(process)s  { %(name)s %(pathname)s:%(lineno)d} \
+                              %(levelname)s - %(message)s', '%m-%d %H:%M:%S')
+logger = logging.getLogger(__name__)
+handler = logging.StreamHandler(stdout)
+handler.setFormatter(formatter)
+logger.addHandler(handler)
 _PERMISSION_MSG_DELETE = _("You are not permitted to delete this document")
 _PERMISSION_MSG_GENERIC = _("You do not have permissions for this document.")
 _PERMISSION_MSG_MODIFY = _("You are not permitted to modify this document")
@@ -122,6 +131,7 @@ def install_app(request, store_id, app_name, version):
         installer.install()
         response_data["success"] = True
     except Exception as ex:
+        logger.error(ex.message)
         response_data["messages"].append({"type": "error", "msg": ex.message})
 
     return HttpResponse(
@@ -137,6 +147,7 @@ def uninstall_app(request, store_id, app_name):
         installer.uninstall()
         response_data["success"] = True
     except Exception as ex:
+        logger.error(ex.message)
         response_data["errors"].append(ex.message)
     return HttpResponse(
         json.dumps(response_data), content_type="application/json")
@@ -279,8 +290,8 @@ def appinstance_detail(request, appinstanceid):
                 exif = exif_extract_dict(appinstance)
                 if exif:
                     context_dict['exif_data'] = exif
-            except BaseException:
-                print "Exif extraction failed."
+            except BaseException as e:
+                logger.error(e.message + "Exif extraction failed.")
 
         return render_to_response("app_manager/appinstance_detail.html",
                                   RequestContext(request, context_dict))

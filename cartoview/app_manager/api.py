@@ -1,11 +1,19 @@
+import logging
 import warnings
+from sys import stdout
 
 from django.conf.urls import include, patterns, url
+from django.shortcuts import render
+from serializers import HTMLSerializer
 from tastypie.api import Api as TastypieApi
 from tastypie.utils import trailing_slash
-from django.shortcuts import render
 
-from serializers import HTMLSerializer
+formatter = logging.Formatter(
+    '[%(asctime)s] p%(process)s  { %(name)s %(pathname)s:%(lineno)d} %(levelname)s - %(message)s', '%m-%d %H:%M:%S')
+logger = logging.getLogger(__name__)
+handler = logging.StreamHandler(stdout)
+handler.setFormatter(formatter)
+logger.addHandler(handler)
 
 
 class BaseApi(TastypieApi):
@@ -69,8 +77,8 @@ class Api():
         if app_name is None:
             try:
                 app_name = module_name.split('.')[1]
-            except BaseException:
-                pass
+            except BaseException as e:
+                logger.error(e.message)
         if app_name not in self.apis:
             self.apis[app_name] = BaseApi(app_name)
         self.apis[app_name].register(resource, canonical)

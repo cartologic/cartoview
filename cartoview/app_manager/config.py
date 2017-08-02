@@ -1,5 +1,6 @@
-import yaml
 import os
+
+import yaml
 
 
 class Item(yaml.YAMLObject):
