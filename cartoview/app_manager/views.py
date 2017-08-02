@@ -92,7 +92,7 @@ def manage_apps(request):
         'apps': apps,
         'site_apps': get_apps_names(),
     }
-    print context["site_apps"]
+    logger.warning(context['site_apps'])
     return render(request, 'app_manager/manage.html', context)
 
 

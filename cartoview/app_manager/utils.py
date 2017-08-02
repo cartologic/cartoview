@@ -17,14 +17,13 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 #########################################################################
-from django.http import JsonResponse, HttpResponse
+from django.conf import settings
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.views.decorators.http import require_http_methods
-from django.conf import settings
-from tastypie.serializers import Serializer
-
 from geonode.api.resourcebase_api import LayerResource
 from geonode.maps.models import Map
+from tastypie.serializers import Serializer
 
 
 @require_http_methods([
@@ -61,7 +60,7 @@ def map_layers(request):
         result['meta']['total_count'] = len(layers)
         result['objects'] = []
         for layer in layers:
-            bundle = resource.build_bundle(obj=layer,request=request)
+            bundle = resource.build_bundle(obj=layer, request=request)
             dehydrated_obj = resource.full_dehydrate(bundle)
             result['objects'].append(dehydrated_obj)
         data = serializer.serialize(result)
