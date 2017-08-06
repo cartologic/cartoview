@@ -8,6 +8,7 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponse
 from django.views.decorators.http import require_http_methods
 from geonode.api.api import ProfileResource
+from geonode.api.authorization import GeoNodeAuthorization
 from geonode.api.resourcebase_api import CommonMetaApi
 from geonode.base.models import ResourceBase
 from geonode.layers.models import Attribute, Layer

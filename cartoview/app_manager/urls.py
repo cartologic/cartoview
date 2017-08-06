@@ -18,7 +18,6 @@ rest_api.register(GeonodeMapLayerResource())
 rest_api.register(GeonodeLayerResource())
 rest_api.register(GeonodeLayerAttributeResource())
 rest_api.register(TagResource())
-
 rest_api.register(ImageResource())
 rest_api.register(CommentResource())
 

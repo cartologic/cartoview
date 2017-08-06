@@ -46,6 +46,7 @@ def settings_api(request):
 ])
 def map_layers(request):
     map_id = request.GET.get('id', None)
+    layer_type = request.GET.get('layer_type', None)
     if map_id:
         resource = LayerResource()
         serializer = Serializer()
@@ -62,6 +63,17 @@ def map_layers(request):
         for layer in layers:
             bundle = resource.build_bundle(obj=layer, request=request)
             dehydrated_obj = resource.full_dehydrate(bundle)
+            # TODO:Test this layer_type filter behavior
+            if layer_type:
+                qs = layer.attribute_set.filter(
+                    attribute_type__icontains=layer_type)
+                if qs.count() > 0:
+                    dehydrated_obj.data.update(
+                        {'layer_type': qs[0].attribute_type})
+            else:
+                qs = layer.attribute_set.get(attribute_type__contains="gml:")
+                dehydrated_obj.data.update(
+                    {'layer_type': qs.attribute_type})
             result['objects'].append(dehydrated_obj)
         data = serializer.serialize(result)
         return HttpResponse(data, content_type='application/json')

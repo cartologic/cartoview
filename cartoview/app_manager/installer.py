@@ -9,7 +9,6 @@ from sys import stdout
 
 import pkg_resources
 import requests
-
 from django.conf import settings
 from django.db.models import Max
 
