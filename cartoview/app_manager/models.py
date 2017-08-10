@@ -1,7 +1,7 @@
 import json
 import logging
 from sys import stdout
-
+import json
 from django.conf import settings as geonode_settings
 from django.contrib.gis.db import models
 from django.contrib.sites.models import Site
@@ -11,7 +11,6 @@ from django.db.models import signals
 from geonode.base.models import ResourceBase, resourcebase_post_save
 from geonode.maps.models import Map as GeonodeMap
 from geonode.security.models import remove_object_permissions
-
 from .config import AppsConfig
 
 formatter = logging.Formatter(
@@ -159,24 +158,34 @@ def pre_delete_appinstance(instance, sender, **kwargs):
     remove_object_permissions(instance.get_self_resource())
 
 
-# def create_thumbnail(sender, instance, created, **kwargs):
-#     if not isinstance(instance, AppInstance):
-#         return
-#     from geonode.base.models import Link
-#
-#     if not instance.has_thumbnail() and instance.map is not None:
-#         parent_app_thumbnail_url = instance.map.get_thumbnail_url()
-#         # Link.objects.get_or_create(resource=instance,
-#         #                            url=parent_app_thumbnail_url,
-#         #                            defaults=dict(
-#         #                                name='Thumbnail',
-#         #                                extension='png',
-#         #                                mime='image/png',
-#         #                                link_type='image',
-#         #                            ))
-#
-#         instance.thumbnail_url = parent_app_thumbnail_url
-#         instance.save()
+def create_thumbnail(sender, instance, created, **kwargs):
+    if not isinstance(instance, AppInstance):
+        return
+    if not instance.has_thumbnail() and instance.map is not None:
+        parent_app_thumbnail_url = instance.map.get_thumbnail_url()
+        instance.thumbnail_url = parent_app_thumbnail_url
+        instance.save()
+    else:
+        # TODO:Remove the Following Section
+        # because eeach app has to  handle its own thumbnails
+        if instance.app.name == "cartoview_dashboard" and not instance.has_thumbnail() and instance.thumbnail_url is None or instance.thumbnail_url == "":
+            parsed_config = json.loads(instance.config)
+            for k, v in parsed_config.get("widgets", {}).items():
+                if isinstance(v, dict):
+                    type = v.get('type', "")
+                    if type == "MapWidget":
+                        id = int(v.get('config', {}).get("mapId", None))
+                        map_obj = GeonodeMap.objects.get(
+                            id=id)
+                        instance.thumbnail_url = map_obj.get_thumbnail_url()
+                        instance.save()
+                        break
+
+        else:
+            return
+
+
+# print o.portal_map.first().portal_item
 
 
 def appinstance_post_save(instance, *args, **kwargs):
@@ -186,7 +195,7 @@ def appinstance_post_save(instance, *args, **kwargs):
 
 
 signals.pre_save.connect(pre_save_appinstance)
-# signals.post_save.connect(create_thumbnail)
+signals.post_save.connect(create_thumbnail)
 
 signals.post_save.connect(appinstance_post_save)
 signals.pre_delete.connect(pre_delete_appinstance)

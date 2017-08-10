@@ -1,7 +1,10 @@
 #wrap {
     background-color: #eee;
 }
-
+body,html {
+   margin: 0 !important;
+   padding: 0 !important;
+}
 .navbar-inverse,
 .home .navbar-inverse {
     background-color: #333;

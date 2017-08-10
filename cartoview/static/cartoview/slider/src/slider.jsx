@@ -44,10 +44,10 @@ export default class FeaturedAppsSlider extends Component {
                                 <Img
                                     src={[
                                         app.thumbnail,
-                                        `/static/${app.app_name}/logo.png"`
+                                        `/static/${app.app_name}/logo.png`
                                     ]}
                                     className="slider-image"
-                                    style={{ width: "100%" }}
+                                    style={{ width: "100%",height:"auto" }}
                                     loader={<Spinner name="line-scale" />}
                                 />
                                 <div className="slider-middle">
