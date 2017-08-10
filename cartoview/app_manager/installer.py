@@ -116,6 +116,7 @@ class AppInstaller:
         app.save()
         tags = info.get('tags', [])
         for tag_name in tags:
+            # TODO: handle existing tags instead of using try
             try:
                 tag = AppTag(name=tag_name)
                 tag.save()
@@ -148,8 +149,8 @@ class AppInstaller:
             installer = importlib.import_module('%s.installer' % self.name)
             installedApps.append(self.add_app(installer))
             installer.install()
-            if restart:
-                finalize_setup()
+            # if restart:
+            # finalize_setup()
         except Exception as ex:
             logger.error(ex.message)
         return installedApps

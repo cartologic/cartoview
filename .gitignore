@@ -194,7 +194,6 @@ $RECYCLE.BIN/
 # Packages
 *.egg
 *.egg-info
-dist/
 build/
 eggs/
 parts/
@@ -237,5 +236,6 @@ cartoview_project/static/*
 
 cartoview_project/cartoview_project/local_settings.py
 cartoview.egg-info/
-dist/
+node_modules
+./dist
 

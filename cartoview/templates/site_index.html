@@ -3,102 +3,48 @@
 {% load cartoview_tags %}
 {% block extra_head %}
     {{ block.super }}
-    <style>
-        .center-counter a {
-
-            color: #ff8f31;
-            font-size: large;
-        }
-
-        .button_shadow {
-            background-color: #0d406d;
-        }
-
-        .icons-spaces {
-            margin-bottom: 20px;
-        }
-
-        .center-counter {
-            padding-bottom: 10px;
-            color: white;
-            padding-top: 10px;
-            padding-left: 25px;
-            padding-right: 25px;
-            font-family: sans-serif;
-            font-size: x-large;
-        }
-
-        .works a {
-            color: #0D406D;
-        }
-
-.slideright {
-  
-  animation: moveImageright 1s linear ;
-  /*left: -350px;*/
-  /*padding: 10px;*/
+ <style>
+.slider-container {
+    position: relative;
+    width: 100%;
 }
 
-@keyframes moveImageright {
-    100% {
-      transform: translateX(calc(100vw + 350px));
-    }
-}
-.slideleft {
-  
-  animation: moveImageleft 0.5s linear ;
-  left: -350px;
-
+.slider-image {
+  opacity: 1;
+  display: block;
+  width: 100%;
+  height: auto;
+  transition: .5s ease;
+  backface-visibility: hidden;
 }
 
-@keyframes moveImageleft {
-    100% {
-      transform: translateX(calc(-100vw - 350px));
-    }
-}
-.w3-black, .w3-hover-black:hover {
-   
-}
-
-.w3-display-right {
-    position: absolute;
-    top: 120px;
-    right: -2%;
-    transform: translate(0%,-50%);
-    -ms-transform: translate(0%,-50%);
-}
-.w3-display-left {
-    position: absolute;
-    top: 120px;
-    left: -2%;
-    transform: translate(0%,-50%);
-    -ms-transform: translate(0%,-50%);
+.slider-middle {
+  transition: .5s ease;
+  opacity: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%)
 }
 
-.w3-btn, .w3-button {
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
+.slider-container:hover .slider-image {
+  opacity: 0.3;
 }
 
-.w3-btn, .w3-button {
-    border: none;
-    display: inline-block;
-    outline: 0;
-    padding: 8px 16px;
-    vertical-align: middle;
-    overflow: hidden;
-    text-decoration: none;
-    color: inherit;
-    background-color: inherit;
-    text-align: center;
-    cursor: pointer;
-    white-space: nowrap;
+.slider-container:hover .slider-middle {
+  opacity: 1;
+}
+
+.slider-text {
+  background-color: #4CAF50;
+  color: white;
+  font-size: 16px;
+  padding: 16px 32px;
 }
     </style>
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css" />
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css" />
 {% endblock %}
 {% block hero %}
 <!--<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">-->
@@ -223,31 +169,18 @@
     </div>
     <section id="showcase">
         <div class="container">
-            <div class="row" >
-                <h2>Featured Apps</h2>
-                {% verbatim %}
-                <div style="position:relative" ng-controller="featuredappsCtrl">
-                    <div ng-repeat="item in featuredApps ">
+            <div class="row" style="padding-bottom:50px" >
+                <h2 style="margin-bottom:20px"> Featured Apps</h2>
 
-                        <div class="col-md-3">
-                            <a href="{{ item.urls.view || item.urls.details }}"><img
-                                    class="{{class}}"
-                                    ng-src="{{ item.thumbnail}}"
-                                    fallback-src="/static/{{ item.app_name }}/logo.png"
-                                    loading-src/></a>
-                            <h4 class="{{class}}">{{ item.title | limitTo: 20 }}{{item.title.length > 20 ? '...' : ''}}</h4>
-                        </div>
-                    </div>
-                  
-                     <button class="w3-button w3-black w3-display-left" ng-click="prevpage()">&#10094;</button> 
+                <div id="featured-apps" class="col-xs-12 col-sm-12 col-md-8 col-md-offset-2">
 
-                   <button class="w3-button w3-black w3-display-right" ng-click="nextpage()">&#10095;</button> 
                 </div>
-                {% endverbatim %}
             </div>
-            <p><a href="{% url 'appinstance_browse' %}">
+            <div class="row">
+                <p><a href="{% url 'appinstance_browse' %}">
                 Explore all
-            </a></p>
+                </a></p>
+            </div>
         </div>
     </section>
 {% endblock %}
@@ -332,5 +265,6 @@
             });
         })();
 
-    </script>
+</script>
+<script src="{{STATIC_URL}}cartoview/slider/dist/Slider.bundle.js" ></script>
 {% endblock %}

@@ -1,0 +1,4 @@
+.slick-prev:before,
+.slick-next:before {
+  color: black;
+}
