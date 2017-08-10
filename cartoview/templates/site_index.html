@@ -6,7 +6,7 @@
  <style>
      #site-banner{
          background-image: url("{{STATIC_URL}}cartoview/img/background.png");
-         background-size: inherit;
+         background-size: cover;
      }
         .center-counter a {
  
@@ -90,7 +90,7 @@
             </h3>
             <div class="row text-center" style="margin-top: 30px">
                 {% if not user.is_authenticated %}
-                    <div style="padding-top:10px;padding-bottom:10px" class="col-md-2 col-md-offset-4">
+                    <div class="col-md-2 col-md-offset-4">
                         <a class="btn button_shadow btn-primary" style="color: white"
                            href="{% url 'account_login' %}?next={% url 'app_manager_base_url' %}"
                            role="button">
@@ -98,7 +98,7 @@
                         </a>
                     </div>
                 {% else %}
-                    <div style="padding-top:10px;padding-bottom:10px" class="col-md-2 col-md-offset-4">
+                    <div class="col-md-2 col-md-offset-4">
                         <a class="btn button_shadow btn-primary" style="color: white"
                            href="{% url 'app_manager_base_url' %}"
                            role="button">
