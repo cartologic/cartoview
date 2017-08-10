@@ -2,6 +2,7 @@ import './app.css'
 
 import React, { Component } from 'react'
 
+import Img from 'react-image'
 import Slider from 'react-slick'
 import Spinner from 'react-spinkit'
 import { render } from 'react-dom'
@@ -39,17 +40,26 @@ export default class FeaturedAppsSlider extends Component {
                 {apps.length > 0 && <Slider {...settings}>
                     {apps.map((app, i) => {
                         return <div key={i} style={{ paddingLeft: 5, paddingRight: 5 }}><div className="slider-container">
-                            <a href={app.urls.view}><img className="slider-image" src={app.thumbnail} style={{ width: "100%" }} />
-                            <div className="slider-middle">
-                                <span style={{whiteSpace: "pre-line"}}><small>{app.title}</small></span><br/>
-                                <span style={{whiteSpace: "pre-line"}} className="label label-primary">{app.app}</span>
-                            </div></a>
+                            <a href={app.urls.view}>
+                                <Img
+                                    src={[
+                                        app.thumbnail,
+                                        `/static/${app.app_name}/logo.png"`
+                                    ]}
+                                    className="slider-image"
+                                    style={{ width: "100%" }}
+                                    loader={<Spinner name="line-scale" />}
+                                />
+                                <div className="slider-middle">
+                                    <span style={{ whiteSpace: "pre-line" }}><small>{app.title}</small></span><br />
+                                    <span style={{ whiteSpace: "pre-line" }} className="label label-primary">{app.app}</span>
+                                </div></a>
                         </div></div>
 
                     })}
 
                 </Slider>}
-                {apps.length==0 && <Spinner name="line-scale" />}
+                {apps.length == 0 && <Spinner name="line-scale" />}
             </div>
         )
     }
