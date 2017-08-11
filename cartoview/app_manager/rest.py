@@ -74,12 +74,16 @@ class AppResource(FileUploadResource):
     store = fields.ForeignKey(AppStoreResource, 'store', full=False, null=True)
     order = fields.IntegerField()
     active = fields.BooleanField()
+    app_instance_count = fields.IntegerField()
 
     def dehydrate_order(self, bundle):
         return bundle.obj.config.order
 
     def dehydrate_active(self, bundle):
         return bundle.obj.config.active
+
+    def dehydrate_app_instance_count(self, bundle):
+        return bundle.obj.appinstance_set.all().count()
 
     class Meta(FileUploadResource.Meta):
         queryset = App.objects.all().order_by('order')
@@ -220,7 +224,6 @@ class TagResource(ModelResource):
         queryset = Tag.objects.all()
 
 
-# Code to remember :D
 def nFilter(filters, objects_list):
     for f in filters.items():
         objects_list = filter(build_filter(f), objects_list)

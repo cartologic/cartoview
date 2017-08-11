@@ -29,7 +29,7 @@ import abc
 from django.utils.decorators import method_decorator
 from geonode.maps.views import _PERMISSION_MSG_VIEW
 from .installer import AppInstaller
-
+from .utils import AppsThumbnail
 formatter = logging.Formatter(
     '[%(asctime)s] p%(process)s  { %(name)s %(pathname)s:%(lineno)d} \
                               %(levelname)s - %(message)s', '%m-%d %H:%M:%S')
@@ -42,7 +42,7 @@ _PERMISSION_MSG_GENERIC = _("You do not have permissions for this document.")
 _PERMISSION_MSG_MODIFY = _("You are not permitted to modify this document")
 _PERMISSION_MSG_METADATA = _(
     "You are not permitted to modify this document's metadata")
-_PERMISSION_MSG_VIEW = _("You are not permitted to view this document")
+# _PERMISSION_MSG_VIEW = _("You are not permitted to view this document")
 
 current_folder, filename = os.path.split(os.path.abspath(__file__))
 temp_dir = os.path.join(current_folder, 'temp')
@@ -488,6 +488,8 @@ class AppViews(object):
         instance_obj.abstract = abstract
         instance_obj.map_id = map_id
         instance_obj.save()
+        thumbnail_obj = AppsThumbnail(instance)
+        thumbnail_obj.create_thumbnail()
 
         owner_permissions = [
             'view_resourcebase',
@@ -546,12 +548,13 @@ class AppViews(object):
         pass
 
 
-class TestView(AppViews):
-    def new(self, request, *args, **kwargs):
-        return HttpResponse("Hello I am working fine For Now")
-
-
 class StandardAppViews(AppViews):
+    '''
+    this class contains basic views for cartoview apps to use this class
+    create instance ==> instance=StandardAppViews(app_name)
+    then you can use class methods ==> instance.new
+    '''
+
     def __init__(self, app_name):
         super(StandardAppViews, self).__init__(app_name)
 

@@ -249,7 +249,6 @@
 				$scope.results = data.objects.sort(function(x, y) {
 					return (x.featured === y.featured) ? 0 : x.featured ? -1 : 1;
 				});
-				console.log($scope.results)
 				$scope.total_counts = data.meta.total_count;
 				$scope.$root.query_data = data;
 				if (HAYSTACK_SEARCH) {

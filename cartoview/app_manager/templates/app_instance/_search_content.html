@@ -1,6 +1,7 @@
 {% load i18n %}
 <div class="row" ng-controller="CartList">
   <div class="col-md-3">
+      <div id="react-apps-list"></div>
     <resource-cart></resource-cart>
     <div class="row">
       <div class="col-xs-12">
@@ -13,8 +14,8 @@
           {% endif %}
         </div>
         {% endblock %}
-    
-        <div class="selections">
+
+        <!-- <div class="selections">
             {% trans "Filters" %}
             <a href="." id="clear-search" class="pull-right">{% trans "Clear" %}</a>
         </div>
@@ -23,10 +24,12 @@
             {% endif  %}
         <div id="slide-pane">
             {% include "search/_general_filters.html" %}
-        </div>
+        </div> -->
       </div>
     </div>
+
   </div>
+  
   <div class="col-md-9">
     <div class="col-md-2">
       <span>Total: </span>
