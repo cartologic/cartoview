@@ -4,7 +4,6 @@ import logging
 import os
 from sys import stdout
 from urlparse import urljoin
-
 from cartoview.app_manager.forms import AppInstanceEditForm
 from django.conf import settings
 from django.contrib.admin.views.decorators import staff_member_required
@@ -26,7 +25,9 @@ from geonode.security.views import _perms_info_json
 from geonode.utils import build_social_links, resolve_object
 from guardian.shortcuts import get_perms
 from models import App, AppInstance
-
+import abc
+from django.utils.decorators import method_decorator
+from geonode.maps.views import _PERMISSION_MSG_VIEW
 from .installer import AppInstaller
 
 formatter = logging.Formatter(
@@ -451,3 +452,136 @@ def appinstance_remove(request, appinstanceid):
             'You are not allowed to delete this Instance',
             mimetype="text/plain",
             status=401)
+
+
+class AppViews(object):
+    __metaclass__ = abc.ABCMeta
+
+    def __init__(self, app_name):
+        self.app_name = app_name
+        self.new_template = "%s/new.html" % self.app_name
+        self.edit_template = "%s/edit.html" % self.app_name
+        self.view_template = "%s/view.html" % self.app_name
+
+    def save(self, request, instance_id):
+        res_json = dict(success=False)
+
+        data = json.loads(request.body)
+        map_id = data.get('map', None)
+        title = data.get('title', "")
+        config = data.get('config', None)
+        access = data.get('access', None)
+        config.update(access=access)
+        config = json.dumps(data.get('config', None))
+        abstract = data.get('abstract', "")
+        keywords = data.get('keywords', [])
+
+        if instance_id is None:
+            instance_obj = AppInstance()
+            instance_obj.app = App.objects.get(name=self.app_name)
+            instance_obj.owner = request.user
+        else:
+            instance_obj = AppInstance.objects.get(pk=instance_id)
+
+        instance_obj.title = title
+        instance_obj.config = config
+        instance_obj.abstract = abstract
+        instance_obj.map_id = map_id
+        instance_obj.save()
+
+        owner_permissions = [
+            'view_resourcebase',
+            'download_resourcebase',
+            'change_resourcebase_metadata',
+            'change_resourcebase',
+            'delete_resourcebase',
+            'change_resourcebase_permissions',
+            'publish_resourcebase',
+        ]
+
+        if access == "private":
+            permessions = {
+                'users': {
+                    '{}'.format(request.user): owner_permissions,
+                }
+            }
+        else:
+            permessions = {
+                'users': {
+                    '{}'.format(request.user): owner_permissions,
+                    'AnonymousUser': [
+                        'view_resourcebase',
+                    ],
+                }
+            }
+        # set permissions so that no one can view this appinstance other than
+        #  the user
+        instance_obj.set_permissions(permessions)
+
+        # update the instance keywords
+        if hasattr(instance_obj, 'keywords'):
+            for k in keywords:
+                if k not in instance_obj.keyword_list():
+                    instance_obj.keywords.add(k)
+
+        res_json.update(dict(success=True, id=instance_obj.id))
+        return HttpResponse(json.dumps(res_json),
+                            content_type="application/json")
+
+    @abc.abstractmethod
+    def new(self, request, template=None, context={}, *args, **kwargs):
+        """Implement New app instance View"""
+        pass
+
+    @abc.abstractmethod
+    def edit(self, request, instance_id,
+             template=None, context={}, * args, **kwargs):
+        """Implement Edit app instance View"""
+        pass
+
+    @abc.abstractmethod
+    def view_app(self, request, instance_id, template=None, context={}, * args,
+                 **kwargs):
+        """Implement View app instance View"""
+        pass
+
+
+class TestView(AppViews):
+    def new(self, request, *args, **kwargs):
+        return HttpResponse("Hello I am working fine For Now")
+
+
+class StandardAppViews(AppViews):
+    def __init__(self, app_name):
+        super(StandardAppViews, self).__init__(app_name)
+
+    @method_decorator(login_required)
+    def new(self, request, template=None, context={}, *args, **kwargs):
+        if template is None:
+            template = self.new_template
+        if request.method == 'POST':
+            return self.save(self, request)
+        return render(request, template, context)
+
+    @method_decorator(login_required)
+    def edit(self, request, instance_id,
+             template=None, context={}, * args, **kwargs):
+        if template is None:
+            template = self.edit_template
+        if request.method == 'POST':
+            return self.save(request, instance_id)
+        instance = AppInstance.objects.get(pk=instance_id)
+        context.update(instance=instance)
+        return render(request, template, context)
+
+    def view_app(self, request, instance_id, template=None, context={}):
+        if template is None:
+            template = self.view_template
+        instance = _resolve_appinstance(
+            request, instance_id, 'base.view_resourcebase',
+            _PERMISSION_MSG_VIEW)
+        context.update({
+            "map_config": instance.map.viewer_json(request.user, None),
+            "instance": instance
+        })
+        return render(request, template, context)

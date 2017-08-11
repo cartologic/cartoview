@@ -30,3 +30,6 @@ h1, h2, h3, h4, h5, h6, p {
     font-weight: 200;
     text-shadow: 9px 11px 11px #000000;
 }
+#wrap{
+    padding-top: 70px;
+}
