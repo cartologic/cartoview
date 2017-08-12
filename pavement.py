@@ -166,10 +166,12 @@ def win_install_deps(options):
     win_packages = {
         # required by transifex-client
         "Py2exe":
-            "http://superb-dca2.dl.sourceforge.net/project/py2exe/py2exe/0.6.9/py2exe-0.6.9.win32-py2.7.exe",
+            "http://superb-dca2.dl.sourceforge.net/project/py2exe/py2exe/0.6.9/\
+            py2exe-0.6.9.win32-py2.7.exe",
         "Nose":
             "https://s3.amazonaws.com/geonodedeps/nose-1.3.3.win32-py2.7.exe",
-        # the wheel 1.9.4 installs but pycsw wants 1.9.3, which fails to compile
+        # the wheel 1.9.4 installs but pycsw wants 1.9.3, which fails to
+        # compile
         # when pycsw bumps their pyproj to 1.9.4 this can be removed.
         "PyProj":
             "https://pyproj.googlecode.com/files/pyproj-1.9.3.win32-py2.7.exe"
@@ -190,7 +192,8 @@ def win_install_deps(options):
     elif failed:
         print "install failed for py2exe, nose, and/or pyproj"
     else:
-        print "Windows dependencies now complete.  Run pip install -e geonode --use-mirrors"
+        print "Windows dependencies now complete.  Run pip install -e \
+        geonode --use-mirrors"
 
 
 @cmdopts([('version=', 'v',
@@ -358,7 +361,8 @@ def start_geoserver(options):
     web_app = path('geoserver/geoserver').abspath()
     log_file = path('geoserver/jetty.log').abspath()
     config = path('scripts/jetty-runner.xml').abspath()
-    # @todo - we should not have set workdir to the datadir but a bug in geoserver
+    # @todo - we should not have set workdir to the datadir but a bug
+    # in geoserver
     # prevents geonode security from initializing correctly otherwise
     with pushd(data_dir):
         javapath = "java"
@@ -370,8 +374,8 @@ def start_geoserver(options):
             try:
                 open("../../downloaded/null.txt", 'w+').close()
             except IOError as e:
-                print "Chances are that you have Geoserver currently running.  You \
-                        can either stop all servers with paver stop or start only \
+                print "Chances are that you have Geoserver currently running.\
+                  Youcan either stop all servers with paver stop or start only\
                         the django application with paver start_django."
 
                 sys.exit(1)
