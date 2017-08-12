@@ -384,7 +384,8 @@ def start_geoserver(options):
         try:
             sh(('java -version'))
         except BaseException:
-            print "Java was not found in your path.  Trying some other options: "
+            print "Java was not found in your path.  \
+            Trying some other options: "
             javapath_opt = None
             if os.environ.get('JAVA_HOME', None):
                 print "Using the JAVA_HOME environment variable"

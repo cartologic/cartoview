@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.db import migrations, models
 from django.conf import settings
+from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
@@ -115,5 +115,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='app',
             name='tags',
-            field=models.ManyToManyField(to='app_manager.AppTag', blank=True),),
+            field=models.ManyToManyField(to='app_manager.AppTag',
+                                         blank=True),),
     ]

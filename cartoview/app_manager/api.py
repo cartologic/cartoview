@@ -9,7 +9,8 @@ from tastypie.api import Api as TastypieApi
 from tastypie.utils import trailing_slash
 
 formatter = logging.Formatter(
-    '[%(asctime)s] p%(process)s  { %(name)s %(pathname)s:%(lineno)d} %(levelname)s - %(message)s', '%m-%d %H:%M:%S')
+    '[%(asctime)s] p%(process)s  { %(name)s %(pathname)s:%(lineno)d}\
+     %(levelname)s - %(message)s', '%m-%d %H:%M:%S')
 logger = logging.getLogger(__name__)
 handler = logging.StreamHandler(stdout)
 handler.setFormatter(formatter)
