@@ -469,10 +469,7 @@ class AppViews(object):
 
     def save(self, request, instance_id=None):
         res_json = dict(success=False)
-        if request.META.get('CONTENT_TYPE', 'application/json') == "application/json":
-            data = json.loads(request.body)
-        else:
-            data = request.POST
+        data = json.loads(request.body)
         map_id = data.get('map', None)
         title = data.get('title', "")
         config = data.get('config', None)
