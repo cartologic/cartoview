@@ -223,6 +223,7 @@
 	 */
 	module.controller('geonode_search_controller', function($injector, $scope,
 		$location, $http, Configs, $parse) {
+		$scope.loading=true
 		$scope.query = $location.search();
 		$scope.query.limit = $scope.query.limit || CLIENT_RESULTS_LIMIT;
 		$scope.query.offset = $scope.query.offset || 0;
@@ -245,7 +246,7 @@
 			$http.get(Configs.url, {
 				params: data || {}
 			}).success(function(data) {
-
+				$scope.loading=false
 				$scope.results = data.objects.sort(function(x, y) {
 					return (x.featured === y.featured) ? 0 : x.featured ? -1 : 1;
 				});

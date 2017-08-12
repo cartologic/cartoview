@@ -37,6 +37,7 @@
     </div>
     {% include "search/_sort_filters.html" %}
     <div class="col-md-12 grid-spacer">
+        <div style="text-align:center" ng-if="loading"><i class="fa fa-spinner fa-spin fa-5x"></i></div>
     {% include 'app_instance/_resourcebase_snippet.html' %}
     {% include 'search/_pagination.html' %}
     </div>

@@ -1,9 +1,11 @@
+import abc
 import importlib
 import json
 import logging
 import os
 from sys import stdout
 from urlparse import urljoin
+from django.conf.urls import patterns, url
 from cartoview.app_manager.forms import AppInstanceEditForm
 from django.conf import settings
 from django.contrib.admin.views.decorators import staff_member_required
@@ -16,20 +18,22 @@ from django.forms.util import ErrorList
 from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, render_to_response
 from django.template import RequestContext, loader
+from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext as _
 from django.views.decorators.http import require_POST
 from geonode.base.forms import CategoryForm
 from geonode.base.models import TopicCategory
+from geonode.maps.views import _PERMISSION_MSG_VIEW
 from geonode.people.forms import ProfileForm
 from geonode.security.views import _perms_info_json
 from geonode.utils import build_social_links, resolve_object
 from guardian.shortcuts import get_perms
+
 from models import App, AppInstance
-import abc
-from django.utils.decorators import method_decorator
-from geonode.maps.views import _PERMISSION_MSG_VIEW
+
 from .installer import AppInstaller
 from .utils import AppsThumbnail
+
 formatter = logging.Formatter(
     '[%(asctime)s] p%(process)s  { %(name)s %(pathname)s:%(lineno)d} \
                               %(levelname)s - %(message)s', '%m-%d %H:%M:%S')
@@ -488,7 +492,7 @@ class AppViews(object):
         instance_obj.abstract = abstract
         instance_obj.map_id = map_id
         instance_obj.save()
-        thumbnail_obj = AppsThumbnail(instance)
+        thumbnail_obj = AppsThumbnail(instance_obj)
         thumbnail_obj.create_thumbnail()
 
         owner_permissions = [
@@ -547,6 +551,11 @@ class AppViews(object):
         """Implement View app instance View"""
         pass
 
+    @abc.abstractmethod
+    def get_url_patterns(self):
+        """implement this fuction to return you app url patterns"""
+        pass
+
 
 class StandardAppViews(AppViews):
     '''
@@ -588,3 +597,14 @@ class StandardAppViews(AppViews):
             "instance": instance
         })
         return render(request, template, context)
+
+    def get_url_patterns(self):
+        return patterns('',
+                        url(r'^new/$', self.new,
+                            name='%s.new' % self.app_name),
+                        url(r'^(?P<instance_id>\d+)/edit/$',
+                            self.edit, name='%s.edit' % self.app_name),
+                        url(r'^(?P<instance_id>\d+)/view/$',
+                            self.view_app,
+                            name='%s.view' % self.app_name)
+                        )

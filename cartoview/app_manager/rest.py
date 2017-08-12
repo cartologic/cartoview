@@ -91,7 +91,8 @@ class AppResource(FileUploadResource):
             "id": ALL,
             "name": ALL,
             "title": ALL,
-            "store": ALL_WITH_RELATIONS
+            "store": ALL_WITH_RELATIONS,
+            "single_instance": ALL
         }
         can_edit = True
 
