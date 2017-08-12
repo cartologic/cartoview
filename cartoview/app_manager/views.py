@@ -467,10 +467,12 @@ class AppViews(object):
         self.edit_template = "%s/edit.html" % self.app_name
         self.view_template = "%s/view.html" % self.app_name
 
-    def save(self, request, instance_id):
+    def save(self, request, instance_id=None):
         res_json = dict(success=False)
-
-        data = json.loads(request.body)
+        if request.META.get('CONTENT_TYPE', 'application/json') == "application/json":
+            data = json.loads(request.body)
+        else:
+            data = request.POST
         map_id = data.get('map', None)
         title = data.get('title', "")
         config = data.get('config', None)
@@ -572,7 +574,7 @@ class StandardAppViews(AppViews):
         if template is None:
             template = self.new_template
         if request.method == 'POST':
-            return self.save(self, request)
+            return self.save(request)
         return render(request, template, context)
 
     @method_decorator(login_required)

@@ -11,14 +11,15 @@ export default class FeaturedAppsSlider extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            apps: []
+            apps: [],
+            loading:true
         }
     }
     loadApps = () => {
         const url = FEATURED_URL + "?type=app&featured=true"
         fetch(url).then((response) => response.json()).then((data) => {
             this.setState({
-                apps: data
+                apps: data,loading:false
             }, () => console.log(this.state.apps))
         })
     }
@@ -26,7 +27,7 @@ export default class FeaturedAppsSlider extends Component {
         this.loadApps()
     }
     render() {
-        let { apps } = this.state
+        let { apps,loading } = this.state
         const settings = {
             dots: true,
             infinite: true,
@@ -37,7 +38,7 @@ export default class FeaturedAppsSlider extends Component {
         };
         return (
             <div className=" col-xs-12 col-sm-12  col-md-12">
-                {apps.length > 0 && <Slider {...settings}>
+                {!loading && apps.length>0 && <Slider {...settings}>
                     {apps.map((app, i) => {
                         return <div key={i} style={{ paddingLeft: 5, paddingRight: 5 }}><div className="slider-container">
                             <a href={app.urls.view}>
@@ -59,7 +60,8 @@ export default class FeaturedAppsSlider extends Component {
                     })}
 
                 </Slider>}
-                {apps.length == 0 && <Spinner name="line-scale" />}
+                {loading && <Spinner name="line-scale" />}
+                {!loading && apps.length == 0 && <h3>{"No Featured Apps"}</h3>}
             </div>
         )
     }
