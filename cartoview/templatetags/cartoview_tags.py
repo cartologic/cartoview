@@ -14,7 +14,7 @@ from geonode.documents.models import Document
 from geonode.groups.models import GroupProfile
 from django.utils.safestring import mark_safe
 from geonode.groups.models import Group
-
+from django.utils.html import mark_safe
 register = template.Library()
 
 
@@ -142,3 +142,9 @@ def facets(context):
                 facets['vector'] + facets['remote']
 
     return facets
+
+
+@register.filter(name='jsonify')
+def jsonify(values):
+    """Json Object"""
+    return mark_safe(json.dumps(values))
