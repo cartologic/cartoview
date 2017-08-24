@@ -18,7 +18,6 @@ from geonode.people.models import Profile
 from guardian.shortcuts import get_objects_for_user
 from taggit.models import Tag
 from tastypie import fields
-from tastypie.authorization import Authorization
 from tastypie.constants import ALL, ALL_WITH_RELATIONS
 from tastypie.http import HttpGone
 from tastypie.resources import ModelResource
@@ -179,7 +178,7 @@ class AppInstanceResource(ModelResource):
         resource_name = 'appinstances'
         allowed_methods = ['get', 'post', 'put']
         excludes = ['csw_anytext', 'metadata_xml']
-        authorization = Authorization()
+        authorization = GeoNodeAuthorization()
 
     def dehydrate_owner(self, bundle):
         return bundle.obj.owner.username
