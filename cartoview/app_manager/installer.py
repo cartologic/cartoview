@@ -189,6 +189,8 @@ class AppInstaller:
 
 def finalize_setup():
     install_app_batch = getattr(settings, 'CARTOVIEW_INSTALL_APP_BAT', None)
+    docker = getattr(settings, 'DOCKER', None)
+    project_dir = getattr(settings, 'PROJECT_DIR')
     if install_app_batch:
 
         def _finalize_setup():
@@ -196,18 +198,21 @@ def finalize_setup():
             working_dir = os.path.dirname(install_app_batch)
             log_file = os.path.join(working_dir, "install_app_log.txt")
             with open(log_file, 'a') as log:
-                # p = Popen(
-                #     install_app_batch,
-                #     stdout=log,
-                #     stderr=log,
-                #     shell=True,
-                #     cwd=working_dir)
-                Popen(
-                    install_app_batch,
-                    stdout=log,
-                    stderr=log,
-                    shell=True,
-                    cwd=working_dir)
+                if docker:
+                    manage_script = os.path.join(project_dir, 'manage.py')
+                    # Kill python process so docker will restart it self
+                    Popen(
+                        "python %s collectstatic --noinput &&  sudo kill $(sudo lsof -t -i:8000)" % manage_script,
+                        stdout=log,
+                        stderr=log,
+                        shell=True)
+                else:
+                    Popen(
+                        install_app_batch,
+                        stdout=log,
+                        stderr=log,
+                        shell=True,
+                        cwd=working_dir)
                 # stdout, stderr = p.communicate()
 
         from threading import Timer

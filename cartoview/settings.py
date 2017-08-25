@@ -1,7 +1,7 @@
 import cartoview
 import geonode
 from geonode.settings import *
-
+import os
 INSTALLED_APPS += ("cartoview", "cartoview.app_manager",
                    "cartoview.user_engage", "cartoview.workspace")
 ROOT_URLCONF = "cartoview.urls"
@@ -15,6 +15,7 @@ STATICFILES_DIRS += [
 cartoview_apps_settings_path = os.path.join(CARTOVIEW_ROOT, 'app_manager',
                                             "settings.py")
 APPS_MENU = False
+DOCKER = os.getenv('DOCKER', False)
 WORKSPACE_ENABLED = True
 TEMPLATES[0]["OPTIONS"]['context_processors'] += (
     'cartoview.app_manager.context_processors.apps',
