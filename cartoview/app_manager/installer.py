@@ -143,8 +143,8 @@ class AppInstaller:
             installer = importlib.import_module('%s.installer' % self.name)
             installedApps.append(self.add_app(installer))
             installer.install()
-            # if restart:
-            # finalize_setup()
+            if restart:
+                finalize_setup()
         except Exception as ex:
             logger.error(ex.message)
         return installedApps
@@ -190,7 +190,8 @@ class AppInstaller:
 def finalize_setup():
     install_app_batch = getattr(settings, 'CARTOVIEW_INSTALL_APP_BAT', None)
     docker = getattr(settings, 'DOCKER', None)
-    project_dir = getattr(settings, 'PROJECT_DIR')
+    project_dir = os.path.abspath(os.path.join(
+        getattr(settings, 'PROJECT_DIR'), os.pardir))
     if install_app_batch:
 
         def _finalize_setup():
