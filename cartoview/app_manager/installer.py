@@ -191,8 +191,6 @@ class AppInstaller:
 def finalize_setup():
     install_app_batch = getattr(settings, 'CARTOVIEW_INSTALL_APP_BAT', None)
     docker = getattr(settings, 'DOCKER', None)
-    project_dir = os.path.abspath(os.path.join(
-        getattr(settings, 'PROJECT_DIR'), os.pardir))
     if install_app_batch:
 
         def _finalize_setup():
@@ -201,10 +199,9 @@ def finalize_setup():
             log_file = os.path.join(working_dir, "install_app_log.txt")
             with open(log_file, 'a') as log:
                 if docker:
-                    manage_script = os.path.join(project_dir, 'manage.py')
                     # Kill python process so docker will restart it self
                     Popen(
-                        "python %s collectstatic --noinput &&  sudo kill $(sudo lsof -t -i:8000)" % manage_script,
+                        "cd /code && python manage.py collectstatic --noinput &&  sudo kill $(sudo lsof -t -i:8000)",
                         stdout=log,
                         stderr=log,
                         shell=True)
