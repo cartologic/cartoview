@@ -132,7 +132,6 @@ def install_app(request, store_id, app_name, version):
     response_data = {'success': False, 'messages': []}
     try:
         installer = AppInstaller(app_name, store_id, version)
-        # installedApps = installer.install()
         installer.install()
         response_data["success"] = True
     except Exception as ex:

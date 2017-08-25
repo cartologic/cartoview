@@ -113,6 +113,7 @@ class AppInstaller:
         app.license = info.get('licence', None)
         app.single_instance = info.get('single_instance', False)
         app.version = self.version["version"]
+        app.store = AppStore.objects.filter(is_default=True).first()
         app.save()
         tags = info.get('tags', [])
         for tag_name in tags:
