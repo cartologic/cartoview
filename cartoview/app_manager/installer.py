@@ -116,14 +116,8 @@ class AppInstaller:
         app.save()
         tags = info.get('tags', [])
         for tag_name in tags:
-            # TODO: handle existing tags instead of using try
-            try:
-                tag = AppTag(name=tag_name)
-                tag.save()
-                app.tags.add(tag)
-            except BaseException as e:
-                logger.error(e.message)
-
+            tag, created = AppTag.objects.get_or_create(name=tag_name)
+            app.tags.add(tag)
         return app
 
     def install(self, restart=True):
