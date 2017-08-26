@@ -6,7 +6,7 @@ import tempfile
 import zipfile
 from StringIO import StringIO
 from sys import stdout
-
+import subprocess
 import pkg_resources
 import requests
 from django.conf import settings
@@ -191,30 +191,23 @@ class AppInstaller:
 def finalize_setup():
     install_app_batch = getattr(settings, 'CARTOVIEW_INSTALL_APP_BAT', None)
     docker = getattr(settings, 'DOCKER', None)
-    if install_app_batch:
 
-        def _finalize_setup():
-            from subprocess import Popen
-            working_dir = os.path.dirname(install_app_batch)
-            log_file = os.path.join(working_dir, "install_app_log.txt")
-            with open(log_file, 'a') as log:
-                if docker:
-                    # Kill python process so docker will restart it self
-                    Popen(
-                        "cd /code && python manage.py collectstatic --noinput &&  sudo kill $(sudo lsof -t -i:8000)",
-                        stdout=log,
-                        stderr=log,
-                        shell=True)
-                else:
-                    Popen(
-                        install_app_batch,
-                        stdout=log,
-                        stderr=log,
-                        shell=True,
-                        cwd=working_dir)
-                # stdout, stderr = p.communicate()
+    def _finalize_setup():
+        from subprocess import Popen
+        if docker:
+            # Kill python process so docker will restart it self
+            logger.error(subprocess.Popen("python /code/manage.py collectstatic --noinput && kill $(lsof -t -i:8000)",
+                                          shell=True, stdout=subprocess.PIPE).stdout.read())
+        else:
+            Popen(
+                install_app_batch,
+                stdout=log,
+                stderr=log,
+                shell=True,
+                cwd=working_dir)
+            # stdout, stderr = p.communicate()
 
-        from threading import Timer
-        timer = Timer(0.1, _finalize_setup)
-        timer.start()
+    from threading import Timer
+    timer = Timer(0.1, _finalize_setup)
+    timer.start()
 # TODO: add function to fix ordering in cartoview (old versions)
