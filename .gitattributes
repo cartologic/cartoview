@@ -1,3 +1,12 @@
-cartoview/static/* linguist-vendored
-cartoview/static/admin/* linguist-vendored
-cartoview/static/app_manager linguist-vendored
+cartoview/static/* linguist-vendored=true
+cartoview/static/admin/* linguist-vendored=true
+cartoview/static/app_manager linguist-vendored=true
+cartoview/templates/**/*.html linguist-vendored=true
+cartoview/templates/admin/**/*.html linguist-vendored=true
+cartoview/static/admin/**/*.js linguist-vendored=true
+cartoview/static/bootstrap-3-arabic/**/*.js linguist-vendored=true
+cartoview/static/bootstrap-3-arabic/**/*.css linguist-vendored=true
+cartoview/static/admin/**/*.css linguist-vendored=true
+cartoview/static/**/*.js linguist-vendored=true
+cartoview/static/**/*.css linguist-vendored=true
+cartoview/static/*.js linguist-vendored=true
