@@ -20,7 +20,7 @@ export default class FeaturedAppsSlider extends Component {
         fetch(url).then((response) => response.json()).then((data) => {
             this.setState({
                 apps: data,loading:false
-            }, () => console.log(this.state.apps))
+            })
         })
     }
     componentWillMount() {

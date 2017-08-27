@@ -2,6 +2,7 @@ import './app.css'
 
 import React, { Component } from 'react'
 
+import Equalizer from 'react-equalizer'
 import Spinner from 'react-spinkit'
 import { render } from 'react-dom'
 
@@ -68,12 +69,17 @@ export default class AppsList extends Component {
                 <hr />
                 <h3>Tools</h3>
                 <hr />
-                {tools.length > 0 && <ul className="list-group">
+                {tools.length > 0 && <div className="row"><Equalizer>
                     {tools.map((tool, i) => {
-                        return <a key={i} href="javascript:;"><li  onClick={()=>window.location.replace(`/apps/${tool.name}/`)} key={i} className="list-group-item">
-                            {tool.title}</li></a>
+                        return <div  key={i}  className="col-md-4"><a href="javascript:;" onClick={()=>window.location.replace(`/apps/${tool.name}/`)}>
+                            <img className="img-responsive img-circle" src={`/static/${tool.name}/logo.png`} />
+                            <p style={{ wordBreak: "normal",textAlign:'center'}}>{tool.title}</p>
+                            </a>
+                        </div>
+                    
                     })}
-                </ul>}
+
+                </Equalizer></div>}
                 {loading && <Spinner name="line-scale" />}
                 {!loading && tools.length == 0 && <small>No Tools installed</small>}
                 <hr />

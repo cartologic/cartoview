@@ -42,9 +42,9 @@
                             <div class="thumbnail">
                                 <img src="{{ STATIC_URL }}{{ app.name }}/logo.png"
                                      style="min-height:200px;height:200px;">
-                                <div class="caption">
-                                    <h4>{{ app.title }}</h4>
-                                    <p>
+                                <div class="caption" >
+                                    <h4 class="text-center">{{ app.title }}</h4>
+                                    <p class="text-center" >
                                         {% if app.description %}
                                             {{ app.description|slice:":70" }}
                                             {% if app.description|length >= 70 %}
@@ -57,7 +57,7 @@
                                         {% endif %}
 
                                     </p>
-                                    <p>
+                                    <p class="text-center">
                                         {% if app.single_instance %}
                                             <a href="{% url 'app_manager_base_url' %}{{ app.name }}"
                                                target="_parent" class="btn btn-sm btn-primary">Open</a>
