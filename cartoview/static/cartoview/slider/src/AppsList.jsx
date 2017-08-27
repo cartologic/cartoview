@@ -71,7 +71,7 @@ export default class AppsList extends Component {
                 <hr />
                 {tools.length > 0 && <div className="row"><Equalizer>
                     {tools.map((tool, i) => {
-                        return <div  key={i}  className="col-md-4"><a href="javascript:;" onClick={()=>window.location.replace(`/apps/${tool.name}/`)}>
+                        return <div  key={i}  className="col-xs-4 col-sm-4 col-md-4 col-lg-4"><a href="javascript:;" onClick={()=>window.location.replace(`/apps/${tool.name}/`)}>
                             <img className="img-responsive img-circle" src={`/static/${tool.name}/logo.png`} />
                             <p style={{ wordBreak: "normal",textAlign:'center'}}>{tool.title}</p>
                             </a>
