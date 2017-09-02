@@ -2,11 +2,13 @@ import importlib
 import logging
 import os
 import shutil
+import subprocess
 import tempfile
 import zipfile
 from StringIO import StringIO
 from sys import stdout
-import subprocess
+from threading import Timer
+
 import pkg_resources
 import requests
 from django.conf import settings
@@ -193,21 +195,20 @@ def finalize_setup():
     docker = getattr(settings, 'DOCKER', None)
 
     def _finalize_setup():
-        from subprocess import Popen
         if docker:
             # Kill python process so docker will restart it self
             logger.error(subprocess.Popen("python /code/manage.py collectstatic --noinput && kill $(lsof -t -i:8000)",
                                           shell=True, stdout=subprocess.PIPE).stdout.read())
         else:
-            Popen(
-                install_app_batch,
-                stdout=log,
-                stderr=log,
-                shell=True,
-                cwd=working_dir)
+            pass
+            # Popen(
+            #     install_app_batch,
+            #     stdout=log,
+            #     stderr=log,
+            #     shell=True,
+            #     cwd=working_dir)
             # stdout, stderr = p.communicate()
 
-    from threading import Timer
     timer = Timer(0.1, _finalize_setup)
     timer.start()
 # TODO: add function to fix ordering in cartoview (old versions)
