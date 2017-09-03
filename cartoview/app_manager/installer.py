@@ -197,17 +197,19 @@ def finalize_setup():
     def _finalize_setup():
         if docker:
             # Kill python process so docker will restart it self
-            logger.error(subprocess.Popen("python /code/manage.py collectstatic --noinput && kill $(lsof -t -i:8000)",
+            logger.error(subprocess.Popen("python /code/manage.py collectstatic --noinput && pkill -f python",
                                           shell=True, stdout=subprocess.PIPE).stdout.read())
         else:
-            pass
-            # Popen(
-            #     install_app_batch,
-            #     stdout=log,
-            #     stderr=log,
-            #     shell=True,
-            #     cwd=working_dir)
-            # stdout, stderr = p.communicate()
+            working_dir = os.path.dirname(install_app_batch)
+            log_file = os.path.join(working_dir, "install_app_log.txt")
+            with open(log_file, 'a') as log:
+                subprocess.Popen(
+                    install_app_batch,
+                    stdout=log,
+                    stderr=log,
+                    shell=True,
+                    cwd=working_dir)
+                # stdout, stderr = p.communicate()
 
     timer = Timer(0.1, _finalize_setup)
     timer.start()
