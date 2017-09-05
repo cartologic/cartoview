@@ -91,9 +91,11 @@
       </li>
     {% endif %}
     {% endwith %}
+    {% if "change_resourcebase" in perms_list  %}
     <li class="list-group-item">
         <button class="btn btn-primary btn-md btn-block" data-toggle="modal" data-target="#edit-appinstance">{% trans "Edit App Instance" %}</button>
       </li>
+    {% endif %}
       <div class="modal fade" id="edit-appinstance" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="z-index: 1400;" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
