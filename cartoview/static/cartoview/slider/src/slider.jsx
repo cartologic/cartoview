@@ -34,7 +34,8 @@ export default class FeaturedAppsSlider extends Component {
             slidesToShow: 3,
             slidesToScroll: 3,
             autoplay: true,
-            autoplaySpeed: 2000
+            autoplaySpeed: 2000,
+            responsive:[ { breakpoint: 738, settings: { slidesToShow: 2 ,slidesToScroll: 2} },{ breakpoint: 418, settings: { slidesToShow: 1 ,slidesToScroll: 1} } ]
         };
         return (
             <div className=" col-xs-12 col-sm-12  col-md-12">
@@ -47,8 +48,7 @@ export default class FeaturedAppsSlider extends Component {
                                         app.thumbnail,
                                         `/static/${app.app_name}/logo.png`
                                     ]}
-                                    className="slider-image"
-                                    style={{ width: "100%",height:"auto" }}
+                                    style={{ width: "100%",maxHeight:"200px" }}
                                     loader={<Spinner name="line-scale" />}
                                 />
                                 <div className="slider-middle">
