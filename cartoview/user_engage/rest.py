@@ -1,3 +1,12 @@
+from __future__ import unicode_literals
+from __future__ import print_function
+from __future__ import division
+from __future__ import absolute_import
+from future import standard_library
+standard_library.install_aliases()
+from builtins import *
+from builtins import str
+from builtins import object
 from cartoview.app_manager.resources import FileUploadResource
 from tastypie.resources import ModelResource
 from .models import Comment, Image
@@ -40,7 +49,7 @@ class MultipartFormSerializer(Serializer):
 
         format = format.split(';')[0]
 
-        for short_format, long_format in self.content_types.items():
+        for short_format, long_format in list(self.content_types.items()):
             if format == long_format:
                 if hasattr(self, "from_%s" % short_format):
                     desired_format = short_format
@@ -67,7 +76,7 @@ class ImageResource(FileUploadResource):
     user = fields.DictField(readonly=True)
     thumbnail = fields.CharField(readonly=True)
 
-    class Meta:
+    class Meta(object):
         serializer = MultipartFormSerializer()
         queryset = Image.objects.all()
         filtering = {"identifier": ALL}
@@ -111,7 +120,7 @@ class ImageResource(FileUploadResource):
 class CommentResource(ModelResource):
     user = fields.DictField(readonly=True)
 
-    class Meta:
+    class Meta(object):
         queryset = Comment.objects.all()
         filtering = {"identifier": ALL}
         can_edit = True

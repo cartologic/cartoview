@@ -1,13 +1,19 @@
+from __future__ import (absolute_import, division, print_function,
+                        unicode_literals)
+
 import abc
 import importlib
 import json
 import logging
 import os
+from builtins import *
+from builtins import object
 from sys import stdout
-from urlparse import urljoin
-from django.conf.urls import patterns, url
+from urllib.parse import urljoin
+
 from cartoview.app_manager.forms import AppInstanceEditForm
 from django.conf import settings
+from django.conf.urls import patterns, url
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
@@ -21,6 +27,8 @@ from django.template import RequestContext, loader
 from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext as _
 from django.views.decorators.http import require_POST
+from future import standard_library
+from future.utils import with_metaclass
 from geonode.base.forms import CategoryForm
 from geonode.base.models import TopicCategory
 from geonode.maps.views import _PERMISSION_MSG_VIEW
@@ -29,10 +37,12 @@ from geonode.security.views import _perms_info_json
 from geonode.utils import build_social_links, resolve_object
 from guardian.shortcuts import get_perms
 
-from models import App, AppInstance
-
 from .installer import AppInstaller
+from .models import App, AppInstance
 from .utils import AppsThumbnail
+
+standard_library.install_aliases()
+
 
 formatter = logging.Formatter(
     '[%(asctime)s] p%(process)s  { %(name)s %(pathname)s:%(lineno)d} \
@@ -107,15 +117,15 @@ def index(request):
         module = importlib.import_module(app.name)
         if hasattr(module, 'urls_dict'):
             urls_dict = getattr(module, 'urls_dict')
-            if 'admin' in urls_dict.keys():
+            if 'admin' in list(urls_dict.keys()):
                 app.admin_urls = urls_dict['admin']
             else:
                 app.admin_urls = None
-            if 'logged_in' in urls_dict.keys():
+            if 'logged_in' in list(urls_dict.keys()):
                 app.logged_in_urls = urls_dict['logged_in']
             else:
                 app.logged_in_urls = None
-            if 'anonymous' in urls_dict.keys():
+            if 'anonymous' in list(urls_dict.keys()):
                 app.anonymous_urls = urls_dict['anonymous']
             else:
                 app.anonymous_urls = None
@@ -457,9 +467,7 @@ def appinstance_remove(request, appinstanceid):
             status=401)
 
 
-class AppViews(object):
-    __metaclass__ = abc.ABCMeta
-
+class AppViews(with_metaclass(abc.ABCMeta, object)):
     def __init__(self, app_name):
         self.app_name = app_name
         self.new_template = "%s/new.html" % self.app_name

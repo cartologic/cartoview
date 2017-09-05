@@ -1,15 +1,23 @@
+from __future__ import absolute_import
+from __future__ import unicode_literals
+from __future__ import print_function
+from __future__ import division
+from future import standard_library
+standard_library.install_aliases()
+from builtins import *
+from builtins import object
 from django.conf.urls import url
 from django.db import models
 from django.forms.models import modelform_factory
 from django.shortcuts import render
-from serializers import HTMLSerializer, MultipartFormSerializer
+from .serializers import HTMLSerializer, MultipartFormSerializer
 from tastypie.authorization import Authorization
 from tastypie.resources import ModelResource, Resource
 
 
 class BaseResource(Resource):
 
-    class Meta:
+    class Meta(object):
         always_return_data = True
         serializer = HTMLSerializer()
         authorization = Authorization()

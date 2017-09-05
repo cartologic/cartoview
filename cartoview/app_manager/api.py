@@ -1,10 +1,18 @@
+from __future__ import absolute_import
+from __future__ import unicode_literals
+from __future__ import print_function
+from __future__ import division
+from future import standard_library
+standard_library.install_aliases()
+from builtins import *
+from builtins import object
 import logging
 import warnings
 from sys import stdout
 
 from django.conf.urls import include, patterns, url
 from django.shortcuts import render
-from serializers import HTMLSerializer
+from .serializers import HTMLSerializer
 from tastypie.api import Api as TastypieApi
 from tastypie.utils import trailing_slash
 
@@ -67,7 +75,7 @@ class BaseApi(TastypieApi):
         return urlpatterns
 
 
-class Api():
+class Api(object):
 
     def __init__(self):
         self.apis = {}

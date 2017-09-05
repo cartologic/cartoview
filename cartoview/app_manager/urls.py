@@ -1,14 +1,22 @@
+from __future__ import absolute_import
+from __future__ import unicode_literals
+from __future__ import print_function
+from __future__ import division
+from future import standard_library
+standard_library.install_aliases()
+from builtins import *
+from builtins import str
 import importlib
 from .config import AppsConfig
 from cartoview.app_manager.utils import map_layers
 from django.conf.urls import patterns, url, include
 from django.views.generic import TemplateView
-from api import rest_api
+from .api import rest_api
 from cartoview.app_manager.rest import AppResource, AppStoreResource,\
     AppInstanceResource, GeonodeMapResource, GeonodeMapLayerResource,\
     GeonodeLayerResource, GeonodeLayerAttributeResource, TagResource,\
     all_resources_rest
-import views as app_manager_views
+from . import views as app_manager_views
 from cartoview.user_engage.rest import ImageResource, CommentResource
 rest_api.register(AppResource())
 rest_api.register(AppStoreResource())

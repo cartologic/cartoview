@@ -1,8 +1,16 @@
+from __future__ import absolute_import
+from __future__ import unicode_literals
+from __future__ import print_function
+from __future__ import division
 # TODO: Review this file. Legacy??!
+from future import standard_library
+standard_library.install_aliases()
+from builtins import *
+from builtins import object
 from django.forms import FileField, ModelForm
 from django.utils.translation import ugettext_lazy as _
 from geonode.base.forms import ResourceBaseForm
-from models import App, AppInstance
+from .models import App, AppInstance
 from modeltranslation.forms import TranslationModelForm
 
 
@@ -15,21 +23,21 @@ class AppInstallerForm(ModelForm):
     }
     package_file = FileField()
 
-    class Meta:
+    class Meta(object):
         model = App
         fields = ("package_file",)
 
 
 class AppForm(ModelForm):
 
-    class Meta:
+    class Meta(object):
         model = App
         fields = ("title",)
 
 
 class AppInstanceForm(TranslationModelForm):
 
-    class Meta:
+    class Meta(object):
         model = AppInstance
         fields = [
             'title',

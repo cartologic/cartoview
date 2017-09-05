@@ -1,3 +1,11 @@
+from __future__ import unicode_literals
+from __future__ import print_function
+from __future__ import division
+from __future__ import absolute_import
+from future import standard_library
+standard_library.install_aliases()
+from builtins import *
+from builtins import object
 from django.contrib.gis.db import models
 from django.conf import settings
 UserModel = settings.AUTH_USER_MODEL
@@ -9,7 +17,7 @@ class BasicModel(models.Model):
     user = models.ForeignKey(UserModel, related_name="engage_%(class)s")
     identifier = models.CharField(max_length=256)
 
-    class Meta:
+    class Meta(object):
         abstract = True
 
 

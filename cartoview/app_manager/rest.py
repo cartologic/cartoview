@@ -1,3 +1,14 @@
+from __future__ import print_function
+from __future__ import unicode_literals
+from __future__ import division
+from __future__ import absolute_import
+from future import standard_library
+standard_library.install_aliases()
+from builtins import *
+from builtins import filter
+from builtins import str
+from builtins import range
+from builtins import object
 import json
 
 from cartoview.app_manager.models import App, AppInstance, AppStore
@@ -28,7 +39,7 @@ from .resources import FileUploadResource
 
 class GeonodeMapLayerResource(ModelResource):
 
-    class Meta:
+    class Meta(object):
         queryset = GeonodeMapLayer.objects.distinct()
 
 
@@ -45,7 +56,7 @@ class GeonodeMapResource(ModelResource):
 
 class GeonodeLayerResource(ModelResource):
 
-    class Meta:
+    class Meta(object):
         queryset = Layer.objects.all()
         excludes = ['csw_anytext', 'metadata_xml']
         filtering = {"typename": ALL}
@@ -54,7 +65,7 @@ class GeonodeLayerResource(ModelResource):
 class GeonodeLayerAttributeResource(ModelResource):
     layer = fields.ForeignKey(GeonodeLayerResource, 'layer')
 
-    class Meta:
+    class Meta(object):
         queryset = Attribute.objects.all().order_by('display_order')
         filtering = {
             "layer": ALL_WITH_RELATIONS,
@@ -197,7 +208,7 @@ class AppInstanceResource(ModelResource):
         return None
 
     def hydrate_owner(self, bundle):
-        print bundle
+        print(bundle)
         owner, created = Profile.objects.get_or_create(
             username=bundle.data['owner'])
         bundle.data['owner'] = owner
@@ -211,7 +222,7 @@ class AppInstanceResource(ModelResource):
         bundle.obj.owner = bundle.request.user
         app_name = bundle.data['appName']
         bundle.obj.app = App.objects.get(name=app_name)
-        for key, value in kwargs.items():
+        for key, value in list(kwargs.items()):
             setattr(bundle.obj, key, value)
 
         bundle = self.full_hydrate(bundle)
@@ -220,13 +231,13 @@ class AppInstanceResource(ModelResource):
 
 class TagResource(ModelResource):
 
-    class Meta:
+    class Meta(object):
         queryset = Tag.objects.all()
 
 
 def nFilter(filters, objects_list):
-    for f in filters.items():
-        objects_list = filter(build_filter(f), objects_list)
+    for f in list(filters.items()):
+        objects_list = list(filter(build_filter(f), objects_list))
     return objects_list
 
 
@@ -288,7 +299,7 @@ def all_resources_rest(request):
 
     if request.GET:
         filters = {}
-        for key in request.GET.keys():
+        for key in list(request.GET.keys()):
             if key in allowed_filters:
                 filters.update({key: request.GET.get(key, None)})
         filtered_list = nFilter(filters, items)

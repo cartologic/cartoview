@@ -1,3 +1,10 @@
+from __future__ import unicode_literals
+from __future__ import print_function
+from __future__ import division
+from __future__ import absolute_import
+from future import standard_library
+standard_library.install_aliases()
+from builtins import *
 from account.decorators import login_required
 from django.shortcuts import render
 from cartoview.app_manager.models import AppInstance

@@ -1,3 +1,10 @@
+from __future__ import print_function
+from __future__ import unicode_literals
+from __future__ import division
+from __future__ import absolute_import
+from future import standard_library
+standard_library.install_aliases()
+from builtins import *
 import requests
 from django.http import HttpResponse
 from django.http import QueryDict
@@ -29,7 +36,7 @@ def send_request(request, url, requests_args=None):
 
     # If there's a content-length header from Django, it's probably in all-caps
     # and requests might not notice it, so just remove it.
-    for key in headers.keys():
+    for key in list(headers.keys()):
         if key.lower() == 'content-length':
             del headers[key]
 
@@ -37,7 +44,7 @@ def send_request(request, url, requests_args=None):
     requests_args['params'] = params
     # url = "https://ao82912.maps.arcgis.com" \
     # if url == "" else "https://ao82912.maps.arcgis.com/" + url
-    print url
+    print(url)
     response = requests.request(
         request.method, url, stream=True, **requests_args)
 
@@ -69,7 +76,7 @@ def send_request(request, url, requests_args=None):
         # should be.
         'content-length',
     ])
-    for key, value in response.headers.iteritems():
+    for key, value in list(response.headers.items()):
         if key.lower() in excluded_headers:
             continue
         proxy_response[key] = value
@@ -89,7 +96,7 @@ def get_headers(environ):
     https://docs.djangoproject.com/en/dev/ref/request-response/#django.http.HttpRequest.META
     """
     headers = {}
-    for key, value in environ.iteritems():
+    for key, value in list(environ.items()):
         # Sometimes, things don't like when you send the requesting host
         # through.
         if key.startswith('HTTP_') and key != 'HTTP_HOST':

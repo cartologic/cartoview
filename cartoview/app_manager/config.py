@@ -1,3 +1,12 @@
+from __future__ import unicode_literals
+from __future__ import print_function
+from __future__ import division
+from __future__ import absolute_import
+from future import standard_library
+standard_library.install_aliases()
+from builtins import *
+from builtins import str
+from builtins import object
 import os
 
 import yaml
@@ -6,7 +15,7 @@ import yaml
 class Item(yaml.YAMLObject):
 
     def __init__(self, **kwargs):
-        for key, value in kwargs.iteritems():
+        for key, value in list(kwargs.items()):
             setattr(self, key, value)
 
     # __getattr__ is called if the object doesn't have the attribute as member
