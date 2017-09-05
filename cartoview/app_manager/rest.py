@@ -1,15 +1,9 @@
-from __future__ import print_function
-from __future__ import unicode_literals
-from __future__ import division
-from __future__ import absolute_import
-from future import standard_library
-standard_library.install_aliases()
-from builtins import *
-from builtins import filter
-from builtins import str
-from builtins import range
-from builtins import object
+from __future__ import (absolute_import, division, print_function,
+                        unicode_literals)
+
 import json
+from builtins import *
+from builtins import filter, object, range, str
 
 from cartoview.app_manager.models import App, AppInstance, AppStore
 from django.conf import settings
@@ -18,6 +12,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse
 from django.views.decorators.http import require_http_methods
+from future import standard_library
 from geonode.api.api import ProfileResource
 from geonode.api.authorization import GeoNodeAuthorization
 from geonode.api.resourcebase_api import CommonMetaApi
@@ -35,6 +30,8 @@ from tastypie.resources import ModelResource
 from tastypie.utils import trailing_slash
 
 from .resources import FileUploadResource
+
+standard_library.install_aliases()
 
 
 class GeonodeMapLayerResource(ModelResource):
@@ -208,7 +205,6 @@ class AppInstanceResource(ModelResource):
         return None
 
     def hydrate_owner(self, bundle):
-        print(bundle)
         owner, created = Profile.objects.get_or_create(
             username=bundle.data['owner'])
         bundle.data['owner'] = owner
