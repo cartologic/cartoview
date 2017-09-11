@@ -1,11 +1,11 @@
 {% extends 'index.html' %}
-{% load i18n %}
+{% load i18n static %}
 {% load cartoview_tags %}
 {% block extra_head %}
     {{ block.super }}
  <style>
      #site-banner{
-         background-image: url("{{STATIC_URL}}cartoview/img/background.png");
+         background-image: url("{% static 'cartoview/img/background.png' %}");
          background-size: cover;
      }
         .center-counter a {
@@ -166,25 +166,25 @@
         <div class="row" style="padding: 10px;margin-bottom: 40px">
             <div class="col-xs-12 col-sm-6 col-md-3 text-center">
                 <div class="row icons-spaces">
-                    <img src="{{ STATIC_URL }}/cartoview/img/edit.png">
+                    <img src="{% static 'cartoview/img/edit.png' %}">
                 </div>
                 <a href="{% url 'account_signup' %}">1. Register</a>
             </div>
             <div class="col-xs-12 col-sm-6 col-md-3 text-center">
                 <div class="row icons-spaces">
-                    <img src="{{ STATIC_URL }}/cartoview/img/layers.png">
+                    <img src="{% static 'cartoview/img/layers.png' %}">
                 </div>
                 <a href="{% url 'layer_upload' %}">2. Upload Layer</a>
             </div>
             <div class="col-xs-12 col-sm-6 col-md-3 text-center">
                 <div class="row icons-spaces">
-                    <img src="{{ STATIC_URL }}/cartoview/img/map.png">
+                    <img src="{% static 'cartoview/img/map.png' %}">
                 </div>
                 <a href="{% url 'new_map' %}">3. Create Map</a>
             </div>
             <div class="col-xs-12 col-sm-6 col-md-3 text-center">
                 <div class="row icons-spaces">
-                    <img src="{{ STATIC_URL }}/cartoview/img/app.png">
+                    <img src="{% static 'cartoview/img/app.png' %}">
                 </div>
                 {% if not user.is_authenticated %}
 
@@ -299,5 +299,5 @@
         })();
 
 </script>
-<script src="{{STATIC_URL}}cartoview/slider/dist/Slider.bundle.js" ></script>
+<script src="{% static 'cartoview/slider/dist/Slider.bundle.js' %}" ></script>
 {% endblock %}
