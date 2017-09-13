@@ -191,6 +191,9 @@ class AppInstanceResource(ModelResource):
     def dehydrate_owner(self, bundle):
         return bundle.obj.owner.username
 
+    def dehydrate_config(self, bundle):
+        return json.loads(bundle.obj.config)
+
     def dehydrate_launch_app_url(self, bundle):
         if bundle.obj.app is not None:
             return reverse(
