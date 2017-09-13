@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.conf.urls import patterns, url, include
 from geonode.urls import urlpatterns
 from cartoview.app_manager.rest import AppInstanceResource, AppResource

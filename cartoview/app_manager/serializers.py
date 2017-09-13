@@ -1,17 +1,19 @@
-from __future__ import unicode_literals
-from __future__ import print_function
-from __future__ import division
-from __future__ import absolute_import
-from future import standard_library
-standard_library.install_aliases()
+# -*- coding: utf-8 -*-
+from __future__ import (absolute_import, division, print_function,
+                        unicode_literals)
+
+import json
 from builtins import *
 from builtins import str
-import json
-from tastypie.serializers import Serializer
+
 from django.template.loader import render_to_string
-from tastypie.exceptions import UnsupportedFormat
 from django.utils import six
 from django.utils.encoding import force_text
+from future import standard_library
+from tastypie.exceptions import UnsupportedFormat
+from tastypie.serializers import Serializer
+
+standard_library.install_aliases()
 
 
 class HTMLSerializer(Serializer):

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import cartoview
 import geonode
 from geonode.settings import *
