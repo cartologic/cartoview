@@ -1,3 +1,7 @@
+# -*- coding: utf-8 -*-
+from __future__ import (absolute_import, division, print_function,
+                        unicode_literals)
+
 import importlib
 import logging
 import os
@@ -5,7 +9,9 @@ import shutil
 import subprocess
 import tempfile
 import zipfile
-from StringIO import StringIO
+from builtins import *
+from builtins import object, str
+from io import BytesIO
 from sys import stdout
 from threading import Timer
 
@@ -13,9 +19,13 @@ import pkg_resources
 import requests
 from django.conf import settings
 from django.db.models import Max
+from future import standard_library
 
 from .config import App as AppConfig
 from .models import App, AppStore, AppTag
+
+standard_library.install_aliases()
+
 
 reload(pkg_resources)
 formatter = logging.Formatter(
@@ -33,7 +43,7 @@ class AppAlreadyInstalledException(BaseException):
     message = "Application is already installed."
 
 
-class AppInstaller:
+class AppInstaller(object):
     """
 
     """
@@ -68,7 +78,8 @@ class AppInstaller:
 
     def _download_app(self):
         response = requests.get(self.version["download_link"], stream=True)
-        zip_ref = zipfile.ZipFile(StringIO(response.content))
+        zip_ref = zipfile.ZipFile(
+            BytesIO(response.content))
         try:
             # extract_to = os.path.join(settings.APPS_DIR)
             if not os.path.exists(temp_dir):
@@ -132,7 +143,7 @@ class AppInstaller:
             else:
                 raise AppAlreadyInstalledException()
         installedApps = []
-        for name, version in self.version["dependencies"].items():
+        for name, version in list(self.version["dependencies"].items()):
             # use try except because AppInstaller.__init__ will handle upgrade
             # if version not match
             try:
@@ -200,16 +211,17 @@ def finalize_setup():
             logger.error(subprocess.Popen("python /code/manage.py collectstatic --noinput && pkill -f python",
                                           shell=True, stdout=subprocess.PIPE).stdout.read())
         else:
-            working_dir = os.path.dirname(install_app_batch)
-            log_file = os.path.join(working_dir, "install_app_log.txt")
-            with open(log_file, 'a') as log:
-                subprocess.Popen(
-                    install_app_batch,
-                    stdout=log,
-                    stderr=log,
-                    shell=True,
-                    cwd=working_dir)
-                # stdout, stderr = p.communicate()
+            pass
+            # working_dir = os.path.dirname(install_app_batch)
+            # log_file = os.path.join(working_dir, "install_app_log.txt")
+            # with open(log_file, 'a') as log:
+            #     subprocess.Popen(
+            #         install_app_batch,
+            #         stdout=log,
+            #         stderr=log,
+            #         shell=True,
+            #         cwd=working_dir)
+            #     # stdout, stderr = p.communicate()
 
     timer = Timer(0.1, _finalize_setup)
     timer.start()

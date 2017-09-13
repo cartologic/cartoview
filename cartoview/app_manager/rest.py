@@ -1,4 +1,10 @@
+# -*- coding: utf-8 -*-
+from __future__ import (absolute_import, division, print_function,
+                        unicode_literals)
+
 import json
+from builtins import *
+from builtins import filter, object, range, str
 
 from cartoview.app_manager.models import App, AppInstance, AppStore
 from django.conf import settings
@@ -7,6 +13,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse
 from django.views.decorators.http import require_http_methods
+from future import standard_library
 from geonode.api.api import ProfileResource
 from geonode.api.authorization import GeoNodeAuthorization
 from geonode.api.resourcebase_api import CommonMetaApi
@@ -25,10 +32,12 @@ from tastypie.utils import trailing_slash
 
 from .resources import FileUploadResource
 
+standard_library.install_aliases()
+
 
 class GeonodeMapLayerResource(ModelResource):
 
-    class Meta:
+    class Meta(object):
         queryset = GeonodeMapLayer.objects.distinct()
 
 
@@ -45,7 +54,7 @@ class GeonodeMapResource(ModelResource):
 
 class GeonodeLayerResource(ModelResource):
 
-    class Meta:
+    class Meta(object):
         queryset = Layer.objects.all()
         excludes = ['csw_anytext', 'metadata_xml']
         filtering = {"typename": ALL}
@@ -54,7 +63,7 @@ class GeonodeLayerResource(ModelResource):
 class GeonodeLayerAttributeResource(ModelResource):
     layer = fields.ForeignKey(GeonodeLayerResource, 'layer')
 
-    class Meta:
+    class Meta(object):
         queryset = Attribute.objects.all().order_by('display_order')
         filtering = {
             "layer": ALL_WITH_RELATIONS,
@@ -183,6 +192,9 @@ class AppInstanceResource(ModelResource):
     def dehydrate_owner(self, bundle):
         return bundle.obj.owner.username
 
+    def dehydrate_config(self, bundle):
+        return json.loads(bundle.obj.config)
+
     def dehydrate_launch_app_url(self, bundle):
         if bundle.obj.app is not None:
             return reverse(
@@ -197,7 +209,6 @@ class AppInstanceResource(ModelResource):
         return None
 
     def hydrate_owner(self, bundle):
-        print bundle
         owner, created = Profile.objects.get_or_create(
             username=bundle.data['owner'])
         bundle.data['owner'] = owner
@@ -211,7 +222,7 @@ class AppInstanceResource(ModelResource):
         bundle.obj.owner = bundle.request.user
         app_name = bundle.data['appName']
         bundle.obj.app = App.objects.get(name=app_name)
-        for key, value in kwargs.items():
+        for key, value in list(kwargs.items()):
             setattr(bundle.obj, key, value)
 
         bundle = self.full_hydrate(bundle)
@@ -220,13 +231,13 @@ class AppInstanceResource(ModelResource):
 
 class TagResource(ModelResource):
 
-    class Meta:
+    class Meta(object):
         queryset = Tag.objects.all()
 
 
 def nFilter(filters, objects_list):
-    for f in filters.items():
-        objects_list = filter(build_filter(f), objects_list)
+    for f in list(filters.items()):
+        objects_list = list(filter(build_filter(f), objects_list))
     return objects_list
 
 
@@ -288,7 +299,7 @@ def all_resources_rest(request):
 
     if request.GET:
         filters = {}
-        for key in request.GET.keys():
+        for key in list(request.GET.keys()):
             if key in allowed_filters:
                 filters.update({key: request.GET.get(key, None)})
         filtered_list = nFilter(filters, items)

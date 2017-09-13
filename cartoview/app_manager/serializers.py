@@ -1,9 +1,19 @@
+# -*- coding: utf-8 -*-
+from __future__ import (absolute_import, division, print_function,
+                        unicode_literals)
+
 import json
-from tastypie.serializers import Serializer
+from builtins import *
+from builtins import str
+
 from django.template.loader import render_to_string
-from tastypie.exceptions import UnsupportedFormat
 from django.utils import six
 from django.utils.encoding import force_text
+from future import standard_library
+from tastypie.exceptions import UnsupportedFormat
+from tastypie.serializers import Serializer
+
+standard_library.install_aliases()
 
 
 class HTMLSerializer(Serializer):
@@ -43,7 +53,7 @@ class MultipartFormSerializer(HTMLSerializer):
 
         format = format.split(';')[0]
 
-        for short_format, long_format in self.content_types.items():
+        for short_format, long_format in list(self.content_types.items()):
             if format == long_format:
                 if hasattr(self, "from_%s" % short_format):
                     desired_format = short_format

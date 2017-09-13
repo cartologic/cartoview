@@ -1,17 +1,26 @@
+from __future__ import (absolute_import, division, print_function,
+                        unicode_literals)
+
 import json
 import logging
+from builtins import *
+from builtins import object, str
 from sys import stdout
-import json
+
 from django.conf import settings as geonode_settings
 from django.contrib.gis.db import models
 from django.contrib.sites.models import Site
 from django.core.urlresolvers import reverse
 from django.db.models import signals
+from future import standard_library
 # Create your models here.
 from geonode.base.models import ResourceBase, resourcebase_post_save
 from geonode.maps.models import Map as GeonodeMap
 from geonode.security.models import remove_object_permissions
+
 from .config import AppsConfig
+
+standard_library.install_aliases()
 
 formatter = logging.Formatter(
     '[%(asctime)s] p%(process)s  { %(name)s %(pathname)s:%(lineno)d} \
@@ -70,7 +79,7 @@ class App(models.Model):
     store = models.ForeignKey(AppStore, null=True)
     order = models.IntegerField(null=True, default=0)
 
-    class meta:
+    class meta(object):
         ordering = ['order']
 
     def __unicode__(self):

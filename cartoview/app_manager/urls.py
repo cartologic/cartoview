@@ -1,15 +1,29 @@
+# -*- coding: utf-8 -*-
+from __future__ import (absolute_import, division, print_function,
+                        unicode_literals)
+
 import importlib
-from .config import AppsConfig
+from builtins import *
+from builtins import str
+
+from cartoview.app_manager.rest import (AppInstanceResource, AppResource,
+                                        AppStoreResource,
+                                        GeonodeLayerAttributeResource,
+                                        GeonodeLayerResource,
+                                        GeonodeMapLayerResource,
+                                        GeonodeMapResource, TagResource,
+                                        all_resources_rest)
 from cartoview.app_manager.utils import map_layers
-from django.conf.urls import patterns, url, include
+from cartoview.user_engage.rest import CommentResource, ImageResource
+from django.conf.urls import include, patterns, url
 from django.views.generic import TemplateView
-from api import rest_api
-from cartoview.app_manager.rest import AppResource, AppStoreResource,\
-    AppInstanceResource, GeonodeMapResource, GeonodeMapLayerResource,\
-    GeonodeLayerResource, GeonodeLayerAttributeResource, TagResource,\
-    all_resources_rest
-import views as app_manager_views
-from cartoview.user_engage.rest import ImageResource, CommentResource
+from future import standard_library
+
+from . import views as app_manager_views
+from .api import rest_api
+from .config import AppsConfig
+
+standard_library.install_aliases()
 rest_api.register(AppResource())
 rest_api.register(AppStoreResource())
 rest_api.register(AppInstanceResource())

@@ -1,4 +1,12 @@
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+from __future__ import print_function
+from __future__ import division
+from __future__ import absolute_import
+from future import standard_library
+standard_library.install_aliases()
+from builtins import *
+from builtins import object
 from django.conf import settings
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404
@@ -8,6 +16,7 @@ from geonode.maps.models import Map
 from tastypie.serializers import Serializer
 from cartoview.app_manager.models import AppInstance
 import abc
+from future.utils import with_metaclass
 
 
 @require_http_methods([
@@ -65,9 +74,7 @@ def map_layers(request):
         return HttpResponse("not enough pramters", status=400)
 
 
-class Thumbnail(object):
-    __metaclass__ = abc.ABCMeta
-
+class Thumbnail(with_metaclass(abc.ABCMeta, object)):
     @abc.abstractmethod
     def create_thumbnail(self):
         """Implement your thumbnail method"""
