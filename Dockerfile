@@ -35,7 +35,7 @@ WORKDIR /code
 RUN pip install cartoview -U --no-cache-dir
 RUN pip install django-osgeo-importer --no-cache-dir
 RUN pip install django-geonode-client --no-cache-dir
-RUN pip install geonode -U --no-cache-dir
+RUN pip install geonode==2.6.3 --no-cache-dir
 RUN pip uninstall Shapely -y
 RUN pip install Shapely==1.5.17
 RUN pip install django-jsonfield
