@@ -60,7 +60,6 @@ class BaseApi(TastypieApi):
             pattern_list.append((r"^%s" % api_pattern, include(resource.urls)))
 
         urlpatterns = self.prepend_urls()
-
         overridden_urls = self.override_urls()
         if overridden_urls:
             warnings.warn(

@@ -176,6 +176,7 @@ class AppInstanceResource(ModelResource):
     map = fields.ForeignKey(GeonodeMapResource, 'map', full=True, null=True)
     owner = fields.ForeignKey(
         ProfileResource, 'owner', full=True, null=True, blank=True)
+    keywords = fields.ListField(null=True, blank=True)
 
     class Meta(CommonMetaApi):
         filtering = CommonMetaApi.filtering
@@ -213,6 +214,9 @@ class AppInstanceResource(ModelResource):
             username=bundle.data['owner'])
         bundle.data['owner'] = owner
         return bundle
+
+    def dehydrate_keywords(self, bundle):
+        return bundle.obj.keyword_list()
 
     def obj_create(self, bundle, **kwargs):
         """
