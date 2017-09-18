@@ -176,6 +176,7 @@ class AppInstanceResource(ModelResource):
     map = fields.ForeignKey(GeonodeMapResource, 'map', full=True, null=True)
     owner = fields.ForeignKey(
         ProfileResource, 'owner', full=True, null=True, blank=True)
+    keywords = fields.ListField(null=True, blank=True)
 
     class Meta(CommonMetaApi):
         filtering = CommonMetaApi.filtering
@@ -193,7 +194,10 @@ class AppInstanceResource(ModelResource):
         return bundle.obj.owner.username
 
     def dehydrate_config(self, bundle):
-        return json.loads(bundle.obj.config)
+        if bundle.obj.config:
+            return json.loads(bundle.obj.config)
+        else:
+            return json.dumps({})
 
     def dehydrate_launch_app_url(self, bundle):
         if bundle.obj.app is not None:
@@ -213,6 +217,9 @@ class AppInstanceResource(ModelResource):
             username=bundle.data['owner'])
         bundle.data['owner'] = owner
         return bundle
+
+    def dehydrate_keywords(self, bundle):
+        return bundle.obj.keyword_list()
 
     def obj_create(self, bundle, **kwargs):
         """

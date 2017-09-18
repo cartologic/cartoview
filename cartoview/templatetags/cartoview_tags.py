@@ -1,27 +1,27 @@
-from __future__ import unicode_literals
-from __future__ import print_function
-from __future__ import division
-from __future__ import absolute_import
-from future import standard_library
-standard_library.install_aliases()
-from builtins import *
+from __future__ import (absolute_import, division, print_function,
+                        unicode_literals)
+
 import json
-from django import template
+from builtins import *
+
 from agon_ratings.models import Rating
-from django.contrib.contenttypes.models import ContentType
+from cartoview.app_manager.models import App, AppInstance
+from django import template
 from django.contrib.auth import get_user_model
+from django.contrib.contenttypes.models import ContentType
 from django.db.models import Count
-from geonode.people.models import Profile
-from guardian.shortcuts import get_objects_for_user
-from cartoview.app_manager.models import AppInstance, App
+from django.utils.html import mark_safe
+from django.utils.safestring import mark_safe
+from future import standard_library
 from geonode import settings
+from geonode.documents.models import Document
+from geonode.groups.models import Group, GroupProfile
 from geonode.layers.models import Layer
 from geonode.maps.models import Map
-from geonode.documents.models import Document
-from geonode.groups.models import GroupProfile
-from django.utils.safestring import mark_safe
-from geonode.groups.models import Group
-from django.utils.html import mark_safe
+from geonode.people.models import Profile
+from guardian.shortcuts import get_objects_for_user
+
+standard_library.install_aliases()
 register = template.Library()
 
 
