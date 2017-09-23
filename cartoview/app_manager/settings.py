@@ -1,18 +1,19 @@
-from __future__ import unicode_literals
-from __future__ import print_function
-from __future__ import division
-from __future__ import absolute_import
-from future import standard_library
-standard_library.install_aliases()
-from builtins import *
-from past.builtins import execfile
+from __future__ import (absolute_import, division, print_function,
+                        unicode_literals)
+
 import importlib
 import logging
 import os
 import sys
+from builtins import *
 from sys import stdout
 
 from cartoview.app_manager.config import AppsConfig
+from future import standard_library
+from past.builtins import execfile
+
+standard_library.install_aliases()
+
 
 formatter = logging.Formatter(
     '[%(asctime)s] p%(process)s  { %(name)s %(pathname)s:%(lineno)d} \
@@ -43,7 +44,8 @@ for app_config in apps_config:
                 # local variables from settings.py without circular imports.
                 execfile(app_settings_file)
             if app_config.name not in CARTOVIEW_APPS:
-                CARTOVIEW_APPS += (app_config.name,)
+                # app_config.name.__str__() because Django don't like unicode_literals
+                CARTOVIEW_APPS += (app_config.name.__str__(),)
         except Exception as e:
             logger.error(e.message)
 
