@@ -13,6 +13,17 @@
         h1, h2, h3, h4, h5, h6, p {
             word-wrap: break-word;
         }
+        .thumbnail{
+            -webkit-box-shadow: 2px 4px 13px -1px rgba(0,0,0,0.24);
+            -moz-box-shadow: 2px 4px 13px -1px rgba(0,0,0,0.24);
+            box-shadow: 2px 4px 13px -1px rgba(0,0,0,0.24);
+        }
+        #card-buttons{
+            text-align: center;
+            padding: 5px;
+            margin-left: auto;
+            margin-right: auto
+        }
     </style>
 {% endblock %}
 {% block body %}
@@ -38,7 +49,7 @@
 
                 {% for app in Apps %}
                     {% if app.config.active and app.name != "cartoview_attachment_manager" %}
-                        <div class="col-xs-12 col-sm-6 col-md-4 item">
+                        <div class="col-xs-12 col-sm-4 col-md-3 item">
                             <div class="thumbnail">
                                 <img src="{{ STATIC_URL }}{{ app.name }}/logo.png"
                                      style="min-height:200px;height:200px;">
@@ -46,8 +57,8 @@
                                     <h4 class="text-center">{{ app.title }}</h4>
                                     <p class="text-center" >
                                         {% if app.description %}
-                                            {{ app.description|slice:":70" }}
-                                            {% if app.description|length >= 70 %}
+                                            {{ app.description|slice:":50" }}
+                                            {% if app.description|length >= 50 %}
                                                 <a href="javascript:;" data-placement="bottom" data-trigger="hover"
                                                    onclick="" data-toggle="popover" title="Description"
                                                    data-content="{{ app.description }}">More</a>
@@ -57,21 +68,26 @@
                                         {% endif %}
 
                                     </p>
-                                    <p class="text-center">
+                                    <div class="text-center" style="display:flex;flex-wrap:wrap">
                                         {% if app.single_instance %}
-                                            <a href="{% url 'app_manager_base_url' %}{{ app.name }}"
-                                               target="_parent" class="btn btn-sm btn-primary">Open</a>
+                                            <div style="margin-right:auto;margin-left:auto" id="card-buttons">
+                                                    <a href="{% url 'app_manager_base_url' %}{{ app.name }}"
+                                                    target="_parent" class="btn btn-sm btn-primary">Open</a>
+                                            </div>
 
                                         {% else %}
+                                        <div id="card-buttons">
                                             <a href="{% url 'appinstance_browse' %}?app__title={{ app.title }}"
                                                target="_parent" class="btn btn-sm btn-primary">Explore <span
                                                     class="badge">{{ app.appinstance_set.all.count }}</span></a>
+                                        </div>
                                             {% if not user.is_authenticated or not request.user.is_staff  %}
+                                            <div id="card-buttons">
                                                 <a class="btn btn-sm btn-primary"
                                                    href="{% url 'account_login' %}?next={% url ""|add:app.name|add:'.new' %}">
                                                     Create New
                                                 </a>
-
+                                            </div>
                                             {% endif %}
 
                                         {% endif %}
@@ -79,8 +95,10 @@
                                             {% for key, values in app.anonymous_urls.iteritems %}
                                                 {% url key as the_url %}
                                                 {% if the_url %}
+                                                <div id="card-buttons">
                                                     <a href="{{ the_url }}" target="_parent"
                                                        class="btn btn-sm btn-primary"> {{ values }}</a>
+                                                </div>
                                                     &nbsp;
                                                 {% endif %}
                                             {% endfor %}
@@ -90,8 +108,10 @@
                                             {% for key, values in app.logged_in_urls.iteritems %}
                                                 {% url key as the_url %}
                                                 {% if the_url %}
+                                                <div id="card-buttons">
                                                     <a href="{{ the_url }}" target="_parent"
                                                        class="btn btn-sm btn-primary"> {{ values }}</a>
+                                                </div>
                                                     &nbsp;
                                                 {% endif %}
                                             {% endfor %}
@@ -100,13 +120,16 @@
                                             {% for key, values in app.admin_urls.iteritems %}
                                                 {% url key as the_url %}
                                                 {% if the_url %}
+                                                <div id="card-buttons">
                                                     <a href="{{ the_url }}" target="_parent"
                                                        class="btn btn-sm btn-primary"> {{ values }}</a>
+                                                </div>
                                                     &nbsp;
                                                 {% endif %}
                                             {% endfor %}
                                         {% endif %}
-                                    </p>
+
+                                    </div>
                                 </div>
                             </div>
                         </div>
