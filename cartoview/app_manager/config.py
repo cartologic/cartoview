@@ -5,7 +5,7 @@ from __future__ import (absolute_import, division, print_function,
 import os
 from builtins import *
 from builtins import object, str
-
+from future.utils import native
 import yaml
 from future import standard_library
 
@@ -90,7 +90,7 @@ class App(Item):
 
     def __init__(self, **kwargs):
         super(App, self).__init__(**kwargs)
-        self.name = str(self.name)
+        self.name = native(str(self.name))
 
     def __str__(self):
         return self.name
@@ -112,7 +112,7 @@ class AppsConfig(Collection):
         if item.order is None:
             item.order = 0
         else:
-            item.order = int(item.order)
+            item.order = native(int(item.order))
         super(AppsConfig, self).append(item)
         self._hash[item.name] = item
 

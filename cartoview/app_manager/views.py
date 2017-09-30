@@ -141,6 +141,7 @@ def index(request):
 @require_POST
 def install_app(request, store_id, app_name, version):
     response_data = {'success': False, 'messages': []}
+    # TODO: remove try
     try:
         installer = AppInstaller(app_name, store_id, version)
         installer.install()

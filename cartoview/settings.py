@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
+import os
+
 import cartoview
 import geonode
 from geonode.settings import *
-import os
+
 INSTALLED_APPS += ("cartoview", "cartoview.app_manager",
                    "cartoview.user_engage", "cartoview.workspace")
 ROOT_URLCONF = "cartoview.urls"
@@ -26,3 +28,31 @@ TEMPLATES[0]["OPTIONS"]['context_processors'] += (
     'cartoview.app_manager.context_processors.apps_menu',
     'cartoview.app_manager.context_processors.workspace')
 execfile(cartoview_apps_settings_path)
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'full': {
+            'format': '[%(asctime)s] %(module)s p%(process)s  { %(name)s %(pathname)s:%(lineno)d} %(levelname)s - %(message)s'
+        }
+    },
+    'filters': {
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue',
+        },
+    },
+    'handlers': {
+        'console': {
+            'level': 'ERROR',
+            'filters': ['require_debug_true'],
+            'class': 'logging.StreamHandler',
+            'formatter': 'full'
+        }
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'propagate': True,
+        }
+    }
+}

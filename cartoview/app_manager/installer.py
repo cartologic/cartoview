@@ -77,6 +77,7 @@ class AppInstaller(object):
             return None
 
     def _download_app(self):
+        # TODO: improve download apps (server-side)
         response = requests.get(self.version["download_link"], stream=True)
         zip_ref = zipfile.ZipFile(
             BytesIO(response.content))
@@ -212,6 +213,8 @@ def finalize_setup():
                                           shell=True, stdout=subprocess.PIPE).stdout.read())
         else:
             pass
+            # TODO: please write scripts to handle non docker servers like
+            # nginx or apache
             # working_dir = os.path.dirname(install_app_batch)
             # log_file = os.path.join(working_dir, "install_app_log.txt")
             # with open(log_file, 'a') as log:
