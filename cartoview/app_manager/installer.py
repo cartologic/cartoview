@@ -131,9 +131,7 @@ class AppInstaller(object):
 
     def add_app(self, installer):
         # save app configuration
-        # test the new behavior get data from store
-        # info = installer.info
-        # installer info
+        # TODO: get rid of legacy installer i.e(create app tags in app Store)
         more_info = installer.info
         app, created = App.objects.get_or_create(name=self.name)
         if created:
