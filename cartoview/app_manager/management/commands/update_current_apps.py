@@ -1,5 +1,5 @@
 import requests
-from cartoview.app_manager.installer import AppSerializer
+from cartoview.app_manager.installer import serializer_factor
 from cartoview.app_manager.models import App, AppStore
 from django.core.management.base import BaseCommand
 
@@ -14,7 +14,8 @@ class Command(BaseCommand):
             try:
                 if app.store:
                     data = self.get_data_from_store(app.name, app.store.url)
-                    app_serializer = AppSerializer(**data)
+                    Serializer = serializer_factor(data.keys())
+                    app_serializer = Serializer(*[data[key] for key in data])
                     app = app_serializer.get_app_object(app)
                     app.save()
                     print('[{}] {}  updated'.format(index + 1, app.name))

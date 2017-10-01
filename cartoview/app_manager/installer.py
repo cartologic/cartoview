@@ -39,32 +39,41 @@ current_folder = os.path.abspath(os.path.dirname(__file__))
 temp_dir = os.path.join(current_folder, 'temp')
 
 
-class AppSerializer(object):
-    def __init__(self, **api_json):
-        self.__dict__.update(api_json)
+def serializer_factor(fields):
+    class AppSerializer(object):
+        __slots__ = fields
 
-    def get_app_object(self, app):
-        app.title = self.title
-        app.description = self.description
-        # TODO:remove short_description
-        app.short_description = self.description
-        app.owner_url = self.get_property_value('owner_url')
-        app.help_url = self.get_property_value('help_url')
-        app.author = self.get_property_value('author')
-        app.author_website = self.get_property_value('author_website')
-        # fallback if needed
-        # app.home_page = info.get('home_page', None)
-        app.home_page = self.get_property_value('demo_url')
-        for category in self.type:
-            category, created = AppType.objects.get_or_create(name=category)
-            app.category.add(category)
-        app.status = self.get_property_value('status')
-        app.license = self.license.get('name', None) if self.license else None
-        app.single_instance = self.get_property_value('single_instance')
-        return app
+        def __init__(self, *args, **kwargs):
+            for slot, arg in zip(AppSerializer.__slots__, args):
+                setattr(self, slot, arg)
+            for key, value in kwargs:
+                setattr(self, key, value)
 
-    def get_property_value(self, p):
-        return getattr(self, p, None)
+        def get_app_object(self, app):
+            app.title = self.title
+            app.description = self.description
+            # TODO:remove short_description
+            app.short_description = self.description
+            app.owner_url = self.get_property_value('owner_url')
+            app.help_url = self.get_property_value('help_url')
+            app.author = self.get_property_value('author')
+            app.author_website = self.get_property_value('author_website')
+            # fallback if needed
+            # app.home_page = info.get('home_page', None)
+            app.home_page = self.get_property_value('demo_url')
+            for category in self.type:
+                category, created = AppType.objects.get_or_create(
+                    name=category)
+                app.category.add(category)
+            app.status = self.get_property_value('status')
+            app.license = self.license.get(
+                'name', None) if self.license else None
+            app.single_instance = self.get_property_value('single_instance')
+            return app
+
+        def get_property_value(self, p):
+            return getattr(self, p, None)
+    return AppSerializer
 
 
 class AppAlreadyInstalledException(BaseException):
@@ -92,7 +101,9 @@ class AppInstaller(object):
             data = self._request_rest_data("appversion/?app__name=", name,
                                            "&version=", version)
             self.version = data['objects'][0]
-        self.app_serializer = AppSerializer(**self.info)
+        Serializer = serializer_factor(self.info.keys())
+        self.app_serializer = Serializer(
+            *[self.info[key] for key in self.info])
 
     def _request_rest_data(self, *args):
         """
