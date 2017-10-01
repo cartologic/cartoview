@@ -22,7 +22,7 @@ from django.db.models import Max
 from future import standard_library
 
 from .config import App as AppConfig
-from .models import App, AppStore, AppTag
+from .models import App, AppStore, AppTag, AppType
 
 standard_library.install_aliases()
 
@@ -37,6 +37,34 @@ handler.setFormatter(formatter)
 logger.addHandler(handler)
 current_folder = os.path.abspath(os.path.dirname(__file__))
 temp_dir = os.path.join(current_folder, 'temp')
+
+
+class AppSerializer(object):
+    def __init__(self, **api_json):
+        self.__dict__.update(api_json)
+
+    def get_app_object(self, app):
+        app.title = self.title
+        app.description = self.description
+        # TODO:remove short_description
+        app.short_description = self.description
+        app.owner_url = self.get_property_value('owner_url')
+        app.help_url = self.get_property_value('help_url')
+        app.author = self.get_property_value('author')
+        app.author_website = self.get_property_value('author_website')
+        # fallback if needed
+        # app.home_page = info.get('home_page', None)
+        app.home_page = self.get_property_value('demo_url')
+        for category in self.type:
+            category, created = AppType.objects.get_or_create(name=category)
+            app.category.add(category)
+        app.status = self.get_property_value('status')
+        app.license = self.license.get('name', None) if self.license else None
+        app.single_instance = self.get_property_value('single_instance')
+        return app
+
+    def get_property_value(self, p):
+        return getattr(self, p, None)
 
 
 class AppAlreadyInstalledException(BaseException):
@@ -63,6 +91,7 @@ class AppInstaller(object):
             data = self._request_rest_data("appversion/?app__name=", name,
                                            "&version=", version)
             self.version = data['objects'][0]
+        self.app_serializer = AppSerializer(**self.info)
 
     def _request_rest_data(self, *args):
         """
@@ -100,9 +129,11 @@ class AppInstaller(object):
             zip_ref.close()
 
     def add_app(self, installer):
-
         # save app configuration
-        info = installer.info
+        # test the new behavior get data from store
+        # info = installer.info
+        # installer info
+        more_info = installer.info
         app, created = App.objects.get_or_create(name=self.name)
         if created:
             if app.order is None or app.order == 0:
@@ -116,20 +147,12 @@ class AppInstaller(object):
             app.apps_config.save()
             app.order = app_config.order
 
-        app.title = info.get('title', self.name)
-        app.description = info.get('description', None)
-        app.short_description = info.get('short_description', None)
-        app.owner_url = info.get('owner_url', None)
-        app.help_url = info.get('help_url', None)
-        app.author = info.get('author', None)
-        app.author_website = info.get('author_website', None)
-        app.home_page = info.get('home_page', None)
-        app.license = info.get('licence', None)
-        app.single_instance = info.get('single_instance', False)
+        app = self.app_serializer.get_app_object(app)
+        # TODO:get TAGS from API
+        tags = more_info.get('tags', [])
         app.version = self.version["version"]
         app.store = AppStore.objects.filter(is_default=True).first()
         app.save()
-        tags = info.get('tags', [])
         for tag_name in tags:
             tag, created = AppTag.objects.get_or_create(name=tag_name)
             app.tags.add(tag)
@@ -203,7 +226,7 @@ class AppInstaller(object):
 
 
 def finalize_setup():
-    install_app_batch = getattr(settings, 'CARTOVIEW_INSTALL_APP_BAT', None)
+    # install_app_batch = getattr(settings, 'CARTOVIEW_INSTALL_APP_BAT', None)
     docker = getattr(settings, 'DOCKER', None)
 
     def _finalize_setup():

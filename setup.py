@@ -33,4 +33,4 @@ setup(
         "Framework :: Django :: 1.8",
         "Topic :: Scientific/Engineering :: GIS"],
     license="BSD",
-    install_requires=['future', 'six==1.10.0'])
+    install_requires=['future', 'mock', 'six==1.10.0'])

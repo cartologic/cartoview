@@ -41,6 +41,16 @@ class AppTag(models.Model):
         return self.name
 
 
+class AppType(models.Model):
+    name = models.CharField(max_length=200, unique=True)
+
+    def __str__(self):
+        return self.name
+
+    def __unicode__(self):
+        return self.name
+
+
 class AppStore(models.Model):
     """
     to store links for cartoview appstores
@@ -50,6 +60,9 @@ class AppStore(models.Model):
     is_default = models.BooleanField(default=False)
 
     def __str__(self):
+        return self.name
+
+    def __unicode__(self):
         return self.name
 
 
@@ -72,6 +85,11 @@ class App(models.Model):
         geonode_settings.AUTH_USER_MODEL, null=True, blank=True)
     single_instance = models.BooleanField(
         default=False, null=False, blank=False)
+    category = models.ManyToManyField(
+        AppType, null=True, related_name='apps')
+    license = models.CharField(max_length=100, null=True, blank=True)
+    status = models.CharField(
+        max_length=100, blank=False, null=False, default='Alpha')
     owner_url = models.URLField(null=True, blank=True)
     help_url = models.URLField(null=True, blank=True)
     app_img_url = models.TextField(max_length=1000, blank=True, null=True)
@@ -84,6 +102,9 @@ class App(models.Model):
 
     class meta(object):
         ordering = ['order']
+
+    def __str__(self):
+        return self.title
 
     def __unicode__(self):
         return self.title
