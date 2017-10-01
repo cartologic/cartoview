@@ -76,7 +76,8 @@ class AppInstaller(object):
 
     """
 
-    def __init__(self, name, store_id=None, version=None):
+    def __init__(self, name, store_id=None, version=None, user=None):
+        self.user = user
         self.app_dir = os.path.join(settings.APPS_DIR, name)
         self.name = name
         if store_id is None:
@@ -151,6 +152,7 @@ class AppInstaller(object):
         # TODO:get TAGS from API
         tags = more_info.get('tags', [])
         app.version = self.version["version"]
+        app.installed_by = self.user
         app.store = AppStore.objects.filter(is_default=True).first()
         app.save()
         for tag_name in tags:
@@ -171,7 +173,8 @@ class AppInstaller(object):
             # use try except because AppInstaller.__init__ will handle upgrade
             # if version not match
             try:
-                app_installer = AppInstaller(name, self.store.id, version)
+                app_installer = AppInstaller(
+                    name, self.store.id, version, user=self.user)
                 installedApps += app_installer.install(restart=False)
             except AppAlreadyInstalledException as e:
                 logger.error(e.message)
@@ -204,7 +207,8 @@ class AppInstaller(object):
         """
         installedApps = App.objects.all()
         for app in installedApps:
-            app_installer = AppInstaller(app.name, self.store.id, app.version)
+            app_installer = AppInstaller(
+                app.name, self.store.id, app.version, user=self.user)
             dependencies = app_installer.version["dependencies"]
             if self.name in dependencies:
                 app_installer.uninstall(restart=False)

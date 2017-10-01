@@ -143,7 +143,7 @@ def install_app(request, store_id, app_name, version):
     response_data = {'success': False, 'messages': []}
     # TODO: remove try
     try:
-        installer = AppInstaller(app_name, store_id, version)
+        installer = AppInstaller(app_name, store_id, version, request.user)
         installer.install()
         response_data["success"] = True
     except Exception as ex:
@@ -159,7 +159,7 @@ def install_app(request, store_id, app_name, version):
 def uninstall_app(request, store_id, app_name):
     response_data = {"success": False, "errors": []}
     try:
-        installer = AppInstaller(app_name, store_id)
+        installer = AppInstaller(app_name, store_id, user=request.user)
         installer.uninstall()
         response_data["success"] = True
     except Exception as ex:
