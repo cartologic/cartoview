@@ -32,13 +32,12 @@ logger.addHandler(handler)
 
 
 class AppTypeManager(models.Manager):
-    def without_apps_dup(self):
-        return self.get_queryset().distinct('apps')
+    def without_apps_duplication(self):
+        return super(AppTypeManager, self).get_queryset().distinct('apps')
 
 
 class AppTag(models.Model):
     name = models.CharField(max_length=200, unique=True, null=True, blank=True)
-    objects = AppTypeManager()
 
     def __str__(self):
         return self.name
@@ -49,6 +48,7 @@ class AppTag(models.Model):
 
 class AppType(models.Model):
     name = models.CharField(max_length=200, unique=True)
+    objects = AppTypeManager()
 
     def __str__(self):
         return self.name
