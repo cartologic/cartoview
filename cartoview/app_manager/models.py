@@ -31,8 +31,14 @@ handler.setFormatter(formatter)
 logger.addHandler(handler)
 
 
+class AppTypeManager(models.Manager):
+    def without_apps_dup(self):
+        return self.get_queryset().distinct('apps')
+
+
 class AppTag(models.Model):
     name = models.CharField(max_length=200, unique=True, null=True, blank=True)
+    objects = AppTypeManager()
 
     def __str__(self):
         return self.name
