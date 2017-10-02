@@ -242,7 +242,7 @@ def finalize_setup():
     def _finalize_setup():
         if docker:
             # Kill python process so docker will restart it self
-            logger.error(subprocess.Popen("python /code/manage.py collectstatic --noinput && pkill -f python",
+            logger.error(subprocess.Popen("python /code/manage.py collectstatic --noinput && pkill -f python && killall python",
                                           shell=True, stdout=subprocess.PIPE).stdout.read())
         else:
             pass
