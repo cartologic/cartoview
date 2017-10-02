@@ -6,7 +6,7 @@ import logging
 from builtins import *
 from builtins import object, str
 from sys import stdout
-
+from taggit.managers import TaggableManager
 from django.conf import settings as geonode_settings
 from django.contrib.gis.db import models
 from django.contrib.sites.models import Site
@@ -34,16 +34,6 @@ logger.addHandler(handler)
 class AppTypeManager(models.Manager):
     def without_apps_duplication(self):
         return super(AppTypeManager, self).get_queryset().distinct('apps')
-
-
-class AppTag(models.Model):
-    name = models.CharField(max_length=200, unique=True, null=True, blank=True)
-
-    def __str__(self):
-        return self.name
-
-    def __unicode__(self):
-        return self.name
 
 
 class AppType(models.Model):
@@ -84,7 +74,7 @@ class App(models.Model):
     author = models.CharField(max_length=200, null=True, blank=True)
     author_website = models.URLField(null=True, blank=True)
     license = models.CharField(max_length=200, null=True, blank=True)
-    tags = models.ManyToManyField(AppTag, blank=True)
+    tags = TaggableManager()
     date_installed = models.DateTimeField(
         'Date Installed', auto_now_add=True, null=True)
     installed_by = models.ForeignKey(

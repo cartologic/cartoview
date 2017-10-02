@@ -22,7 +22,7 @@ from django.db.models import Max
 from future import standard_library
 
 from .config import App as AppConfig
-from .models import App, AppStore, AppTag, AppType
+from .models import App, AppStore, AppType
 
 standard_library.install_aliases()
 
@@ -66,6 +66,8 @@ def serializer_factor(fields):
                     name=category)
                 app.category.add(category)
             app.status = self.get_property_value('status')
+            app.tags.clear()
+            app.tags.add(*self.get_property_value('tags'))
             app.license = self.license.get(
                 'name', None) if self.license else None
             app.single_instance = self.get_property_value('single_instance')
@@ -164,9 +166,6 @@ class AppInstaller(object):
         app.installed_by = self.user
         app.store = AppStore.objects.filter(is_default=True).first()
         app.save()
-        for tag_name in tags:
-            tag, created = AppTag.objects.get_or_create(name=tag_name)
-            app.tags.add(tag)
         return app
 
     def install(self, restart=True):
