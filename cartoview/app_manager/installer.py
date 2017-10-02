@@ -145,7 +145,6 @@ class AppInstaller(object):
     def add_app(self, installer):
         # save app configuration
         # TODO: get rid of legacy installer i.e(create app tags in app Store)
-        more_info = installer.info
         app, created = App.objects.get_or_create(name=self.name)
         if created:
             if app.order is None or app.order == 0:
@@ -161,7 +160,6 @@ class AppInstaller(object):
 
         app = self.app_serializer.get_app_object(app)
         # TODO:get TAGS from API
-        tags = more_info.get('tags', [])
         app.version = self.version["version"]
         app.installed_by = self.user
         app.store = AppStore.objects.filter(is_default=True).first()
