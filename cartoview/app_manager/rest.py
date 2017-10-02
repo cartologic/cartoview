@@ -6,7 +6,7 @@ import json
 from builtins import *
 from builtins import filter, object, range, str
 
-from cartoview.app_manager.models import App, AppInstance, AppStore
+from cartoview.app_manager.models import App, AppInstance, AppStore, AppType
 from django.conf import settings
 from django.conf.urls import url
 from django.core.exceptions import ObjectDoesNotExist
@@ -82,6 +82,7 @@ class AppResource(FileUploadResource):
     store = fields.ForeignKey(AppStoreResource, 'store', full=False, null=True)
     order = fields.IntegerField()
     active = fields.BooleanField()
+    categories = fields.ListField()
     app_instance_count = fields.IntegerField()
 
     def dehydrate_order(self, bundle):
@@ -89,6 +90,9 @@ class AppResource(FileUploadResource):
 
     def dehydrate_active(self, bundle):
         return bundle.obj.config.active
+
+    def dehydrate_categories(self, bundle):
+        return [category.name for category in bundle.obj.category.all()]
 
     def dehydrate_app_instance_count(self, bundle):
         return bundle.obj.appinstance_set.all().count()
@@ -167,6 +171,14 @@ class AppResource(FileUploadResource):
                 app.apps_config.save()
         self.log_throttled_access(request)
         return self.create_response(request, {'success': True})
+
+
+class AppTypeResource(ModelResource):
+    apps = fields.ToManyField(
+        AppResource, attribute='apps', full=True, null=True)
+
+    class Meta(object):
+        queryset = AppType.objects.all()
 
 
 class AppInstanceResource(ModelResource):
@@ -249,8 +261,7 @@ def nFilter(filters, objects_list):
 
 
 def build_filter(filter):
-    key = filter[0]
-    value = filter[1]
+    key, value = filter
     if key == 'not_app':
         return lambda obj_dict: obj_dict['type'] in ['map', 'layer', 'doc']
     elif key == 'featured':
