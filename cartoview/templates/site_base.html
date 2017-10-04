@@ -36,10 +36,5 @@
 
     </li>
     {{ block.super }}
-    {% if WORKSPACE_ENABLED %}
-        <li>
-            <a href="{% url 'my_workspace' %}">{% trans "Workspace" %}</a>
-        </li>
-    {% endif %}
 
 {% endblock %}

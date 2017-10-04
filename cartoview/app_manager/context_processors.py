@@ -1,15 +1,16 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-from __future__ import print_function
-from __future__ import division
-from __future__ import absolute_import
-from future import standard_library
-standard_library.install_aliases()
+from __future__ import (absolute_import, division, print_function,
+                        unicode_literals)
+
 from builtins import *
+
 from cartoview.app_manager.models import App, AppInstance, Logo
 from django.conf import settings
 from django.contrib.sites.models import Site
 from django.shortcuts import get_object_or_404
+from future import standard_library
+
+standard_library.install_aliases()
 
 
 def news(request):
@@ -22,10 +23,6 @@ def apps(request):
 
 def apps_menu(request):
     return {'APPS_MENU': settings.APPS_MENU}
-
-
-def workspace(request):
-    return {'WORKSPACE_ENABLED': settings.WORKSPACE_ENABLED}
 
 
 def apps_instance(request):
