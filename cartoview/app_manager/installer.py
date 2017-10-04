@@ -236,7 +236,7 @@ class AppInstaller(object):
 
 
 def finalize_setup():
-    # install_app_batch = getattr(settings, 'CARTOVIEW_INSTALL_APP_BAT', None)
+    install_app_batch = getattr(settings, 'INSTALL_APP_BAT', None)
     docker = getattr(settings, 'DOCKER', None)
 
     def _finalize_setup():
@@ -245,19 +245,17 @@ def finalize_setup():
             logger.error(subprocess.Popen("python /code/manage.py collectstatic --noinput && pkill -f python && killall python",
                                           shell=True, stdout=subprocess.PIPE).stdout.read())
         else:
-            pass
-            # TODO: please write scripts to handle non docker servers like
             # nginx or apache
-            # working_dir = os.path.dirname(install_app_batch)
-            # log_file = os.path.join(working_dir, "install_app_log.txt")
-            # with open(log_file, 'a') as log:
-            #     subprocess.Popen(
-            #         install_app_batch,
-            #         stdout=log,
-            #         stderr=log,
-            #         shell=True,
-            #         cwd=working_dir)
-            #     # stdout, stderr = p.communicate()
+            working_dir = os.path.dirname(install_app_batch)
+            log_file = os.path.join(working_dir, "install_app_log.txt")
+            with open(log_file, 'a') as log:
+                subprocess.Popen(
+                    install_app_batch,
+                    stdout=log,
+                    stderr=log,
+                    shell=True,
+                    cwd=working_dir)
+                stdout, stderr = p.communicate()
 
     timer = Timer(0.1, _finalize_setup)
     timer.start()
