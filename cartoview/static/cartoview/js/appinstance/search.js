@@ -231,11 +231,11 @@
 
 		//Get data from apis and make them available to the page
 		function query_api(data) {
-			if (angular.isString(data.app__title)) {
+			if (angular.isString(data.app__name)) {
 				$scope.appTitle = data.app__title;
 				$http.get(APPS_ENDPOINT, {
 					params: {
-						title: data.app__title
+						name: data.app__name
 					}
 				}).success(function(res) {
 					$scope.app_name = res.objects[0].name;

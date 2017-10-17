@@ -1,26 +1,27 @@
-from __future__ import unicode_literals
-from __future__ import print_function
-from __future__ import division
-from __future__ import absolute_import
-from future import standard_library
-standard_library.install_aliases()
-from builtins import *
-from builtins import str
-from builtins import object
-from cartoview.app_manager.resources import FileUploadResource
-from tastypie.resources import ModelResource
-from .models import Comment, Image
-from tastypie.authorization import Authorization
-from tastypie import fields
-from avatar.templatetags.avatar_tags import avatar_url
-from tastypie.serializers import Serializer
-from tastypie.exceptions import UnsupportedFormat
-from django.utils.encoding import force_text
-from django.utils import six
-from tastypie.constants import ALL
-from PIL import Image as PILImage
-from django.conf import settings
+from __future__ import (absolute_import, division, print_function,
+                        unicode_literals)
+
 import os
+from builtins import *
+from builtins import object, str
+
+from avatar.templatetags.avatar_tags import avatar_url
+from cartoview.app_manager.resources import FileUploadResource
+from django.conf import settings
+from django.utils import six
+from django.utils.encoding import force_text
+from future import standard_library
+from PIL import Image as PILImage
+from tastypie import fields
+from tastypie.authorization import Authorization
+from tastypie.constants import ALL
+from tastypie.exceptions import UnsupportedFormat
+from tastypie.resources import ModelResource
+from tastypie.serializers import Serializer
+
+from .models import Comment, Image
+
+standard_library.install_aliases()
 
 
 class MultipartFormSerializer(Serializer):
