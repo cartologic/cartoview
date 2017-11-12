@@ -30,10 +30,9 @@ RUN apt-get install nodejs -y
 RUN npm install -g bower grunt
 RUN mkdir /code
 WORKDIR /code
+RUN pip install --upgrade pip
 RUN pip install GDAl django-osgeo-importer django-geonode-client \
-                geonode==2.6.3 django-jsonfield django-jsonfield-compat cherrypy  --no-cache-dir
-RUN pip install cartoview -U --no-cache-dir
-RUN pip uninstall Shapely -y
-RUN pip install Shapely==1.5.17
+                geonode==2.6.3 django-jsonfield django-jsonfield-compat  --no-cache-dir
+RUN pip install cartoview cherrypy==11.0.0 -U --no-cache-dir
 RUN rm -rf /var/lib/apt/lists/*
 CMD ["/bin/bash"]
