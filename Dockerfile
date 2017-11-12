@@ -10,7 +10,7 @@ RUN apt-get update && apt-get install -y \
 		gettext \
                 python-pip \
 		libpq-dev \
-		sqlite3 \
+		sqlite3 git \
                 software-properties-common python-software-properties \
                 lsof psmisc \
                 python-gdal python-psycopg2 \
