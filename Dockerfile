@@ -31,8 +31,8 @@ RUN npm install -g bower grunt
 RUN mkdir /code
 WORKDIR /code
 RUN pip install --upgrade pip
-RUN pip install GDAl django-osgeo-importer django-geonode-client \
-                geonode==2.6.3 django-jsonfield django-jsonfield-compat  --no-cache-dir
-RUN pip install cartoview cherrypy==11.0.0 -U --no-cache-dir
+RUN pip install --ignore-installed GDAl django-osgeo-importer django-geonode-client \
+                geonode==2.6.3 django-jsonfield django-jsonfield-compat cartoview \
+                geonode-user-accounts==1.0.13 cherrypy==11.0.0 --no-cache-dir
 RUN rm -rf /var/lib/apt/lists/*
 CMD ["/bin/bash"]
