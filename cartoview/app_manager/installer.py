@@ -9,10 +9,11 @@ import shutil
 import subprocess
 import tempfile
 import zipfile
+from django.core.management import call_command
 from builtins import *
 from builtins import object, str
 from io import BytesIO
-from sys import stdout
+from sys import stdout, exit
 from threading import Timer
 
 import pkg_resources
@@ -39,6 +40,57 @@ current_folder = os.path.abspath(os.path.dirname(__file__))
 temp_dir = os.path.join(current_folder, 'temp')
 
 
+class FinalizeInstaller:
+    def collect_static(self):
+        call_command("collectstatic", ignore=[
+                     'node_modules', ], interactive=False)
+
+    def migrate_app(self, app_name):
+        call_command("migrate", app_name, interactive=False)
+
+    def restart_docker(self):
+        try:
+            exit(0)
+        except:
+            logger.error(subprocess.Popen("pkill -f python && killall python",
+                                          shell=True,
+                                          stdout=subprocess.PIPE).stdout.read())
+
+    def restart_server(self, install_app_batch):
+        working_dir = os.path.dirname(install_app_batch)
+        log_file = os.path.join(working_dir, "install_app_log.txt")
+        with open(log_file, 'a') as log:
+            proc = subprocess.Popen(
+                install_app_batch,
+                stdout=log,
+                stderr=log,
+                shell=True,
+                cwd=working_dir)
+            logger.warning(proc.stdout)
+            logger.error(proc.stderr)
+
+    def finalize_setup(self, app_name):
+        install_app_batch = getattr(settings, 'INSTALL_APP_BAT', None)
+        docker = getattr(settings, 'DOCKER', None)
+
+        def _finalize_setup(app_name):
+            self.collect_static()
+            self.migrate_app(app_name)
+            if docker:
+                self.restart_docker()
+            else:
+                # nginx or apache
+                self.restart_server(install_app_batch)
+        timer = Timer(0.1, _finalize_setup(app_name))
+        timer.start()
+
+    def __call__(self, app_name):
+        self.finalize_setup(app_name)
+
+
+finalize_setup = FinalizeInstaller()
+
+
 def serializer_factor(fields):
     class AppSerializer(object):
         __slots__ = fields
@@ -50,27 +102,26 @@ def serializer_factor(fields):
                 setattr(self, key, value)
 
         def get_app_object(self, app):
+            obj_property = self.get_property_value
             app.title = self.title
             app.description = self.description
             # TODO:remove short_description
             app.short_description = self.description
-            app.owner_url = self.get_property_value('owner_url')
-            app.help_url = self.get_property_value('help_url')
-            app.author = self.get_property_value('author')
-            app.author_website = self.get_property_value('author_website')
-            # fallback if needed
-            # app.home_page = info.get('home_page', None)
-            app.home_page = self.get_property_value('demo_url')
+            app.owner_url = obj_property('owner_url')
+            app.help_url = obj_property('help_url')
+            app.author = obj_property('author')
+            app.author_website = obj_property('author_website')
+            app.home_page = obj_property('demo_url')
             for category in self.type:
                 category, created = AppType.objects.get_or_create(
                     name=category)
                 app.category.add(category)
-            app.status = self.get_property_value('status')
+            app.status = obj_property('status')
             app.tags.clear()
-            app.tags.add(*self.get_property_value('tags'))
+            app.tags.add(*obj_property('tags'))
             app.license = self.license.get(
                 'name', None) if self.license else None
-            app.single_instance = self.get_property_value('single_instance')
+            app.single_instance = obj_property('single_instance')
             return app
 
         def get_property_value(self, p):
@@ -83,9 +134,6 @@ class AppAlreadyInstalledException(BaseException):
 
 
 class AppInstaller(object):
-    """
-
-    """
 
     def __init__(self, name, store_id=None, version=None, user=None):
         self.user = user
@@ -125,7 +173,6 @@ class AppInstaller(object):
         zip_ref = zipfile.ZipFile(
             BytesIO(response.content))
         try:
-            # extract_to = os.path.join(settings.APPS_DIR)
             if not os.path.exists(temp_dir):
                 os.makedirs(temp_dir)
             extract_to = tempfile.mkdtemp(dir=temp_dir)
@@ -139,12 +186,13 @@ class AppInstaller(object):
             shutil.move(self.old_app_temp_dir, settings.APPS_DIR)
             # delete temp extract dir
             shutil.rmtree(extract_to)
+        except IOError as e:
+            logger.error(e.message)
         finally:
             zip_ref.close()
 
     def add_app(self, installer):
         # save app configuration
-        # TODO: get rid of legacy installer i.e(create app tags in app Store)
         app, created = App.objects.get_or_create(name=self.name)
         if created:
             if app.order is None or app.order == 0:
@@ -157,9 +205,7 @@ class AppInstaller(object):
             app.apps_config.append(app_config)
             app.apps_config.save()
             app.order = app_config.order
-
         app = self.app_serializer.get_app_object(app)
-        # TODO:get TAGS from API
         app.version = self.version["version"]
         app.installed_by = self.user
         app.store = AppStore.objects.filter(is_default=True).first()
@@ -191,7 +237,7 @@ class AppInstaller(object):
             installedApps.append(self.add_app(installer))
             installer.install()
             if restart:
-                finalize_setup()
+                finalize_setup(self.name)
         except Exception as ex:
             logger.error(ex.message)
         return installedApps
@@ -232,31 +278,4 @@ class AppInstaller(object):
         app_dir = os.path.join(settings.APPS_DIR, self.name)
         shutil.rmtree(app_dir)
         if restart:
-            finalize_setup()
-
-
-def finalize_setup():
-    install_app_batch = getattr(settings, 'INSTALL_APP_BAT', None)
-    docker = getattr(settings, 'DOCKER', None)
-
-    def _finalize_setup():
-        if docker:
-            # Kill python process so docker will restart it self
-            logger.error(subprocess.Popen("python /code/manage.py collectstatic --noinput && pkill -f python && killall python",
-                                          shell=True, stdout=subprocess.PIPE).stdout.read())
-        else:
-            # nginx or apache
-            working_dir = os.path.dirname(install_app_batch)
-            log_file = os.path.join(working_dir, "install_app_log.txt")
-            with open(log_file, 'a') as log:
-                subprocess.Popen(
-                    install_app_batch,
-                    stdout=log,
-                    stderr=log,
-                    shell=True,
-                    cwd=working_dir)
-                stdout, stderr = p.communicate()
-
-    timer = Timer(0.1, _finalize_setup)
-    timer.start()
-# TODO: add function to fix ordering in cartoview (old versions)
+            finalize_setup(app.name)

@@ -64,8 +64,6 @@ temp_dir = os.path.join(current_folder, 'temp')
 if not os.path.exists(temp_dir):
     os.makedirs(temp_dir)
 
-# TODO: Review the following function Legacy?!!!
-
 
 def save_thumbnail(filename, image):
     thumb_folder = 'thumbs'
