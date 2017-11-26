@@ -50,7 +50,7 @@ class FinalizeInstaller:
 
     def restart_docker(self):
         try:
-            exit(0)
+            exit(1)
         except:
             logger.error(subprocess.Popen("pkill -f python && killall python",
                                           shell=True,
@@ -232,6 +232,10 @@ class AppInstaller(object):
                 logger.error(e.message)
         self._download_app()
         reload(pkg_resources)
+        self.check_then_finlize(restart, installedApps)
+        return installedApps
+
+    def check_then_finlize(self, restart, installedApps):
         try:
             installer = importlib.import_module('%s.installer' % self.name)
             installedApps.append(self.add_app(installer))
@@ -240,7 +244,6 @@ class AppInstaller(object):
                 finalize_setup(self.name)
         except Exception as ex:
             logger.error(ex.message)
-        return installedApps
 
     def uninstall(self, restart=True):
         """

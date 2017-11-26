@@ -474,33 +474,11 @@ class AppViews(with_metaclass(abc.ABCMeta, object)):
         self.edit_template = "%s/edit.html" % self.app_name
         self.view_template = "%s/view.html" % self.app_name
 
-    def save(self, request, instance_id=None):
-        res_json = dict(success=False)
-        data = json.loads(request.body)
-        map_id = data.get('map', None)
-        title = data.get('title', "")
-        config = data.get('config', None)
-        access = data.get('access', None)
-        config.update(access=access)
-        config = json.dumps(data.get('config', None))
-        abstract = data.get('abstract', "")
-        keywords = data.get('keywords', [])
-
-        if instance_id is None:
-            instance_obj = AppInstance()
-            instance_obj.app = App.objects.get(name=self.app_name)
-            instance_obj.owner = request.user
-        else:
-            instance_obj = AppInstance.objects.get(pk=instance_id)
-
-        instance_obj.title = title
-        instance_obj.config = config
-        instance_obj.abstract = abstract
-        instance_obj.map_id = map_id
-        instance_obj.save()
-        thumbnail_obj = AppsThumbnail(instance_obj)
+    def set_thumbnail(self, instance):
+        thumbnail_obj = AppsThumbnail(instance)
         thumbnail_obj.create_thumbnail()
 
+    def set_permissions(self, instance, owner):
         owner_permissions = [
             'view_resourcebase',
             'download_resourcebase',
@@ -514,13 +492,13 @@ class AppViews(with_metaclass(abc.ABCMeta, object)):
         if access == "private":
             permessions = {
                 'users': {
-                    '{}'.format(request.user): owner_permissions,
+                    '{}'.format(owner): owner_permissions,
                 }
             }
         else:
             permessions = {
                 'users': {
-                    '{}'.format(request.user): owner_permissions,
+                    '{}'.format(owner): owner_permissions,
                     'AnonymousUser': [
                         'view_resourcebase',
                     ],
@@ -528,14 +506,45 @@ class AppViews(with_metaclass(abc.ABCMeta, object)):
             }
         # set permissions so that no one can view this appinstance other than
         #  the user
-        instance_obj.set_permissions(permessions)
+        instance.set_permissions(permessions)
 
-        # update the instance keywords
-        if hasattr(instance_obj, 'keywords'):
+    def set_keywords(self, keywords, instance):
+        if hasattr(instance, 'keywords'):
             for k in keywords:
-                if k not in instance_obj.keyword_list():
-                    instance_obj.keywords.add(k)
+                if k not in instance.keyword_list():
+                    instance.keywords.add(k)
+    def save_instance(self,instance_id,owner,title,config,abstract,map_id):
+        if instance_id is None:
+            instance_obj = AppInstance()
+            instance_obj.app = App.objects.get(name=self.app_name)
+            instance_obj.owner = owner
+        else:
+            instance_obj = AppInstance.objects.get(pk=instance_id)
 
+        instance_obj.title = title
+        instance_obj.config = config
+        instance_obj.abstract = abstract
+        instance_obj.map_id = map_id
+        instance_obj.save()
+        return instance_obj
+    
+    def save(self, request, instance_id=None):
+        res_json = dict(success=False)
+        data = json.loads(request.body)
+        map_id = data.get('map', None)
+        title = data.get('title', "")
+        config = data.get('config', None)
+        access = data.get('access', None)
+        config.update(access=access)
+        config = json.dumps(data.get('config', None))
+        abstract = data.get('abstract', "")
+        keywords = data.get('keywords', [])
+        instance_obj = self.save_instance(instance_id, request.user, title,
+                                          config, abstract, map_id)
+        self.set_thumbnail(instance_obj)
+        self.set_permissions(instance_obj, request.user)
+        self.set_keywords(keywords, instance_obj)
+        # update the instance keywords
         res_json.update(dict(success=True, id=instance_obj.id))
         return HttpResponse(json.dumps(res_json),
                             content_type="application/json")
