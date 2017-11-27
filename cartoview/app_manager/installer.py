@@ -9,13 +9,11 @@ import shutil
 import subprocess
 import tempfile
 import zipfile
-from django.core.management import call_command
+import yaml
 from builtins import *
-from builtins import object, str
 from io import BytesIO
 from sys import stdout, exit
 from threading import Timer
-
 import pkg_resources
 import requests
 from django.conf import settings
@@ -24,10 +22,7 @@ from future import standard_library
 
 from .config import App as AppConfig
 from .models import App, AppStore, AppType
-
 standard_library.install_aliases()
-
-
 reload(pkg_resources)
 formatter = logging.Formatter(
     '[%(asctime)s] p%(process)s  { %(name)s %(pathname)s:%(lineno)d} \
@@ -41,12 +36,13 @@ temp_dir = os.path.join(current_folder, 'temp')
 
 
 class FinalizeInstaller:
-    def collect_static(self):
-        call_command("collectstatic", ignore=[
-                     'node_modules', ], interactive=False)
+    def __init__(self):
+        self.apps_to_finlize = []
 
-    def migrate_app(self, app_name):
-        call_command("migrate", app_name, interactive=False)
+    def save_pending_app_to_finlize(self):
+        with open(settings.PENDING_APPS, 'wb') as outfile:
+            yaml.dump(self.apps_to_finlize, outfile, default_flow_style=False)
+        self.apps_to_finlize = []
 
     def restart_docker(self):
         try:
@@ -70,16 +66,18 @@ class FinalizeInstaller:
             logger.error(proc.stderr)
 
     def finalize_setup(self, app_name):
+        self.save_pending_app_to_finlize()
         install_app_batch = getattr(settings, 'INSTALL_APP_BAT', None)
         docker = getattr(settings, 'DOCKER', None)
 
         def _finalize_setup(app_name):
-            self.collect_static()
-            self.migrate_app(app_name)
             if docker:
-                self.restart_docker()
+                try:
+                    import cherrypy
+                    cherrypy.engine.restart()
+                except ImportError:
+                    exit(0)
             else:
-                # nginx or apache
                 self.restart_server(install_app_batch)
         timer = Timer(0.1, _finalize_setup(app_name))
         timer.start()
@@ -88,7 +86,7 @@ class FinalizeInstaller:
         self.finalize_setup(app_name)
 
 
-finalize_setup = FinalizeInstaller()
+FINALIZE_SETUP = FinalizeInstaller()
 
 
 def serializer_factor(fields):
@@ -215,33 +213,34 @@ class AppInstaller(object):
     def install(self, restart=True):
         self.upgrade = False
         if os.path.exists(self.app_dir):
-            installedApp = App.objects.get(name=self.name)
-            if installedApp.version < self.version["version"]:
+            installed_app = App.objects.get(name=self.name)
+            if installed_app.version < self.version["version"]:
                 self.upgrade = True
             else:
                 raise AppAlreadyInstalledException()
-        installedApps = []
+        installed_apps = []
         for name, version in list(self.version["dependencies"].items()):
             # use try except because AppInstaller.__init__ will handle upgrade
             # if version not match
             try:
                 app_installer = AppInstaller(
                     name, self.store.id, version, user=self.user)
-                installedApps += app_installer.install(restart=False)
+                installed_apps += app_installer.install(restart=False)
             except AppAlreadyInstalledException as e:
                 logger.error(e.message)
         self._download_app()
         reload(pkg_resources)
-        self.check_then_finlize(restart, installedApps)
-        return installedApps
+        self.check_then_finlize(restart, installed_apps)
+        return installed_apps
 
-    def check_then_finlize(self, restart, installedApps):
+    def check_then_finlize(self, restart, installed_apps):
         try:
             installer = importlib.import_module('%s.installer' % self.name)
-            installedApps.append(self.add_app(installer))
+            installed_apps.append(self.add_app(installer))
             installer.install()
+            FINALIZE_SETUP.apps_to_finlize.append(self.name)
             if restart:
-                finalize_setup(self.name)
+                FINALIZE_SETUP(self.name)
         except Exception as ex:
             logger.error(ex.message)
 
@@ -260,8 +259,8 @@ class AppInstaller(object):
 
         :return:
         """
-        installedApps = App.objects.all()
-        for app in installedApps:
+        installed_apps = App.objects.all()
+        for app in installed_apps:
             app_installer = AppInstaller(
                 app.name, self.store.id, app.version, user=self.user)
             dependencies = app_installer.version["dependencies"]
@@ -281,4 +280,4 @@ class AppInstaller(object):
         app_dir = os.path.join(settings.APPS_DIR, self.name)
         shutil.rmtree(app_dir)
         if restart:
-            finalize_setup(app.name)
+            FINALIZE_SETUP(app.name)

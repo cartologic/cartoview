@@ -5,8 +5,7 @@ import cartoview
 import geonode
 from geonode.settings import *
 
-INSTALLED_APPS += ("cartoview", "cartoview.app_manager",
-                   "cartoview.user_engage")
+INSTALLED_APPS += ("cartoview", "cartoview.app_manager")
 ROOT_URLCONF = "cartoview.urls"
 CARTOVIEW_ROOT = os.path.abspath(os.path.dirname(cartoview.__file__))
 GEONODE_ROOT = os.path.abspath(os.path.dirname(geonode.__file__))
@@ -21,7 +20,6 @@ APPS_MENU = False
 DOCKER = os.getenv('DOCKER', False)
 TEMPLATES[0]["OPTIONS"]['context_processors'] += (
     'cartoview.app_manager.context_processors.apps',
-    'cartoview.app_manager.context_processors.news',
     'cartoview.app_manager.context_processors.apps_instance',
     'cartoview.app_manager.context_processors.site_logo',
     'cartoview.app_manager.context_processors.apps_menu')

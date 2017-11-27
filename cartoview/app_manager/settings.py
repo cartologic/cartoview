@@ -30,6 +30,7 @@ if APPS_DIR not in sys.path:
     sys.path.append(APPS_DIR)
 
 apps_file_path = os.path.join(APPS_DIR, "apps.yml")
+PENDING_APPS = os.path.join(APPS_DIR, "pendingOperation.yml")
 apps_config = AppsConfig(apps_file_path)
 CARTOVIEW_APPS = ()
 for app_config in apps_config:
@@ -50,3 +51,4 @@ for app_config in apps_config:
             logger.error(e.message)
 
 INSTALLED_APPS = INSTALLED_APPS + CARTOVIEW_APPS
+INSTALLED_APPS += ("cartoview.apps_handler.apps.AppsHandlerConfig",)

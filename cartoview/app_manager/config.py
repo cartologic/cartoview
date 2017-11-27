@@ -4,7 +4,6 @@ from __future__ import (absolute_import, division, print_function,
 
 import os
 from builtins import *
-from builtins import object, str
 from future.utils import native
 import yaml
 from future import standard_library
