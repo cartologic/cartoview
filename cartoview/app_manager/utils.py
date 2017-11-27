@@ -20,21 +20,6 @@ from future.utils import with_metaclass
 
 
 @require_http_methods([
-    "POST",
-])
-def settings_api(request):
-    result = {}
-    data = request.POST.getlist('attributes')
-    for attr in data:
-        if hasattr(settings, attr):
-            result[attr] = getattr(settings, attr)
-        else:
-            return HttpResponse(
-                "{} Not Found in settings".format(attr), status=404)
-    return JsonResponse(result)
-
-
-@require_http_methods([
     "GET",
 ])
 def map_layers(request):

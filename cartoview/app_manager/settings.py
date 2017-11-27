@@ -8,7 +8,7 @@ import sys
 from builtins import *
 from sys import stdout
 
-from .config import AppsConfig
+from cartoview.app_manager.config import AppsConfig
 from future import standard_library
 from past.builtins import execfile
 
@@ -30,7 +30,7 @@ if APPS_DIR not in sys.path:
     sys.path.append(APPS_DIR)
 
 apps_file_path = os.path.join(APPS_DIR, "apps.yml")
-apps_pending_yml_path = os.path.join(APPS_DIR, "pendingOperation.yml")
+PENDING_APPS = os.path.join(APPS_DIR, "pendingOperation.yml")
 apps_config = AppsConfig(apps_file_path)
 CARTOVIEW_APPS = ()
 for app_config in apps_config:

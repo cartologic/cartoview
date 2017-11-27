@@ -14,7 +14,6 @@ from cartoview.app_manager.rest import (AppInstanceResource, AppResource,
                                         GeonodeMapResource, TagResource,
                                         all_resources_rest)
 from cartoview.app_manager.utils import map_layers
-from cartoview.user_engage.rest import CommentResource, ImageResource
 from django.conf.urls import include, patterns, url
 from django.views.generic import TemplateView
 from future import standard_library
@@ -32,8 +31,6 @@ rest_api.register(GeonodeMapLayerResource())
 rest_api.register(GeonodeLayerResource())
 rest_api.register(GeonodeLayerAttributeResource())
 rest_api.register(TagResource())
-rest_api.register(ImageResource())
-rest_api.register(CommentResource())
 
 # from django.conf import settings
 #
