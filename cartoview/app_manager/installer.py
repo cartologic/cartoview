@@ -9,7 +9,7 @@ import shutil
 import subprocess
 import tempfile
 import zipfile
-from django.core.management import call_command
+import yaml
 from builtins import *
 from builtins import object, str
 from io import BytesIO
@@ -24,10 +24,8 @@ from future import standard_library
 
 from .config import App as AppConfig
 from .models import App, AppStore, AppType
-
+from django.conf import settings
 standard_library.install_aliases()
-
-
 reload(pkg_resources)
 formatter = logging.Formatter(
     '[%(asctime)s] p%(process)s  { %(name)s %(pathname)s:%(lineno)d} \
@@ -38,15 +36,17 @@ handler.setFormatter(formatter)
 logger.addHandler(handler)
 current_folder = os.path.abspath(os.path.dirname(__file__))
 temp_dir = os.path.join(current_folder, 'temp')
+logger.error(settings.PENDING_APPS)
 
 
 class FinalizeInstaller:
-    def collect_static(self):
-        call_command("collectstatic", ignore=[
-                     'node_modules', ], interactive=False)
+    def __init__(self):
+        self.apps_to_finlize = []
 
-    def migrate_app(self, app_name):
-        call_command("migrate", app_name, interactive=False)
+    def save_pending_app_to_finlize(self):
+        with open(settings.PENDING_APPS, 'wb') as outfile:
+            yaml.dump(self.apps_to_finlize, outfile, default_flow_style=False)
+        self.apps_to_finlize = []
 
     def restart_docker(self):
         try:
@@ -70,12 +70,11 @@ class FinalizeInstaller:
             logger.error(proc.stderr)
 
     def finalize_setup(self, app_name):
+        self.save_pending_app_to_finlize()
         install_app_batch = getattr(settings, 'INSTALL_APP_BAT', None)
         docker = getattr(settings, 'DOCKER', None)
 
         def _finalize_setup(app_name):
-            self.collect_static()
-            self.migrate_app(app_name)
             if docker:
                 self.restart_docker()
             else:
@@ -240,6 +239,7 @@ class AppInstaller(object):
             installer = importlib.import_module('%s.installer' % self.name)
             installedApps.append(self.add_app(installer))
             installer.install()
+            finalize_setup.apps_to_finlize.append(self.name)
             if restart:
                 finalize_setup(self.name)
         except Exception as ex:

@@ -478,7 +478,7 @@ class AppViews(with_metaclass(abc.ABCMeta, object)):
         thumbnail_obj = AppsThumbnail(instance)
         thumbnail_obj.create_thumbnail()
 
-    def set_permissions(self, instance, owner):
+    def set_permissions(self, instance,access, owner):
         owner_permissions = [
             'view_resourcebase',
             'download_resourcebase',
@@ -542,7 +542,7 @@ class AppViews(with_metaclass(abc.ABCMeta, object)):
         instance_obj = self.save_instance(instance_id, request.user, title,
                                           config, abstract, map_id)
         self.set_thumbnail(instance_obj)
-        self.set_permissions(instance_obj, request.user)
+        self.set_permissions(instance_obj,access, request.user)
         self.set_keywords(keywords, instance_obj)
         # update the instance keywords
         res_json.update(dict(success=True, id=instance_obj.id))
