@@ -51,3 +51,4 @@ for app_config in apps_config:
             logger.error(e.message)
 
 INSTALLED_APPS = INSTALLED_APPS + CARTOVIEW_APPS
+INSTALLED_APPS += ("cartoview.apps_handler.apps.AppsHandlerConfig",)
