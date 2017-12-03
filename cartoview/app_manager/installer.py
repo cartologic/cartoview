@@ -185,7 +185,7 @@ class AppInstaller(object):
             shutil.move(self.old_app_temp_dir, settings.APPS_DIR)
             # delete temp extract dir
             shutil.rmtree(extract_to)
-        except IOError as e:
+        except Exception as e:
             logger.error(e.message)
         finally:
             zip_ref.close()
@@ -215,10 +215,12 @@ class AppInstaller(object):
         self.upgrade = False
         if os.path.exists(self.app_dir):
             installed_app = App.objects.get(name=self.name)
+            logger.error(installed_app)
             if installed_app.version < self.version["version"]:
                 self.upgrade = True
             else:
-                raise AppAlreadyInstalledException()
+                pass
+                # raise AppAlreadyInstalledException()
         installed_apps = []
         for name, version in list(self.version["dependencies"].items()):
             # use try except because AppInstaller.__init__ will handle upgrade

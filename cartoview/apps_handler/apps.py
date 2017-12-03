@@ -8,6 +8,7 @@ import logging
 from sys import stdout
 from django.core.management import call_command
 from django.core.management.base import CommandError
+pending_yaml = settings.PENDING_APPS
 formatter = logging.Formatter(
     '[%(asctime)s] p%(process)s  { %(name)s %(pathname)s:%(lineno)d} \
                             %(levelname)s - %(message)s', '%m-%d %H:%M:%S')
@@ -25,20 +26,28 @@ class AppsHandlerConfig(AppConfig):
         from cartoview.app_manager.installer import AppInstaller
         AppInstaller(appname).uninstall(restart=True)
 
+    def reset(self):
+        with open(pending_yaml, 'w+') as f:
+            yaml.dump([], f)
+
     def execute_pending(self):
         # TODO: fix racing
-        pending_yaml = settings.PENDING_APPS
         if os.path.exists(pending_yaml):
             with open(pending_yaml, 'r') as f:
                 pending_apps = yaml.load(f) or []
                 for app in pending_apps:
-                    call_command("makemigrations", app, interactive=False)
                     try:
-                        call_command("migrate", app, interactive=False)
-                    except CommandError:
-                        self.delete_application_on_fail(app)
-            with open(pending_yaml, 'w+') as f:
-                yaml.dump([], f)
+                        call_command("makemigrations", app,
+                                     interactive=False)
+                        call_command("migrate", app,
+                                     interactive=False)
+                    except CommandError as e:
+                        error = e.message
+                        logger.error(error)
+                        if "you cannot selectively sync unmigrated apps"\
+                                not in error:
+                            self.reset()
+                            self.delete_application_on_fail(app)
         else:
             pass
 
