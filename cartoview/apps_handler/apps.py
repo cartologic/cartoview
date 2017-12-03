@@ -46,8 +46,8 @@ class AppsHandlerConfig(AppConfig):
                         logger.error(error)
                         if "you cannot selectively sync unmigrated apps"\
                                 not in error:
-                            self.reset()
                             self.delete_application_on_fail(app)
+            self.reset()
         else:
             pass
 

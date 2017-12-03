@@ -12,7 +12,7 @@ import zipfile
 import yaml
 from builtins import *
 from io import BytesIO
-from sys import stdout, exit
+from sys import stdout, exit, executable
 from threading import Timer
 import pkg_resources
 import requests
@@ -254,9 +254,15 @@ class AppInstaller(object):
         del app.apps_config[app_config]
         app.apps_config.save()
 
+    def execute_command(self, command):
+        manage_py = os.path.join(settings.BASE_DIR, 'manage.py')
+        process = subprocess.Popen("{} {} {}".format(
+            executable, manage_py, command), shell=True)
+        out, err = process.communicate()
+        logger.error(out, err)
+
     def delete_app_tables(self):
-        from django.contrib.contenttypes.models import ContentType
-        ContentType.objects.filter(app_label=self.name).delete()
+        self.execute_command("migrate {} zero".format(self.name))
 
     def uninstall(self, restart=True):
         """
