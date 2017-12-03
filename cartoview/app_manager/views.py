@@ -478,7 +478,7 @@ class AppViews(with_metaclass(abc.ABCMeta, object)):
         thumbnail_obj = AppsThumbnail(instance)
         thumbnail_obj.create_thumbnail()
 
-    def set_permissions(self, instance,access, owner):
+    def set_permissions(self, instance, access, owner):
         owner_permissions = [
             'view_resourcebase',
             'download_resourcebase',
@@ -513,7 +513,8 @@ class AppViews(with_metaclass(abc.ABCMeta, object)):
             for k in keywords:
                 if k not in instance.keyword_list():
                     instance.keywords.add(k)
-    def save_instance(self,instance_id,owner,title,config,abstract,map_id):
+
+    def save_instance(self, instance_id, owner, title, config, abstract, map_id):
         if instance_id is None:
             instance_obj = AppInstance()
             instance_obj.app = App.objects.get(name=self.app_name)
@@ -527,7 +528,7 @@ class AppViews(with_metaclass(abc.ABCMeta, object)):
         instance_obj.map_id = map_id
         instance_obj.save()
         return instance_obj
-    
+
     def save(self, request, instance_id=None):
         res_json = dict(success=False)
         data = json.loads(request.body)
@@ -542,12 +543,11 @@ class AppViews(with_metaclass(abc.ABCMeta, object)):
         instance_obj = self.save_instance(instance_id, request.user, title,
                                           config, abstract, map_id)
         self.set_thumbnail(instance_obj)
-        self.set_permissions(instance_obj,access, request.user)
+        self.set_permissions(instance_obj, access, request.user)
         self.set_keywords(keywords, instance_obj)
         # update the instance keywords
         res_json.update(dict(success=True, id=instance_obj.id))
-        return HttpResponse(json.dumps(res_json),
-                            content_type="application/json")
+        return HttpResponse(json.dumps(res_json), content_type="application/json")
 
     @abc.abstractmethod
     def new(self, request, template=None, context={}, *args, **kwargs):
