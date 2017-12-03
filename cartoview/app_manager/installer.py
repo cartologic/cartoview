@@ -245,7 +245,7 @@ class AppInstaller(object):
         except Exception as ex:
             logger.error(ex.message)
 
-    def delete_app_and_appConfig(self):
+    def completely_remove(self):
         app = App.objects.get(name=self.name)
         app.delete()
         app_config = app.apps_config.get_by_name(self.name)
@@ -281,7 +281,7 @@ class AppInstaller(object):
         installer = importlib.import_module('%s.installer' % self.name)
         installer.uninstall()
         self.delete_app_tables()
-        self.delete_app_and_appConfig()
+        self.completely_remove()
         app_dir = os.path.join(settings.APPS_DIR, self.name)
         shutil.rmtree(app_dir)
         if restart:
