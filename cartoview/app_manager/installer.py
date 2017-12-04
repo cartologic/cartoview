@@ -12,7 +12,7 @@ import zipfile
 import yaml
 from builtins import *
 from io import BytesIO
-from sys import stdout, exit
+from sys import stdout, exit, executable
 from threading import Timer
 import pkg_resources
 import requests
@@ -22,6 +22,7 @@ from future import standard_library
 
 from .config import App as AppConfig
 from .models import App, AppStore, AppType
+install_app_batch = getattr(settings, 'INSTALL_APP_BAT', None)
 standard_library.install_aliases()
 reload(pkg_resources)
 formatter = logging.Formatter(
@@ -52,7 +53,7 @@ class FinalizeInstaller:
                                           shell=True,
                                           stdout=subprocess.PIPE).stdout.read())
 
-    def restart_server(self, install_app_batch):
+    def restart_server(self):
         working_dir = os.path.dirname(install_app_batch)
         log_file = os.path.join(working_dir, "install_app_log.txt")
         with open(log_file, 'a') as log:
@@ -67,7 +68,7 @@ class FinalizeInstaller:
 
     def finalize_setup(self, app_name):
         self.save_pending_app_to_finlize()
-        install_app_batch = getattr(settings, 'INSTALL_APP_BAT', None)
+
         docker = getattr(settings, 'DOCKER', None)
 
         def _finalize_setup(app_name):
@@ -78,7 +79,7 @@ class FinalizeInstaller:
                 except ImportError:
                     exit(0)
             else:
-                self.restart_server(install_app_batch)
+                self.restart_server()
         timer = Timer(0.1, _finalize_setup(app_name))
         timer.start()
 
@@ -184,7 +185,7 @@ class AppInstaller(object):
             shutil.move(self.old_app_temp_dir, settings.APPS_DIR)
             # delete temp extract dir
             shutil.rmtree(extract_to)
-        except IOError as e:
+        except Exception as e:
             logger.error(e.message)
         finally:
             zip_ref.close()
@@ -214,10 +215,12 @@ class AppInstaller(object):
         self.upgrade = False
         if os.path.exists(self.app_dir):
             installed_app = App.objects.get(name=self.name)
+            logger.error(installed_app)
             if installed_app.version < self.version["version"]:
                 self.upgrade = True
             else:
-                raise AppAlreadyInstalledException()
+                pass
+                # raise AppAlreadyInstalledException()
         installed_apps = []
         for name, version in list(self.version["dependencies"].items()):
             # use try except because AppInstaller.__init__ will handle upgrade
@@ -244,6 +247,23 @@ class AppInstaller(object):
         except Exception as ex:
             logger.error(ex.message)
 
+    def completely_remove(self):
+        app = App.objects.get(name=self.name)
+        app.delete()
+        app_config = app.apps_config.get_by_name(self.name)
+        del app.apps_config[app_config]
+        app.apps_config.save()
+
+    def execute_command(self, command):
+        manage_py = os.path.join(settings.BASE_DIR, 'manage.py')
+        process = subprocess.Popen("{} {} {}".format(
+            executable, manage_py, command), shell=True)
+        out, err = process.communicate()
+        logger.error(out, err)
+
+    def delete_app_tables(self):
+        self.execute_command("migrate {} zero".format(self.name))
+
     def uninstall(self, restart=True):
         """
         angular.forEach(app.store.installedApps.objects,
@@ -268,16 +288,9 @@ class AppInstaller(object):
                 app_installer.uninstall(restart=False)
         installer = importlib.import_module('%s.installer' % self.name)
         installer.uninstall()
-        from django.contrib.contenttypes.models import ContentType
-        ContentType.objects.filter(app_label=self.name).delete()
-        app = App.objects.get(name=self.name)
-        app.delete()
-
-        app_config = app.apps_config.get_by_name(self.name)
-        del app.apps_config[app_config]
-        app.apps_config.save()
-
+        self.delete_app_tables()
+        self.completely_remove()
         app_dir = os.path.join(settings.APPS_DIR, self.name)
         shutil.rmtree(app_dir)
         if restart:
-            FINALIZE_SETUP(app.name)
+            FINALIZE_SETUP.restart_server()
