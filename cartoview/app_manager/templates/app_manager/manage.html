@@ -14,7 +14,7 @@
 {% block body %}
 
 
-<div class="col-md-8 col-md-offset-2 manager-ct" ng-app="cartoview.appManager.manager">
+<div class="col-md-10 col-md-offset-1 manager-ct" ng-app="cartoview.appManager.manager">
 
     <cartoview-app-manager></cartoview-app-manager>
     <cartoview-app-installer></cartoview-app-installer>
@@ -59,37 +59,68 @@
             <ul class="list-group">
                 <li class="list-group-item" ng-repeat="app in getSelectedStore().apps.objects">
                     {% verbatim %}
-                    <h4 class="list-group-item-heading">
-                        <img class="app-logo" ng-src="{{ app.latest_version.logo }}">
-                        {{ app.title }}
-                        <span class="label label-info">{{ app.latest_version.version }}</span>
-                        <span class="label label-success pull-right" ng-show="app.installedApp"> installed version {{ app.installedApp.version }}</span>
-
-                    </h4>
-                    {% endverbatim %}
+                   <div class="row list-group-item-heading">
+                       <div class="col-xs-12 col-sm-12 col-md-6">
+                            <h4 class="list-group-item-heading">
+                                    <img class="app-logo" ng-src="{{ app.latest_version.logo }}">
+                                    {{ app.title }}                           
+                            </h4>
+                       </div>
+                       <div class="col-xs-12 col-sm-12 col-md-6 text-right">
+                            <h4 class="list-group-item-heading">
+                                <div class="row">
+                                    <span class="label label-success" ng-show="app.installedApp"> installed version: {{ app.installedApp.version }}</span>    
+                                    <span class="label label-info">Latest Version: {{ app.latest_version.version }}</span>
+                                    <span class="label label-warning">Status: {{app.status}}</span>
+                                </div>     
+                            </h4>
+                        </div>     
+                   </div>
                     <div class="list-group-item-text">
-                        <alerts-panel messages="app.messages"></alerts-panel>
-                        <div class="pull-right">
-                            <a ng-if="!app.installedApp" ng-click="install(app)" class="btn btn-primary" ng-disabled="installing">
-                                <span class="fa fa-circle-o-notch rotating" ng-show="installing==app"></span>
-                                Install<span ng-show="installing==app">ing</span>
-                            </a>
-                            <a ng-if="app.installedApp && app.latest_version.version > app.installedApp.version" ng-click="install(app, true)" class="btn btn-primary" ng-disabled="installing">
-                                <span class="fa fa-circle-o-notch rotating" ng-show="installing==app"></span>
-                                <span ng-show="installing!=app">Upgrade</span><span ng-show="installing==app">Upgrading</span>
-                            </a>
-                            <a ng-if="app.installedApp" ng-click="uninstall(app)" class="btn btn-danger"  ng-disabled="installing">
-                                <span class="fa fa-circle-o-notch rotating" ng-show="installing==app"></span>
-                                UnInstall<span ng-show="installing==app">ing</span>
-                            </a>
-
-                            <a ng-if="app.installedApp" ng-click="toggleActive(app)" class="btn btn-warning">
-                                <span ng-show="app.installedApp.active">Suspend</span>
-                                <span ng-show="!app.installedApp.active">Activate</span>
-                            </a>
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-10">
+                                <p class="description text-capitalize">
+                                        <b>Categories: {{app.type.join(',')}}</b>  
+                                </p>
+                                <p class="description text-capitalize">
+                                        {{app.description}}
+                                </p>
+                                
+                                <p class="description">
+                                        <small><b>Stars {{ app.stars }} of 5</b></small>
+                                </p>
+                            </div>
+                            <div class="col-xs-12 col-sm-12 col-md-2">
+                                <div class="btn-group-vertical">
+                                    <a ng-if="!app.installedApp" ng-click="install(app)" class="btn btn-primary" ng-disabled="installing">
+                                        <span class="fa fa-circle-o-notch rotating" ng-show="installing==app"></span>
+                                        Install<span ng-show="installing==app">ing</span>
+                                    </a>
+                                    <a ng-if="app.installedApp && app.latest_version.version > app.installedApp.version" ng-click="install(app, true)" class="btn btn-primary" ng-disabled="installing">
+                                        <span class="fa fa-circle-o-notch rotating" ng-show="installing==app"></span>
+                                        <span ng-show="installing!=app">Upgrade</span><span ng-show="installing==app">Upgrading</span>
+                                    </a>
+                                    <a ng-if="app.installedApp" ng-click="uninstall(app)" class="btn btn-danger"  ng-disabled="installing">
+                                        <span class="fa fa-circle-o-notch rotating" ng-show="installing==app"></span>
+                                        UnInstall<span ng-show="installing==app">ing</span>
+                                    </a>
+        
+                                    <a ng-if="app.installedApp" ng-click="toggleActive(app)" class="btn btn-warning">
+                                        <span ng-show="app.installedApp.active">Suspend</span>
+                                        <span ng-show="!app.installedApp.active">Activate</span>
+                                    </a>
+                                    <a href="javascript:;" class="btn btn-success"><small>Downloads {{ app.downloads }}</small></a>
+                                </div>
+                                
+                                
+                            </div>
                         </div>
+                        
                     </div>
+                    {% endverbatim %}
                 </li>
+                <alerts-panel messages="app.messages"></alerts-panel>
+                
             </ul>
         </div>
 

@@ -200,6 +200,7 @@
                                 if (!this._apps) {
                                     this._apps = AppStore.AppResource(this).query(function(){
                                         store._apps.objects.forEach(function(app){
+                                            console.log(app)
                                             appsHash[app.name] = app;
                                             app.store = store;
                                         });
