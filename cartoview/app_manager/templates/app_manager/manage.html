@@ -55,9 +55,13 @@
             <div class="row reorder-btn-ct">
                 <a ng-click="reorder()" class="btn btn-primary pull-right">Reorder Installed Apps</a>
             </div>
+            <div class="input-group search-box">
+                <input type="text" class="form-control" ng-model="search_term" placeholder="Search for an App" aria-describedby="basic-addon2">
+                <span class="input-group-addon" id="basic-addon2">Search</span>
+            </div>
 
             <ul class="list-group">
-                <li class="list-group-item" ng-repeat="app in getSelectedStore().apps.objects">
+                <li class="list-group-item" ng-repeat="app in getSelectedStore().apps.objects | filter:{title:search_term}:strict">
                     {% verbatim %}
                    <div class="row list-group-item-heading">
                        <div class="col-xs-12 col-sm-12 col-md-6">
