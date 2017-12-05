@@ -8,7 +8,6 @@ import json
 import logging
 import os
 from builtins import *
-from builtins import object
 from sys import stdout
 from urllib.parse import urljoin
 
@@ -20,6 +19,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.core.files import File
 from django.core.urlresolvers import reverse
+from django.db import transaction
 from django.db.models import F, Max, Min
 from django.forms.util import ErrorList
 from django.http import Http404, HttpResponse, HttpResponseRedirect
@@ -137,6 +137,7 @@ def index(request):
 
 @staff_member_required
 @require_POST
+@transaction.atomic
 def install_app(request, store_id, app_name, version):
     response_data = {'success': False, 'messages': []}
     # TODO: remove try

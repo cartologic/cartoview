@@ -241,6 +241,7 @@ class AppInstaller(object):
             installer = importlib.import_module('%s.installer' % self.name)
             installed_apps.append(self.add_app(installer))
             installer.install()
+
             FINALIZE_SETUP.apps_to_finlize.append(self.name)
             if restart:
                 FINALIZE_SETUP(self.name)

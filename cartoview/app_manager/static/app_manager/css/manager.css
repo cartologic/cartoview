@@ -3,15 +3,24 @@
 }
 
 .app-logo{
-    width: 40px;
+    width: 60px;
     margin: 0 5px;
+    height: auto;
 }
-
 .list-group-item-text{
     padding-bottom: 40px;
 
 }
-
+.description{
+    padding-left: 10px;
+    padding-right: 10px;
+}
+.btn-group, .btn-group-vertical {
+    width: 100% !important;
+}
+.btn-group>.btn, .btn-group-vertical>.btn {
+    margin: 5px !important;
+}
 .rotating{
     -webkit-animation-name: rotate;
     -webkit-animation-duration: 2s;
@@ -69,6 +78,10 @@
 .apps-reorder-list ul[dnd-list] {
     min-height: 42px;
     padding-left: 0px;
+}
+.row{
+    margin-left: -10px !important;
+    margin-right: -10px !important;
 }
 
 /**
