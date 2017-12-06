@@ -159,6 +159,7 @@
                 AppInstaller, Dialogs, $timeout, Alerts) {
                 $scope.selectedStoreId = null;
                 var appsHash = {};
+                $scope.loading=true;
                 $scope.busy = false;
                 $scope.stores = AppStoreResource.query(function(){
                     $scope.stores.objects.forEach(function(store){
@@ -193,6 +194,7 @@
                                     }, 2000);
                                 }
                             });
+                            $scope.loading=false
                         };
                         Object.defineProperty(store, 'apps', {
                             configurable: true,
@@ -200,8 +202,10 @@
                                 if (!this._apps) {
                                     this._apps = AppStore.AppResource(this).query(function(){
                                         store._apps.objects.forEach(function(app){
+                                            
                                             appsHash[app.name] = app;
                                             app.store = store;
+                                           
                                         });
                                         store.update()
                                     });
