@@ -263,6 +263,8 @@ class AppInstaller(object):
         logger.error(out, err)
 
     def delete_app_tables(self):
+        from django.contrib.contenttypes.models import ContentType
+        ContentType.objects.filter(app_label=self.name).delete()
         self.execute_command("migrate {} zero".format(self.name))
 
     def uninstall(self, restart=True):
