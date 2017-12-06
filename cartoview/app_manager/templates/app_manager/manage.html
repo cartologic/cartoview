@@ -52,11 +52,11 @@
                         ng-options="store.id as store.name for store in stores.objects">
                 </select>
             </div>
-            <div ng-if="!loading" class="row reorder-btn-ct">
+            <div ng-if="!loading"  class="row reorder-btn-ct">
                 <a ng-click="reorder()" class="btn btn-primary pull-right">Reorder Installed Apps</a>
             </div>
-            <div ng-if="!loading" class="input-group search-box">
-                <input type="text" class="form-control" ng-model="search_term" placeholder="Search for an App" aria-describedby="basic-addon2">
+            <div  class="input-group search-box">
+                <input type="text" ng-disabled="loading" class="form-control" ng-model="search_term" placeholder="Search for an App" aria-describedby="basic-addon2">
                 <span class="input-group-addon" id="basic-addon2">Search</span>
             </div>
             <div ng-if="loading" class="row text-center">
