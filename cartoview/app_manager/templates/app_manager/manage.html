@@ -162,6 +162,7 @@
 {% block extra_script %}
     {{ block.super }}
 
+    <script type="text/javascript" src="{{ STATIC_URL }}compare-versions/index.js"></script>
     <script type="text/javascript" src="{% url 'check_version' %}"></script>
     <script type="text/javascript" src='{{ STATIC_URL }}vendor/angular-bootstrap/ui-bootstrap-tpls.min.js'></script>
     <script type="text/javascript" src='{{ STATIC_URL }}vendor/angular-animate/angular-animate.min.js'></script>
