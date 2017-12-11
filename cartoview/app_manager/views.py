@@ -513,7 +513,8 @@ class AppViews(with_metaclass(abc.ABCMeta, object)):
                 if k not in instance.keyword_list():
                     instance.keywords.add(k)
 
-    def save_instance(self, instance_id, owner, title, config, abstract, map_id):
+    def save_instance(self, instance_id, owner, title, config, abstract,
+                      map_id):
         if instance_id is None:
             instance_obj = AppInstance()
             instance_obj.app = App.objects.get(name=self.app_name)
