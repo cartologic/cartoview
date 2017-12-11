@@ -177,7 +177,6 @@
                             break;
                         }
                     }
-                    console.log(compatible)
                     return compatible
                 }
                 $scope.stores = AppStoreResource.query(function () {
