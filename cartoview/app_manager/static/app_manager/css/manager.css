@@ -1,7 +1,20 @@
 .manager-ct{
-    padding-top: 10px;
+    padding-top: 30px;
 }
-
+.row {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display:         flex;
+    flex-wrap: wrap;
+}
+.row > [class*='col-'] {
+    display: flex;
+    flex-direction: column;
+}
+.fill-empty{
+    flex-grow: 1
+}
 .app-logo{
     width: 60px;
     margin: 0 5px;
@@ -12,6 +25,13 @@
 }
 .card-header{
     border-bottom: 1px solid #f1efef;
+}
+.card-header-right{
+    align-content: center;
+    align-items: flex-end;
+    vertical-align: middle;
+    display: flex;
+    justify-content: center;
 }
 .list-group-item-text{
     padding-bottom: 10px;
@@ -87,6 +107,7 @@
 /*Apps reorder*/
 .reorder-btn-ct{
     height: 40px;
+text-align: right;
 }
 /**
  * The dnd-list should always have a min-height,
@@ -138,4 +159,13 @@
 .apps-reorder-list ul[dnd-list] li.selected {
     background-color: #dff0d8;
     color: #3c763d;
+}
+@media screen and (max-width: 768px) {
+    .card-header-right{
+        align-content: center;
+        align-items: center;
+        vertical-align: middle;
+        display: flex;
+        justify-content: center;
+    }
 }
