@@ -33,6 +33,13 @@
     display: flex;
     justify-content: center;
 }
+.loading-center{
+    align-content: center;
+    align-items: center;
+    vertical-align: middle;
+    display: flex;
+    justify-content: center;
+}
 .list-group-item-text{
     padding-bottom: 10px;
 
