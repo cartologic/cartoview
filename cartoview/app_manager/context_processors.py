@@ -6,6 +6,8 @@ from builtins import *
 
 from cartoview.app_manager.models import App, AppInstance, Logo
 from django.conf import settings
+from geonode.version import get_version
+from cartoview import __version__
 from django.contrib.sites.models import Site
 from django.shortcuts import get_object_or_404
 from future import standard_library
@@ -13,25 +15,19 @@ from future import standard_library
 standard_library.install_aliases()
 
 
-def news(request):
-    return {'news_app': 'cartoview_news' in settings.INSTALLED_APPS}
-
-
 def apps(request):
     return {'apps': App.objects.all().order_by('order')}
 
 
-def apps_menu(request):
-    return {'APPS_MENU': settings.APPS_MENU}
-
-
-def apps_instance(request):
-    instances = AppInstance.objects.all()
-    num = AppInstance.objects.all().count()
-    return {
-        'apps_instance_count': num,
-        'instances': instances.order_by('app__order')[:5]
+def cartoview_processor(request):
+    defaults = {
+        'apps': App.objects.all().order_by('order'),
+        'CARTOVIEW_VERSION': get_version(__version__),
+        'APPS_MENU': settings.APPS_MENU,
+        'apps_instance_count': AppInstance.objects.all().count(),
+        'instances': AppInstance.objects.all().order_by('app__order')[:5]
     }
+    return defaults
 
 
 def site_logo(request):

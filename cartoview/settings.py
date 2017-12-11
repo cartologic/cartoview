@@ -19,10 +19,8 @@ cartoview_apps_settings_path = os.path.join(CARTOVIEW_ROOT, 'app_manager',
 APPS_MENU = False
 DOCKER = os.getenv('DOCKER', False)
 TEMPLATES[0]["OPTIONS"]['context_processors'] += (
-    'cartoview.app_manager.context_processors.apps',
-    'cartoview.app_manager.context_processors.apps_instance',
-    'cartoview.app_manager.context_processors.site_logo',
-    'cartoview.app_manager.context_processors.apps_menu')
+    'cartoview.app_manager.context_processors.cartoview_processor',
+    'cartoview.app_manager.context_processors.site_logo',)
 execfile(cartoview_apps_settings_path)
 LOGGING = {
     'version': 1,

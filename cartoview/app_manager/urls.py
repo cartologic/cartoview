@@ -4,7 +4,6 @@ from __future__ import (absolute_import, division, print_function,
 
 import importlib
 from builtins import *
-from builtins import str
 
 from cartoview.app_manager.rest import (AppInstanceResource, AppResource,
                                         AppStoreResource,
@@ -53,9 +52,8 @@ urlpatterns = patterns(
     url(r'^uninstall/(?P<store_id>\d+)/(?P<app_name>.*)/$',
         app_manager_views.uninstall_app,
         name='cartoview_uninstall_app_url'),
-    url(r'^appinstances/$',
-        TemplateView.as_view(
-            template_name='app_manager/app_instance_list.html'),
+    url(r'^appinstances/$', TemplateView.as_view(
+        template_name='app_manager/app_instance_list.html'),
         name='appinstance_browse'),
     url(r'^appinstance/(?P<appinstanceid>\d+)/?$',
         app_manager_views.appinstance_detail,

@@ -10,7 +10,6 @@ import os
 from builtins import *
 from sys import stdout
 from urllib.parse import urljoin
-
 from cartoview.app_manager.forms import AppInstanceEditForm
 from django.conf import settings
 from django.conf.urls import patterns, url
@@ -104,9 +103,8 @@ def manage_apps(request):
     apps = App.objects.all()
     context = {
         'apps': apps,
-        'site_apps': get_apps_names(),
+        'site_apps': get_apps_names()
     }
-    logger.warning(context['site_apps'])
     return render(request, 'app_manager/manage.html', context)
 
 
@@ -515,7 +513,8 @@ class AppViews(with_metaclass(abc.ABCMeta, object)):
                 if k not in instance.keyword_list():
                     instance.keywords.add(k)
 
-    def save_instance(self, instance_id, owner, title, config, abstract, map_id):
+    def save_instance(self, instance_id, owner, title, config, abstract,
+                      map_id):
         if instance_id is None:
             instance_obj = AppInstance()
             instance_obj.app = App.objects.get(name=self.app_name)
