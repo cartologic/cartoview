@@ -68,7 +68,6 @@ class FinalizeInstaller:
 
     def finalize_setup(self, app_name):
         self.save_pending_app_to_finlize()
-
         docker = getattr(settings, 'DOCKER', None)
 
         def _finalize_setup(app_name):
