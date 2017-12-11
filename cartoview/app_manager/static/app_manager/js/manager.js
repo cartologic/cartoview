@@ -160,6 +160,7 @@
                 $scope.selectedStoreId = null;
                 var appsHash = {};
                 $scope.loading=true;
+                $scope.storeError=false;
                 $scope.busy = false;
                 $scope.stores = AppStoreResource.query(function(){
                     $scope.stores.objects.forEach(function(store){
@@ -207,7 +208,12 @@
                                            
                                         });
                                         store.update()
-                                    });
+                                    })
+                                    this._apps.$promise.catch( function(errorResponse) {
+                                        // console.error(errorResponse);
+                                        $scope.loading=false;
+                                        $scope.storeError=true
+                                    }); 
 
                                 }
                                 return this._apps;
