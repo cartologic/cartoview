@@ -7,9 +7,22 @@
     margin: 0 5px;
     height: auto;
 }
+.border-right{
+    border-right: 1px solid #f1efef;
+}
+.card-header{
+    border-bottom: 1px solid #f1efef;
+}
 .list-group-item-text{
-    padding-bottom: 40px;
+    padding-bottom: 10px;
 
+}
+.flex-element{
+    display: flex;
+    flex-grow: 1;
+}
+.card-store-info-extra{
+    margin-right: 10px
 }
 .description{
     padding-left: 10px;
