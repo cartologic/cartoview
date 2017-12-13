@@ -100,10 +100,15 @@ def installed_apps():
 
 @staff_member_required
 def manage_apps(request):
+    from cartoview.version import get_backward_compatible,get_current_version
     apps = App.objects.all()
     context = {
         'apps': apps,
-        'site_apps': get_apps_names()
+        'site_apps': get_apps_names(),
+        'version_info': {
+            'current_version':get_current_version(),
+            'backward_versions':get_backward_compatible()
+        }
     }
     return render(request, 'app_manager/manage.html', context)
 

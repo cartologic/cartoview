@@ -2,6 +2,7 @@
 {% load bootstrap_tags staticfiles%}
 {% load i18n avatar_tags cartoview_tags %}
 
+
 {% block title %} {% trans "Install App" %} - {{ block.super }} {% endblock %}
 
 {% block body_class %}appinstances appinstances-list explore{% endblock body_class %}
@@ -185,7 +186,7 @@
 {% block extra_script %}
     {{ block.super }}
     <script>
-    const currentVersion="{{CARTOVIEW_VERSION}}";
+        const versionInfo={{version_info|dump_json}}
     </script>
     <script type="text/javascript" src="{{ STATIC_URL }}compare-versions/index.js"></script>
     <script type="text/javascript" src="{% url 'check_version' %}"></script>

@@ -214,12 +214,10 @@ class AppInstaller(object):
         self.upgrade = False
         if os.path.exists(self.app_dir):
             installed_app = App.objects.get(name=self.name)
-            logger.error(installed_app)
             if installed_app.version < self.version["version"]:
                 self.upgrade = True
             else:
-                pass
-                # raise AppAlreadyInstalledException()
+                raise AppAlreadyInstalledException()
         installed_apps = []
         for name, version in list(self.version["dependencies"].items()):
             # use try except because AppInstaller.__init__ will handle upgrade
@@ -240,19 +238,18 @@ class AppInstaller(object):
             installer = importlib.import_module('%s.installer' % self.name)
             installed_apps.append(self.add_app(installer))
             installer.install()
-
             FINALIZE_SETUP.apps_to_finlize.append(self.name)
             if restart:
                 FINALIZE_SETUP(self.name)
-        except Exception as ex:
+        except ImportError as ex:
             logger.error(ex.message)
 
     def completely_remove(self):
         app = App.objects.get(name=self.name)
-        app.delete()
         app_config = app.apps_config.get_by_name(self.name)
         del app.apps_config[app_config]
         app.apps_config.save()
+        app.delete()
 
     def execute_command(self, command):
         manage_py = os.path.join(settings.BASE_DIR, 'manage.py')
