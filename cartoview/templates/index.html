@@ -44,7 +44,7 @@
                     {% endif %}
                     </form>
                 </div>
-                <p><a class="btn btn-default btn-lg" href="/search/">Advanced Search</a></p>
+                <p><a class="btn btn-default btn-lg" href="{% url 'search' %}">Advanced Search</a></p>
             </div>
         </div>
 
@@ -55,7 +55,7 @@
                         <div class="container text-center">
                             <h1>Discover the available datasets.</h1>
                             <div class="col-xs-4 col-sm-2">
-                                <a href="/search/?limit=100&offset=0&category__identifier__in=boundaries&category__identifier__in=planningCadastre"
+                                <a href="{% url 'search' %}?limit=100&offset=0&category__identifier__in=boundaries&category__identifier__in=planningCadastre"
                                    data-toggle="tooltip" data-placement="auto"
                                    title="Political and administrative boundaries. Land use maps, zoning maps, cadastral surveys, land ownership.">
                                     <div class="category">
@@ -65,7 +65,7 @@
                                 </a>
                             </div>
                             <div class="col-xs-4 col-sm-2">
-                                <a href="/search/?limit=100&offset=0&category__identifier__in=structure&category__identifier__in=intelligenceMilitary&category__identifier__in=utilitiesCommunication"
+                                <a href="{% url 'search' %}?limit=100&offset=0&category__identifier__in=structure&category__identifier__in=intelligenceMilitary&category__identifier__in=utilitiesCommunication"
                                    data-toggle="tooltip" data-placement="auto"
                                    title="Buildings, museums, churches, factories, housing, monuments, shops, towers. Energy, water and waste systems and communications infrastructure and services. Military bases, structures, activities.">
                                     <div class="category">
@@ -75,7 +75,7 @@
                                 </a>
                             </div>
                             <div class="col-xs-4 col-sm-2">
-                                <a href="/search/?limit=100&offset=0&category__identifier__in=climatologyMeteorologyAtmosphere"
+                                <a href="{% url 'search' %}?limit=100&offset=0&category__identifier__in=climatologyMeteorologyAtmosphere"
                                    data-toggle="tooltip" data-placement="auto"
                                    title="Cloud cover, weather, climate, atmospheric conditions, climate change, precipitation">
                                     <div class="category">
@@ -85,7 +85,7 @@
                                 </a>
                             </div>
                             <div class="col-xs-4 col-sm-2">
-                                <a href="/search/?limit=100&offset=0&category__identifier__in=elevation"
+                                <a href="{% url 'search' %}?limit=100&offset=0&category__identifier__in=elevation"
                                    data-toggle="tooltip"
                                    data-placement="auto"
                                    title="Altitude, bathymetry, digital elevation models, slope, derived products">
@@ -96,7 +96,7 @@
                                 </a>
                             </div>
                             <div class="col-xs-4 col-sm-2">
-                                <a href="/search/?limit=100&offset=0&category__identifier__in=geoscientificInformation"
+                                <a href="{% url 'search' %}?limit=100&offset=0&category__identifier__in=geoscientificInformation"
                                    data-toggle="tooltip" data-placement="auto"
                                    title="Geophysical features and processes, geology, minerals, sciences dealing with the composition, structure and origin of the earth s rocks, risks of earthquakes, volcanic activity, landslides, gravity information, soils, permafrost, hydrogeology, erosion.">
                                     <div class="category">
@@ -106,7 +106,7 @@
                                 </a>
                             </div>
                             <div class="col-xs-4 col-sm-2">
-                                <a href="/search/?limit=100&offset=0&category__identifier__in=health"
+                                <a href="{% url 'search' %}?limit=100&offset=0&category__identifier__in=health"
                                    data-toggle="tooltip"
                                    data-placement="auto"
                                    title="Health, health services, human ecology, and safety.">
@@ -117,7 +117,7 @@
                                 </a>
                             </div>
                             <div class="col-xs-4 col-sm-2">
-                                <a href="/search/?limit=100&offset=0&category__identifier__in=imageryBaseMapsEarthCover"
+                                <a href="{% url 'search' %}?limit=100&offset=0&category__identifier__in=imageryBaseMapsEarthCover"
                                    data-toggle="tooltip" data-placement="auto"
                                    title="Land cover, topographic maps, imagery, unclassified images, annotations.">
                                     <div class="category">
@@ -127,7 +127,7 @@
                                 </a>
                             </div>
                             <div class="col-xs-4 col-sm-2">
-                                <a href="/search/?limit=100&offset=0&category__identifier__in=biota&category__identifier__in=farming&category__identifier__in=environment"
+                                <a href="{% url 'search' %}?limit=100&offset=0&category__identifier__in=biota&category__identifier__in=farming&category__identifier__in=environment"
                                    data-toggle="tooltip" data-placement="auto"
                                    title="Wildlife, vegetation, biological sciences, ecology, wilderness, sealife, wetlands, habitat. Environmental resources, protection and conservation. Agriculture, irrigation, aquaculture, plantations, herding, pests and diseases affecting crops and livestock">
                                     <div class="category">
@@ -137,7 +137,7 @@
                                 </a>
                             </div>
                             <div class="col-xs-4 col-sm-2">
-                                <a href="/search/?limit=100&offset=0&category__identifier__in=location"
+                                <a href="{% url 'search' %}?limit=100&offset=0&category__identifier__in=location"
                                    data-toggle="tooltip"
                                    data-placement="auto"
                                    title="Addresses, geodetic networks, control points, postal zones and services, place names">
@@ -148,7 +148,7 @@
                                 </a>
                             </div>
                             <div class="col-xs-4 col-sm-2">
-                                <a href="/search/?limit=100&offset=0&category__identifier__in=economy&category__identifier__in=society"
+                                <a href="{% url 'search' %}?limit=100&offset=0&category__identifier__in=economy&category__identifier__in=society"
                                    data-toggle="tooltip" data-placement="auto"
                                    title="Settlements, anthropology, archaeology, education, traditional beliefs, demographic data, crime and justice, census information. Economic activities, conditions and employment.">
                                     <div class="category">
@@ -158,7 +158,7 @@
                                 </a>
                             </div>
                             <div class="col-xs-4 col-sm-2">
-                                <a href="/search/?limit=100&offset=0&category__identifier__in=transportation"
+                                <a href="{% url 'search' %}?limit=100&offset=0&category__identifier__in=transportation"
                                    data-toggle="tooltip"
                                    data-placement="auto"
                                    title="Roads, airports/airstrips, shipping routes, tunnels, nautical charts, vehicle or vessel location, aeronautical charts, railways.">
@@ -169,7 +169,7 @@
                                 </a>
                             </div>
                             <div class="col-xs-4 col-sm-2">
-                                <a href="/search/?limit=100&offset=0&category__identifier__in=inlandWaters&category__identifier__in=oceans"
+                                <a href="{% url 'search' %}?limit=100&offset=0&category__identifier__in=inlandWaters&category__identifier__in=oceans"
                                    data-toggle="tooltip" data-placement="auto"
                                    title="Rivers and glaciers, salt lakes, water utilization plans, dams, currents, floods. Water quality, hydrographic charts, tides, tidal waves, coastal information, reefs.">
                                     <div class="category">
@@ -200,7 +200,7 @@
                         </div>
                         {% endverbatim %}
                     </div>
-                    <p><a href="/search/">Explore all datasets</a></p>
+                    <p><a href="{% url 'search' %}">Explore all datasets</a></p>
                 </div>
             </section>
         {% endblock %}
