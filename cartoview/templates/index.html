@@ -34,9 +34,7 @@
             <div class="container">
                 <h1>{% trans "Search for Data." %}</h1>
                 <div class="search">
-                    <form id="search" action="{% url " search
-            " %}
-                    " >
+                    <form id="search" action="{% url 'search' %}">
                     <span class="fa fa-search fa-2x"></span>
                     {% if HAYSTACK_SEARCH %}
                         <input id="search_input" type="text" placeholder="Search" class="form-control" name="q">

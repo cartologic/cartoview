@@ -119,7 +119,7 @@
                 <ul class="nav navbar-nav navbar-right">
                     <li>
                         <div class="search">
-                            <form id="search" action="{% url "search" %}">
+                            <form id="search" action="{% url 'search' %}">
                                 <span class="fa fa-search"></span>
                                 {% if HAYSTACK_SEARCH %}
                                     <input id="search_input" type="text" placeholder="Search" name="q">
