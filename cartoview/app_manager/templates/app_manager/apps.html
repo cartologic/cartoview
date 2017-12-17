@@ -45,15 +45,14 @@
     <div id="page-wrapper">
         <div class="container-fluid">
             <!-- Page Heading -->
-            <div class="row">
+            <div class="apps-wrapper">
 
                 {% for app in Apps %}
                     {% if app.config.active and app.name != "cartoview_attachment_manager" %}
-                        <div class="col-xs-12 col-sm-4 col-md-3 item">
+                        <div class="flex-item">
                             <div class="thumbnail">
-                                <img src="{{ STATIC_URL }}{{ app.name }}/logo.png"
-                                     style="min-height:200px;height:200px;">
-                                <div class="caption" >
+                                <img src="{{ STATIC_URL }}{{ app.name }}/logo.png" class="app-img">
+                                <div class="fill-empty flex-row" >
                                     <h4 class="text-center">{{ app.title }}</h4>
                                     <p class="text-center" >
                                         {% if app.description %}
@@ -68,6 +67,8 @@
                                         {% endif %}
 
                                     </p>
+                                    <div class="fill-empty">
+                                    </div>
                                     <div class="text-center" style="display:flex;flex-wrap:wrap">
                                         {% if app.single_instance %}
                                             <div style="margin-right:auto;margin-left:auto" id="card-buttons">
