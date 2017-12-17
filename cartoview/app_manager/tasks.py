@@ -4,6 +4,8 @@ import datetime
 from django.core.exceptions import ObjectDoesNotExist
 import logging
 from sys import stdout
+from importlib import import_module
+
 import json
 formatter = logging.Formatter(
     '[%(asctime)s] p%(process)s  { %(name)s %(pathname)s:%(lineno)d} \
@@ -36,7 +38,8 @@ class CartoviewTask(object):
 
     def create_task(self):
         task = Task.objects.create(
-            type=self.type, every=self.every, started_at=datetime.datetime.now(),
+            type=self.type, every=self.every,
+            started_at=datetime.datetime.now(),
             status=Task.IN_PROGRESS)
         self.id = task.id
 
@@ -56,12 +59,26 @@ class CartoviewTask(object):
         except ObjectDoesNotExist as ex:
             logger.error(ex.message)
 
+    def _execute(self, target, task_args=[], task_kwargs={}):
+        thread = Thread(target=target, args=tuple(
+            task_args), kwargs=task_kwargs)
+        thread.daemon = True
+        thread.start()
+
     def execute_async(self):
         if not self.id:
             self.create_task()
-            thread = Thread(target=self._run_save)
-            thread.daemon = True
-            thread.start()
+            self._execute(self._run_save)
             return self.id
         else:
             raise TaskAlreadyRunningException()
+
+    def execute_forget(self):
+        self._execute(self.task, self.task_args, self.task_kwargs)
+
+
+def import_from_module(string_package_module):
+    package, module = string_package_module.rsplit('.', 1)
+    package = import_module(package)
+    imported = getattr(package, module)
+    return imported
