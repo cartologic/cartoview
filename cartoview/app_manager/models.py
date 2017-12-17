@@ -209,3 +209,35 @@ class Logo(models.Model):
 
     def __unicode__(self):
         return "Site {} Logo: {}".format(self.site.name, self.logo.url)
+
+
+class PeriodicTaskPeriodException(BaseException):
+    message = "Periodic Task time not set"
+
+
+class Task(models.Model):
+    PERIODIC = 1
+    A_PERIODIC = 0
+    PERIODIC = 1
+    IN_PROGRESS = 0
+    FINISHED = 1
+    TASK_TYPE_CHOICES = (
+        (PERIODIC, 'Periodic Task'),
+        (A_PERIODIC, 'A-Periodic Task'))
+    STATUS_CHOICES = (
+        (FINISHED, 'FINISHED'),
+        (IN_PROGRESS, 'In Progress'))
+    type = models.IntegerField(
+        default=0, choices=TASK_TYPE_CHOICES, null=False, blank=False)
+    status = models.IntegerField(
+        default=0, choices=STATUS_CHOICES, null=False, blank=False)
+    # time in hours
+    every = models.FloatField(null=True, blank=True, default=0)
+    started_at = models.DateTimeField(auto_now_add=True, auto_now=False)
+    finished_at = models.DateTimeField(null=True, blank=False)
+    result = models.TextField(null=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        if self.pk is None and self.type == Task.PERIODIC and not self.every:
+            raise PeriodicTaskPeriodException()
+        super(Task, self).save(*args, **kwargs)
