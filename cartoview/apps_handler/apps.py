@@ -37,6 +37,8 @@ class AppsHandlerConfig(AppConfig):
                 pending_apps = yaml.load(f) or []
                 for app in pending_apps:
                     try:
+                        call_command("collectstatic", interactive=False,
+                                     ignore=['node_modules'])
                         call_command("makemigrations", app,
                                      interactive=False)
                         call_command("migrate", app,
