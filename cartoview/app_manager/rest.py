@@ -4,8 +4,6 @@ from __future__ import (absolute_import, division, print_function,
 
 import json
 from builtins import *
-from builtins import filter, object, range, str
-
 from cartoview.app_manager.models import App, AppInstance, AppStore, AppType
 from django.conf import settings
 from django.conf.urls import url
@@ -29,28 +27,40 @@ from tastypie.constants import ALL, ALL_WITH_RELATIONS
 from tastypie.http import HttpGone
 from tastypie.resources import ModelResource
 from tastypie.utils import trailing_slash
+from guardian.shortcuts import get_objects_for_user
 
 from .resources import FileUploadResource
 from geonode.api.resourcebase_api import LayerResource
 standard_library.install_aliases()
 
 
-class StylersResource(LayerResource):
+class StylersLayerResource(LayerResource):
+    def build_filters(self, filters=None):
+        if filters is None:
+            filters = {}
+        orm_filters = super(StylersLayerResource, self).build_filters(filters)
+        if('permission' in filters):
+            permission = filters['permission']
+            orm_filters.update({'permission': permission})
+
+        return orm_filters
+
     def apply_filters(self, request, applicable_filters):
-        from guardian.shortcuts import get_objects_for_user
-        filtered = super(StylersResource, self).apply_filters(
-            request,
-            applicable_filters)
-        allowed = get_objects_for_user(request.user, "change_layer_style",
-                                       filtered)
-        return allowed
+        permission = None
+        if 'permission' in applicable_filters:
+            permission = applicable_filters.pop('permission')
+        filtered = super(StylersLayerResource, self).apply_filters(
+            request, applicable_filters)
+        if permission is not None:
+            filtered = get_objects_for_user(request.user, permission,
+                                            filtered)
+        return filtered
 
     class Meta(LayerResource.Meta):
         resource_name = "layers"
 
 
 class GeonodeMapLayerResource(ModelResource):
-
     class Meta(object):
         queryset = GeonodeMapLayer.objects.distinct()
 
