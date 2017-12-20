@@ -27,7 +27,6 @@ from tastypie.constants import ALL, ALL_WITH_RELATIONS
 from tastypie.http import HttpGone
 from tastypie.resources import ModelResource
 from tastypie.utils import trailing_slash
-from guardian.shortcuts import get_objects_for_user
 
 from .resources import FileUploadResource
 from geonode.api.resourcebase_api import LayerResource
