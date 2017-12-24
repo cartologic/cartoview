@@ -42,20 +42,20 @@ class StylersLayerResource(LayerResource):
             permission = filters['permission']
             orm_filters.update({'permission': permission})
         if 'type' in filters:
-            type = filters['type']
-            orm_filters.update({'type': type})
+            layer_type = filters['type']
+            orm_filters.update({'type': layer_type})
 
         return orm_filters
 
     def apply_filters(self, request, applicable_filters):
         permission = applicable_filters.pop('permission', None)
-        type = applicable_filters.pop('type', None)
+        layer_type = applicable_filters.pop('type', None)
         filtered = super(StylersLayerResource, self).apply_filters(
             request, applicable_filters)
-        if type:
+        if layer_type:
             filtered = filtered.filter(
                 attribute_set__in=Attribute.objects.filter(
-                    attribute_type__icontains=type))
+                    attribute_type__icontains=layer_type))
         if permission is not None:
             filtered = get_objects_for_user(request.user, permission,
                                             filtered)
