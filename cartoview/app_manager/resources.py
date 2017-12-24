@@ -26,7 +26,7 @@ class BaseResource(Resource):
 class BaseModelResource(ModelResource):
 
     class Meta(BaseResource.Meta):
-        pass
+        object_class = None
 
     def build_schema(self):
         base_schema = super(BaseModelResource, self).build_schema()
