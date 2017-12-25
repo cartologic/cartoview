@@ -63,6 +63,10 @@ class StylersLayerResource(LayerResource):
 
     class Meta(LayerResource.Meta):
         resource_name = "layers"
+        filering = LayerResource.Meta.filtering
+        filering.update({
+            'typename': ALL
+        })
 
 
 class GeonodeMapLayerResource(ModelResource):

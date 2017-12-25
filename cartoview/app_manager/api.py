@@ -1,20 +1,21 @@
-from __future__ import absolute_import
-from __future__ import unicode_literals
-from __future__ import print_function
-from __future__ import division
-from future import standard_library
-standard_library.install_aliases()
-from builtins import *
-from builtins import object
+from __future__ import (absolute_import, division, print_function,
+                        unicode_literals)
+
 import logging
 import warnings
+from builtins import *
 from sys import stdout
 
 from django.conf.urls import include, patterns, url
 from django.shortcuts import render
-from .serializers import HTMLSerializer
+from future import standard_library
 from tastypie.api import Api as TastypieApi
 from tastypie.utils import trailing_slash
+
+from .serializers import HTMLSerializer
+
+standard_library.install_aliases()
+
 
 formatter = logging.Formatter(
     '[%(asctime)s] p%(process)s  { %(name)s %(pathname)s:%(lineno)d}\
