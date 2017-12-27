@@ -83,7 +83,7 @@ class App(models.Model):
     single_instance = models.BooleanField(
         default=False, null=False, blank=False)
     category = models.ManyToManyField(
-        AppType, null=True, related_name='apps')
+        AppType, related_name='apps')
     license = models.CharField(max_length=100, null=True, blank=True)
     status = models.CharField(
         max_length=100, blank=False, null=False, default='Alpha')
