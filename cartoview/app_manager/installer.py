@@ -13,7 +13,6 @@ import yaml
 from builtins import *
 from io import BytesIO
 from .helpers import create_direcotry, change_path_permission
-import errno
 from sys import stdout, exit, executable
 from threading import Timer
 import pkg_resources
@@ -83,42 +82,42 @@ class FinalizeInstaller:
 FINALIZE_SETUP = FinalizeInstaller()
 
 
-def serializer_factor(fields):
-    class AppSerializer(object):
-        __slots__ = fields
+def remove_unwanted(dictionary):
+    app_fields = [field.name for field in
+                  sorted(App._meta.fields + App._meta.many_to_many)]
+    app_fields.append("type")
+    return {k: v for k, v in dictionary.iteritems() if k in app_fields}
 
-        def __init__(self, *args, **kwargs):
-            for slot, arg in zip(AppSerializer.__slots__, args):
-                setattr(self, slot, arg)
-            for key, value in kwargs:
-                setattr(self, key, value)
 
-        def get_app_object(self, app):
-            obj_property = self.get_property_value
-            app.title = self.title
-            app.description = self.description
-            # TODO:remove short_description
-            app.short_description = self.description
-            app.owner_url = obj_property('owner_url')
-            app.help_url = obj_property('help_url')
-            app.author = obj_property('author')
-            app.author_website = obj_property('author_website')
-            app.home_page = obj_property('demo_url')
-            for category in self.type:
-                category, created = AppType.objects.get_or_create(
-                    name=category)
-                app.category.add(category)
-            app.status = obj_property('status')
-            app.tags.clear()
-            app.tags.add(*obj_property('tags'))
-            app.license = self.license.get(
-                'name', None) if self.license else None
-            app.single_instance = obj_property('single_instance')
-            return app
+class AppJson(object):
+    def __init__(self, dictionary):
+        self.__dict__ = dictionary
 
-        def get_property_value(self, p):
-            return getattr(self, p, None)
-    return AppSerializer
+    def get_app_object(self, app):
+        obj_property = self.get_property_value
+        app.title = self.title
+        app.description = self.description
+        # TODO:remove short_description
+        app.short_description = self.description
+        app.owner_url = obj_property('owner_url')
+        app.help_url = obj_property('help_url')
+        app.author = obj_property('author')
+        app.author_website = obj_property('author_website')
+        app.home_page = obj_property('demo_url')
+        for category in self.type:
+            category, created = AppType.objects.get_or_create(
+                name=category)
+            app.category.add(category)
+        app.status = obj_property('status')
+        app.tags.clear()
+        app.tags.add(*obj_property('tags'))
+        app.license = self.license.get(
+            'name', None) if self.license else None
+        app.single_instance = obj_property('single_instance')
+        return app
+
+    def get_property_value(self, p):
+        return getattr(self, p, None)
 
 
 class AppAlreadyInstalledException(BaseException):
@@ -143,9 +142,7 @@ class AppInstaller(object):
             data = self._request_rest_data("appversion/?app__name=", name,
                                            "&version=", version)
             self.version = data['objects'][0]
-        Serializer = serializer_factor(self.info.keys())
-        self.app_serializer = Serializer(
-            *[self.info[key] for key in self.info])
+        self.app_serializer = AppJson(remove_unwanted(self.info))
 
     def _request_rest_data(self, *args):
         """
