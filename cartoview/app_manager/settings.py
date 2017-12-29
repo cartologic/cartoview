@@ -9,6 +9,8 @@ from builtins import *
 from sys import stdout
 
 from cartoview.app_manager.config import AppsConfig
+from cartoview.app_manager.helpers import (create_direcotry,
+                                           change_path_permission)
 from future import standard_library
 from past.builtins import execfile
 
@@ -25,7 +27,9 @@ logger.addHandler(handler)
 # BASE_DIR must be defined in project.settings
 APPS_DIR = os.path.abspath(os.path.join(BASE_DIR, "apps"))
 if not os.path.exists(APPS_DIR):
-    os.makedirs(APPS_DIR)
+    create_direcotry(APPS_DIR)
+    if not os.access(APPS_DIR, os.W_OK):
+        change_path_permission(APPS_DIR)
 if APPS_DIR not in sys.path:
     sys.path.append(APPS_DIR)
 

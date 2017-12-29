@@ -12,6 +12,8 @@ import zipfile
 import yaml
 from builtins import *
 from io import BytesIO
+from .helpers import create_direcotry, change_path_permission
+import errno
 from sys import stdout, exit, executable
 from threading import Timer
 import pkg_resources
@@ -44,14 +46,6 @@ class FinalizeInstaller:
         with open(settings.PENDING_APPS, 'wb') as outfile:
             yaml.dump(self.apps_to_finlize, outfile, default_flow_style=False)
         self.apps_to_finlize = []
-
-    def restart_docker(self):
-        try:
-            exit(1)
-        except:
-            logger.error(subprocess.Popen("pkill -f python && killall python",
-                                          shell=True,
-                                          stdout=subprocess.PIPE).stdout.read())
 
     def restart_server(self):
         working_dir = os.path.dirname(install_app_batch)
@@ -165,27 +159,31 @@ class AppInstaller(object):
             logger.error(e.message)
             return None
 
+    def extract_move_app(self, zipped_app):
+        extract_to = tempfile.mkdtemp(dir=temp_dir)
+        zipped_app.extractall(extract_to)
+        if self.upgrade and os.path.exists(self.app_dir):
+            # move old version to temporary dir so that we can restore in
+            # case of failure
+            old_version_temp_dir = tempfile.mkdtemp(dir=temp_dir)
+            shutil.move(self.app_dir, old_version_temp_dir)
+        self.old_app_temp_dir = os.path.join(extract_to, self.name)
+        shutil.move(self.old_app_temp_dir, settings.APPS_DIR)
+        # delete temp extract dir
+        shutil.rmtree(extract_to)
+
     def _download_app(self):
         # TODO: improve download apps (server-side)
         response = requests.get(self.version["download_link"], stream=True)
         zip_ref = zipfile.ZipFile(
             BytesIO(response.content))
         try:
-            if not os.path.exists(temp_dir):
-                os.makedirs(temp_dir)
-            extract_to = tempfile.mkdtemp(dir=temp_dir)
-            zip_ref.extractall(extract_to)
-            if self.upgrade and os.path.exists(self.app_dir):
-                # move old version to temporary dir so that we can restore in
-                # case of failure
-                old_version_temp_dir = tempfile.mkdtemp(dir=temp_dir)
-                shutil.move(self.app_dir, old_version_temp_dir)
-            self.old_app_temp_dir = os.path.join(extract_to, self.name)
-            shutil.move(self.old_app_temp_dir, settings.APPS_DIR)
-            # delete temp extract dir
-            shutil.rmtree(extract_to)
+            create_direcotry(temp_dir)
+            if not os.access(temp_dir, os.W_OK):
+                change_path_permission(temp_dir)
+            self.extract_move_app(zip_ref)
         except Exception as e:
-            logger.error(e.message)
+            raise e
         finally:
             zip_ref.close()
 
