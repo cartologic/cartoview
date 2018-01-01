@@ -48,12 +48,11 @@ class FinalizeInstaller:
 
     def restart_server(self):
         working_dir = os.path.dirname(install_app_batch)
-        log_file = os.path.join(working_dir, "install_app_log.txt")
-        with open(log_file, 'a') as log:
+        # log_file = os.path.join(working_dir, "install_app_log.txt")
+        if install_app_batch and os.path.exists(install_app_batch):
+            # with open(log_file, 'a') as log:
             proc = subprocess.Popen(
                 install_app_batch,
-                stdout=log,
-                stderr=log,
                 shell=True,
                 cwd=working_dir)
             logger.warning(proc.stdout)
