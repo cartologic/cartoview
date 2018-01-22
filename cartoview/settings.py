@@ -5,7 +5,8 @@ import cartoview
 import geonode
 from geonode.settings import *
 
-INSTALLED_APPS += ("cartoview", "cartoview.app_manager")
+INSTALLED_APPS += ("cartoview",
+                   "cartoview.cartoview_api.apps.CartoviewAPIConfig", "cartoview.app_manager")
 ROOT_URLCONF = "cartoview.urls"
 CARTOVIEW_ROOT = os.path.abspath(os.path.dirname(cartoview.__file__))
 GEONODE_ROOT = os.path.abspath(os.path.dirname(geonode.__file__))
@@ -41,12 +42,6 @@ LOGGING = {
             'filters': ['require_debug_true'],
             'class': 'logging.StreamHandler',
             'formatter': 'full'
-        }
-    },
-    'loggers': {
-        'django': {
-            'handlers': ['console'],
-            'propagate': True,
         }
     }
 }

@@ -9,13 +9,10 @@ from django.conf import settings
 from django.conf.urls import url
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
-from django.http import HttpResponse
-from django.views.decorators.http import require_http_methods
 from future import standard_library
 from geonode.api.api import ProfileResource
 from geonode.api.authorization import GeoNodeAuthorization
 from geonode.api.resourcebase_api import CommonMetaApi
-from geonode.base.models import ResourceBase
 from geonode.layers.models import Attribute, Layer
 from geonode.maps.models import Map as GeonodeMap
 from geonode.maps.models import MapLayer as GeonodeMapLayer
@@ -285,77 +282,3 @@ class TagResource(ModelResource):
 
     class Meta(object):
         queryset = Tag.objects.all()
-
-
-def nFilter(filters, objects_list):
-    for f in list(filters.items()):
-        objects_list = list(filter(build_filter(f), objects_list))
-    return objects_list
-
-
-def build_filter(filter):
-    key, value = filter
-    if key == 'not_app':
-        return lambda obj_dict: obj_dict['type'] in ['map', 'layer', 'doc']
-    elif key == 'featured':
-        return lambda obj_dict: obj_dict[key] == json.loads(value)
-
-    return lambda obj_dict: obj_dict[key] == obj_dict[key].__class__(value)
-
-
-def get_item_data(item):
-    urls = dict(
-        details=item.detail_url,)
-    item_data = dict(
-        id=item.id,
-        title=item.title,
-        abstract=item.abstract,
-        thumbnail=item.thumbnail_url,
-        urls=urls,
-        featured=item.featured,
-        owner=item.owner.username,
-        type="layer")
-    if hasattr(item, 'appinstance'):
-        urls["view"] = reverse(
-            '%s.view' % item.appinstance.app.name,
-            args=[str(item.appinstance.id)])
-        if item.appinstance.map and item.thumbnail_url == "":
-            item_data["thumbnail"] = item.appinstance.map.thumbnail_url
-        item_data["type"] = "app"
-        if item.appinstance.app is not None:
-            item_data["app"] = item.appinstance.app.title
-            item_data["app_name"] = item.appinstance.app.name
-    elif hasattr(item, 'document'):
-        urls["download"] = reverse('document_download', None, [str(item.id)])
-        item_data["type"] = "doc"
-    elif hasattr(item, 'map'):
-        urls["view"] = reverse('map_view', None, [str(item.id)])
-        item_data["type"] = "map"
-    return item_data
-
-
-@require_http_methods([
-    "GET",
-])
-def all_resources_rest(request):
-    # this filter is exact filter
-    allowed_filters = ['type', 'owner', 'id', 'not_app', 'featured']
-    permitted_ids = get_objects_for_user(request.user,
-                                         'base.view_resourcebase').values('id')
-    qs = ResourceBase.objects.filter(id__in=permitted_ids).filter(
-        title__isnull=False)
-    items = []
-    for item in qs:
-        items.append(get_item_data(item))
-
-    if request.GET:
-        filters = {}
-        for key in list(request.GET.keys()):
-            if key in allowed_filters:
-                filters.update({key: request.GET.get(key, None)})
-        filtered_list = nFilter(filters, items)
-        res_json = json.dumps(filtered_list)
-        return HttpResponse(res_json, content_type="text/json")
-    else:
-        res_json = json.dumps(items)
-        return HttpResponse(res_json, content_type="text/json")
