@@ -1,24 +1,31 @@
 from geonode.base.models import ResourceBase
 from tastypie import fields
-from tastypie.constants import ALL
+from tastypie.constants import ALL, ALL_WITH_RELATIONS
 from tastypie.resources import ModelResource
 from django.core.urlresolvers import reverse
+from geonode.api.api import OwnersResource
 
 
 class AllResoucesResource(ModelResource):
     type = fields.CharField(null=False, blank=False)
     urls = fields.DictField(null=False, blank=False)
+    owner = fields.ToOneField(OwnersResource, 'owner', full=True)
 
     class Meta:
         queryset = ResourceBase.objects.distinct()
         fields = ['id', 'title', 'abstract',
-                  'thumbnail_url', 'type', 'featured']
+                  'thumbnail_url', 'type', 'featured', 'owner__username']
         filtering = {
             'id': ALL,
             'title': ALL,
             'abstract': ALL,
-            'featured': ALL
+            'featured': ALL,
+            'owner': ALL_WITH_RELATIONS
         }
+        limit = 100
+
+    def dehydrate_owner(self, bundle):
+        return bundle.obj.owner.username
 
     def dehydrate_urls(self, bundle):
         item = bundle.obj
