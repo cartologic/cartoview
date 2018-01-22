@@ -33,11 +33,11 @@ from geonode.api.resourcebase_api import LayerResource
 standard_library.install_aliases()
 
 
-class LayerResource(LayerResource):
+class LayerFilterExtensionResource(LayerResource):
     def build_filters(self, filters=None):
         if filters is None:
             filters = {}
-        orm_filters = super(LayerResource, self).build_filters(filters)
+        orm_filters = super(LayerFilterExtensionResource, self).build_filters(filters)
         if('permission' in filters):
             permission = filters['permission']
             orm_filters.update({'permission': permission})
@@ -50,7 +50,7 @@ class LayerResource(LayerResource):
     def apply_filters(self, request, applicable_filters):
         permission = applicable_filters.pop('permission', None)
         layer_type = applicable_filters.pop('type', None)
-        filtered = super(LayerResource, self).apply_filters(
+        filtered = super(LayerFilterExtensionResource, self).apply_filters(
             request, applicable_filters)
         if layer_type:
             filtered = filtered.filter(
