@@ -43,5 +43,11 @@ LOGGING = {
             'class': 'logging.StreamHandler',
             'formatter': 'full'
         }
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'propagate': True,
+        }
     }
 }

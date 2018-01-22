@@ -100,14 +100,14 @@ def installed_apps():
 
 @staff_member_required
 def manage_apps(request):
-    from cartoview.version import get_backward_compatible,get_current_version
+    from cartoview.version import get_backward_compatible, get_current_version
     apps = App.objects.all()
     context = {
         'apps': apps,
         'site_apps': get_apps_names(),
         'version_info': {
-            'current_version':get_current_version(),
-            'backward_versions':get_backward_compatible()
+            'current_version': get_current_version(),
+            'backward_versions': get_backward_compatible()
         }
     }
     return render(request, 'app_manager/manage.html', context)
@@ -612,8 +612,10 @@ class StandardAppViews(AppViews):
         instance = _resolve_appinstance(
             request, instance_id, 'base.view_resourcebase',
             _PERMISSION_MSG_VIEW)
+        map_config = instance.map.viewer_json(
+            request.user, None) if instance.map else None
         context.update({
-            "map_config": instance.map.viewer_json(request.user, None),
+            "map_config": map_config,
             "instance": instance
         })
         return render(request, template, context)
