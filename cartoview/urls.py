@@ -3,13 +3,14 @@ from django.conf.urls import patterns, url, include
 from geonode.urls import urlpatterns
 from cartoview_api.rest import AllResourcesResource
 from cartoview.app_manager.rest import (AppInstanceResource, AppResource,
-                                        AppTypeResource)
+                                        AppTypeResource,LayerFilterExtensionResource)
 from cartoview.views import index as cartoview_index, check_version
 from geonode.api.urls import api
 
 api.register(AppInstanceResource())
 api.register(AppResource())
 api.register(AppTypeResource())
+api.register(LayerFilterExtensionResource())
 api.register(AllResourcesResource())
 urlpatterns = patterns(
     '',

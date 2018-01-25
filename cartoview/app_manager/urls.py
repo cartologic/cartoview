@@ -10,8 +10,7 @@ from cartoview.app_manager.rest import (AppInstanceResource, AppResource,
                                         GeonodeLayerAttributeResource,
                                         GeonodeLayerResource,
                                         GeonodeMapLayerResource,
-                                        GeonodeMapResource,
-                                        StylersLayerResource, TagResource)
+                                        GeonodeMapResource, TagResource)
 from cartoview.app_manager.utils import map_layers
 from django.conf.urls import include, patterns, url
 from django.views.generic import TemplateView
@@ -22,7 +21,6 @@ from .api import rest_api
 from .config import AppsConfig
 
 standard_library.install_aliases()
-rest_api.register(StylersLayerResource())
 rest_api.register(AppResource())
 rest_api.register(AppStoreResource())
 rest_api.register(AppInstanceResource())
