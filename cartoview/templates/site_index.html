@@ -234,10 +234,11 @@
             });
         });
     </script>
+    <!-- please fix featured apps and dataset -->
     <script>
     //TODO: please fix animation logic
         (function () {
-            FEATURED_URL = '{% url 'cartoview_all_resources' %}';
+            FEATURED_URL = "{% url 'api_dispatch_list' api_name='api' resource_name='all_resouces' %}";
             var app = angular.module('featured', ['dcbImgFallback']);
             app.controller('featuredappsCtrl', function ($scope, $http,$interval,$timeout) {
 
@@ -292,7 +293,7 @@
                 });
             });
             app.controller('featuredCtrl', function ($scope, $http) {
-                $http.get(FEATURED_URL + "?featured=true&not_app=true").then(function (response) {
+                $http.get(FEATURED_URL + "?featured=true").then(function (response) {
                     $scope.featured = response.data;
                 });
             });
