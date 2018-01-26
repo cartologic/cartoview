@@ -236,69 +236,15 @@
     </script>
     <!-- please fix featured apps and dataset -->
     <script>
-    //TODO: please fix animation logic
         (function () {
             FEATURED_URL = "{% url 'api_dispatch_list' api_name='api' resource_name='all_resouces' %}";
             var app = angular.module('featured', ['dcbImgFallback']);
-            app.controller('featuredappsCtrl', function ($scope, $http,$interval,$timeout) {
-
-                $http.get(FEATURED_URL + "?type=app&featured=true").then(function (response) {
-                    
-                    var allApps=response.data;
-                    var page=1;
-                    var max= Math.ceil(allApps.length/4);
-
-                    const itemPerPage = 4;
-                    $scope.class=allApps.length >4 ? "slide" : "";
-                    $scope.featuredApps = allApps;
-                    $scope.featuredApps= allApps.slice((page-1)*itemPerPage,itemPerPage*page)
-                    $scope.nextpage=function() {
-                        if(page<max){
-                                $scope.class = allApps.length >4 ? "slideright": "";
-                                $timeout(function() { 
-                                    $scope.class=allApps.length >4 ? "slide" : "";
-                                    page++;
-                                $scope.featuredApps= allApps.slice((page-1)*itemPerPage,itemPerPage*page)
-                                }, 500);
-
-                                }
-                        else{
-                                $scope.class=allApps.length >4 ? "slideright": "";
-                                $timeout(function() { 
-                                            $scope.class=allApps.length >4 ? "slide" : "";
-                                            page=1;
-                                            $scope.featuredApps= allApps.slice((page-1)*itemPerPage,itemPerPage*page)
-                                            }, 500);
-                                            }}
-                    $scope.prevpage=function() {
-                        if(page>1){
-                                    $scope.class=allApps.length >4 ? "slideleft" : "";
-                                    $timeout(function() { 
-                                        $scope.class=allApps.length >4 ? "slide" : "";
-                                        --page;
-                                        $scope.featuredApps= allApps.slice((page-1)*itemPerPage,itemPerPage*page)
-                                                        },500);
-                                    }
-                        else{
-                            $scope.class=allApps.length >4 ? "slideleft" : "";
-                            $timeout(function() { 
-                                $scope.class=allApps.length >4 ? "slide" : "";
-                                page=max
-                                $scope.featuredApps= allApps.slice((page-1)*itemPerPage,itemPerPage*page)
-                                }, 500); }}
-
-                        $interval(function () {$scope.nextpage() }, 6000);
-
-
-                });
-            });
             app.controller('featuredCtrl', function ($scope, $http) {
                 $http.get(FEATURED_URL + "?featured=true").then(function (response) {
-                    $scope.featured = response.data;
+                    $scope.featured = response.data.objects;
                 });
             });
         })();
-
 </script>
-<script src="{% static 'cartoview/slider/dist/Slider.bundle.js' %}" ></script>
+<script src="{% static 'cartoview/slider/dist/AppSlider.bundle.js' %}?v={{ CARTOVIEW_VERSION }}" ></script>
 {% endblock %}

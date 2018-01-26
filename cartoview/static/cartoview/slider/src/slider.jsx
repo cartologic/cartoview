@@ -8,26 +8,27 @@ import Spinner from 'react-spinkit'
 import { render } from 'react-dom'
 
 export default class FeaturedAppsSlider extends Component {
-    constructor(props) {
-        super(props)
+    constructor( props ) {
+        super( props )
         this.state = {
-            apps: [],
-            loading:true
+            apps: [ ],
+            loading: true
         }
     }
-    loadApps = () => {
-        const url = FEATURED_URL + "?type=app&featured=true"
-        fetch(url).then((response) => response.json()).then((data) => {
-            this.setState({
-                apps: data,loading:false
-            })
-        })
+    loadApps = ( ) => {
+        const url = FEATURED_URL + "?resource_type=app&featured=true"
+        fetch( url ).then( ( response ) => response.json( ) ).then( ( data ) => {
+            this.setState( {
+                apps: data.objects,
+                loading: false
+            } )
+        } )
     }
-    componentWillMount() {
-        this.loadApps()
+    componentWillMount( ) {
+        this.loadApps( )
     }
-    render() {
-        let { apps,loading } = this.state
+    render( ) {
+        let { apps, loading } = this.state
         const settings = {
             dots: true,
             infinite: true,
@@ -35,7 +36,9 @@ export default class FeaturedAppsSlider extends Component {
             slidesToScroll: 3,
             autoplay: true,
             autoplaySpeed: 2000,
-            responsive:[ { breakpoint: 738, settings: { slidesToShow: 2 ,slidesToScroll: 2} },{ breakpoint: 418, settings: { slidesToShow: 1 ,slidesToScroll: 1} } ]
+            responsive: [ { breakpoint: 738, settings: { slidesToShow: 2,
+                    slidesToScroll: 2 } }, { breakpoint: 418,
+                settings: { slidesToShow: 1, slidesToScroll: 1 } } ]
         };
         return (
             <div className=" col-xs-12 col-sm-12  col-md-12">
@@ -46,14 +49,14 @@ export default class FeaturedAppsSlider extends Component {
                                 <Img
                                     src={[
                                         app.thumbnail,
-                                        `/static/${app.app_name}/logo.png`
+                                        `/static/${app.app.name}/logo.png`
                                     ]}
                                     style={{ width: "100%",maxHeight:"200px" }}
                                     loader={<Spinner name="line-scale" />}
                                 />
                                 <div className="slider-middle">
-                                    <span style={{ whiteSpace: "pre-line" }}><small>{app.title}</small></span><br />
-                                    <span style={{ whiteSpace: "pre-line" }} className="label label-primary">{app.app}</span>
+                                    <span style={{ whiteSpace: "pre-line" }} className="label label-success"><small>{app.title}</small></span><br />
+                                    <span style={{ whiteSpace: "pre-line" }} className="label label-primary">{app.app.name}</span>
                                 </div></a>
                         </div></div>
 
@@ -66,4 +69,4 @@ export default class FeaturedAppsSlider extends Component {
         )
     }
 }
-render(<FeaturedAppsSlider />, document.getElementById("featured-apps"))
+render( <FeaturedAppsSlider />, document.getElementById( "featured-apps" ) )

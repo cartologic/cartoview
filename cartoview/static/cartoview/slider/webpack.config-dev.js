@@ -6,7 +6,7 @@ var plugins = [];
 var filename = '[name].bundle.js';
 module.exports = {
 	entry: {
-		Slider: path.join(APP_DIR, 'slider.jsx'),
+		AppSlider: path.join(APP_DIR, 'slider.jsx'),
 		AppsList: path.join(APP_DIR, 'AppsList.jsx')
 	},
 	output: {

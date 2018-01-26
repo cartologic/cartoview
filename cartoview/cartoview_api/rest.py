@@ -15,6 +15,7 @@ type_filter = {
 
 class AllResourcesResource(ModelResource):
     type = fields.CharField(null=False, blank=False)
+    app = fields.DictField(null=True, blank=False)
     urls = fields.DictField(null=False, blank=False)
     owner = fields.ToOneField(OwnersResource, 'owner', full=True)
 
@@ -68,6 +69,14 @@ class AllResourcesResource(ModelResource):
 
     def dehydrate_owner(self, bundle):
         return bundle.obj.owner.username
+
+    def dehydrate_app(self, bundle):
+        item = bundle.obj
+        if hasattr(item, 'appinstance'):
+            return {'name': item.appinstance.app.name,
+                    'title': item.appinstance.app.title}
+        else:
+            return None
 
     def dehydrate_urls(self, bundle):
         item = bundle.obj
