@@ -16,7 +16,7 @@ RUN apt-get update && apt-get install -y \
                 python-gdal python-psycopg2 \
                 python-imaging python-lxml \
                 python-dev libgdal-dev \
-                python-ldap \
+                python-ldap libxml2 libxml2-dev \
                 libmemcached-dev libsasl2-dev zlib1g-dev \
                 python-pylibmc python-setuptools \
                 curl build-essential build-essential python-dev \
