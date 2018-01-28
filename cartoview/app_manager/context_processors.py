@@ -4,7 +4,8 @@ from __future__ import (absolute_import, division, print_function,
 
 from builtins import *
 
-from cartoview.app_manager.models import App, AppInstance, Logo
+from cartoview.app_manager.models import App, AppInstance
+from cartoview.site_management.models import SiteLogo
 from django.conf import settings
 from geonode.version import get_version
 from cartoview import __version__
@@ -32,7 +33,7 @@ def cartoview_processor(request):
 
 def site_logo(request):
     try:
-        logo = get_object_or_404(Logo, site=Site.objects.get_current())
+        logo = get_object_or_404(SiteLogo, site=Site.objects.get_current())
         return {'site_logo': logo}
     except BaseException:
         return {'site_logo': None}

@@ -5,7 +5,7 @@ from builtins import *
 from django.contrib import admin
 from future import standard_library
 
-from .models import App, AppInstance, AppStore, AppType, Logo
+from .models import App, AppInstance, AppStore, AppType
 
 standard_library.install_aliases()
 
@@ -18,4 +18,3 @@ class AppAdmin(admin.ModelAdmin):
 admin.site.register(AppType)
 admin.site.register(AppInstance)
 admin.site.register(AppStore)
-admin.site.register(Logo)

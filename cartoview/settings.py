@@ -6,7 +6,8 @@ import geonode
 from geonode.settings import *
 
 INSTALLED_APPS += ("cartoview",
-                   "cartoview.cartoview_api.apps.CartoviewAPIConfig", "cartoview.app_manager")
+                   "cartoview.cartoview_api.apps.CartoviewAPIConfig",
+                   "cartoview.app_manager", "cartoview.site_management")
 ROOT_URLCONF = "cartoview.urls"
 CARTOVIEW_ROOT = os.path.abspath(os.path.dirname(cartoview.__file__))
 GEONODE_ROOT = os.path.abspath(os.path.dirname(geonode.__file__))

@@ -241,9 +241,6 @@ def pre_delete_appinstance(instance, sender, **kwargs):
     remove_object_permissions(instance.get_self_resource())
 
 
-# print o.portal_map.first().portal_item
-
-
 def appinstance_post_save(instance, *args, **kwargs):
     if not isinstance(instance, AppInstance):
         return
@@ -251,15 +248,5 @@ def appinstance_post_save(instance, *args, **kwargs):
 
 
 signals.pre_save.connect(pre_save_appinstance)
-# signals.post_save.connect(create_thumbnail)
-
 signals.post_save.connect(appinstance_post_save)
 signals.pre_delete.connect(pre_delete_appinstance)
-
-
-class Logo(models.Model):
-    site = models.OneToOneField(Site)
-    logo = models.ImageField()
-
-    def __unicode__(self):
-        return "Site {} Logo: {}".format(self.site.name, self.logo.url)
