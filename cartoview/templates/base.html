@@ -31,6 +31,23 @@
         <style type="text/css">[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak, .ng-hide:not(.ng-hide-animate) {
             display: none !important;
         }</style>
+        <style>
+            {% if site_logo %}
+                .navbar-inverse .navbar-brand {
+                    background-image: url("{{ site_logo.logo.url }}") !important;
+                    background-position: center center;
+                }
+            {% else %}
+                .navbar-inverse .navbar-brand {
+                    background-image: url({{ STATIC_URL }}cartoview/img/cartoview-logo-text-white.png);
+                    background-position: center center;
+                }
+                body {
+                    overflow-x: hidden;
+                }
+            {% endif %}
+        
+        </style>
         {% block extra_head %}
         {% endblock %}
     {% endblock %}
@@ -273,24 +290,6 @@
 
 {% include 'autocomplete_light/static.html' %}
 <script type="text/javascript" src="{% url 'django.views.i18n.javascript_catalog' %}"></script>
-{#<link href="{{ STATIC_URL }}cartoview/css/cartoview.css" rel="stylesheet"/>#}
-<style>
-    {% if site_logo %}
-        .navbar-inverse .navbar-brand {
-            background-image: url("{{ site_logo.logo.url }}") !important;
-            background-position: center center;
-        }
-    {% else %}
-        .navbar-inverse .navbar-brand {
-            background-image: url({{ STATIC_URL }}cartoview/img/cartoview-logo-text-white.png);
-            background-position: center center;
-        }
-        body {
-            overflow-x: hidden;
-        }
-    {% endif %}
-
-</style>
 {% block extra_script %}{% endblock extra_script %}
 <script type="text/javascript">
     var autocomplete = $('#search_input').yourlabsAutocomplete({
