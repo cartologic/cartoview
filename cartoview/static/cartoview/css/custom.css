@@ -13,6 +13,7 @@ body,html {
 h1, h2, h3, h4, h5, h6, p {
     word-wrap: normal;
     word-break: break-word;
+    white-space: normal
 }
 .home .jumbotron {
     background: #2c689c;
