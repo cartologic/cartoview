@@ -29,7 +29,7 @@ setup(
         "apps",
         "application management"],
     classifiers=[
-        "Development Status :: 5 - Production/Stable",
+        "Development Status :: 4 - Beta",
         "Framework :: Django :: 1.8",
         "Topic :: Scientific/Engineering :: GIS"],
     license="BSD",
