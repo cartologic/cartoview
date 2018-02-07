@@ -54,6 +54,7 @@
 .description{
     padding-left: 10px;
     padding-right: 10px;
+    white-space: normal;
 }
 .search-box{
     margin-top: 5px;

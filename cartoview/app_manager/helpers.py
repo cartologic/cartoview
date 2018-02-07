@@ -33,3 +33,15 @@ def get_path_permission(path):
     st = os.stat(path)
     permission = octal_permissions(lst.st_mode), octal_permissions(st.st_mode)
     return permission
+
+
+def get_perm(fname):
+    return stat.S_IMODE(os.lstat(fname)[stat.ST_MODE])
+
+
+def make_writeable_recursive(path):
+    for root, dirs, files in os.walk(path, topdown=False):
+        for dir in [os.path.join(root, d) for d in dirs]:
+            os.chmod(dir, get_perm(dir) | os.ST_WRITE)
+        for file in [os.path.join(root, f) for f in files]:
+            os.chmod(file, get_perm(file) | os.ST_WRITE)

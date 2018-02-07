@@ -1,32 +1,32 @@
-from __future__ import absolute_import
-from __future__ import unicode_literals
-from __future__ import print_function
-from __future__ import division
-from future import standard_library
-standard_library.install_aliases()
+from __future__ import (absolute_import, division, print_function,
+                        unicode_literals)
+
 from builtins import *
-from builtins import object
+
 from django.conf.urls import url
 from django.db import models
 from django.forms.models import modelform_factory
 from django.shortcuts import render
-from .serializers import HTMLSerializer, MultipartFormSerializer
+from future import standard_library
 from tastypie.authorization import Authorization
-from tastypie.resources import ModelResource, Resource
+from tastypie.resources import ModelResource
+
+from .serializers import HTMLSerializer, MultipartFormSerializer
+
+standard_library.install_aliases()
 
 
-class BaseResource(Resource):
-
-    class Meta(object):
-        always_return_data = True
-        serializer = HTMLSerializer()
-        authorization = Authorization()
+class BaseMeta(object):
+    object_class = None
+    always_return_data = True
+    serializer = HTMLSerializer()
+    authorization = Authorization()
 
 
 class BaseModelResource(ModelResource):
 
-    class Meta(BaseResource.Meta):
-        object_class = None
+    class Meta(BaseMeta):
+        pass
 
     def build_schema(self):
         base_schema = super(BaseModelResource, self).build_schema()
@@ -72,6 +72,7 @@ class BaseModelResource(ModelResource):
 class FileUploadResource(BaseModelResource):
 
     class Meta(BaseModelResource.Meta):
+        object_class = None
         serializer = MultipartFormSerializer()
 
     def obj_create(self, bundle, **kwargs):
