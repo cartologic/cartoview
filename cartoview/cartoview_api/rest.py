@@ -1,9 +1,10 @@
-from geonode.base.models import ResourceBase
+from django.core.urlresolvers import reverse
 from tastypie import fields
 from tastypie.constants import ALL, ALL_WITH_RELATIONS
 from tastypie.resources import ModelResource
-from django.core.urlresolvers import reverse
+
 from geonode.api.api import OwnersResource
+from geonode.base.models import ResourceBase
 
 type_filter = {
     'app': 'appinstance',

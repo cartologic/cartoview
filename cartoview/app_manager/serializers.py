@@ -4,7 +4,6 @@ from __future__ import (absolute_import, division, print_function,
 
 import json
 from builtins import *
-from builtins import str
 
 from django.template.loader import render_to_string
 from django.utils import six

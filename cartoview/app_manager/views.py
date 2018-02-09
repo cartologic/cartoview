@@ -10,7 +10,7 @@ import os
 from builtins import *
 from sys import stdout
 from urllib.parse import urljoin
-from cartoview.app_manager.forms import AppInstanceEditForm
+
 from django.conf import settings
 from django.conf.urls import patterns, url
 from django.contrib.admin.views.decorators import staff_member_required
@@ -29,13 +29,15 @@ from django.utils.translation import ugettext as _
 from django.views.decorators.http import require_POST
 from future import standard_library
 from future.utils import with_metaclass
+from guardian.shortcuts import get_perms
+
+from cartoview.app_manager.forms import AppInstanceEditForm
 from geonode.base.forms import CategoryForm
 from geonode.base.models import TopicCategory
 from geonode.maps.views import _PERMISSION_MSG_VIEW
 from geonode.people.forms import ProfileForm
 from geonode.security.views import _perms_info_json
 from geonode.utils import build_social_links, resolve_object
-from guardian.shortcuts import get_perms
 
 from .installer import AppInstaller
 from .models import App, AppInstance

@@ -8,11 +8,12 @@ import sys
 from builtins import *
 from sys import stdout
 
-from cartoview.app_manager.config import AppsConfig
-from cartoview.app_manager.helpers import (create_direcotry,
-                                           change_path_permission)
 from future import standard_library
 from past.builtins import execfile
+
+from cartoview.app_manager.config import AppsConfig
+from cartoview.app_manager.helpers import (change_path_permission,
+                                           create_direcotry)
 
 standard_library.install_aliases()
 

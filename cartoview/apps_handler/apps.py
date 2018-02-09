@@ -1,13 +1,15 @@
 # -*- coding: utf-8 -*-
 
+import logging
+import os
+from sys import stdout
+
+import yaml
 from django.apps import AppConfig
 from django.conf import settings
-import yaml
-import os
-import logging
-from sys import stdout
 from django.core.management import call_command
 from django.core.management.base import CommandError
+
 pending_yaml = settings.PENDING_APPS
 formatter = logging.Formatter(
     '[%(asctime)s] p%(process)s  { %(name)s %(pathname)s:%(lineno)d} \

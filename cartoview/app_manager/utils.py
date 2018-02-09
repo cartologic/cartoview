@@ -5,15 +5,16 @@ from __future__ import (absolute_import, division, print_function,
 import abc
 from builtins import *
 
-from cartoview.app_manager.models import AppInstance
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.views.decorators.http import require_http_methods
 from future import standard_library
 from future.utils import with_metaclass
+from tastypie.serializers import Serializer
+
+from cartoview.app_manager.models import AppInstance
 from geonode.api.resourcebase_api import LayerResource
 from geonode.maps.models import Map
-from tastypie.serializers import Serializer
 
 standard_library.install_aliases()
 
