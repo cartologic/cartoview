@@ -151,7 +151,7 @@ class AppInstaller(object):
             q = requests.get(self.store.url + ''.join(
                 [str(item) for item in args]))
             return q.json()
-        except BaseException as e:
+        except Exception as e:
             logger.error(e.message)
             return None
 
@@ -183,20 +183,23 @@ class AppInstaller(object):
         finally:
             zip_ref.close()
 
+    def get_app_order(self):
+        apps = App.objects.all()
+        max_value = apps.aggregate(
+            Max('order'))['order__max'] if apps.exists() else 0
+        return max_value+1
+
     def add_app(self, installer):
         # save app configuration
         app, created = App.objects.get_or_create(name=self.name)
         if created:
+            # append app in order
             if app.order is None or app.order == 0:
-                apps = App.objects.all()
-                max_value = apps.aggregate(
-                    Max('order'))['order__max'] if apps.exists() else 0
-                app.order = max_value + 1
+                app.order = self.get_app_order()
             app_config = AppConfig(
                 name=self.name, active=True, order=app.order)
             app.apps_config.append(app_config)
             app.apps_config.save()
-            app.order = app_config.order
         app = self.app_serializer.get_app_object(app)
         app.version = self.version["version"]
         app.installed_by = self.user
