@@ -1,18 +1,20 @@
 # -*- coding: utf-8 -*-
-from __future__ import absolute_import
-from __future__ import unicode_literals
-from __future__ import print_function
-from __future__ import division
-# TODO: Review this file. Legacy??!
-from future import standard_library
-standard_library.install_aliases()
+from __future__ import (absolute_import, division, print_function,
+                        unicode_literals)
+
 from builtins import *
-from builtins import object
+
 from django.forms import FileField, ModelForm
 from django.utils.translation import ugettext_lazy as _
-from geonode.base.forms import ResourceBaseForm
-from .models import App, AppInstance
+# TODO: Review this file. Legacy??!
+from future import standard_library
 from modeltranslation.forms import TranslationModelForm
+
+from geonode.base.forms import ResourceBaseForm
+
+from .models import App, AppInstance
+
+standard_library.install_aliases()
 
 
 class AppInstallerForm(ModelForm):
