@@ -58,17 +58,20 @@ class FinalizeInstaller:
             logger.warning(proc.stdout)
             logger.error(proc.stderr)
 
+    def docker_restart(self):
+        try:
+            import cherrypy
+            cherrypy.engine.restart()
+        except ImportError:
+            exit(0)
+
     def finalize_setup(self, app_name):
         self.save_pending_app_to_finlize()
         docker = getattr(settings, 'DOCKER', None)
 
         def _finalize_setup(app_name):
             if docker:
-                try:
-                    import cherrypy
-                    cherrypy.engine.restart()
-                except ImportError:
-                    exit(0)
+                self.docker_restart()
             else:
                 self.restart_server()
         timer = Timer(0.1, _finalize_setup(app_name))
