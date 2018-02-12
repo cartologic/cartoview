@@ -34,7 +34,7 @@ RUN pip install --upgrade pip
 RUN pip install --ignore-installed django-osgeo-importer django-geonode-client \
                 geonode==2.8rc11 django-jsonfield django-jsonfield-compat cartoview \
                 cherrypy==11.0.0 cheroot==5.8.3 django-haystack elasticsearch==2.4.0 \
-		woosh --no-cache-dir
+		Whoosh --no-cache-dir
 RUN pip install GDAL==1.10 --global-option=build_ext --global-option="-I/usr/include/gdal"
 RUN rm -rf /var/lib/apt/lists/*
 CMD ["/bin/bash"]
