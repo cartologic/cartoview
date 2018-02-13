@@ -15,7 +15,7 @@ RUN apt-get update && apt-get install -y \
                 lsof psmisc \
                 python-gdal python-psycopg2 \
                 python-imaging python-lxml \
-                python-dev libgdal-dev \
+                python-dev libgdal-dev libgeoip-dev \
                 python-ldap libxml2 libxml2-dev libxslt-dev \
                 libmemcached-dev libsasl2-dev zlib1g-dev \
                 python-pylibmc python-setuptools \
@@ -31,7 +31,7 @@ RUN npm install -g bower grunt
 RUN mkdir /code
 WORKDIR /code
 RUN pip install --upgrade pip
-RUN pip install --ignore-installed django-osgeo-importer django-geonode-client \
+RUN pip install --ignore-installed django-osgeo-importer geoip django-geonode-client \
                 geonode==2.8rc11 django-jsonfield django-jsonfield-compat cartoview \
                 cherrypy==11.0.0 cheroot==5.8.3 django-haystack elasticsearch==2.4.0 \
 		Whoosh --no-cache-dir
