@@ -11,7 +11,6 @@ from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Count
 from django.utils.html import mark_safe
-from django.utils.safestring import mark_safe
 from future import standard_library
 from geonode import settings
 from geonode.documents.models import Document
