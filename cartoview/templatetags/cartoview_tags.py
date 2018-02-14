@@ -40,17 +40,17 @@ def num_ratings(obj):
 
 @register.simple_tag
 def layers_counts():
-    return Layer.objects.all().count()
+    return Layer.objects.count()
 
 
 @register.simple_tag
 def maps_counts():
-    return Map.objects.all().count()
+    return Map.objects.count()
 
 
 @register.simple_tag
 def apps_counts():
-    return AppInstance.objects.all().count()
+    return AppInstance.objects.count()
 
 
 @register.simple_tag
