@@ -9,8 +9,9 @@ import logging
 import os
 from builtins import *
 from sys import stdout
+from django.shortcuts import get_object_or_404
 from urllib.parse import urljoin
-
+from .decorators import can_change_app_instance, can_view_app_instance
 from django.conf import settings
 from django.conf.urls import patterns, url
 from django.contrib.admin.views.decorators import staff_member_required
@@ -598,22 +599,23 @@ class StandardAppViews(AppViews):
         return render(request, template, context)
 
     @method_decorator(login_required)
+    @method_decorator(can_change_app_instance)
     def edit(self, request, instance_id,
              template=None, context={}, * args, **kwargs):
         if template is None:
             template = self.edit_template
         if request.method == 'POST':
             return self.save(request, instance_id)
-        instance = AppInstance.objects.get(pk=instance_id)
+
+        instance = get_object_or_404(AppInstance, pk=instance_id)
         context.update(instance=instance)
         return render(request, template, context)
 
+    @method_decorator(can_view_app_instance)
     def view_app(self, request, instance_id, template=None, context={}):
         if template is None:
             template = self.view_template
-        instance = _resolve_appinstance(
-            request, instance_id, 'base.view_resourcebase',
-            _PERMISSION_MSG_VIEW)
+        instance = get_object_or_404(AppInstance, pk=instance_id)
         map_config = instance.map.viewer_json(
             request.user, None) if instance.map else None
         context.update({

@@ -5,7 +5,8 @@ import json
 import logging
 from builtins import *
 from sys import stdout
-
+from datetime import datetime
+from django.template.defaultfilters import slugify
 from django.conf import settings as geonode_settings
 from django.contrib.gis.db import models
 from django.core.urlresolvers import reverse
@@ -136,6 +137,13 @@ class App(models.Model):
         return self.apps_config.get_by_name(self.name)
 
 
+def get_app_logo_path(instance, filename):
+    today = datetime.now()
+    date_as_path = today.strftime("%Y/%m/%d")
+    return '/'.join(['app_instance_logos', slugify(instance.title),
+                     date_as_path, filename])
+
+
 class AppInstance(ResourceBase):
     """
     An App Instance  is any kind of App Instance that can be created
@@ -146,6 +154,8 @@ class AppInstance(ResourceBase):
     app = models.ForeignKey(App, null=True, blank=True)
     config = models.TextField(null=True, blank=True)
     map = models.ForeignKey(GeonodeMap, null=True, blank=True)
+    logo = models.ImageField(
+        upload_to=get_app_logo_path, blank=True, null=True)
 
     def get_absolute_url(self):
         return reverse('appinstance_detail', args=(self.id,))
