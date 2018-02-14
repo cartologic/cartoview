@@ -1,5 +1,5 @@
 {% extends "app_manager/app_install_base.html" %}
-{% load bootstrap_tags staticfiles %}
+{% load bootstrap_tags staticfiles cartoview_tags %}
 {% load i18n %}
 
 {% block title %} {{ block.super }} - {% trans "Applications" %} {% endblock %}
@@ -80,7 +80,7 @@
                                         <div id="card-buttons">
                                             <a href="{% url 'appinstance_browse' %}?app__name={{ app.name }}&app__title={{app.title }}"
                                                target="_parent" class="btn btn-sm btn-primary">Explore <span
-                                                    class="badge">{{ app.appinstance_set.all.count }}</span></a>
+                                                    class="badge">{{ app.appinstance_set.all|objects_count:request.user }}</span></a>
                                         </div>
                                             {% if not user.is_authenticated or not request.user.is_staff  %}
                                             <div id="card-buttons">
