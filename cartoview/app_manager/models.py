@@ -151,9 +151,11 @@ class AppInstance(ResourceBase):
     """
 
     # Relation to the App model
-    app = models.ForeignKey(App, null=True, blank=True)
+    app = models.ForeignKey(App, null=True, blank=True,
+                            on_delete=models.CASCADE)
     config = models.TextField(null=True, blank=True)
-    map = models.ForeignKey(GeonodeMap, null=True, blank=True)
+    map = models.ForeignKey(GeonodeMap, null=True,
+                            blank=True, on_delete=models.CASCADE)
     logo = models.ImageField(
         upload_to=get_app_logo_path, blank=True, null=True)
 
