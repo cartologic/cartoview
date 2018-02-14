@@ -172,8 +172,17 @@
                 $scope.compatible = function (cartoviewVersions) {
                     var compatible = false;
                     for (var i = 0; i < cartoviewVersions.length; i++) {
-                        const version=cartoviewVersions[i].version
-                        if ( version=== versionInfo.current_version || versionInfo.backward_versions.indexOf(version)>-1) {
+                        const version = cartoviewVersions[i].version
+                        const current_version_check = compareVersions(version, versionInfo.current_version)
+                        const backward_version_check = -1
+                        for (var j = 0; j < versionInfo.backward_versions.length; j++) {
+                            const v = versionInfo.backward_versions[j]
+                            if (compareVersions(version, v) == 0) {
+                                backward_version_check = 0
+                                break
+                            }
+                        }
+                        if (current_version_check === 0 || backward_version_check === 0) {
                             compatible = true;
                             break;
                         }
