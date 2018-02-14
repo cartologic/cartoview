@@ -15,8 +15,12 @@ from tastypie.serializers import Serializer
 from cartoview.app_manager.models import AppInstance
 from geonode.api.resourcebase_api import LayerResource
 from geonode.maps.models import Map
+from django.utils.translation import ugettext as _
+from geonode.utils import resolve_object
 
 standard_library.install_aliases()
+
+_PERMISSION_MSG_GENERIC = _("You do not have permissions for this Instance.")
 
 
 @require_http_methods([
@@ -57,6 +61,23 @@ def map_layers(request):
         return HttpResponse(data, content_type='application/json')
     else:
         return HttpResponse("not enough pramters", status=400)
+
+
+def resolve_appinstance(request,
+                        appinstanceid,
+                        permission='base.change_resourcebase',
+                        msg=_PERMISSION_MSG_GENERIC,
+                        **kwargs):
+    """
+    Resolve the document by the provided primary key
+    and check the optional permission.
+    """
+    return resolve_object(
+        request,
+        AppInstance, {'pk': appinstanceid},
+        permission=permission,
+        permission_msg=msg,
+        **kwargs)
 
 
 class Thumbnail(with_metaclass(abc.ABCMeta, object)):

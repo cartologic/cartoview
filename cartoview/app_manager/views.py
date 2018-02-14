@@ -11,7 +11,10 @@ from builtins import *
 from sys import stdout
 from django.shortcuts import get_object_or_404
 from urllib.parse import urljoin
-from .decorators import can_change_app_instance, can_view_app_instance
+from .decorators import (can_change_app_instance, can_view_app_instance,
+                         PERMISSION_MSG_DELETE, PERMISSION_MSG_GENERIC,
+                         PERMISSION_MSG_METADATA, PERMISSION_MSG_MODIFY,
+                         PERMISSION_MSG_VIEW)
 from django.conf import settings
 from django.conf.urls import patterns, url
 from django.contrib.admin.views.decorators import staff_member_required
@@ -35,14 +38,13 @@ from guardian.shortcuts import get_perms
 from cartoview.app_manager.forms import AppInstanceEditForm
 from geonode.base.forms import CategoryForm
 from geonode.base.models import TopicCategory
-from geonode.maps.views import _PERMISSION_MSG_VIEW
 from geonode.people.forms import ProfileForm
 from geonode.security.views import _perms_info_json
 from geonode.utils import build_social_links, resolve_object
 
 from .installer import AppInstaller
 from .models import App, AppInstance
-from .utils import AppsThumbnail
+from .utils import AppsThumbnail, resolve_appinstance
 
 standard_library.install_aliases()
 
@@ -59,8 +61,11 @@ _PERMISSION_MSG_GENERIC = _("You do not have permissions for this document.")
 _PERMISSION_MSG_MODIFY = _("You are not permitted to modify this document")
 _PERMISSION_MSG_METADATA = _(
     "You are not permitted to modify this document's metadata")
-# _PERMISSION_MSG_VIEW = _("You are not permitted to view this document")
-
+_PERMISSION_MSG_VIEW = _("You are not permitted to view this document")
+# TODO: remove this line after fixing apps
+# NOTE: this line is here to handle if apps unsing old _resolve_appinstance
+# function
+_resolve_appinstance = resolve_appinstance
 current_folder, filename = os.path.split(os.path.abspath(__file__))
 temp_dir = os.path.join(current_folder, 'temp')
 if not os.path.exists(temp_dir):
@@ -235,32 +240,15 @@ def save_app_orders(request):
     return HttpResponse(json.dumps(ajax_vars), content_type="application/json")
 
 
-def _resolve_appinstance(request,
-                         appinstanceid,
-                         permission='base.change_resourcebase',
-                         msg=_PERMISSION_MSG_GENERIC,
-                         **kwargs):
-    """
-    Resolve the document by the provided primary key
-    and check the optional permission.
-    """
-    return resolve_object(
-        request,
-        AppInstance, {'pk': appinstanceid},
-        permission=permission,
-        permission_msg=msg,
-        **kwargs)
-
-
 def appinstance_detail(request, appinstanceid):
     """
     The view that show details of each document
     """
     appinstance = None
     try:
-        appinstance = _resolve_appinstance(request, appinstanceid,
-                                           'base.view_resourcebase',
-                                           _PERMISSION_MSG_VIEW)
+        appinstance = resolve_appinstance(request, appinstanceid,
+                                          'base.view_resourcebase',
+                                          PERMISSION_MSG_VIEW)
 
     except Http404:
         return HttpResponse(
@@ -324,9 +312,9 @@ def appinstance_metadata(request,
                          template='app_manager/appinstance_metadata.html'):
     appinstance = None
     try:
-        appinstance = _resolve_appinstance(request, appinstanceid,
-                                           'base.change_resourcebase_metadata',
-                                           _PERMISSION_MSG_METADATA)
+        appinstance = resolve_appinstance(request, appinstanceid,
+                                          'base.change_resourcebase_metadata',
+                                          PERMISSION_MSG_METADATA)
 
     except Http404:
         return HttpResponse(
@@ -462,9 +450,9 @@ def appinstance_metadata(request,
 
 def appinstance_remove(request, appinstanceid):
     try:
-        appinstance = _resolve_appinstance(request, appinstanceid,
-                                           'base.delete_resourcebase',
-                                           _PERMISSION_MSG_DELETE)
+        appinstance = resolve_appinstance(request, appinstanceid,
+                                          'base.delete_resourcebase',
+                                          PERMISSION_MSG_DELETE)
         appinstance.delete()
         return HttpResponseRedirect(reverse('appinstance_browse'))
     except PermissionDenied:
