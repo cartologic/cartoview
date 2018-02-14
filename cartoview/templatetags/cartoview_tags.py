@@ -12,7 +12,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.db.models import Count
 from django.utils.html import mark_safe
 from future import standard_library
-from geonode import settings
+from django.conf import settings
 from geonode.documents.models import Document
 from geonode.groups.models import Group, GroupProfile
 from geonode.layers.models import Layer
