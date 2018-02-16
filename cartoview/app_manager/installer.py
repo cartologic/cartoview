@@ -22,6 +22,7 @@ from django.db.models import Max
 from future import standard_library
 
 from .config import App as AppConfig
+import fcntl
 from .models import App, AppStore, AppType
 install_app_batch = getattr(settings, 'INSTALL_APP_BAT', None)
 standard_library.install_aliases()
@@ -43,7 +44,9 @@ class FinalizeInstaller:
 
     def save_pending_app_to_finlize(self):
         with open(settings.PENDING_APPS, 'wb') as outfile:
+            fcntl.flock(outfile, fcntl.LOCK_EX | fcntl.LOCK_NB)
             yaml.dump(self.apps_to_finlize, outfile, default_flow_style=False)
+            fcntl.flock(outfile, fcntl.LOCK_UN)
         self.apps_to_finlize = []
 
     def restart_server(self):

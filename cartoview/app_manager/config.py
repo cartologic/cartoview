@@ -2,11 +2,13 @@
 from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
 
+import fcntl
 import os
 from builtins import *
-from future.utils import native
+
 import yaml
 from future import standard_library
+from future.utils import native
 
 standard_library.install_aliases()
 
@@ -82,7 +84,9 @@ class Collection(object):
     def save(self):
         self.default_sort()
         with open(self.yaml_file_path, 'w') as f:
+            fcntl.flock(f, fcntl.LOCK_EX | fcntl.LOCK_NB)
             self._save(f)
+            fcntl.flock(f, fcntl.LOCK_UN)
 
 
 class App(Item):

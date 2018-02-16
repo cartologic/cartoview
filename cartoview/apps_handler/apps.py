@@ -9,7 +9,7 @@ from django.apps import AppConfig
 from django.conf import settings
 from django.core.management import call_command
 from django.core.management.base import CommandError
-
+import fcntl
 pending_yaml = settings.PENDING_APPS
 formatter = logging.Formatter(
     '[%(asctime)s] p%(process)s  { %(name)s %(pathname)s:%(lineno)d} \
@@ -30,7 +30,9 @@ class AppsHandlerConfig(AppConfig):
 
     def reset(self):
         with open(pending_yaml, 'w+') as f:
+            fcntl.flock(f, fcntl.LOCK_EX | fcntl.LOCK_NB)
             yaml.dump([], f)
+            fcntl.flock(f, fcntl.LOCK_UN)
 
     def execute_pending(self):
         # TODO: fix racing
