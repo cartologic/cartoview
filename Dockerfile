@@ -34,7 +34,7 @@ RUN pip install --upgrade pip
 RUN pip install --ignore-installed django-osgeo-importer django-geonode-client \
                 geonode==2.6.3 django-jsonfield django-jsonfield-compat cartoview \
                 geonode-user-accounts==1.0.13 django-polymorphic==1.3 cherrypy==11.0.0 \
-		cheroot==5.8.3 transifex-client<=0.12.5 --no-cache-dir
+		cheroot==5.8.3 transifex-client==0.12.5 --no-cache-dir
 RUN pip uninstall awesome-slugify python-slugify -y
 RUN pip install awesome-slugify==1.6.5
 RUN pip install GDAL==1.10 --global-option=build_ext --global-option="-I/usr/include/gdal"
