@@ -12,8 +12,8 @@ from sys import stdout
 from django.shortcuts import get_object_or_404
 from urllib.parse import urljoin
 from .decorators import (can_change_app_instance, can_view_app_instance,
-                         PERMISSION_MSG_DELETE, PERMISSION_MSG_GENERIC,
-                         PERMISSION_MSG_METADATA, PERMISSION_MSG_MODIFY,
+                         PERMISSION_MSG_DELETE,
+                         PERMISSION_MSG_METADATA,
                          PERMISSION_MSG_VIEW)
 from django.conf import settings
 from django.conf.urls import patterns, url
@@ -40,7 +40,7 @@ from geonode.base.forms import CategoryForm
 from geonode.base.models import TopicCategory
 from geonode.people.forms import ProfileForm
 from geonode.security.views import _perms_info_json
-from geonode.utils import build_social_links, resolve_object
+from geonode.utils import build_social_links
 
 from .installer import AppInstaller
 from .models import App, AppInstance
