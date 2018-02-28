@@ -4,15 +4,14 @@ ENV TERM xterm
 RUN apt-get update
 RUN apt-get install locales -y
 RUN locale-gen ru_RU.UTF-8 && update-locale
-RUN apt-get  install gdal-bin python-gdal -y
+RUN apt-get install software-properties-common python-software-properties -y
+RUN add-apt-repository -y ppa:ubuntugis/ubuntugis-unstable
+RUN apt-get update
+RUN apt-get upgrade -y
 RUN apt-get update && apt-get install -y \
-		gcc \
-		gettext \
-                python-pip \
-		libpq-dev \
-		sqlite3 git \
-                software-properties-common python-software-properties \
-                lsof psmisc \
+		gcc gettext \
+                python-pip libpq-dev \
+		sqlite3 git gdal-bin lsof psmisc \
                 python-gdal python-psycopg2 \
                 python-imaging python-lxml \
                 python-dev libgdal-dev libgeoip-dev \
@@ -21,9 +20,6 @@ RUN apt-get update && apt-get install -y \
                 python-pylibmc python-setuptools \
                 curl build-essential build-essential python-dev \
 	--no-install-recommends
-RUN add-apt-repository -y ppa:ubuntugis/ubuntugis-unstable
-RUN apt-get update
-RUN apt-get upgrade -y
 RUN curl -sL https://deb.nodesource.com/setup_6.x -o nodesource_setup.sh
 RUN bash nodesource_setup.sh -y
 RUN apt-get install nodejs -y
