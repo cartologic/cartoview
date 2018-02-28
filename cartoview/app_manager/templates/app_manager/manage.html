@@ -128,7 +128,7 @@
                                         </div>
                                         <small ng-show="!compatible(app.latest_version.cartoview_version)">Incompatible</small>
                                     </button>
-                                    <button ng-disabled="!compatible(app.latest_version.cartoview_version)"  ng-if="app.installedApp && app.latest_version.version > app.installedApp.version" ng-click="install(app, true)" class="btn btn-primary" ng-disabled="installing">
+                                    <button ng-disabled="!compatible(app.latest_version.cartoview_version)"  ng-if="app.installedApp && upgradable(app.installedApp.version,app.latest_version.version)" ng-click="install(app, true)" class="btn btn-primary" ng-disabled="installing">
                                         <div ng-if="compatible(app.latest_version.cartoview_version)">
                                             <span class="fa fa-circle-o-notch rotating" ng-show="installing==app"></span>
                                             <span ng-show="installing!=app">Upgrade</span><span ng-show="installing==app">Upgrading</span>

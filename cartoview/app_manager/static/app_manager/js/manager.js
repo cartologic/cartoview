@@ -174,9 +174,10 @@
                     for (var i = 0; i < cartoviewVersions.length; i++) {
                         const version = cartoviewVersions[i].version
                         const current_version_check = compareVersions(version, versionInfo.current_version)
-                        const backward_version_check = -1
+                        var backward_version_check = -1
                         for (var j = 0; j < versionInfo.backward_versions.length; j++) {
                             const v = versionInfo.backward_versions[j]
+                            
                             if (compareVersions(version, v) == 0) {
                                 backward_version_check = 0
                                 break
@@ -186,6 +187,13 @@
                             compatible = true;
                             break;
                         }
+                    }
+                    return compatible
+                }
+                $scope.upgradable = function (currentVersion, storeVersion) {
+                    var compatible = false
+                    if (compareVersions(currentVersion, storeVersion) === -1) {
+                        compatible = true
                     }
                     return compatible
                 }
