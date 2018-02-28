@@ -17,12 +17,12 @@ class Command(BaseCommand):
                     app_serializer = AppJson(remove_unwanted(data))
                     app = app_serializer.get_app_object(app)
                     app.save()
-                    print('[{}] {}  updated'.format(index + 1, app.name))
+                    print('[%-2s] %-35s  updated' % (index + 1, app.name))
                 else:
-                    print('[{}] {}  Ignored because No Store Available'.format(
+                    print('[%-2s] %-35s  Ignored because No Store Available' % (
                         index + 1, app.name))
             except Exception as ex:
-                print('[{}] {}  Failed error message {}'.format(
+                print('[%-2s] %-35s  Failed error message %-25s' % (
                     index + 1, app.name, ex.message))
 
     def get_data_from_store(self, appname, url):
