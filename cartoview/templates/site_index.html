@@ -237,7 +237,7 @@
     <!-- please fix featured apps and dataset -->
     <script>
         (function () {
-            FEATURED_URL = "{% url 'api_dispatch_list' api_name='api' resource_name='all_resouces' %}";
+            FEATURED_URL = "{% url 'api_dispatch_list' api_name='api' resource_name='all_resources' %}";
             var app = angular.module('featured', ['dcbImgFallback']);
             app.controller('featuredCtrl', function ($scope, $http) {
                 $http.get(FEATURED_URL + "?featured=true").then(function (response) {

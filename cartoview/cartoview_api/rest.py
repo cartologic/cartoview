@@ -21,7 +21,7 @@ class AllResourcesResource(ModelResource):
     owner = fields.ToOneField(OwnersResource, 'owner', full=True)
 
     class Meta:
-        resource_name = 'all_resouces'
+        resource_name = 'all_resources'
         queryset = ResourceBase.objects.distinct()
         fields = ['id', 'title', 'abstract',
                   'thumbnail_url', 'type', 'featured', 'owner__username']
