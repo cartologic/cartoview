@@ -21,23 +21,17 @@ class Command(BaseCommand):
                 try:
                     # ensure that the folder is python module
                     importlib.import_module(app_name)
-                    app = App()
-                    app.title = app_name
-                    app.name = app_name
-                    app.status = "Alpha"
-                    app.license = None
-                    app.version = '1.0.0'
-                    app.installed_by = user
-                    app.store = None
+                    app = App(title=app_name, name=app_name, status="Alpha", license=None,
+                              version='1.0.0', installed_by=user, store=None, single_instance=False)
                     single = False
                     try:
                         installer = importlib.import_module(
                             '%s.installer' % app_name)
                         single = installer.info.get('single_instance', False)
                     except:
-                        print('%-15s installer.py not found so this app will be marked as Multiple Instance' % (app_name))
+                        print(
+                            '%-15s installer.py not found so this app will be marked as Multiple Instance' % (app_name))
                     app.single_instance = single
-                    app.save()
                     category, created = AppType.objects.get_or_create(
                         name='app_manager_loader')
                     app.category.add(category)
@@ -45,4 +39,5 @@ class Command(BaseCommand):
                     app.save()
                     print('%-15s loaded Successfully' % (app_name))
                 except Exception as e:
-                    print('Failed to load %-5s may be app folder not found error: %-10s' % (app_name, e.message))
+                    print('Failed to load %-5s may be app folder not found error: %-10s' %
+                          (app_name, e.message))
