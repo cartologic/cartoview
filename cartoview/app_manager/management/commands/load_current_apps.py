@@ -32,8 +32,10 @@ class Command(BaseCommand):
                         print(
                             '%-15s installer.py not found so this app will be marked as Multiple Instance' % (app_name))
                     app.single_instance = single
+                    app.save()
                     category, created = AppType.objects.get_or_create(
                         name='app_manager_loader')
+                    
                     app.category.add(category)
                     app.tags.add(*['cartoview', ])
                     app.save()
