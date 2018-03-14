@@ -529,7 +529,7 @@ class AppViews(with_metaclass(abc.ABCMeta, object)):
         response = self.save(request, instance_id)
         id = json.loads(response.content).get('id', None)
         if id:
-            instance_obj = AppInstance.objects.get(pk=instance_id)
+            instance_obj = AppInstance.objects.get(pk=id)
             thumb_obj = AppsThumbnail(instance_obj)
             thumb_obj.create_thumbnail()
         return response
