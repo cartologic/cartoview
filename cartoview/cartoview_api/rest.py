@@ -19,12 +19,13 @@ class AllResourcesResource(ModelResource):
     app = fields.DictField(null=True, blank=False)
     urls = fields.DictField(null=False, blank=False)
     owner = fields.ToOneField(OwnersResource, 'owner', full=True)
+    thumbnail_url = fields.CharField(null=True, blank=True)
 
     class Meta:
         resource_name = 'all_resources'
         queryset = ResourceBase.objects.distinct()
         fields = ['id', 'title', 'abstract',
-                  'thumbnail_url', 'type', 'featured', 'owner__username']
+                  'type', 'featured', 'owner__username']
         filtering = {
             'id': ALL,
             'title': ALL,
@@ -59,6 +60,13 @@ class AllResourcesResource(ModelResource):
         else:
             result = queryset
         return result
+
+    def dehydrate_thumbnail_url(self, bundle):
+        thumb = bundle.obj.thumbnail_url
+        if not thumb and hasattr(bundle.obj, 'appinstance') and\
+                bundle.obj.appinstance.map:
+            thumb = bundle.obj.appinstance.map.thumbnail_url
+        return thumb
 
     def apply_filters(self, request, applicable_filters):
         resource_type = applicable_filters.pop('resource_type', None)
