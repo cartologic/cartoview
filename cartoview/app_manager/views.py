@@ -593,6 +593,7 @@ class StandardAppViews(AppViews):
             template = self.new_template
         if request.method == 'POST':
             return self.save_all(request)
+        context.update(app_name=self.app_name)
         return render(request, template, context)
 
     @method_decorator(login_required)
@@ -605,7 +606,7 @@ class StandardAppViews(AppViews):
             return self.save_all(request, instance_id)
 
         instance = get_object_or_404(AppInstance, pk=instance_id)
-        context.update(instance=instance)
+        context.update(instance=instance, app_name=self.app_name)
         return render(request, template, context)
 
     @method_decorator(can_view_app_instance)
@@ -617,7 +618,8 @@ class StandardAppViews(AppViews):
             request.user, None) if instance.map else None
         context.update({
             "map_config": map_config,
-            "instance": instance
+            "instance": instance,
+            "app_name": self.app_name
         })
         return render(request, template, context)
 
