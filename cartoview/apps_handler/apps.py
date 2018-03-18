@@ -35,7 +35,6 @@ class AppsHandlerConfig(AppConfig):
             fcntl.flock(f, fcntl.LOCK_UN)
 
     def execute_pending(self):
-        # TODO: fix racing
         if os.path.exists(pending_yaml):
             with open(pending_yaml, 'r') as f:
                 pending_apps = yaml.load(f) or []
