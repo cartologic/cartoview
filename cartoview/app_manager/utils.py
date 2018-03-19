@@ -53,9 +53,14 @@ def map_layers(request):
                     dehydrated_obj.data.update(
                         {'layer_type': qs[0].attribute_type})
             else:
-                qs = layer.attribute_set.get(attribute_type__contains="gml:")
-                dehydrated_obj.data.update(
-                    {'layer_type': qs.attribute_type})
+                try:
+                    qs = layer.attribute_set.get(
+                        attribute_type__contains="gml:")
+                    dehydrated_obj.data.update(
+                        {'layer_type': qs.attribute_type})
+                except:
+                    dehydrated_obj.data.update(
+                        {'layer_type': None})
             result['objects'].append(dehydrated_obj)
         data = serializer.serialize(result)
         return HttpResponse(data, content_type='application/json')
