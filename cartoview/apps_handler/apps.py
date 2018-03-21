@@ -41,9 +41,7 @@ class AppsHandlerConfig(AppConfig):
                 for app in pending_apps:
                     try:
                         call_command("collectstatic", interactive=False,
-                                     ignore=['node_modules'])
-                        call_command("makemigrations", app,
-                                     interactive=False)
+                                     ignore=['node_modules', '.git'])
                         call_command("migrate", app,
                                      interactive=False)
                     except CommandError as e:
