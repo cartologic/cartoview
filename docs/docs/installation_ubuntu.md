@@ -1,6 +1,6 @@
 #CartoView
 
-## This document describes the Installation of CartoView on ubunto with GeoNode 2.6.3
+## This document describes the Installation of CartoView on Ubuntu with GeoNode 2.6.3
     
 !!! warning
 	In case of any other version of GeoNode before 2.5 these steps will not be applicable.
