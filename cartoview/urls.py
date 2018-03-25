@@ -2,7 +2,8 @@
 from django.conf.urls import patterns, url, include
 from geonode.urls import urlpatterns
 from cartoview.cartoview_api.views import layer_config_json
-from cartoview_api.rest import AllResourcesResource
+from cartoview_api.rest import (
+    AllResourcesResource, AttributeResource, MapLayerResource)
 from cartoview.app_manager.rest import (AppInstanceResource, AppResource,
                                         AppTypeResource,
                                         LayerFilterExtensionResource)
@@ -14,6 +15,8 @@ api.register(AppResource())
 api.register(AppTypeResource())
 api.register(LayerFilterExtensionResource())
 api.register(AllResourcesResource())
+api.register(AttributeResource())
+api.register(MapLayerResource())
 urlpatterns = patterns(
     '',
     url(r'^/?$', cartoview_index, name='home'),

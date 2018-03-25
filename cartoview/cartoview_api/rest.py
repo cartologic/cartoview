@@ -2,9 +2,17 @@ from django.core.urlresolvers import reverse
 from tastypie import fields
 from tastypie.constants import ALL, ALL_WITH_RELATIONS
 from tastypie.resources import ModelResource
-
+import json
 from geonode.api.api import OwnersResource
+from geonode.api.resourcebase_api import MapResource
 from geonode.base.models import ResourceBase
+from cartoview.app_manager.rest import LayerFilterExtensionResource
+from geonode.maps.models import MapLayer
+from geonode.layers.models import Attribute
+from tastypie.authentication import MultiAuthentication, SessionAuthentication
+from geonode.api.authorization import (
+    GeoNodeAuthorization, GeonodeApiKeyAuthentication)
+from geonode.layers.models import Layer
 
 type_filter = {
     'app': 'appinstance',
@@ -33,7 +41,9 @@ class AllResourcesResource(ModelResource):
             'featured': ALL,
             'owner': ALL_WITH_RELATIONS
         }
-        limit = 100
+        authorization = GeoNodeAuthorization()
+        authentication = MultiAuthentication(
+            SessionAuthentication(), GeonodeApiKeyAuthentication())
 
     def build_filters(self, filters=None):
         if filters is None:
@@ -45,18 +55,27 @@ class AllResourcesResource(ModelResource):
 
         return orm_filters
 
+    def apply_filters(self, request, applicable_filters):
+        resource_type = applicable_filters.pop('resource_type', None)
+        filtered = super(AllResourcesResource, self).apply_filters(
+            request, applicable_filters)
+        if resource_type:
+            filtered = self.type_filter(resource_type, filtered)
+        return filtered
+
     def type_filter(self, filter, queryset):
         filter = filter.lower()
         result = []
         if filter in type_filter:
             for item in queryset:
                 if hasattr(item, type_filter[filter]):
-                    result.append(item)
+                    result.append(item.id)
                 elif filter == 'layer' and \
                         not hasattr(item, type_filter['app']) and\
                         not hasattr(item, type_filter['doc']) and\
                         not hasattr(item, type_filter['map']):
-                    result.append(item)
+                    result.append(item.id)
+            result = ResourceBase.objects.filter(id__in=result)
         else:
             result = queryset
         return result
@@ -67,14 +86,6 @@ class AllResourcesResource(ModelResource):
                 bundle.obj.appinstance.map:
             thumb = bundle.obj.appinstance.map.thumbnail_url
         return thumb
-
-    def apply_filters(self, request, applicable_filters):
-        resource_type = applicable_filters.pop('resource_type', None)
-        filtered = super(AllResourcesResource, self).apply_filters(
-            request, applicable_filters)
-        if resource_type:
-            filtered = self.type_filter(resource_type, filtered)
-        return filtered
 
     def dehydrate_owner(self, bundle):
         return bundle.obj.owner.username
@@ -110,3 +121,89 @@ class AllResourcesResource(ModelResource):
             return "Map"
         else:
             return "Layer"
+
+
+class AttributeResource(ModelResource):
+    layer = fields.ToOneField(LayerFilterExtensionResource, 'layer', full=True)
+
+    class Meta:
+        resource_name = "attributes"
+        queryset = Attribute.objects.distinct()
+        fields = ['id', 'attribute', 'description',
+                  'attribute_label', 'attribute_type', 'visible', 'layer']
+        filtering = {
+            'id': ALL,
+            'attribute': ALL,
+            'description': ALL,
+            'attribute_label': ALL,
+            'attribute_type': ALL,
+            'visible': ALL,
+            'layer': ALL_WITH_RELATIONS
+        }
+        authorization = GeoNodeAuthorization()
+        authentication = MultiAuthentication(
+            SessionAuthentication(), GeonodeApiKeyAuthentication())
+
+
+class MapLayerResource(ModelResource):
+    map = fields.ToOneField(MapResource, 'map', full=False)
+    layer_params = fields.DictField(default={})
+    source_params = fields.DictField(default={})
+    layer_type = fields.CharField(null=True, blank=True)
+
+    def build_filters(self, filters=None, **kwargs):
+        if filters is None:
+            filters = {}
+        orm_filters = super(MapLayerResource, self).build_filters(
+            filters, **kwargs)
+        if 'type' in filters:
+            layer_type = filters['type']
+            orm_filters.update({'type': layer_type})
+
+        return orm_filters
+
+    def apply_filters(self, request, applicable_filters):
+        layer_type = applicable_filters.pop('type', None)
+        filtered = super(MapLayerResource, self).apply_filters(
+            request, applicable_filters)
+        if layer_type:
+            filtered = [lyr.id for lyr in filtered if self.get_layer(lyr.name)and
+                        Attribute.objects.filter(attribute_type__contains="gml:", attribute_type__icontains=layer_type.lower(), layer=self.get_layer(lyr.name)).count() > 0]
+            filtered = MapLayer.objects.filter(
+                id__in=filtered)
+        return filtered
+
+    def get_layer(self, name):
+        layer = Layer.objects.filter(alternate=name)
+        if layer.count() > 0:
+            return layer.first()
+        return None
+
+    def dehydrate_layer_type(self, bundle):
+        layer = self.get_layer(bundle.obj.name)
+        if layer:
+            try:
+                qs = layer.attribute_set.get(
+                    attribute_type__contains="gml:")
+                return qs.attribute_type
+            except:
+                pass
+        return ""
+
+    def dehydrate_layer_params(self, bundle):
+        return json.loads(bundle.obj.layer_params)
+
+    def dehydrate_source_params(self, bundle):
+        return json.loads(bundle.obj.source_params)
+
+    class Meta:
+        resource_name = "maplayers"
+        queryset = MapLayer.objects.filter(local=True).distinct()
+        filtering = {
+            'id': ALL,
+            'name': ALL,
+            'map': ALL_WITH_RELATIONS
+        }
+        authorization = GeoNodeAuthorization()
+        authentication = MultiAuthentication(
+            SessionAuthentication(), GeonodeApiKeyAuthentication())

@@ -34,7 +34,8 @@ class LayerFilterExtensionResource(LayerResource):
     def build_filters(self, filters=None):
         if filters is None:
             filters = {}
-        orm_filters = super(LayerFilterExtensionResource, self).build_filters(filters)
+        orm_filters = super(LayerFilterExtensionResource,
+                            self).build_filters(filters)
         if('permission' in filters):
             permission = filters['permission']
             orm_filters.update({'permission': permission})
@@ -89,6 +90,8 @@ class GeonodeLayerResource(ModelResource):
         excludes = ['csw_anytext', 'metadata_xml']
         filtering = {"typename": ALL}
 
+# TODO:Remove this resource ,take a look on cartoview_api.rest
+
 
 class GeonodeLayerAttributeResource(ModelResource):
     layer = fields.ForeignKey(GeonodeLayerResource, 'layer')
@@ -98,7 +101,7 @@ class GeonodeLayerAttributeResource(ModelResource):
         filtering = {
             "layer": ALL_WITH_RELATIONS,
             "id": ALL,
-            "attribute": ALL_WITH_RELATIONS
+            "attribute": ALL_WITH_RELATIONS,
         }
 
 
