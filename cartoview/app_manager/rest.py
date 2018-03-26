@@ -61,10 +61,8 @@ class LayerFilterExtensionResource(LayerResource):
 
     class Meta(LayerResource.Meta):
         resource_name = "layers"
-        filering = LayerResource.Meta.filtering
-        filering.update({
-            'typename': ALL
-        })
+        filering = dict(LayerResource.Meta.filtering.items() +
+                        {'typename': ALL}.items())
 
 
 class GeonodeMapLayerResource(ModelResource):
