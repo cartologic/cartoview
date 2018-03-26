@@ -124,13 +124,14 @@ class AllResourcesResource(ModelResource):
 
 
 class AttributeResource(ModelResource):
-    layer = fields.ToOneField(LayerFilterExtensionResource, 'layer', full=True)
+    layer = fields.ToOneField(
+        LayerFilterExtensionResource, 'layer', full=False)
 
     class Meta:
         resource_name = "attributes"
         queryset = Attribute.objects.distinct()
         fields = ['id', 'attribute', 'description',
-                  'attribute_label', 'attribute_type', 'visible', 'layer']
+                  'attribute_label', 'attribute_type', 'visible']
         filtering = {
             'id': ALL,
             'attribute': ALL,
@@ -198,7 +199,7 @@ class MapLayerResource(ModelResource):
 
     class Meta:
         resource_name = "maplayers"
-        queryset = MapLayer.objects.filter(local=True).distinct()
+        queryset = MapLayer.objects.all().distinct()
         filtering = {
             'id': ALL,
             'name': ALL,
