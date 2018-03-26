@@ -114,10 +114,16 @@ class AppResource(FileUploadResource):
     order = fields.IntegerField()
     active = fields.BooleanField()
     categories = fields.ListField()
+    default_config = fields.DictField(default={})
     app_instance_count = fields.IntegerField()
 
     def dehydrate_order(self, bundle):
         return bundle.obj.config.order
+
+    def dehydrate_default_config(self, bundle):
+        if bundle.obj.default_config:
+            return bundle.obj.default_config
+        return {}
 
     def dehydrate_active(self, bundle):
         return bundle.obj.config.active

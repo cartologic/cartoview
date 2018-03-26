@@ -60,7 +60,7 @@ def map_layers(request):
                         {'layer_type': qs.attribute_type})
                 except:
                     dehydrated_obj.data.update(
-                        {'layer_type': None})
+                        {'layer_type': ""})
             result['objects'].append(dehydrated_obj)
         data = serializer.serialize(result)
         return HttpResponse(data, content_type='application/json')
