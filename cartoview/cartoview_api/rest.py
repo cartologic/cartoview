@@ -141,7 +141,6 @@ class AttributeResource(ModelResource):
             'visible': ALL,
             'layer': ALL_WITH_RELATIONS
         }
-        authorization = GeoNodeAuthorization()
         authentication = MultiAuthentication(
             SessionAuthentication(), GeonodeApiKeyAuthentication())
 
