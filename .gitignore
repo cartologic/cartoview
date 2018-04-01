@@ -237,5 +237,5 @@ cartoview_project/static/*
 cartoview_project/cartoview_project/local_settings.py
 cartoview.egg-info/
 node_modules
-./dist/
+dist/
 

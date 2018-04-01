@@ -28,7 +28,7 @@ RUN mkdir /code
 WORKDIR /code
 RUN pip install --upgrade pip
 RUN pip install --ignore-installed django-osgeo-importer geoip django-geonode-client \
-                geonode==2.8rc11 django-jsonfield django-jsonfield-compat cartoview==1.5.7 \
+                geonode==2.8rc11 django-jsonfield django-jsonfield-compat cartoview==1.5.9 \
                 cherrypy==11.0.0 cheroot==5.8.3 django-haystack elasticsearch==2.4.0 \
 		Whoosh --no-cache-dir
 RUN rm -rf /var/lib/apt/lists/*
