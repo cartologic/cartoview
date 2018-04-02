@@ -3,7 +3,7 @@ from __future__ import (absolute_import, division, print_function,
 
 import json
 from builtins import *
-
+from django.core.urlresolvers import reverse
 from agon_ratings.models import Rating
 from cartoview.app_manager.models import App, AppInstance
 from django import template
@@ -60,6 +60,16 @@ def users_counts():
 @register.simple_tag
 def groups_counts():
     return Group.objects.exclude(name="anonymous").count()
+
+
+@register.simple_tag
+def apps_url(url_name, *args, **kwargs):
+    url = None
+    try:
+        url = reverse(url_name, args=args, kwargs=kwargs)
+    except:
+        pass
+    return json.dumps(url)
 
 
 @register.assignment_tag(takes_context=True)
