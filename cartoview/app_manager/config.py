@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
 from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
-
-import fcntl
+# TODO: find a cross platform function (fcntl is not supported by windows)
+try:
+    import fcntl
+except Exception:
+    pass
 import os
 from builtins import *
 
@@ -84,10 +87,12 @@ class Collection(object):
     def save(self):
         self.default_sort()
         with open(self.yaml_file_path, 'w') as f:
-            fcntl.flock(f, fcntl.LOCK_EX | fcntl.LOCK_NB)
-            self._save(f)
-            fcntl.flock(f, fcntl.LOCK_UN)
-
+            if 'fcntl' in globals():
+                fcntl.flock(f, fcntl.LOCK_EX | fcntl.LOCK_NB)
+                self._save(f)
+                fcntl.flock(f, fcntl.LOCK_UN)
+            else:
+                self._save(f)
 
 class App(Item):
 
