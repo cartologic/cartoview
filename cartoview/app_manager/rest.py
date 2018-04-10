@@ -80,28 +80,6 @@ class GeonodeMapResource(ModelResource):
         queryset = GeonodeMap.objects.distinct().order_by('-date')
 
 
-class GeonodeLayerResource(ModelResource):
-
-    class Meta(object):
-        queryset = Layer.objects.all()
-        excludes = ['csw_anytext', 'metadata_xml']
-        filtering = {"typename": ALL}
-
-# TODO:Remove this resource ,take a look on cartoview_api.rest
-
-
-class GeonodeLayerAttributeResource(ModelResource):
-    layer = fields.ForeignKey(GeonodeLayerResource, 'layer')
-
-    class Meta(object):
-        queryset = Attribute.objects.all().order_by('display_order')
-        filtering = {
-            "layer": ALL_WITH_RELATIONS,
-            "id": ALL,
-            "attribute": ALL_WITH_RELATIONS,
-        }
-
-
 class AppStoreResource(FileUploadResource):
 
     class Meta(FileUploadResource.Meta):

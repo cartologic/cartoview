@@ -11,8 +11,6 @@ from future import standard_library
 
 from cartoview.app_manager.rest import (AppInstanceResource, AppResource,
                                         AppStoreResource,
-                                        GeonodeLayerAttributeResource,
-                                        GeonodeLayerResource,
                                         GeonodeMapLayerResource,
                                         GeonodeMapResource, TagResource)
 from cartoview.app_manager.utils import map_layers
@@ -27,8 +25,6 @@ rest_api.register(AppStoreResource())
 rest_api.register(AppInstanceResource())
 rest_api.register(GeonodeMapResource())
 rest_api.register(GeonodeMapLayerResource())
-rest_api.register(GeonodeLayerResource())
-rest_api.register(GeonodeLayerAttributeResource())
 rest_api.register(TagResource())
 
 # from django.conf import settings
