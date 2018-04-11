@@ -4,6 +4,7 @@ import json
 # Create your views here.
 
 
+# TODO: check if function is provided by geonode
 def layer_config_json(request, layername):
     layer_details = layer_detail(
         request, layername)
