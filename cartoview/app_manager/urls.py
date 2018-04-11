@@ -12,7 +12,7 @@ from future import standard_library
 from cartoview.app_manager.rest import (AppInstanceResource, AppResource,
                                         AppStoreResource,
                                         GeonodeMapLayerResource,
-                                        GeonodeMapResource, TagResource)
+                                        TagResource)
 from cartoview.app_manager.utils import map_layers
 
 from . import views as app_manager_views
@@ -23,7 +23,6 @@ standard_library.install_aliases()
 rest_api.register(AppResource())
 rest_api.register(AppStoreResource())
 rest_api.register(AppInstanceResource())
-rest_api.register(GeonodeMapResource())
 rest_api.register(GeonodeMapLayerResource())
 rest_api.register(TagResource())
 
