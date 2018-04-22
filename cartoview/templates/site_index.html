@@ -1,225 +1,274 @@
 {% extends 'index.html' %}
 {% load i18n static %}
 {% load cartoview_tags %}
+
+
 {% block extra_head %}
     {{ block.super }}
- <style>
-     #site-banner{
-         background-image: url("{% static 'cartoview/img/background.png' %}");
-         background-size: cover;
-     }
+    <style>
+        #site-banner {
+            background-image: url("{% static 'cartoview/img/background.png' %}");
+            background-size: cover;
+        }
+
         .center-counter a {
- 
-             color: #ff8f31;
-             font-size: large;
-         }
- 
-         .button_shadow {
-             background-color: #0d406d;
-         }
- 
-         .icons-spaces {
-             margin-bottom: 20px;
-         }
- 
-         .center-counter {
-             padding-bottom: 10px;
-             color: white;
-             padding-top: 10px;
-             padding-left: 25px;
-             padding-right: 25px;
-             font-family: sans-serif;
-             font-size: x-large;
-         }
- 
-         .works a {
-             color: #0D406D;
-         }
- 
-.slider-container {
-    position: relative;
-    width: 100%;
-}
 
-.slider-image {
-  opacity: 1;
-  display: block;
-  width: 100%;
-  height: auto;
-  transition: .5s ease;
-  backface-visibility: hidden;
-}
+            color: #ff8f31;
+            font-size: large;
+        }
 
-.slider-middle {
-  transition: .5s ease;
-  opacity: 0;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  -ms-transform: translate(-50%, -50%)
-}
+        .button_shadow {
+            background-color: #0d406d;
+        }
 
-.slider-container:hover .slider-image {
-  opacity: 0.3;
-}
+        .icons-spaces {
+            margin-bottom: 20px;
+        }
 
-.slider-container:hover .slider-middle {
-  opacity: 1;
-}
+        .center-counter {
+            padding-bottom: 10px;
+            color: white;
+            padding-top: 10px;
+            padding-left: 25px;
+            padding-right: 25px;
+            font-family: sans-serif;
+            font-size: x-large;
+        }
 
-.slider-text {
-  background-color: #4CAF50;
-  color: white;
-  font-size: 16px;
-  padding: 16px 32px;
-}
+        .works a {
+            color: #0D406D;
+        }
+
+        .slider-container {
+            position: relative;
+            width: 100%;
+        }
+
+        .slider-image {
+            opacity: 1;
+            display: block;
+            width: 100%;
+            height: auto;
+            transition: .5s ease;
+            backface-visibility: hidden;
+        }
+
+        .slider-middle {
+            transition: .5s ease;
+            opacity: 0;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            -ms-transform: translate(-50%, -50%)
+        }
+
+        .slider-container:hover .slider-image {
+            opacity: 0.3;
+        }
+
+        .slider-container:hover .slider-middle {
+            opacity: 1;
+        }
+
+        .slider-text {
+            background-color: #4CAF50;
+            color: white;
+            font-size: 16px;
+            padding: 16px 32px;
+        }
+
+        .all-datasets {
+            clear: both;
+        }
     </style>
-<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css" />
-<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css" />
+    <link rel="stylesheet" type="text/css"
+          href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css"/>
+    <link rel="stylesheet" type="text/css"
+          href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css"/>
 {% endblock %}
-{% block hero %}
-<!--<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">-->
-    <div id="site-banner" style="text-shadow: 2px 2px black;" class="jumbotron">
-        <div class="container" style="    margin-top: 60px;">
-            <h1 style="text-align: center;">{% trans "Build Geo Apps" %}</h1>
-            <h3 class="text-center">
-                <span class="count">{{ apps_instance_count }}</span>
-                Apps
-                Created
-            </h3>
-            <div class="row text-center" style="margin-top: 30px">
-                {% if not user.is_authenticated %}
-                    <div class="col-md-2 col-md-offset-4">
+
+
+{% block middle %}
+    {#    {{ block.super }}#}
+    {% block hero %}
+        <!--<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">-->
+        <div id="site-banner" style="text-shadow: 2px 2px black;" class="jumbotron">
+            <div class="container" style="    margin-top: 60px;">
+                <h1 style="text-align: center;">{% trans "Build Geo Apps" %}</h1>
+                <h3 class="text-center">
+                    <span class="count">{{ apps_instance_count }}</span>
+                    Apps
+                    Created
+                </h3>
+                <div class="row text-center" style="margin-top: 30px">
+                    {% if not user.is_authenticated %}
+                        <div class="col-md-2 col-md-offset-4">
+                            <a class="btn button_shadow btn-primary" style="color: white"
+                               href="{% url 'account_login' %}?next={% url 'app_manager_base_url' %}"
+                               role="button">
+                                Create New
+                            </a>
+                        </div>
+                    {% else %}
+                        <div class="col-md-2 col-md-offset-4">
+                            <a class="btn button_shadow btn-primary" style="color: white"
+                               href="{% url 'app_manager_base_url' %}"
+                               role="button">
+                                Create App
+                            </a>
+                        </div>
+                    {% endif %}
+
+                    <div class="col-md-2">
                         <a class="btn button_shadow btn-primary" style="color: white"
-                           href="{% url 'account_login' %}?next={% url 'app_manager_base_url' %}"
+                           href="{% url 'appinstance_browse' %}"
                            role="button">
-                            Create New
+                            Explore
                         </a>
                     </div>
-                {% else %}
-                    <div class="col-md-2 col-md-offset-4">
-                        <a class="btn button_shadow btn-primary" style="color: white"
-                           href="{% url 'app_manager_base_url' %}"
-                           role="button">
-                            Create App
-                        </a>
+                </div>
+            </div>
+            <div class="row" style="margin-top: 20px;padding: 10px;padding-left: 20px;padding-right: 20px;">
+                <p class="text-center">{% blocktrans %}
+                    <a href="http://cartoview.net" class="cartoview_install">Cartoview is open source. Install on your
+                        Platform.
+                    </a>
+                {% endblocktrans %}
+                </p>
+            </div>
+            <div class="row" style="background: rgba(13, 64, 109, 0.68);">
+                <div class="col-xs-6 col-sm-6 col-md-2 col-md-offset-1 text-center center-counter">
+                    <div class="row">
+                        <span class="count">{% layers_counts %}</span>
                     </div>
-                {% endif %}
+                    <a href="{% url 'layer_browse' %}">Layers</a>
+                </div>
+                <div class="col-xs-6 col-sm-6 col-md-2 text-center center-counter">
+                    <div class="row">
+                        <span class="count">{% maps_counts %}</span>
+                    </div>
 
-                <div class="col-md-2">
-                    <a class="btn button_shadow btn-primary" style="color: white"
-                       href="{% url 'appinstance_browse' %}"
-                       role="button">
-                        Explore
-                    </a>
+                    <a href="{% url 'maps_browse' %}">Maps</a>
+                </div>
+                <div class="col-xs-6 col-sm-6 col-md-2 text-center center-counter ">
+                    <div class="row">
+                        <span class="count">{% users_counts %}</span>
+                    </div>
+
+                    <a href="{% url 'profile_browse' %}">Users</a>
+                </div>
+                <div class="col-xs-6 col-sm-6 col-md-2 text-center center-counter ">
+                    <div class="row">
+                        <span class="count">{% groups_counts %}</span>
+                    </div>
+
+                    <a href="{% url 'group_list' %}">Groups</a>
+                </div>
+                <div class="col-xs-6 col-sm-6  col-md-2 text-center center-counter">
+                    <div class="row">
+                        <span class="count">{% apps_counts %}</span>
+                    </div>
+                    <a href="{% url 'appinstance_browse' %}">Apps</a>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="row text-center works" style="padding: 20px">
+            <h3 style="margin-bottom: 40px;color: #0D406D;">HOW IT WORKS</h3>
+            <div class="row" style="padding: 10px;margin-bottom: 40px">
+                <div class="col-xs-12 col-sm-6 col-md-3 text-center">
+                    <div class="row icons-spaces">
+                        <img src="{% static 'cartoview/img/edit.png' %}">
+                    </div>
+                    <a href="{% url 'account_signup' %}">1. Register</a>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-3 text-center">
+                    <div class="row icons-spaces">
+                        <img src="{% static 'cartoview/img/layers.png' %}">
+                    </div>
+                    <a href="{% url 'layer_upload' %}">2. Upload Layer</a>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-3 text-center">
+                    <div class="row icons-spaces">
+                        <img src="{% static 'cartoview/img/map.png' %}">
+                    </div>
+                    <a href="{% url 'new_map' %}">3. Create Map</a>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-3 text-center">
+                    <div class="row icons-spaces">
+                        <img src="{% static 'cartoview/img/app.png' %}">
+                    </div>
+                    {% if not user.is_authenticated %}
+
+                        <a href="{% url 'account_login' %}?next={% url 'app_manager_base_url' %}">4. Create
+                            Application</a>
+
+                    {% else %}
+
+                        <a href="{% url 'app_manager_base_url' %}">
+                            4. Create Application
+                        </a>
+                    {% endif %}
                 </div>
             </div>
-        </div>
-        <div class="row" style="margin-top: 20px;padding: 10px;padding-left: 20px;
-    padding-right: 20px;">
-            <p class="text-center">{% blocktrans %}
-                <a href="http://cartoview.net" class="cartoview_install">Cartoview is open source. Install on your
-                    Platform.
-                </a>
-            {% endblocktrans %}</p>
-        </div>
-         <div class="row" style="background: rgba(13, 64, 109, 0.68);">
-        <div class="col-xs-6 col-sm-6 col-md-2 col-md-offset-1 text-center center-counter">
-            <div class="row">
-                <span class="count">{% layers_counts %}</span>
-            </div>
-            <a href="{% url 'layer_browse' %}">Layers</a>
-        </div>
-        <div class="col-xs-6 col-sm-6 col-md-2 text-center center-counter">
-            <div class="row">
-                <span class="count">{% maps_counts %}</span>
-            </div>
 
-            <a href="{% url 'maps_browse' %}">Maps</a>
         </div>
-        <div class="col-xs-6 col-sm-6 col-md-2 text-center center-counter ">
-            <div class="row">
-                <span class="count">{% users_counts %}</span>
-            </div>
+        <section id="showcase">
+            <div class="container">
+                <div class="row" style="padding-bottom:50px">
+                    <h2 style="margin-bottom:20px"> Featured Apps</h2>
 
-            <a href="{% url 'profile_browse' %}">Users</a>
-        </div>
-        <div class="col-xs-6 col-sm-6 col-md-2 text-center center-counter ">
-            <div class="row">
-                <span class="count">{% groups_counts %}</span>
-            </div>
+                    <div id="featured-apps" class="col-xs-12 col-sm-12 col-md-8 col-md-offset-2">
 
-            <a href="{% url 'group_list' %}">Groups</a>
-        </div>
-        <div class="col-xs-6 col-sm-6  col-md-2 text-center center-counter">
-            <div class="row">
-                <span class="count">{% apps_counts %}</span>
-            </div>
-            <a href="{% url 'appinstance_browse' %}">Apps</a>
-        </div>
-
-    </div>
-    </div>
-    <div class="row text-center works" style="padding: 20px">
-        <h3 style="margin-bottom: 40px;color: #0D406D;">HOW IT WORKS</h3>
-        <div class="row" style="padding: 10px;margin-bottom: 40px">
-            <div class="col-xs-12 col-sm-6 col-md-3 text-center">
-                <div class="row icons-spaces">
-                    <img src="{% static 'cartoview/img/edit.png' %}">
+                    </div>
                 </div>
-                <a href="{% url 'account_signup' %}">1. Register</a>
-            </div>
-            <div class="col-xs-12 col-sm-6 col-md-3 text-center">
-                <div class="row icons-spaces">
-                    <img src="{% static 'cartoview/img/layers.png' %}">
-                </div>
-                <a href="{% url 'layer_upload' %}">2. Upload Layer</a>
-            </div>
-            <div class="col-xs-12 col-sm-6 col-md-3 text-center">
-                <div class="row icons-spaces">
-                    <img src="{% static 'cartoview/img/map.png' %}">
-                </div>
-                <a href="{% url 'new_map' %}">3. Create Map</a>
-            </div>
-            <div class="col-xs-12 col-sm-6 col-md-3 text-center">
-                <div class="row icons-spaces">
-                    <img src="{% static 'cartoview/img/app.png' %}">
-                </div>
-                {% if not user.is_authenticated %}
-
-                    <a href="{% url 'account_login' %}?next={% url 'app_manager_base_url' %}">4. Create Application</a>
-
-                {% else %}
-
-                    <a href="{% url 'app_manager_base_url' %}">
-                        4. Create Application
-                    </a>
-                {% endif %}
-            </div>
-        </div>
-
-    </div>
-    <section id="showcase">
-        <div class="container">
-            <div class="row" style="padding-bottom:50px" >
-                <h2 style="margin-bottom:20px"> Featured Apps</h2>
-
-                <div id="featured-apps" class="col-xs-12 col-sm-12 col-md-8 col-md-offset-2">
-
+                <div class="row">
+                    <p><a href="{% url 'appinstance_browse' %}">
+                        Explore all
+                    </a></p>
                 </div>
             </div>
+        </section>
+
+    {% endblock %}
+
+    {% block mainbody %}
+        {% block bigsearch %}
+            {{ block.super }}
+        {% endblock %}
+
+        {% block datasets %}
+            {{ block.super }}
+
+        {% endblock %}
+
+        {% block showcase %}
             <div class="row">
-                <p><a href="{% url 'appinstance_browse' %}">
-                Explore all
-                </a></p>
+                <div class="container text-center">
+                    <h2>Featured Datasets</h2>
+                    {% verbatim %}
+                        <div ng-app="featured" style="clear: both">
+                            <div ng-repeat="item in featured | limitTo:4">
+                                <div class="col-md-3">
+                                    <a href="{{ item.detail_url }}"><img ng-src="{{ item.thumbnail_url }}"/></a>
+                                    <h4>{{ item.title | limitTo: 20 }}{{ item.title.length > 20 ? '...' : ''}}</h4>
+                                </div>
+                            </div>
+                        </div>
+                    {% endverbatim %}
+                    <div class="all-datasets"><a href="/search/">Explore all datasets</a></div>
+                </div>
             </div>
-        </div>
-    </section>
-{% endblock %}
-{% block mainbody %}
-    {{ block.super }}
-{% endblock %}
+        {% endblock showcase %}
+
+    {% endblock mainbody %}
+
+{% endblock middle %}
+
+
+
 {% block extra_script %}
     {{ block.super }}
     <script>
@@ -234,17 +283,5 @@
             });
         });
     </script>
-    <!-- please fix featured apps and dataset -->
-    <script>
-        (function () {
-            FEATURED_URL = "{% url 'api_dispatch_list' api_name='api' resource_name='all_resources' %}";
-            var app = angular.module('featured', ['dcbImgFallback']);
-            app.controller('featuredCtrl', function ($scope, $http) {
-                $http.get(FEATURED_URL + "?featured=true").then(function (response) {
-                    $scope.featured = response.data.objects;
-                });
-            });
-        })();
-</script>
-<script src="{% static 'cartoview/slider/dist/AppSlider.bundle.js' %}?v={{ CARTOVIEW_VERSION }}" ></script>
+    <script src="{% static 'cartoview/slider/dist/AppSlider.bundle.js' %}?v={{ CARTOVIEW_VERSION }}" ></script>
 {% endblock %}

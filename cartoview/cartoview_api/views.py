@@ -4,6 +4,7 @@ import json
 # Create your views here.
 
 
+# TODO: check if function is provided by geonode
 def layer_config_json(request, layername):
     layer_details = layer_detail(
         request, layername)
@@ -11,7 +12,8 @@ def layer_config_json(request, layername):
     layer = layer_details.context_data['resource']
     # TODO: check Projection
     viewer = json.loads(viewer)
-    layer.set_bounds_from_bbox(layer.bbox[0:4])
+    # Todo: check if srid is not settled
+    layer.set_bounds_from_bbox(layer.bbox[0:4], layer.srid)
     center = [layer.center_x, layer.center_y]
     zoom = layer.zoom
     viewer['map']['center'] = center

@@ -3,7 +3,6 @@ from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
 
 import json
-from builtins import *
 from cartoview.app_manager.models import App, AppInstance, AppStore, AppType
 from django.conf import settings
 from django.conf.urls import url
@@ -13,9 +12,8 @@ from future import standard_library
 from geonode.api.api import ProfileResource
 from geonode.api.authorization import GeoNodeAuthorization
 from geonode.api.resourcebase_api import CommonMetaApi
-from geonode.layers.models import Attribute, Layer
-from geonode.maps.models import Map as GeonodeMap
-from geonode.maps.models import MapLayer as GeonodeMapLayer
+from geonode.layers.models import Attribute
+from geonode.maps.models import MapLayer
 from geonode.people.models import Profile
 from guardian.shortcuts import get_objects_for_user
 from taggit.models import Tag
@@ -26,7 +24,7 @@ from tastypie.resources import ModelResource
 from tastypie.utils import trailing_slash
 
 from .resources import FileUploadResource
-from geonode.api.resourcebase_api import LayerResource
+from geonode.api.resourcebase_api import LayerResource, MapResource
 standard_library.install_aliases()
 
 
@@ -61,46 +59,12 @@ class LayerFilterExtensionResource(LayerResource):
 
     class Meta(LayerResource.Meta):
         resource_name = "layers"
-        filering = dict(LayerResource.Meta.filtering.items() +
-                        {'typename': ALL}.items())
+        filtering = dict(LayerResource.Meta.filtering.items() + {'typename': ALL}.items() )
 
 
 class GeonodeMapLayerResource(ModelResource):
     class Meta(object):
-        queryset = GeonodeMapLayer.objects.distinct()
-
-
-# TODO: remove this Resource
-
-
-class GeonodeMapResource(ModelResource):
-    map_layers = fields.ToManyField(
-        GeonodeMapLayerResource, 'layer_set', null=True, full=True)
-
-    class Meta(CommonMetaApi):
-        queryset = GeonodeMap.objects.distinct().order_by('-date')
-
-
-class GeonodeLayerResource(ModelResource):
-
-    class Meta(object):
-        queryset = Layer.objects.all()
-        excludes = ['csw_anytext', 'metadata_xml']
-        filtering = {"typename": ALL}
-
-# TODO:Remove this resource ,take a look on cartoview_api.rest
-
-
-class GeonodeLayerAttributeResource(ModelResource):
-    layer = fields.ForeignKey(GeonodeLayerResource, 'layer')
-
-    class Meta(object):
-        queryset = Attribute.objects.all().order_by('display_order')
-        filtering = {
-            "layer": ALL_WITH_RELATIONS,
-            "id": ALL,
-            "attribute": ALL_WITH_RELATIONS,
-        }
+        queryset = MapLayer.objects.distinct()
 
 
 class AppStoreResource(FileUploadResource):
@@ -222,7 +186,7 @@ class AppInstanceResource(ModelResource):
     launch_app_url = fields.CharField(null=True, blank=True)
     edit_url = fields.CharField(null=True, blank=True)
     app = fields.ForeignKey(AppResource, 'app', full=True, null=True)
-    map = fields.ForeignKey(GeonodeMapResource, 'map', full=True, null=True)
+    map = fields.ForeignKey(MapResource, 'map', full=True, null=True)
     owner = fields.ForeignKey(
         ProfileResource, 'owner', full=True, null=True, blank=True)
     keywords = fields.ListField(null=True, blank=True)

@@ -24,7 +24,7 @@ from django.core.files import File
 from django.core.urlresolvers import reverse
 from django.db import transaction
 from django.db.models import F, Max, Min
-from django.forms.util import ErrorList
+from django.forms.utils import ErrorList
 from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, render_to_response
 from django.template import RequestContext, loader

@@ -40,6 +40,7 @@
 {% endblock %}
 
 {% block extra_script %}
+    <script src="{{ STATIC_URL }}vendor/angular-img-fallback/angular.dcb-img-fallback.min.js"/>
     {% if GEONODE_SECURITY_ENABLED %}
         {% include "_permissions_form_js.html" %}
     {% endif %}
@@ -54,5 +55,7 @@
     {% with include_spatial='true' %}
         {% include 'app_instance/search_scripts.html' %}
     {% endwith %}
+
+
     <!-- <script src="{{STATIC_URL}}cartoview/slider/dist/AppsList.bundle.js" ></script> -->
 {% endblock extra_script %}

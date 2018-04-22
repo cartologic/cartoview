@@ -33,8 +33,8 @@
                         <li><a href="{% url "announcements_list" %}">{% trans "Announcements" %}</a></li>
                     {% endif %}
                     {% if user.is_superuser %}
+                        <li><a href="{% url "geonode.invitations:geonode-send-invite" %}">{% trans "Invite Users" %}</a></li>
                         <li><a href="/admin/people/profile/add/">{% trans "Add User" %}</a></li>
-                        <li><a href="{% url "account_invite_user" %}">{% trans "Invite User" %}</a></li>
                         <li><a href="{% url "group_create" %}">{% trans "Create Group" %}</a></li>
                     {% endif %}
                 </ul>
