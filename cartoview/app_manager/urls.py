@@ -83,7 +83,7 @@ def import_app_rest(app_name):
 def app_url(app_name):
     app = str(app_name)
     return url(
-        r'^' + app + '/',
+        r'^' + app.replace('cartoview_', '') + '/',
         include('%s.urls' % app),
         name=app + '_base_url')
 

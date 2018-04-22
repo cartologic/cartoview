@@ -204,6 +204,5 @@ class MapLayerResource(ModelResource):
             'name': ALL,
             'map': ALL_WITH_RELATIONS
         }
-        authorization = GeoNodeAuthorization()
-        authentication = MultiAuthentication(
-            SessionAuthentication(), GeonodeApiKeyAuthentication())
+        # authorization = GeoNodeAuthorization()
+        authentication = MultiAuthentication(SessionAuthentication(), GeonodeApiKeyAuthentication())
