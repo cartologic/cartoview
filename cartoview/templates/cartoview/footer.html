@@ -1,4 +1,4 @@
-{% load i18n avatar_tags %}
+{% load i18n avatar_tags cartoview_tags %}
 <footer>
     <div class="container">
         <div class="row">
@@ -33,7 +33,7 @@
                         <li><a href="{% url "announcements_list" %}">{% trans "Announcements" %}</a></li>
                     {% endif %}
                     {% if user.is_superuser %}
-                        <li><a href="{% url "geonode.invitations:geonode-send-invite" %}">{% trans "Invite Users" %}</a></li>
+                        <li><a href="{% cartoview_reverse "geonode.invitations:geonode-send-invite" %}">{% trans "Invite Users" %}</a></li>
                         <li><a href="/admin/people/profile/add/">{% trans "Add User" %}</a></li>
                         <li><a href="{% url "group_create" %}">{% trans "Create Group" %}</a></li>
                     {% endif %}

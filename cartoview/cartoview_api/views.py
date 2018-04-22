@@ -18,8 +18,11 @@ def layer_config_json(request, layername):
     layer = layer_details.context_data['resource']
     # TODO: check Projection
     viewer = json.loads(viewer)
-    # Todo: check if srid is not settled
-    layer.set_bounds_from_bbox(layer.bbox[0:4], layer.srid)
+    try:
+        layer.set_bounds_from_bbox(layer.bbox[0:4], layer.srid)
+    except:
+        # TODO: remove the following fallback in the new version
+        layer.set_bounds_from_bbox(layer.bbox[0:4])
     center = [layer.center_x, layer.center_y]
     zoom = layer.zoom
     viewer['map']['center'] = center
