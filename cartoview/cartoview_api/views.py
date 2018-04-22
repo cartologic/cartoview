@@ -1,7 +1,13 @@
-from django.shortcuts import render, HttpResponse
+from django.shortcuts import HttpResponse
 from geonode.layers.views import layer_detail
 import json
-# Create your views here.
+
+
+def convert_infinty(obj):
+    if obj == float('inf') or obj == float('-inf'):
+        return None
+    else:
+        return obj
 
 
 # TODO: check if function is provided by geonode
@@ -18,4 +24,11 @@ def layer_config_json(request, layername):
     zoom = layer.zoom
     viewer['map']['center'] = center
     viewer['map']['zoom'] = zoom
-    return HttpResponse(json.dumps(viewer), content_type="application/json")
+    for l in viewer.get("map").get("layers"):
+        if l.get('bbox', None):
+            newBBox = []
+            for x in l.get('bbox'):
+                newBBox.append(convert_infinty(x))
+            l.update({"bbox": newBBox})
+    return HttpResponse(json.dumps(viewer),
+                        content_type="application/json")
