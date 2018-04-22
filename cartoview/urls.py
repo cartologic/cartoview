@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.conf.urls import patterns, url, include
 from geonode.urls import urlpatterns
-from cartoview.cartoview_api.views import layer_config_json
+from cartoview.cartoview_api.views import layer_config_json, update_extent
 from cartoview_api.rest import (
     AllResourcesResource, AttributeResource, MapLayerResource)
 from cartoview.app_manager.rest import (AppInstanceResource, AppResource,
@@ -22,6 +22,8 @@ urlpatterns = patterns(
     url(r'^/?$', cartoview_index, name='home'),
     url(r'^layer/(?P<layername>[^/]*)/json/?$',
         layer_config_json, name='layer_json'),
+    url(r'^update/extent/(?P<typename>[^/]*)$', update_extent,
+        name='cartoview.update_extent'),
     url(r'^check-version/$', check_version, name='check_version'),
     url(r'', include(api.urls)),
     (r'^apps/', include('cartoview.app_manager.urls')),) + urlpatterns
