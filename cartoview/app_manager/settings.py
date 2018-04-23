@@ -2,29 +2,20 @@ from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
 
 import importlib
-import logging
 import os
 import sys
 from builtins import *
-from sys import stdout
-
 from future import standard_library
 from past.builtins import execfile
 
 from cartoview.app_manager.config import AppsConfig
 from cartoview.app_manager.helpers import (change_path_permission,
                                            create_direcotry)
+from cartoview.log_handler import get_logger
+logger = get_logger(__name__)
 
 standard_library.install_aliases()
 
-
-formatter = logging.Formatter(
-    '[%(asctime)s] p%(process)s  { %(name)s %(pathname)s:%(lineno)d} \
-                            %(levelname)s - %(message)s', '%m-%d %H:%M:%S')
-logger = logging.getLogger(__name__)
-handler = logging.StreamHandler(stdout)
-handler.setFormatter(formatter)
-logger.addHandler(handler)
 # BASE_DIR must be defined in project.settings
 APPS_DIR = os.path.abspath(os.path.join(BASE_DIR, "apps"))
 if not os.path.exists(APPS_DIR):

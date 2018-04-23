@@ -9,19 +9,15 @@ from django.apps import AppConfig
 from django.conf import settings
 from django.core.management import call_command
 from django.core.management.base import CommandError
+from cartoview.log_handler import get_logger
 # TODO: find a cross platform function (fcntl is not supported by windows)
 try:
     import fcntl
 except Exception:
     pass
 pending_yaml = settings.PENDING_APPS
-formatter = logging.Formatter(
-    '[%(asctime)s] p%(process)s  { %(name)s %(pathname)s:%(lineno)d} \
-                            %(levelname)s - %(message)s', '%m-%d %H:%M:%S')
-logger = logging.getLogger(__name__)
-handler = logging.StreamHandler(stdout)
-handler.setFormatter(formatter)
-logger.addHandler(handler)
+
+logger = get_logger(__name__)
 
 
 class AppsHandlerConfig(AppConfig):

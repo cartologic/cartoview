@@ -5,10 +5,8 @@ from __future__ import (absolute_import, division, print_function,
 import abc
 import importlib
 import json
-import logging
 import os
 from builtins import *
-from sys import stdout
 from django.shortcuts import get_object_or_404
 from urllib.parse import urljoin
 from .decorators import (can_change_app_instance, can_view_app_instance,
@@ -45,17 +43,11 @@ from geonode.utils import build_social_links
 from .installer import AppInstaller
 from .models import App, AppInstance
 from .utils import AppsThumbnail, resolve_appinstance
+from cartoview.log_handler import get_logger
+logger = get_logger(__name__)
 
 standard_library.install_aliases()
 
-
-formatter = logging.Formatter(
-    '[%(asctime)s] p%(process)s  { %(name)s %(pathname)s:%(lineno)d} \
-                              %(levelname)s - %(message)s', '%m-%d %H:%M:%S')
-logger = logging.getLogger(__name__)
-handler = logging.StreamHandler(stdout)
-handler.setFormatter(formatter)
-logger.addHandler(handler)
 _PERMISSION_MSG_DELETE = _("You are not permitted to delete this document")
 _PERMISSION_MSG_GENERIC = _("You do not have permissions for this document.")
 _PERMISSION_MSG_MODIFY = _("You are not permitted to modify this document")
