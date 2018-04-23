@@ -33,7 +33,7 @@ class AllResourcesResource(ModelResource):
         resource_name = 'all_resources'
         queryset = ResourceBase.objects.distinct()
         fields = ['id', 'title', 'abstract',
-                  'type', 'featured', 'owner__username']
+                  'type', 'featured', 'owner__username','app', 'owner', 'urls', 'thumbnail_url']
         filtering = {
             'id': ALL,
             'title': ALL,
