@@ -51,7 +51,7 @@ def get_featureType(self, workspace, store, lyr_name):
     return json.loads(req.content)
 
 
-def update_extent(self, request, typename="geonode:mitigation_strategies"):
+def update_extent(self, request, typename):
     lyr = _resolve_layer(
         request,
         typename,
