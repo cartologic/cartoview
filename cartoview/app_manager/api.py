@@ -1,10 +1,7 @@
 from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
-
-import logging
 import warnings
 from builtins import *
-from sys import stdout
 
 from django.conf.urls import include, patterns, url
 from django.shortcuts import render
@@ -13,17 +10,9 @@ from tastypie.api import Api as TastypieApi
 from tastypie.utils import trailing_slash
 
 from .serializers import HTMLSerializer
-
+from cartoview.log_handler import get_logger
+logger = get_logger(__name__)
 standard_library.install_aliases()
-
-
-formatter = logging.Formatter(
-    '[%(asctime)s] p%(process)s  { %(name)s %(pathname)s:%(lineno)d}\
-     %(levelname)s - %(message)s', '%m-%d %H:%M:%S')
-logger = logging.getLogger(__name__)
-handler = logging.StreamHandler(stdout)
-handler.setFormatter(formatter)
-logger.addHandler(handler)
 
 
 class BaseApi(TastypieApi):

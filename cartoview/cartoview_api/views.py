@@ -1,9 +1,14 @@
 from django.shortcuts import HttpResponse
 from geonode.layers.views import layer_detail
-import json
+try:
+    import simplejson as json
+except:
+    import json
 import requests
 from requests.auth import HTTPBasicAuth
 from geonode.layers.views import _resolve_layer, _PERMISSION_MSG_MODIFY
+from cartoview.log_handler import get_logger
+logger = get_logger(__name__)
 
 
 def convert_infinty(obj):

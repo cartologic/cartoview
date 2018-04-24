@@ -20,16 +20,10 @@ from geonode.maps.models import Map as GeonodeMap
 from geonode.security.models import (remove_object_permissions)
 
 from .config import AppsConfig
+from cartoview.log_handler import get_logger
+logger = get_logger(__name__)
 
 standard_library.install_aliases()
-
-formatter = logging.Formatter(
-    '[%(asctime)s] p%(process)s  { %(name)s %(pathname)s:%(lineno)d} \
-                            %(levelname)s - %(message)s', '%m-%d %H:%M:%S')
-logger = logging.getLogger(__name__)
-handler = logging.StreamHandler(stdout)
-handler.setFormatter(formatter)
-logger.addHandler(handler)
 
 
 class AppTypeManager(models.Manager):

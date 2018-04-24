@@ -28,16 +28,11 @@ try:
 except Exception:
     pass
 from .models import App, AppStore, AppType
+from cartoview.log_handler import get_logger
+logger = get_logger(__name__)
 install_app_batch = getattr(settings, 'INSTALL_APP_BAT', None)
 standard_library.install_aliases()
 reload(pkg_resources)
-formatter = logging.Formatter(
-    '[%(asctime)s] p%(process)s  { %(name)s %(pathname)s:%(lineno)d} \
-                            %(levelname)s - %(message)s', '%m-%d %H:%M:%S')
-logger = logging.getLogger(__name__)
-handler = logging.StreamHandler(stdout)
-handler.setFormatter(formatter)
-logger.addHandler(handler)
 current_folder = os.path.abspath(os.path.dirname(__file__))
 temp_dir = os.path.join(current_folder, 'temp')
 
@@ -50,10 +45,12 @@ class FinalizeInstaller:
         with open(settings.PENDING_APPS, 'wb') as outfile:
             if 'fcntl' in globals():
                 fcntl.flock(outfile, fcntl.LOCK_EX | fcntl.LOCK_NB)
-                yaml.dump(self.apps_to_finlize, outfile, default_flow_style=False)
+                yaml.dump(self.apps_to_finlize, outfile,
+                          default_flow_style=False)
                 fcntl.flock(outfile, fcntl.LOCK_UN)
             else:
-                yaml.dump(self.apps_to_finlize, outfile, default_flow_style=False)
+                yaml.dump(self.apps_to_finlize, outfile,
+                          default_flow_style=False)
         self.apps_to_finlize = []
 
     def restart_server(self):
