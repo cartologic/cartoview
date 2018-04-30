@@ -122,7 +122,7 @@
         this.install = function (app) {
             var url = "../install/" + app.store.id;
             url += "/" + app.name;
-            url += "/latest/";
+            url += "/" + app.latest_version.version + "/";
             return $http.post(url);
 
         };
