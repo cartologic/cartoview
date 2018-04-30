@@ -63,7 +63,7 @@
 
     app.service("AppStore", function(urls, $resource){
         function AppResource(store){
-            return $resource(store.url + 'app/:storeId', {storeId:'@id'}, {
+            return $resource(store.url + 'app/:storeId?cartoview_version=:version', {storeId:'@id', version:versionInfo.current_version}, {
                 'query': {
                     isArray: false,
                     method: 'JSONP',
