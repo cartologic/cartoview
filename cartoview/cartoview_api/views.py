@@ -51,7 +51,7 @@ def layer_config_json(request, layername):
 
 
 def get_featureType(workspace, store, lyr_name):
-    gs_user, gs_password, gs_url = get_geoserver_credintials
+    gs_user, gs_password, gs_url = get_geoserver_credintials()
     target_url = "{}rest/workspaces/{}/datastores/{}/featuretypes/{}"\
         .format(
             gs_url, workspace, store, lyr_name)
@@ -71,7 +71,7 @@ def update_extent(request, typename):
     workspace = lyr.workspace
     lyr_name = lyr.name
     feature_type = get_featureType(workspace, store, lyr_name)
-    gs_user, gs_password, gs_url = get_geoserver_credintials
+    gs_user, gs_password, gs_url = get_geoserver_credintials()
     target_url = "{}rest/workspaces/{}/datastores/{}/featuretypes/{}"\
         .format(
             gs_url, workspace, store, lyr_name)
