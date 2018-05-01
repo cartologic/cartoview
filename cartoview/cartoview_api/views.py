@@ -5,6 +5,7 @@ try:
 except:
     import json
 import requests
+from geonode.geoserver.helpers import ogc_server_settings
 from requests.auth import HTTPBasicAuth
 from geonode.layers.views import _resolve_layer, _PERMISSION_MSG_MODIFY
 from cartoview.log_handler import get_logger
@@ -16,6 +17,13 @@ def convert_infinty(obj):
         return None
     else:
         return obj
+
+
+def get_geoserver_credintials():
+    gs_user = ogc_server_settings.credentials[0]
+    gs_password = ogc_server_settings.credentials[1]
+    gs_url = ogc_server_settings.LOCATION
+    return gs_user, gs_password, gs_url
 
 
 def layer_config_json(request, layername):
@@ -42,8 +50,8 @@ def layer_config_json(request, layername):
                         content_type="application/json")
 
 
-def get_featureType(self, workspace, store, lyr_name):
-    gs_user, gs_password, gs_url = self.get_geoserver_credintials()
+def get_featureType(workspace, store, lyr_name):
+    gs_user, gs_password, gs_url = get_geoserver_credintials
     target_url = "{}rest/workspaces/{}/datastores/{}/featuretypes/{}"\
         .format(
             gs_url, workspace, store, lyr_name)
@@ -53,7 +61,7 @@ def get_featureType(self, workspace, store, lyr_name):
     return json.loads(req.content)
 
 
-def update_extent(self, request, typename):
+def update_extent(request, typename):
     lyr = _resolve_layer(
         request,
         typename,
@@ -62,8 +70,8 @@ def update_extent(self, request, typename):
     store = lyr.store
     workspace = lyr.workspace
     lyr_name = lyr.name
-    feature_type = self.get_featureType(workspace, store, lyr_name)
-    gs_user, gs_password, gs_url = self.get_geoserver_credintials()
+    feature_type = get_featureType(workspace, store, lyr_name)
+    gs_user, gs_password, gs_url = get_geoserver_credintials
     target_url = "{}rest/workspaces/{}/datastores/{}/featuretypes/{}"\
         .format(
             gs_url, workspace, store, lyr_name)
@@ -72,7 +80,7 @@ def update_extent(self, request, typename):
                        headers={'Accept': 'application/json'},
                        auth=HTTPBasicAuth(gs_user, gs_password))
     if req.status_code == 200:
-        new_feature_type = self.get_featureType(workspace, store, lyr_name)
+        new_feature_type = get_featureType(workspace, store, lyr_name)
         native_bbox = new_feature_type["featureType"]["nativeBoundingBox"]
         bbox = [native_bbox["minx"], native_bbox["maxx"],
                 native_bbox["miny"], native_bbox["maxy"]]
