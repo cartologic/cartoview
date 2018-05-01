@@ -18,18 +18,15 @@ def convert_infinty(obj):
         return obj
 
 
-# TODO: check if function is provided by geonode
 def layer_config_json(request, layername):
     layer_details = layer_detail(
         request, layername)
     viewer = layer_details.context_data['viewer']
     layer = layer_details.context_data['resource']
-    # TODO: check Projection
     viewer = json.loads(viewer)
     try:
         layer.set_bounds_from_bbox(layer.bbox[0:4], layer.srid)
     except:
-        # TODO: remove the following fallback in the new version
         layer.set_bounds_from_bbox(layer.bbox[0:4])
     center = [layer.center_x, layer.center_y]
     zoom = layer.zoom
