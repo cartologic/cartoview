@@ -3,7 +3,10 @@ LABEL "MAINTAINER"="Cartologic Development Team"
 ENV TERM xterm
 RUN apt-get update
 RUN apt-get install locales -y
-RUN locale-gen "en_US.UTF-8" && update-locale
+RUN locale-gen en_US.UTF-8 && update-locale
+ENV LANG en_US.UTF-8  
+ENV LANGUAGE en_US:en  
+ENV LC_ALL en_US.UTF-8
 RUN apt-get install software-properties-common python-software-properties -y
 RUN add-apt-repository -y ppa:ubuntugis/ubuntugis-unstable
 RUN apt-get update
