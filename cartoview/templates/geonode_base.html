@@ -1,8 +1,7 @@
 {% extends "base.html" %}
 {% load static  i18n %}
 {% block extra_head %}
-    <link rel="shortcut icon" type="image/png" href="{{ STATIC_URL }}cartoview/img/icon.png"/>
-    <link href="{{ STATIC_URL }}cartoview/css/custom.css" rel="stylesheet"/>
+    {{ block.super}}
 {% endblock %}
 {% block tabs %}
     <li>
