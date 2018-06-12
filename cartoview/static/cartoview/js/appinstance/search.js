@@ -237,21 +237,22 @@
 					params: {
 						name: data.app__name
 					}
-				}).success(function(res) {
-					$scope.app_name = res.objects[0].name;
+				}).then(function(res) {
+                    console.log(res);
+					$scope.app_name = res.data.objects[0].name;
 				})
 			} else {
 				delete $scope.appTitle;
 			}
 			$http.get(Configs.url, {
 				params: data || {}
-			}).success(function(data) {
+			}).then(function(data) {
 				$scope.loading=false
-				$scope.results = data.objects.sort(function(x, y) {
+				$scope.results = data.data.objects.sort(function(x, y) {
 					return (x.featured === y.featured) ? 0 : x.featured ? -1 : 1;
 				});
-				$scope.total_counts = data.meta.total_count;
-				$scope.$root.query_data = data;
+				$scope.total_counts = data.data.meta.total_count;
+				$scope.$root.query_data = data.data;
 				if (HAYSTACK_SEARCH) {
 					if ($location.search().hasOwnProperty('q')) {
 						$scope.text_query = $location.search()['q'].replace(/\+/g, " ");
@@ -267,10 +268,10 @@
 				if (HAYSTACK_FACET_COUNTS) {
 					module.haystack_facets($http, $scope.$root, $location);
 					$("#types").find("a").each(function() {
-						if ($(this)[0].id in data.meta.facets.subtype) {
-							$(this).find("span").text(data.meta.facets.subtype[$(this)[0].id]);
-						} else if ($(this)[0].id in data.meta.facets.type) {
-							$(this).find("span").text(data.meta.facets.type[$(this)[0].id]);
+						if ($(this)[0].id in data.data.meta.facets.subtype) {
+							$(this).find("span").text(data.data.meta.facets.subtype[$(this)[0].id]);
+						} else if ($(this)[0].id in data.data.meta.facets.type) {
+							$(this).find("span").text(data.data.meta.facets.type[$(this)[0].id]);
 						} else {
 							$(this).find("span").text("0");
 						}
