@@ -54,12 +54,14 @@
                                     <h4 class="text-center">{{ app.title }}</h4>
                                     <p class="text-center" >
                                         {% if app.description %}
-                                            {{ app.description|slice:":50" }}
-                                            {% if app.description|length >= 50 %}
-                                                <a href="javascript:;" data-placement="bottom" data-trigger="hover"
-                                                   onclick="" data-toggle="popover" title="Description"
-                                                   data-content="{{ app.description }}">More</a>
-                                            {% endif %}
+                                            {% with truncated_desc=app.description|truncatewords:9 %}
+                                            {{ truncated_desc }}
+                                                {% if app.description|length > truncated_desc|length %}
+                                                    <a href="javascript:;" data-placement="bottom" data-trigger="hover"
+                                                       onclick="" data-toggle="popover" title="Description"
+                                                       data-content="{{ app.description }}">More</a>
+                                                {% endif %}
+                                            {% endwith %}
                                         {% else %}
                                             No Description Provided
                                         {% endif %}

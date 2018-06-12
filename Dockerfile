@@ -3,7 +3,10 @@ LABEL "MAINTAINER"="Cartologic Development Team"
 ENV TERM xterm
 RUN apt-get update
 RUN apt-get install locales -y
-RUN locale-gen "en_US.UTF-8" && update-locale
+RUN locale-gen en_US.UTF-8 && update-locale
+ENV LANG en_US.UTF-8  
+ENV LANGUAGE en_US:en  
+ENV LC_ALL en_US.UTF-8
 RUN apt-get install software-properties-common python-software-properties -y
 RUN add-apt-repository -y ppa:ubuntugis/ubuntugis-unstable
 RUN apt-get update
@@ -28,8 +31,8 @@ RUN mkdir /code
 WORKDIR /code
 RUN pip install --upgrade pip
 RUN pip install --ignore-installed django-osgeo-importer geoip django-geonode-client \
-                geonode==2.8rc11 django-jsonfield django-jsonfield-compat cartoview==1.5.9 \
+                geonode==2.8rc11 django-jsonfield django-jsonfield-compat cartoview==1.8.1 \
                 cherrypy==11.0.0 cheroot==5.8.3 django-haystack elasticsearch==2.4.0 \
-		Whoosh --no-cache-dir
+                django-autocomplete-light==2.3.3 Whoosh --no-cache-dir
 RUN rm -rf /var/lib/apt/lists/*
 CMD ["/bin/bash"]
