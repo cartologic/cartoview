@@ -11,7 +11,7 @@ from geonode.maps.models import MapLayer
 from geonode.layers.models import Attribute
 from tastypie.authentication import MultiAuthentication, SessionAuthentication
 from geonode.api.authorization import (
-    GeoNodeAuthorization, GeonodeApiKeyAuthentication)
+    GeoNodeAuthorization) #, GeonodeApiKeyAuthentication)
 from geonode.layers.models import Layer
 
 type_filter = {
@@ -42,8 +42,6 @@ class AllResourcesResource(ModelResource):
             'owner': ALL_WITH_RELATIONS
         }
         authorization = GeoNodeAuthorization()
-        authentication = MultiAuthentication(
-            SessionAuthentication(), GeonodeApiKeyAuthentication())
 
     def build_filters(self, filters=None):
         if filters is None:
@@ -141,8 +139,7 @@ class AttributeResource(ModelResource):
             'visible': ALL,
             'layer': ALL_WITH_RELATIONS
         }
-        authentication = MultiAuthentication(
-            SessionAuthentication(), GeonodeApiKeyAuthentication())
+        authorization = GeoNodeAuthorization()
 
 
 class MapLayerResource(ModelResource):
@@ -202,8 +199,7 @@ class MapLayerResource(ModelResource):
         filtering = {
             'id': ALL,
             'name': ALL,
-            'map': ALL_WITH_RELATIONS
+            'map': ALL_WITH_RELATIONS,
+            'fixed': ALL,
         }
         authorization = GeoNodeAuthorization()
-        authentication = MultiAuthentication(
-            SessionAuthentication(), GeonodeApiKeyAuthentication())
