@@ -10,7 +10,7 @@ except (IOError, ImportError):
 setup(
     name='cartoview',
     packages=find_packages(),
-    version=__import__('cartoview').get_current_version(),
+    version= '1.8.1-exchange',#__import__('cartoview').get_current_version(),
     description='Cartoview is a GIS web mapping application framework to \
     easily share and deploy apps based on Geonode',
     long_description=long_description,
