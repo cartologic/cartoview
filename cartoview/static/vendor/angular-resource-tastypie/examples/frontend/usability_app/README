@@ -1,0 +1,7 @@
+IMPORTANT
+
+If you downloaded the project with bower:
+EX: "bower install angular-resource-tastypie"
+
+Then install dependence for usability_app:
+bower install bower.json

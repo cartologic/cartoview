@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en" ng-app="myApp">    
+<head>
+    <meta charset="utf-8">
+    <title>Simple View</title>
+    <script src="lib/angular/angular.min.js"></script>
+    <script src="lib/angular/angular-resource.min.js"></script>
+    <script src="lib/angular-resource-tastypie.min.js"></script>
+    <script src="controller.js"></script>
+    
+    <style>
+        .group { float: left }
+        .clear { clear: both }
+        .container { padding: 10px }
+    </style>
+</head>
+    
+<body ng-controller="MyCtrl">
+    <a href="https://github.com/mw-ferretti/angular-resource-tastypie">
+    <img style="position: absolute; top: 0; right: 0; border: 0;"
+        src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67"
+        alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png">
+    </a>
+    
+    <h2><u>Angular Resource Tastypie</u><span ng-show="Api.working"> &nbsp; >>> Api working ...</span></h2>
+    
+    <div class="container group">
+        <h3>Meta</h3>
+        <ul>
+            <li>Endpoint: {{ Song.endpoint }}</li>
+            <li>Previous: {{ Song.page.meta.previous || 'NULL' }}</li>
+            <li>Next: {{ Song.page.meta.next || 'NULL' }}</li>
+            <li>Limit: {{Song.page.meta.limit}}</li>
+            <li>Offset: {{Song.page.meta.offset}}</li>
+            <li>Total_count: {{Song.page.meta.total_count}}</li>
+        </ul>
+    </div>
+    
+    <div class="container group">
+        <h3>Form</h3>
+        <form name="myForm">
+            ID: {{song.id}} <br>
+            RANK: <input type="number" ng-model="song.rank" value="{{song.rank}}" required> <br>
+            SONG: <input type="text" ng-model="song.song" value="{{song.song}}" required> <br>
+            ARTIST: <input type="text" ng-model="song.artist" value="{{song.artist}}" required> <br>            
+            <input ng-disabled="!myForm.$valid" type="button" ng-click="song.$save()" value="Save"> 
+            <input ng-disabled="!myForm.$valid" type="button" ng-click="song.$clear()" value="Clear">
+        </form>
+    </div>
+    
+    <div class="clear"> </div>
+    
+    <div class="container group">
+        <h3>Pagination control server-side</h3>
+        <input type="button" ng-click="Song.page.first()" ng-disabled="!Song.page.meta.previous" value="First">
+        <input type="button" ng-click="Song.page.previous()" ng-disabled="!Song.page.meta.previous" value="Previous">
+        <b ng-show="Song.page.length">{{Song.page.index}}/{{Song.page.length}}</b>
+        <input type="button" ng-click="Song.page.next()" ng-disabled="!Song.page.meta.next" value="Next">
+        <input type="button" ng-click="Song.page.last()" ng-disabled="!Song.page.meta.next" value="Last">
+    </div>
+    
+    <div class="container group">
+        <h3>Search server-side</h3>
+        <input ng-model="filter" type="search" ng-change="Song.objects.$find({search:filter})">
+    </div>
+    
+    <div class="container group">
+        <h3>Limit server-side</h3>
+        <select 
+                ng-options="limit for limit in [5, 10, 15]" 
+                ng-model="Song.defaults.limit"
+                ng-change="Song.objects.$find({search:filter});"
+        >
+        </select>
+    </div>
+    
+    <div class="clear"> </div>
+    
+    <div id="objects" class="container">
+        <h3>Objects<span ng-show="Song.working"> &nbsp; >>> Service working ...</span></h3>
+        <table border="0" ng-show="Song.page.objects.length">
+            <thead>
+                <th>Id</th>
+                <th>Rank</th>
+                <th>Song</th>
+                <th>Artist</th>
+                <th colspan="2"></th>
+            </thead>
+            <tbody>
+                <tr ng-repeat="obj in Song.page.objects">
+                    <td>{{obj.id}}</td>
+                    <td><input type="number" ng-model="obj.rank" value="{{obj.rank}}" required></td>
+                    <td><input type="text" ng-model="obj.song" value="{{obj.song}}" required></td>
+                    <td><input type="text" ng-model="obj.artist" value="{{obj.artist}}" required></td>
+                    <td><input type="button" ng-click="obj.$save()" value="Save"></td>
+                    <td><input type="button" ng-click="obj.$delete()" value="Delete"></td>
+                </tr>
+            </tbody>
+        </table>
+        <p ng-show="!Song.page.objects.length">No result</p>
+    </div>
+    
+    <p>
+        <h4>All with just a single object:</h4>
+        $scope.Song = new $tastypieResource('song', {limit:5});
+    </p>
+    Have a good time!<br><br>
+    <table border="0">
+        <tr>
+            <td><a href="http://opensource.org/"><img src="lib/osi_logo_100X133_90ppi.png"></a></td>
+            <td>
+                <a href="http://br.linkedin.com/in/mwferretti">
+                        <img 
+                             src="https://static.licdn.com/scds/common/u/img/webpromo/btn_viewmy_160x33_pt_BR.png?locale=" 
+                             width="160" 
+                             height="33" 
+                             border="0" 
+                             alt="View Marcos W. Ferretti profile on LinkedIn"
+                        >
+                </a>
+            </td>
+            <td>
+                <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+                    <input type="hidden" name="cmd" value="_s-xclick">
+                    <input type="hidden" name="hosted_button_id" value="RGQ8NSYPA59FL">
+                    <input type="image" 
+                           src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif" 
+                           border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+                    <img alt="" border="0" src="https://www.paypalobjects.com/pt_BR/i/scr/pixel.gif" width="1" height="1">
+                </form>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

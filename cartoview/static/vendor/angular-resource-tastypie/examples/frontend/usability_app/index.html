@@ -1,0 +1,196 @@
+<html lang="en" ng-app="myApp">
+
+<head>
+    <meta name="viewport" content="initial-scale=1" charset="utf-8" />
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap-theme.css">
+    <link rel="stylesheet" href="bower_components/angular-bootstrap/ui-bootstrap-csp.css">
+    <link rel="stylesheet" href="bower_components/angular-material/angular-material.min.css">
+    <link rel="stylesheet" href="bower_components/json-formatter/dist/json-formatter.min.css">
+
+    <!-- Angular Dependencies -->
+    <script src="bower_components/angular/angular.min.js"></script>
+
+    <!-- Bootstrap Dependencies -->
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+
+    <!-- Angular Resource Tastypie Dependencies -->
+    <script src="bower_components/angular-resource/angular-resource.min.js"></script>
+    <script src="bower_components/angular-resource-tastypie/src/angular-resource-tastypie.min.js"></script>
+
+    <!-- Angular Material Dependencies -->
+    <script src="bower_components/angular-animate/angular-animate.min.js"></script>
+    <script src="bower_components/angular-aria/angular-aria.min.js"></script>
+    <script src="bower_components/angular-material/angular-material.min.js"></script>
+    <script src="bower_components/angular-material-icons/angular-material-icons.min.js"></script>
+
+    <!-- Angular Bootstrap Dependencies -->
+    <script src="bower_components/angular-bootstrap/ui-bootstrap.min.js"></script>
+    <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+
+    <!-- json-formatter Dependencies -->
+    <script src="bower_components/json-formatter/dist/json-formatter.min.js"></script>
+
+    <!-- Module Dependencies -->
+    <script src="controller.js"></script>
+</head>
+
+<body ng-controller="ProjectCtrl" layout="column">
+
+    <md-toolbar >
+        <a href="https://github.com/mw-ferretti/angular-resource-tastypie" target="_blank">
+            <img style="position: absolute; top: 0; left: 0; border: 0;"  
+                 src="https://camo.githubusercontent.com/82b228a3648bf44fc1163ef44c62fcc60081495e/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f7265645f6161303030302e706e67" 
+                 alt="Fork me on GitHub" 
+                 data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_red_aa0000.png">
+        </a>
+        <div class="md-toolbar-tools">
+            
+            <h2 style="margin-left: 90px;">
+                <span><a href="https://github.com/mw-ferretti/angular-resource-tastypie" target="_blank">Angular Resource Tastypie</a></span>
+            </h2>
+            <span flex></span>
+            <a href="http://opensource.org/" target="_blank"><img src="osi_keyhole_100X100_90ppi.png" width="60px" style="margin-right: 20px;"></a>
+            <div style="height: 50px; margin-right: 15px;">            
+                <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+                    <input type="hidden" name="cmd" value="_s-xclick">
+                    <input type="hidden" name="hosted_button_id" value="RGQ8NSYPA59FL">
+                    <input type="image" 
+                           src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif" 
+                           border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+                    <img alt="" border="0" src="https://www.paypalobjects.com/pt_BR/i/scr/pixel.gif" width="1" height="1">
+                </form>
+            </div>                
+            <a href="http://br.linkedin.com/in/mwferretti" target="_blank">
+                    <img 
+                         src="https://static.licdn.com/scds/common/u/img/webpromo/btn_viewmy_160x33_pt_BR.png?locale=" 
+                         width="160" 
+                         height="33" 
+                         border="0" 
+                         alt="View Marcos W. Ferretti profile on LinkedIn">
+            </a>            
+        </div>        
+    </md-toolbar>
+
+    <md-content ng-controller="SongCtrl" class='md-padding' layout="row" flex layout-margin>
+
+        <div flex flex-order="1">
+            <md-content 
+                        layout="column" 
+                        style="height:470px;" 
+                        md-scroll-y="" 
+                        flex="" 
+                        layout-padding="0" 
+                        class="ng-scope md-default-theme md-whiteframe-z3">
+                <json-formatter open="3" json="{'Meta': Song.page.meta, 'Objects': Song.page.objects}"></json-formatter>
+            </md-content>
+            <md-progress-linear ng-if="Api.Provider.working" md-mode="indeterminate"></md-progress-linear>
+        </div>
+
+        <div flex flex-order="2">
+            <md-content 
+                        layout="column" 
+                        style="height:470px;" 
+                        md-scroll-y="" 
+                        flex="" 
+                        layout-padding="0" 
+                        class="ng-scope md-default-theme md-whiteframe-z3">
+                
+                <md-toolbar style="background-color: white;">
+                    <div class="md-toolbar-tools">
+                        <md-autocomplete 
+                                         flex 
+                                         md-items="item in []" 
+                                         md-autofocus="true"
+                                         md-search-text="filter"
+                                         md-search-text-change="Song.objects.$find({search: filter})"
+                                         md-floating-label="Search Song">
+                        </md-autocomplete>
+                        <span flex></span>
+                        <md-button class="md-icon-button" aria-label="More" ng-click="new()">
+                            <ng-md-icon icon="playlist_add" style="fill: black"></ng-md-icon>
+                        </md-button>
+                    </div>                    
+                </md-toolbar>
+
+                <md-content layout="row" flex>
+                    <div layout="column" layout-fill layout-align="top center">
+                        <md-list>
+                            <md-list-item ng-repeat="obj in Song.page.objects" ng-click="select(obj)">
+                                <div class="md-avatar">{{obj.rank}}</div>
+                                <div class="md-list-item-text">
+                                    <h4>{{obj.song}}</h4>
+                                    <p>
+                                        {{obj.artist}}
+                                    </p>
+                                </div>
+                                <div class="md-secondary" ng-click="alert('Owowowo');">
+                                    <md-button class="md-icon-button" aria-label="More">
+                                        <ng-md-icon icon="play_circle_outline" style="fill: black" size="28"></ng-md-icon>
+                                    </md-button>
+                                </div>
+                                <md-divider inset></md-divider>
+                            </md-list-item>
+                        </md-list>
+                    </div>
+                </md-content>
+                
+                <md-toolbar style="background-color: white;">
+                    <div class="md-toolbar-tools">
+                        <pagination 
+                                    total-items="Song.page.meta.total_count" 
+                                    ng-model="Song.page.index" 
+                                    max-size="3" 
+                                    items-per-page="Song.page.meta.limit" 
+                                    class="pagination-sm" 
+                                    ng-change="Song.page.refresh()" 
+                                    boundary-links="true">
+                        </pagination>
+                        <span flex></span>
+                        <select 
+                                class="form-control" 
+                                ng-model="Song.defaults.limit" 
+                                ng-change="Song.objects.$find({search:filter});" 
+                                style="min-width: 70px; width: 70px;">
+                            <option value="4">4</option>
+                            <option value="7">7</option>
+                            <option value="10">10</option>
+                        </select>
+                    </div>
+                </md-toolbar>                
+                
+                <md-sidenav class="md-sidenav-right md-whiteframe-z2" md-component-id="right">
+                    <md-toolbar class="md-theme-light">
+                        <h1 class="md-toolbar-tools">{{rightTitle}}</h1>
+                    </md-toolbar>
+                    <md-content ng-controller="RightCtrl" layout-padding>
+                        <form name="myForm">
+                            <md-input-container>
+                                <label for="Rank">Rank</label>
+                                <input type="number" ng-model="song.rank" md-sidenav-focus required>
+                            </md-input-container>
+                            <md-input-container>
+                                <label for="Song">Song</label>
+                                <input type="text" ng-model="song.song" required>
+                            </md-input-container>
+                            <md-input-container>
+                                <label for="Artist">Artist</label>
+                                <input type="text" ng-model="song.artist" required>
+                            </md-input-container>
+                        </form>
+
+                        <section layout="row" layout-sm="column" layout-align="center center">
+                            <md-button ng-disabled="!myForm.$valid" class="md-raised md-primary" ng-click="save(song)">Save</md-button>
+                            <md-button class="md-raised md-warn" ng-if="song.id > 0" ng-click="delete(song)">Delete</md-button>
+                            <div class="label">Raised</div>
+                        </section>
+                    </md-content>
+                </md-sidenav>
+            </md-content>
+            <md-progress-linear ng-if="Song.working" md-mode="indeterminate"></md-progress-linear>
+        </div>
+    </md-content>
+</body>
+
+</html>

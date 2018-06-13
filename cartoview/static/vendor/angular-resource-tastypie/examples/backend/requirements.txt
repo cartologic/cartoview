@@ -1,0 +1,6 @@
+Django==1.9.5
+django-cors-headers==1.1.0
+django-tastypie==0.13.3
+python-dateutil==2.5.2
+python-mimeparse==1.5.1
+six==1.10.0
