@@ -202,7 +202,8 @@ class MapLayerResource(ModelResource):
         filtering = {
             'id': ALL,
             'name': ALL,
-            'map': ALL_WITH_RELATIONS
+            'map': ALL_WITH_RELATIONS,
+            'fixed': ALL
         }
         authorization = GeoNodeAuthorization()
         authentication = MultiAuthentication(
