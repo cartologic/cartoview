@@ -7,6 +7,7 @@ formatter = logging.Formatter(
 
 def get_logger(name=__name__):
     logger = logging.getLogger(name)
+    logger.setLevel(logging.DEBUG)
     handler = logging.StreamHandler(stdout)
     handler.setFormatter(formatter)
     logger.addHandler(handler)
