@@ -30,9 +30,10 @@ RUN npm install -g bower grunt
 RUN mkdir /code
 WORKDIR /code
 RUN pip install --upgrade pip
-RUN pip install --ignore-installed django-osgeo-importer geoip django-geonode-client \
-                geonode==2.8rc11 django-jsonfield django-jsonfield-compat cartoview==1.8.1 \
+RUN pip install --ignore-installed geoip django-geonode-client geonode==2.8rc11 \
+                django-jsonfield django-jsonfield-compat cartoview==1.8.1 \
                 cherrypy==11.0.0 cheroot==5.8.3 django-haystack elasticsearch==2.4.0 \
                 django-autocomplete-light==2.3.3 Whoosh --no-cache-dir
+RUN pip install git+https://github.com/GeoNode/django-osgeo-importer.git
 RUN rm -rf /var/lib/apt/lists/*
 CMD ["/bin/bash"]
