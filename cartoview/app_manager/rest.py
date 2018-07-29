@@ -34,32 +34,34 @@ class LayerFilterExtensionResource(LayerResource):
             filters = {}
         orm_filters = super(LayerFilterExtensionResource,
                             self).build_filters(filters)
-        if('permission' in filters):
+        if ('permission' in filters):
             permission = filters['permission']
             orm_filters.update({'permission': permission})
-        if 'type' in filters:
-            layer_type = filters['type']
-            orm_filters.update({'type': layer_type})
+        # NOTE: We change this filter name because it overrides geonode type filter(vector,raster)
+        if 'geom_type' in filters:
+            layer_type = filters['geom_type']
+            orm_filters.update({'geom_type': layer_type})
 
         return orm_filters
 
     def apply_filters(self, request, applicable_filters):
         permission = applicable_filters.pop('permission', None)
-        layer_type = applicable_filters.pop('type', None)
+        # NOTE: We change this filter name from type to geom_type because it overrides geonode type filter(vector,raster)
+        layer_geom_type = applicable_filters.pop('geom_type', None)
         filtered = super(LayerFilterExtensionResource, self).apply_filters(
             request, applicable_filters)
-        if layer_type:
+        if layer_geom_type:
             filtered = filtered.filter(
                 attribute_set__in=Attribute.objects.filter(
-                    attribute_type__icontains=layer_type))
+                    attribute_type__icontains=layer_geom_type))
         if permission is not None:
-            filtered = get_objects_for_user(request.user, permission,
-                                            filtered)
+            filtered = get_objects_for_user(request.user, permission, filtered)
         return filtered
 
     class Meta(LayerResource.Meta):
         resource_name = "layers"
-        filtering = dict(LayerResource.Meta.filtering.items() + {'typename': ALL}.items() )
+        filtering = dict(LayerResource.Meta.filtering.items() +
+                         {'typename': ALL}.items())
 
 
 class GeonodeMapLayerResource(ModelResource):
@@ -68,7 +70,6 @@ class GeonodeMapLayerResource(ModelResource):
 
 
 class AppStoreResource(FileUploadResource):
-
     class Meta(FileUploadResource.Meta):
         queryset = AppStore.objects.all()
 
@@ -113,7 +114,10 @@ class AppResource(FileUploadResource):
         name = view + "_app"
         if single:
             exp = r"^(?P<resource_name>%s)/(?P<pk>\w[\w/-]*)/%s%s$" % (
-                self._meta.resource_name, view, trailing_slash(),)
+                self._meta.resource_name,
+                view,
+                trailing_slash(),
+            )
         else:
             exp = r"^(?P<resource_name>%s)/%s%s$" % (self._meta.resource_name,
                                                      view, trailing_slash())
@@ -250,6 +254,5 @@ class AppInstanceResource(ModelResource):
 
 
 class TagResource(ModelResource):
-
     class Meta(object):
         queryset = Tag.objects.all()
