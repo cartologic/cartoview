@@ -1,27 +1,31 @@
 # -*- coding: utf-8 -*-
 import os
+from distutils.util import strtobool
 
-import geonode
 from geonode.settings import *
-CARTOVIEW_DIR = os.path.dirname(os.path.abspath(__file__))
-BASE_DIR = os.path.dirname(CARTOVIEW_DIR)
+
+import cartoview
+
 INSTALLED_APPS += ("cartoview",
                    "cartoview.cartoview_api.apps.CartoviewAPIConfig",
-                   "cartoview.app_manager", "cartoview.site_management")
+                   "cartoview.app_manager", "cartoview.site_management",
+                   "cartoview.apps_handler.apps.AppsHandlerConfig")
 ROOT_URLCONF = "cartoview.urls"
-GEONODE_ROOT = os.path.abspath(os.path.dirname(geonode.__file__))
+CARTOVIEW_DIR = os.path.abspath(os.path.dirname(cartoview.__file__))
+BASE_DIR = os.path.dirname(CARTOVIEW_DIR)
 TEMPLATES[0]["DIRS"] = [os.path.join(CARTOVIEW_DIR, "templates")
                         ] + TEMPLATES[0]["DIRS"]
 STATICFILES_DIRS += [
     os.path.join(CARTOVIEW_DIR, "static"),
 ]
+APPS_DIR = os.path.abspath(os.path.join(CARTOVIEW_DIR, "apps"))
+PENDING_APPS = os.path.join(APPS_DIR, "pendingOperation.yml")
 APPS_MENU = False
 DOCKER = os.getenv('DOCKER', False)
 TEMPLATES[0]["OPTIONS"]['context_processors'] += (
     'cartoview.app_manager.context_processors.cartoview_processor',
-    'cartoview.app_manager.context_processors.site_logo',
+    'cartoview.app_manager.context_processors.site_logo'
 )
-execfile(os.path.join(CARTOVIEW_DIR, 'app_manager', 'settings.py'))
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -73,9 +77,11 @@ except Exception as e:
 if 'datastore' in DATABASES:
     OGC_SERVER['default']['DATASTORE'] = 'datastore'
 
-MIDDLEWARE_CLASSES += ("django.middleware.gzip.GZipMiddleware", )
-
 if 'geonode.geoserver' in INSTALLED_APPS and "LOCAL_GEOSERVER" in \
         locals() and LOCAL_GEOSERVER in MAP_BASELAYERS:
     LOCAL_GEOSERVER["source"][
         "url"] = OGC_SERVER['default']['PUBLIC_LOCATION'] + "wms"
+# NOTE:set cartoview_stand_alone environment var if you are not using cartoview_proect_template
+if strtobool(os.getenv('cartoview_stand_alone', 'FALSE')):
+    from cartoview.app_manager.settings import load_apps
+    INSTALLED_APPS += load_apps()
