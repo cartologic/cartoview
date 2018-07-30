@@ -7,12 +7,8 @@ import importlib
 import json
 import os
 from builtins import *
-from django.shortcuts import get_object_or_404
 from urllib.parse import urljoin
-from .decorators import (can_change_app_instance, can_view_app_instance,
-                         PERMISSION_MSG_DELETE,
-                         PERMISSION_MSG_METADATA,
-                         PERMISSION_MSG_VIEW)
+
 from django.conf import settings
 from django.conf.urls import patterns, url
 from django.contrib.admin.views.decorators import staff_member_required
@@ -24,26 +20,30 @@ from django.db import transaction
 from django.db.models import F, Max, Min
 from django.forms.utils import ErrorList
 from django.http import Http404, HttpResponse, HttpResponseRedirect
-from django.shortcuts import render, render_to_response
+from django.shortcuts import get_object_or_404, render, render_to_response
 from django.template import RequestContext, loader
 from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext as _
 from django.views.decorators.http import require_POST
 from future import standard_library
 from future.utils import with_metaclass
-from guardian.shortcuts import get_perms
-
-from cartoview.app_manager.forms import AppInstanceEditForm
 from geonode.base.forms import CategoryForm
 from geonode.base.models import TopicCategory
 from geonode.people.forms import ProfileForm
 from geonode.security.views import _perms_info_json
 from geonode.utils import build_social_links
+from guardian.shortcuts import get_perms
 
+from cartoview.app_manager.forms import AppInstanceEditForm
+from cartoview.log_handler import get_logger
+
+from .decorators import (PERMISSION_MSG_DELETE, PERMISSION_MSG_METADATA,
+                         PERMISSION_MSG_VIEW, can_change_app_instance,
+                         can_view_app_instance)
 from .installer import AppInstaller
 from .models import App, AppInstance
 from .utils import AppsThumbnail, resolve_appinstance
-from cartoview.log_handler import get_logger
+
 logger = get_logger(__name__)
 
 standard_library.install_aliases()
