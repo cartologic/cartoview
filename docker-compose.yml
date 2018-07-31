@@ -30,15 +30,23 @@ services:
       - "15672"
     networks:
       -cartoview-internal:
+  data-dir-conf:
+    image: geonode/geoserver_data:latest
+    restart: on-failure
+    container_name: gsconf4cartoview
+    command: /bin/true
+    volumes:
+      - geoserver-data-dir:/geoserver_data/data
   geoserver:
     image: cartoview/geoserver_docker:tomcat
     depends_on:
       - postgis
+      - data-dir-conf
     restart: always
     expose:
       - "8080"
     volumes:
-      - "./geoserver/data:/geoserver_data"
+      - "geoserver-data-dir:/geoserver_data"
     env_file:
       - ./env/tomcat.env
     networks:
@@ -47,7 +55,7 @@ services:
       -cartoview-internal:
   cartoview:
     image: cartoview/cartoview:latest
-    command: bash -c "python server.py"
+    command: bash -c "pip install -e . && python server.py"
     restart: unless-stopped
     hostname: cartoview
     depends_on:
@@ -65,7 +73,7 @@ services:
       - "8000"
   celery:
     image: cartoview/cartoview:latest
-    command: bash -c "celery worker --app=cartoview --broker=amqp://guest:guest@rabbitmq:5672/ -B -E -l debug"
+    command: bash -c "pip install -e . && celery worker --app=cartoview --broker=amqp://guest:guest@rabbitmq:5672/ -B -E -l debug"
     restart: unless-stopped
     hostname: celery
     depends_on:
@@ -85,7 +93,7 @@ services:
     expose:
       - "80"
     volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./scripts/nginx/nginx.conf:/etc/nginx/nginx.conf
     networks:
       -cartoview-external:
         ipv4_address: 10.5.0.4
@@ -99,4 +107,5 @@ networks:
     -cartoview-internal:
        internal: true
 volumes:
+  geoserver-data-dir:
   pg-data:

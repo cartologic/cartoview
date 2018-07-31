@@ -15,7 +15,7 @@
 ## Docker Installation:
   - install [docker](https://docs.docker.com/v17.12/install/#server) and [docker-compose](https://docs.docker.com/compose/install/#prerequisites)
   - clone cartoview and navigate to cartoview folder
-  - on linux based OS use this command `make up` to setup cartoview for the first time 
+  - on linux based OS use this command `make run` to setup cartoview for the first time 
   - on windows run the following commands to setup cartoview for the first time:
       - `docker-compose up`
       - `docker-compose exec cartoview python manage.py makemigrations`
