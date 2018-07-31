@@ -67,8 +67,24 @@ LOCAL_MEDIA_URL = "/uploaded/"
 CKEDITOR_UPLOAD_PATH = "uploads/"
 # static section
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
-# INSTALLED_APPS = ('ckeditor', ) + INSTALLED_APPS
-# INSTALLED_APPS += ('hazards', 'gpkg_manager', "ags2sld")
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        'NAME': 'cartoview',
+        'USER': 'docker',
+        'PASSWORD': 'docker',
+        'HOST': 'postgis',
+        'PORT': '5432',
+    },
+    'datastore': {
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        'NAME': 'cartoview_datastore',
+        'USER': 'docker',
+        'PASSWORD': 'docker',
+        'HOST': 'postgis',
+        'PORT': '5432',
+    }
+}
 try:
     from .local_settings import *
 except Exception as e:
