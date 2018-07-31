@@ -17,13 +17,13 @@
   - clone cartoview and navigate to cartoview folder
   - on linux based OS use this command `make up` to setup cartoview for the first time 
   - on windows run the following commands to setup cartoview for the first time:
-      - docker-compose up
-      - docker-compose exec cartoview python manage.py makemigrations
-      - docker-compose exec cartoview python manage.py migrate
-      - docker-compose exec cartoview python manage.py loaddata sample_admin.json
-      - docker-compose exec cartoview python manage.py loaddata json/default_oauth_apps.json
-      - docker-compose exec cartoview python manage.py loaddata app_stores.json
-      - docker-compose exec cartoview python manage.py loaddata initial_data.json
+      - `docker-compose up`
+      - `docker-compose exec cartoview python manage.py makemigrations`
+      - `docker-compose exec cartoview python manage.py migrate`
+      - `docker-compose exec cartoview python manage.py loaddata sample_admin.json`
+      - `docker-compose exec cartoview python manage.py loaddata json/default_oauth_apps.json`
+      - `docker-compose exec cartoview python manage.py loaddata app_stores.json`
+      - `docker-compose exec cartoview python manage.py loaddata initial_data.json`
   - open your browser and type the following address `10.5.0.4`
 
 ## Docs:
