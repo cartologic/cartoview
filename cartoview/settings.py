@@ -3,7 +3,7 @@ import os
 from distutils.util import strtobool
 
 from geonode.settings import *
-
+import ast
 import cartoview
 
 INSTALLED_APPS += ("cartoview",
@@ -86,9 +86,16 @@ DATABASES = {
     }
 }
 try:
+    # try to parse python notation, default in dockerized env
+    ALLOWED_HOSTS = ast.literal_eval(os.getenv('ALLOWED_HOSTS'))
+except ValueError:
+    # fallback to regular list of values separated with misc chars
+    ALLOWED_HOSTS = ['localhost', 'django', 'geonode'] if os.getenv('ALLOWED_HOSTS') is None \
+        else re.split(r' *[,|:|;] *', os.getenv('ALLOWED_HOSTS'))
+try:
     from .local_settings import *
 except Exception as e:
-    print e.message
+    pass
 
 if 'datastore' in DATABASES:
     OGC_SERVER['default']['DATASTORE'] = 'datastore'
