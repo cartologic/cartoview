@@ -98,6 +98,6 @@ if 'geonode.geoserver' in INSTALLED_APPS and "LOCAL_GEOSERVER" in \
     LOCAL_GEOSERVER["source"][
         "url"] = OGC_SERVER['default']['PUBLIC_LOCATION'] + "wms"
 # NOTE:set cartoview_stand_alone environment var if you are not using cartoview_proect_template
-if strtobool(os.getenv('cartoview_stand_alone', 'FALSE')):
+if strtobool(os.getenv('CARTOVIEW_STAND_ALONE', 'FALSE')):
     from cartoview.app_manager.settings import load_apps
     INSTALLED_APPS += load_apps()
