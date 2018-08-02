@@ -3,32 +3,30 @@ from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
 
 import importlib
-import logging
 import os
 import shutil
 import subprocess
 import tempfile
 import zipfile
-import yaml
 from builtins import *
 from io import BytesIO
-from .helpers import create_direcotry, change_path_permission
-from sys import stdout, exit, executable
+from sys import executable, exit
 from threading import Timer
+
 import pkg_resources
+import portalocker
 import requests
+import yaml
 from django.conf import settings
 from django.db.models import Max
 from future import standard_library
 
-from .config import App as AppConfig
-# TODO: find a cross platform function (fcntl is not supported by windows)
-try:
-    import fcntl
-except Exception:
-    pass
-from .models import App, AppStore, AppType
 from cartoview.log_handler import get_logger
+
+from .config import App as AppConfig
+from .helpers import change_path_permission, create_direcotry
+from .models import App, AppStore, AppType
+
 logger = get_logger(__name__)
 install_app_batch = getattr(settings, 'INSTALL_APP_BAT', None)
 standard_library.install_aliases()
@@ -43,14 +41,8 @@ class FinalizeInstaller:
 
     def save_pending_app_to_finlize(self):
         with open(settings.PENDING_APPS, 'wb') as outfile:
-            if 'fcntl' in globals():
-                fcntl.flock(outfile, fcntl.LOCK_EX | fcntl.LOCK_NB)
-                yaml.dump(self.apps_to_finlize, outfile,
-                          default_flow_style=False)
-                fcntl.flock(outfile, fcntl.LOCK_UN)
-            else:
-                yaml.dump(self.apps_to_finlize, outfile,
-                          default_flow_style=False)
+            portalocker.lock(outfile, portalocker.LOCK_EX)
+            yaml.dump(self.apps_to_finlize, outfile, default_flow_style=False)
         self.apps_to_finlize = []
 
     def restart_server(self):

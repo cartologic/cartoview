@@ -30,4 +30,5 @@ setup(
         "Framework :: Django :: 1.8",
         "Topic :: Scientific/Engineering :: GIS"],
     license="BSD",
-    install_requires=['future', 'six==1.10.0', 'geonode>=2.8rc11'])
+    install_requires=['future', 'six==1.10.0', 'portalocker==1.2.1',
+                      'geonode>=2.8rc11'])
