@@ -32,5 +32,33 @@
   - start the containers with `docker-compose up -d` or `make up`
   - stop the containers with `docker-compose down` or `make down`
 
+## How To Add Cartoview To Existing Geonode:
+  - install cartoview with pip:
+      - `pip install cartoview --no-cache-dir`
+      - open geonode `settings.py` and add the following lines at the end of the file:
+          ```python
+          
+          from cartoview import settings as cartoview_settings
+          INSTALLED_APPS = cartoview_settings.INSTALLED_APPS
+          ROOT_URLCONF = cartoview_settings.ROOT_URLCONF
+
+
+          APPS_DIR = os.path.abspath(os.path.join(PROJECT_ROOT, "apps"))
+          PENDING_APPS = os.path.join(PROJECT_ROOT, "pendingOperation.yml")
+
+
+          APPS_MENU = False
+
+          TEMPLATES[0]["DIRS"] = CARTOVIEW_TEMPLATE_DIRS
+          TEMPLATES[0]["OPTIONS"]['context_processors'] += cartoview_settings.CARTOVIEW_CONTEXT_PROCESSORS
+
+
+          STATICFILES_DIRS += cartoview_settings.CARTOVIEW_STATIC_DIRS
+
+
+          from cartoview.app_manager.settings import load_apps
+          INSTALLED_APPS += load_apps()
+          ```
+      - restart your server
 ## Docs:
   - [How to use and install](http://cartologic.github.io)
