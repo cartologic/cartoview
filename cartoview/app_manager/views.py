@@ -606,10 +606,7 @@ class StandardAppViews(AppViews):
         if template is None:
             template = self.view_template
         instance = get_object_or_404(AppInstance, pk=instance_id)
-        map_config = instance.map.viewer_json(
-            request.user, None) if instance.map else None
         context.update({
-            "map_config": map_config,
             "instance": instance,
             "app_name": self.app_name
         })
