@@ -15,8 +15,8 @@
 ## Docker Installation:
   - install [docker](https://docs.docker.com/v17.12/install/#server) and [docker-compose](https://docs.docker.com/compose/install/#prerequisites)
   - clone cartoview and navigate to cartoview folder
-  - on linux based OS use this command `make run` to setup cartoview for the first time 
-  - on windows run the following commands to setup cartoview for the first time:
+  - on linux based OS use this command `make run` to setup and start cartoview in docker for the first time 
+  - on windows run the following commands to setup and start cartoview in docker for the first time:
       - `docker-compose up`
       - `docker-compose exec cartoview python manage.py makemigrations`
       - `docker-compose exec cartoview python manage.py migrate`
@@ -26,6 +26,11 @@
       - `docker-compose exec cartoview python manage.py loaddata initial_data.json`
   - open your browser and type the following address `10.5.0.4`
   - default user credentials `admin/admin` for cartoview and `admin/geoserver` for geoserver
+  - you can stop containers with `make down` or `docker-compose down`
+  - you can get logs for each service in `docker-compose.yml` unsing the following command:
+      - `docker-compose logs --follow --tail=100 <service_name>`
+  - start the containers with `docker-compose up -d` or `make up`
+  - stop the containers with `docker-compose down` or `make down`
 
 ## Docs:
   - [How to use and install](http://cartologic.github.io)
