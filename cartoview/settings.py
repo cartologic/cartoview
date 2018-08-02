@@ -28,35 +28,6 @@ TEMPLATES[0]["OPTIONS"]['context_processors'] += (
     'cartoview.app_manager.context_processors.cartoview_processor',
     'cartoview.app_manager.context_processors.site_logo'
 )
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'formatters': {
-        'full': {
-            'format':
-            '[%(asctime)s] %(module)s p%(process)s  { %(name)s %(pathname)s:%(lineno)d} %(levelname)s - %(message)s'
-        }
-    },
-    'filters': {
-        'require_debug_true': {
-            '()': 'django.utils.log.RequireDebugTrue',
-        },
-    },
-    'handlers': {
-        'console': {
-            'level': 'ERROR',
-            'filters': ['require_debug_true'],
-            'class': 'logging.StreamHandler',
-            'formatter': 'full'
-        }
-    },
-    'loggers': {
-        'django': {
-            'handlers': ['console'],
-            'propagate': True,
-        }
-    }
-}
 # bower static files
 STATICFILES_DIRS += [
     os.path.join(CARTOVIEW_DIR, "static"),
