@@ -1,0 +1,111 @@
+version: '3'
+
+services:
+  postgis:
+    image: cartoview/cartoview-postgis:latest
+    restart: unless-stopped
+    env_file:
+      - ./env/postgis.env
+    expose:
+      - "5432"
+    volumes:
+      - "pg-data:/var/lib/postgresql"
+    networks:
+      -cartoview-internal:
+  elasticsearch:
+    image: elasticsearch:alpine
+    restart: unless-stopped
+    stdin_open: true
+    tty: true
+    expose:
+      - "9300"
+      - "9200"
+    networks:
+      -cartoview-internal:
+  rabbitmq:
+    image: rabbitmq:latest
+    restart: unless-stopped
+    expose:
+      - "5672"
+      - "15672"
+    networks:
+      -cartoview-internal:
+  data-dir-conf:
+    image: geonode/geoserver_data:latest
+    restart: on-failure
+    container_name: gsconf4cartoview
+    command: /bin/true
+    volumes:
+      - geoserver-data-dir:/geoserver_data/data
+  geoserver:
+    image: cartoview/geoserver_docker:tomcat
+    depends_on:
+      - postgis
+      - data-dir-conf
+    restart: always
+    expose:
+      - "8080"
+    volumes:
+      - "geoserver-data-dir:/geoserver_data"
+    env_file:
+      - ./env/tomcat.env
+    networks:
+      -cartoview-external:
+        ipv4_address: 10.5.0.2
+      -cartoview-internal:
+  cartoview:
+    image: cartoview/cartoview:latest
+    command: bash -c "pip install -e . && python server.py"
+    restart: unless-stopped
+    hostname: cartoview
+    depends_on:
+      - postgis
+      - geoserver
+    env_file:
+      - ./env/django.env
+    volumes:
+      - "./:/code/"
+    networks:
+      -cartoview-external:
+        ipv4_address: 10.5.0.3
+      -cartoview-internal:
+    expose:
+      - "8000"
+  celery:
+    image: cartoview/cartoview:latest
+    command: bash -c "pip install -e . && celery worker --app=cartoview --broker=amqp://guest:guest@rabbitmq:5672/ -B -E -l debug"
+    restart: unless-stopped
+    hostname: celery
+    depends_on:
+      - postgis
+      - rabbitmq
+      - geoserver
+    stdin_open: true
+    env_file:
+      - ./env/celery.env
+    volumes:
+      - "./:/code/"
+    networks:
+      -cartoview-internal:
+  nginx:
+    image: nginx:alpine
+    restart: unless-stopped
+    expose:
+      - "80"
+    volumes:
+      - ./scripts/nginx/nginx.conf:/etc/nginx/nginx.conf
+    networks:
+      -cartoview-external:
+        ipv4_address: 10.5.0.4
+      -cartoview-internal:
+networks:
+    -cartoview-external:
+      driver: bridge
+      ipam:
+        config:
+          - subnet: 10.5.0.0/16
+    -cartoview-internal:
+       internal: true
+volumes:
+  geoserver-data-dir:
+  pg-data:

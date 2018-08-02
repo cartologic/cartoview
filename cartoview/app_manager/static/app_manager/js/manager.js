@@ -177,7 +177,7 @@
                         var backward_version_check = -1
                         for (var j = 0; j < versionInfo.backward_versions.length; j++) {
                             const v = versionInfo.backward_versions[j]
-                            
+
                             if (compareVersions(version, v) == 0) {
                                 backward_version_check = 0
                                 break
