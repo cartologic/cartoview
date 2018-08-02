@@ -17,13 +17,15 @@
   - clone cartoview and navigate to cartoview folder
   - on linux based OS use this command `make run` to setup and start cartoview in docker for the first time 
   - on windows run the following commands to setup and start cartoview in docker for the first time:
-      - `docker-compose up`
-      - `docker-compose exec cartoview python manage.py makemigrations`
-      - `docker-compose exec cartoview python manage.py migrate`
-      - `docker-compose exec cartoview python manage.py loaddata sample_admin.json`
-      - `docker-compose exec cartoview python manage.py loaddata scripts/json/default_oauth_apps.json`
-      - `docker-compose exec cartoview python manage.py loaddata app_stores.json`
-      - `docker-compose exec cartoview python manage.py loaddata initial_data.json`
+      ```sh
+      $ docker-compose up
+      $ docker-compose exec cartoview python manage.py makemigrations
+      $ docker-compose exec cartoview python manage.py migrate
+      $ docker-compose exec cartoview python manage.py loaddata sample_admin.json
+      $ docker-compose exec cartoview python manage.py loaddata scripts/json/default_oauth_apps.json
+      $ docker-compose exec cartoview python manage.py loaddata app_stores.json
+      $ docker-compose exec cartoview python manage.py loaddata initial_data.json
+      ```
   - open your browser and type the following address `10.5.0.4`
   - default user credentials `admin/admin` for cartoview and `admin/geoserver` for geoserver
   - you can stop containers with `make down` or `docker-compose down`
@@ -39,6 +41,8 @@
           ```python
           
           from cartoview import settings as cartoview_settings
+          
+          
           INSTALLED_APPS = cartoview_settings.INSTALLED_APPS
           ROOT_URLCONF = cartoview_settings.ROOT_URLCONF
 
@@ -49,6 +53,7 @@
 
           APPS_MENU = False
 
+          
           TEMPLATES[0]["DIRS"] = CARTOVIEW_TEMPLATE_DIRS
           TEMPLATES[0]["OPTIONS"]['context_processors'] += cartoview_settings.CARTOVIEW_CONTEXT_PROCESSORS
 
