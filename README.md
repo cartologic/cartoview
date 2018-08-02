@@ -21,10 +21,11 @@
       - `docker-compose exec cartoview python manage.py makemigrations`
       - `docker-compose exec cartoview python manage.py migrate`
       - `docker-compose exec cartoview python manage.py loaddata sample_admin.json`
-      - `docker-compose exec cartoview python manage.py loaddata json/default_oauth_apps.json`
+      - `docker-compose exec cartoview python manage.py loaddata scripts/json/default_oauth_apps.json`
       - `docker-compose exec cartoview python manage.py loaddata app_stores.json`
       - `docker-compose exec cartoview python manage.py loaddata initial_data.json`
   - open your browser and type the following address `10.5.0.4`
+  - default user credentials `admin/admin` for cartoview and `admin/geoserver` for geoserver
 
 ## Docs:
   - [How to use and install](http://cartologic.github.io)
