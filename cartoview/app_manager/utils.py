@@ -7,16 +7,16 @@ from builtins import *
 
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
+from django.utils.translation import ugettext as _
 from django.views.decorators.http import require_http_methods
 from future import standard_library
 from future.utils import with_metaclass
+from geonode.api.resourcebase_api import LayerResource
+from geonode.maps.models import Map
+from geonode.utils import resolve_object
 from tastypie.serializers import Serializer
 
 from cartoview.app_manager.models import AppInstance
-from geonode.api.resourcebase_api import LayerResource
-from geonode.maps.models import Map
-from django.utils.translation import ugettext as _
-from geonode.utils import resolve_object
 
 standard_library.install_aliases()
 
@@ -105,3 +105,9 @@ class AppsThumbnail(Thumbnail):
             parent_app_thumbnail_url = instance.map.get_thumbnail_url()
             instance.thumbnail_url = parent_app_thumbnail_url
             instance.save()
+
+
+def populate_apps():
+    from django.apps import apps
+    from django.conf import settings
+    apps.populate(settings.INSTALLED_APPS)

@@ -8,7 +8,6 @@ from django.conf import settings
 from django.conf.urls import url
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
-from django.db.models import Q
 from future import standard_library
 from geonode.api.api import ProfileResource
 from geonode.api.authorization import GeoNodeAuthorization
@@ -28,6 +27,7 @@ from tastypie.utils import trailing_slash
 from cartoview.app_manager.models import App, AppInstance, AppStore, AppType
 
 from .resources import FileUploadResource
+from .utils import populate_apps
 
 standard_library.install_aliases()
 
@@ -153,6 +153,7 @@ class AppResource(FileUploadResource):
                 bundle=bundle, **self.remove_api_resource_names(kwargs))
             app.config.active = active
             app.apps_config.save()
+            populate_apps()
         except ObjectDoesNotExist:
             return HttpGone()
 

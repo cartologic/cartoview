@@ -25,11 +25,6 @@ type_filter = {
 
 class ExtendedResourceBaseResource(ResourceBaseResource):
     class Meta(ResourceBaseResource.Meta):
-        __inactive_apps = [
-            app.id for app in App.objects.all() if not app.config.active]
-        __inactive_apps_instances = [instance.id for instance in
-                                     AppInstance.objects.filter(
-                                         app__id__in=__inactive_apps)]
         queryset = ResourceBase.objects.polymorphic_queryset().distinct()\
             .order_by('-date')
         resource_name = 'base'
