@@ -3,15 +3,17 @@ from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
 
 import json
-from cartoview.app_manager.models import App, AppInstance, AppStore, AppType
+
 from django.conf import settings
 from django.conf.urls import url
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
+from django.db.models import Q
 from future import standard_library
 from geonode.api.api import ProfileResource
 from geonode.api.authorization import GeoNodeAuthorization
-from geonode.api.resourcebase_api import CommonMetaApi
+from geonode.api.resourcebase_api import (CommonMetaApi, LayerResource,
+                                          MapResource)
 from geonode.layers.models import Attribute
 from geonode.maps.models import MapLayer
 from geonode.people.models import Profile
@@ -23,8 +25,10 @@ from tastypie.http import HttpGone
 from tastypie.resources import ModelResource
 from tastypie.utils import trailing_slash
 
+from cartoview.app_manager.models import App, AppInstance, AppStore, AppType
+
 from .resources import FileUploadResource
-from geonode.api.resourcebase_api import LayerResource, MapResource
+
 standard_library.install_aliases()
 
 
@@ -196,10 +200,13 @@ class AppInstanceResource(ModelResource):
     keywords = fields.ListField(null=True, blank=True)
 
     class Meta(CommonMetaApi):
+        __inactive_apps = [
+            app.id for app in App.objects.all() if not app.config.active]
         filtering = CommonMetaApi.filtering
         always_return_data = True
         filtering.update({'app': ALL_WITH_RELATIONS, 'featured': ALL})
-        queryset = AppInstance.objects.distinct().order_by('-date')
+        queryset = AppInstance.objects.distinct().exclude(
+            Q(app__isnull=True) | Q(app__id__in=__inactive_apps)).order_by('-date')
         if settings.RESOURCE_PUBLISHING:
             queryset = queryset.filter(is_published=True)
         resource_name = 'appinstances'
