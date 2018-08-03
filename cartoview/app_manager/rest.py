@@ -200,19 +200,29 @@ class AppInstanceResource(ModelResource):
     keywords = fields.ListField(null=True, blank=True)
 
     class Meta(CommonMetaApi):
-        __inactive_apps = [
-            app.id for app in App.objects.all() if not app.config.active]
         filtering = CommonMetaApi.filtering
         always_return_data = True
         filtering.update({'app': ALL_WITH_RELATIONS, 'featured': ALL})
-        queryset = AppInstance.objects.distinct().exclude(
-            Q(app__isnull=True) | Q(app__id__in=__inactive_apps)).order_by('-date')
+        queryset = AppInstance.objects.distinct().order_by('-date')
         if settings.RESOURCE_PUBLISHING:
             queryset = queryset.filter(is_published=True)
         resource_name = 'appinstances'
         allowed_methods = ['get', 'post', 'put']
         excludes = ['csw_anytext', 'metadata_xml']
         authorization = GeoNodeAuthorization()
+
+    def get_object_list(self, request):
+        __inactive_apps = [
+            app.id for app in App.objects.all() if not app.config.active]
+        __inactive_apps_instances = [instance.id for instance in
+                                     AppInstance.objects.filter(
+                                         app__id__in=__inactive_apps)]
+        active_app_instances = super(AppInstanceResource, self)\
+            .get_object_list(
+            request).exclude(
+            id__in=__inactive_apps_instances)
+
+        return active_app_instances
 
     def dehydrate_owner(self, bundle):
         return bundle.obj.owner.username
