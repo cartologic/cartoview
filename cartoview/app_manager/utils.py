@@ -3,8 +3,12 @@ from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
 
 import abc
+import logging
+import os
+import sys
 from builtins import *
 
+import psutil
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.utils.translation import ugettext as _
@@ -107,7 +111,31 @@ class AppsThumbnail(Thumbnail):
             instance.save()
 
 
-def populate_apps():
+def populate_apps(new_apps=None):
     from django.apps import apps
     from django.conf import settings
-    apps.populate(settings.INSTALLED_APPS)
+    apps_to_load = settings.INSTALLED_APPS
+    if new_apps and isinstance(new_apps, tuple):
+        unloaded_apps = [app for app in new_apps if app not in apps_to_load]
+        apps_to_load += tuple(unloaded_apps)
+    settings._wrapped.INSTALLED_APPS = apps_to_load
+    settings.INSTALLED_APPS = apps_to_load
+    from django.template.loaders import app_directories
+    from django.contrib.staticfiles import finders
+    from django.template import defaulttags, defaultfilters
+    reload(app_directories)
+    reload(finders)
+    reload(defaulttags)
+    reload(defaultfilters)
+    apps.set_installed_apps(apps_to_load)
+    # apps.populate(apps_to_load)
+
+
+def reload_urls(urlconf=None):
+    from django.utils.importlib import import_module
+    from django.conf import settings
+    if not urlconf:
+        urlconf = settings.ROOT_URLCONF
+    if urlconf in sys.modules:
+        reload(sys.modules[urlconf])
+        import_module(urlconf)

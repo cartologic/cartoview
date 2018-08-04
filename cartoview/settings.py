@@ -15,9 +15,9 @@ INSTALLED_APPS += ("cartoview",
 ROOT_URLCONF = "cartoview.urls"
 CARTOVIEW_DIR = os.path.abspath(os.path.dirname(cartoview.__file__))
 BASE_DIR = os.path.dirname(CARTOVIEW_DIR)
-CARTOVIEW_TEMPLATE_DIRS = [os.path.join(CARTOVIEW_DIR, "templates")
-                           ] + TEMPLATES[0]["DIRS"]
-TEMPLATES[0]["DIRS"] = CARTOVIEW_TEMPLATE_DIRS
+# CARTOVIEW_TEMPLATE_DIRS = [os.path.join(CARTOVIEW_DIR, "templates")
+#                            ] + TEMPLATES[0]["DIRS"]
+# TEMPLATES[0]["DIRS"] = CARTOVIEW_TEMPLATE_DIRS
 CARTOVIEW_STATIC_DIRS = [
     os.path.join(CARTOVIEW_DIR, "static"),
 ]
@@ -26,11 +26,52 @@ APPS_DIR = os.path.abspath(os.path.join(CARTOVIEW_DIR, "apps"))
 PENDING_APPS = os.path.join(APPS_DIR, "pendingOperation.yml")
 APPS_MENU = False
 DOCKER = os.getenv('DOCKER', False)
-CARTOVIEW_CONTEXT_PROCESSORS = (
+CARTOVIEW_CONTEXT_PROCESSORS = [
     'cartoview.app_manager.context_processors.cartoview_processor',
     'cartoview.app_manager.context_processors.site_logo'
-)
-TEMPLATES[0]["OPTIONS"]['context_processors'] += CARTOVIEW_CONTEXT_PROCESSORS
+]
+TEMPLATES = [
+    {
+        'NAME': 'GeoNode Project Templates',
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [os.path.join(CARTOVIEW_DIR, "templates"), os.path.join(PROJECT_ROOT, "templates")],
+        # 'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.i18n',
+                'django.template.context_processors.tz',
+                'django.template.context_processors.request',
+                'django.template.context_processors.media',
+                'django.template.context_processors.static',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+                'django.contrib.auth.context_processors.auth',
+                # 'django.core.context_processors.debug',
+                # 'django.core.context_processors.i18n',
+                # 'django.core.context_processors.tz',
+                # 'django.core.context_processors.media',
+                # 'django.core.context_processors.static',
+                # 'django.core.context_processors.request',
+                'geonode.context_processors.resource_urls',
+                'geonode.geoserver.context_processors.geoserver_urls',
+            ]+CARTOVIEW_CONTEXT_PROCESSORS,
+            # Either remove APP_DIRS or remove the 'loaders' option.
+            'loaders': [
+                'django.template.loaders.filesystem.Loader',
+                'django.template.loaders.app_directories.Loader',
+                'cartoview.app_manager.loaders.Loader',
+            ],
+            'debug': DEBUG,
+        },
+    },
+]
+# TEMPLATES[0]["OPTIONS"]['context_processors'] += CARTOVIEW_CONTEXT_PROCESSORS
+# TEMPLATES[0]["OPTIONS"]['loaders'] = [
+#     'django.template.loaders.filesystem.Loader',
+#     'django.template.loaders.app_directories.Loader',
+#     'cartoview.app_manager.loaders.Loader'
+# ],
 # bower static files
 STATICFILES_DIRS += [
     os.path.join(CARTOVIEW_DIR, "static"),

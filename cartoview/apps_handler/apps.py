@@ -35,8 +35,13 @@ class AppsHandlerConfig(AppConfig):
                 pending_apps = yaml.load(f) or []
                 for app in pending_apps:
                     try:
+                        call_command("findstatic", app)
                         call_command("collectstatic", interactive=False,
                                      ignore=['node_modules', '.git'])
+                    except CommandError as e:
+                        error = e.message
+                        logger.error(error)
+                    try:
                         call_command("migrate", app,
                                      interactive=False)
                     except CommandError as e:

@@ -82,7 +82,7 @@
                                                target="_parent" class="btn btn-sm btn-primary">Explore <span
                                                     class="badge">{{ app.appinstance_set.all|objects_count:request.user }}</span></a>
                                         </div>
-                                            {% if not user.is_authenticated or not request.user.is_staff  %}
+                                            {% if not user.is_authenticated or not request.user.is_staff or not request.user.is_superuser %}
                                             <div id="card-buttons">
                                                 <a class="btn btn-sm btn-primary"
                                                    href="{% url 'account_login' %}?next={% url ""|add:app.name|add:'.new' %}">
