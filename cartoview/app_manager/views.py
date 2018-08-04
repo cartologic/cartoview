@@ -10,7 +10,7 @@ from builtins import *
 from urllib.parse import urljoin
 
 from django.conf import settings
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
@@ -617,12 +617,12 @@ class StandardAppViews(AppViews):
         return render(request, template, context)
 
     def get_url_patterns(self):
-        return patterns('',
-                        url(r'^new/$', self.new,
-                            name='%s.new' % self.app_name),
-                        url(r'^(?P<instance_id>\d+)/edit/$',
-                            self.edit, name='%s.edit' % self.app_name),
-                        url(r'^(?P<instance_id>\d+)/view/$',
-                            self.view_app,
-                            name='%s.view' % self.app_name)
-                        )
+        return [
+            url(r'^new/$', self.new,
+                name='%s.new' % self.app_name),
+            url(r'^(?P<instance_id>\d+)/edit/$',
+                self.edit, name='%s.edit' % self.app_name),
+            url(r'^(?P<instance_id>\d+)/view/$',
+                self.view_app,
+                name='%s.view' % self.app_name)
+        ]

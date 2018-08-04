@@ -1,5 +1,6 @@
-from sys import stdout
 import logging
+from sys import stdout
+
 formatter = logging.Formatter(
     '[%(asctime)s] p%(process)s  { %(name)s %(pathname)s:%(lineno)d} \
                             %(levelname)s - %(message)s', '%m-%d %H:%M:%S')

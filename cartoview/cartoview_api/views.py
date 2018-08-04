@@ -1,14 +1,16 @@
+import requests
 from django.shortcuts import HttpResponse
-from geonode.layers.views import layer_detail
+from geonode.geoserver.helpers import ogc_server_settings
+from geonode.layers.views import (_PERMISSION_MSG_MODIFY, _resolve_layer,
+                                  layer_detail)
+from requests.auth import HTTPBasicAuth
+
+from cartoview.log_handler import get_logger
+
 try:
     import simplejson as json
 except:
     import json
-import requests
-from geonode.geoserver.helpers import ogc_server_settings
-from requests.auth import HTTPBasicAuth
-from geonode.layers.views import _resolve_layer, _PERMISSION_MSG_MODIFY
-from cartoview.log_handler import get_logger
 logger = get_logger(__name__)
 
 

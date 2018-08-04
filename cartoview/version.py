@@ -1,6 +1,8 @@
-from geonode.version import get_version
-from cartoview import __compatible_with__, __version__
 import json
+
+from geonode.version import get_version
+
+from cartoview import __compatible_with__, __version__
 
 
 def get_current_version():

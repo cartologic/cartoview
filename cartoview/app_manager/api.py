@@ -3,7 +3,7 @@ from __future__ import (absolute_import, division, print_function,
 import warnings
 from builtins import *
 
-from django.conf.urls import include, patterns, url
+from django.conf.urls import include, url
 from django.shortcuts import render
 from future import standard_library
 from tastypie.api import Api as TastypieApi
@@ -47,7 +47,8 @@ class BaseApi(TastypieApi):
         for name in sorted(self._registry.keys()):
             resource = self._registry[name]
             resource.api_name = self.api_name
-            pattern_list.append((r"^%s" % api_pattern, include(resource.urls)))
+            pattern_list.append(
+                url(r"^%s" % api_pattern, include(resource.urls)))
 
         urlpatterns = self.prepend_urls()
         overridden_urls = self.override_urls()
@@ -60,7 +61,7 @@ class BaseApi(TastypieApi):
 
             urlpatterns += overridden_urls
 
-        urlpatterns += patterns('', *pattern_list)
+        urlpatterns += pattern_list
         return urlpatterns
 
 
@@ -91,7 +92,7 @@ class Api(object):
         for name in sorted(self.apis.keys()):
             pattern_list.append(
                 url(r"^%s/" % name, include(self.apis[name].urls)))
-        self.urlpatterns = patterns('', *pattern_list)
+        self.urlpatterns = pattern_list
         return self.urlpatterns
 
     def register_app_urls(self, app_name):

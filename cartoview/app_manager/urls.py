@@ -5,7 +5,7 @@ from __future__ import (absolute_import, division, print_function,
 import importlib
 from builtins import *
 
-from django.conf.urls import include, patterns, url
+from django.conf.urls import include, url
 from django.views.generic import TemplateView
 from future import standard_library
 
@@ -37,8 +37,7 @@ rest_api.register(TagResource())
 #         # TODO: log the error
 #         pass
 
-urlpatterns = patterns(
-    'cartoview.app_manager',
+urlpatterns = [
     url(r'^$', app_manager_views.index, name='app_manager_base_url'),
     url(r'^manage/$', app_manager_views.manage_apps, name='manage_apps'),
     url(r'^install/(?P<store_id>\d+)/(?P<app_name>.*)/(?P<version>.*)/$',
@@ -67,8 +66,8 @@ urlpatterns = patterns(
     url(r'^(?P<appinstanceid>\d+)/remove$',
         app_manager_views.appinstance_remove,
         name="appinstance_remove"),
-    (r'^rest/', include(rest_api.urls)),
-    url(r'^maplayers/api$', map_layers, name="cartoview_map_layers"), )
+    url(r'^rest/', include(rest_api.urls)),
+    url(r'^maplayers/api$', map_layers, name="cartoview_map_layers"), ]
 
 
 def import_app_rest(app_name):

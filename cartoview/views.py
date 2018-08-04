@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 import requests
 from django.shortcuts import render
-from .version import (get_current_version)
+
 from .log_handler import get_logger
+from .version import get_current_version
+
 logger = get_logger(__name__)
 
 
