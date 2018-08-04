@@ -18,6 +18,7 @@ import portalocker
 import requests
 import yaml
 from django.conf import settings
+from django.db import transaction
 from django.db.models import Max
 from future import standard_library
 
@@ -177,6 +178,7 @@ class AppInstaller(object):
                 change_path_permission(temp_dir)
             self.extract_move_app(zip_ref)
         except shutil.Error as e:
+            logger.error(e.message)
             raise e
         finally:
             zip_ref.close()
@@ -205,14 +207,25 @@ class AppInstaller(object):
         app.save()
         return app
 
+    def _rollback(self):
+        shutil.rmtree(self.app_dir)
+        apps_config = AppConfig()
+        app_conf = apps_config.get_by_name(self.name)
+        if app_conf:
+            del app_conf
+
     def install(self, restart=True):
         self.upgrade = False
         if os.path.exists(self.app_dir):
-            installed_app = App.objects.get(name=self.name)
-            if installed_app.version < self.version["version"]:
-                self.upgrade = True
-            else:
-                raise AppAlreadyInstalledException()
+            try:
+                installed_app = App.objects.get(name=self.name)
+                if installed_app.version < self.version["version"]:
+                    self.upgrade = True
+                else:
+                    raise AppAlreadyInstalledException()
+            except App.DoesNotExist:
+                # NOTE:the following code handle if app downloaded and for some reason not added to the portal
+                self._rollback()
         installed_apps = []
         for name, version in list(self.version["dependencies"].items()):
             # use try except because AppInstaller.__init__ will handle upgrade
@@ -228,16 +241,24 @@ class AppInstaller(object):
         self.check_then_finlize(restart, installed_apps)
         return installed_apps
 
+    @transaction.atomic
     def check_then_finlize(self, restart, installed_apps):
         try:
             installer = importlib.import_module('%s.installer' % self.name)
-            installed_apps.append(self.add_app(installer))
-            installer.install()
+            new_app = self.add_app(installer)
+            installed_apps.append(new_app)
+            try:
+                installer.install()
+            except Exception as e:
+                logger.error(e.message)
             FINALIZE_SETUP.apps_to_finlize.append(self.name)
             if restart:
                 FINALIZE_SETUP(self.name)
         except ImportError as ex:
             logger.error(ex.message)
+            if os.path.exists(self.app_dir):
+                self._rollback()
+                raise ex
 
     def completely_remove(self):
         app = App.objects.get(name=self.name)
