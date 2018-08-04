@@ -101,12 +101,16 @@ def installed_apps():
 @staff_member_required
 def manage_apps(request):
     from cartoview.version import get_backward_compatible, get_current_version
+    from pkg_resources import parse_version
     apps = App.objects.all()
+    _version = parse_version(get_current_version())._version
+    release = _version.release
+    version = [str(x) for x in release]
     context = {
         'apps': apps,
         'site_apps': get_apps_names(),
         'version_info': {
-            'current_version': get_current_version(),
+            'current_version': ".".join(version),
             'backward_versions': get_backward_compatible()
         }
     }
