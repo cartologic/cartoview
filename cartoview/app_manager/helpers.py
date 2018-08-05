@@ -1,6 +1,8 @@
 import os
 import stat
 world_permission = 0o777
+from cartoview.log_handler import get_logger
+logger = get_logger(__name__)
 
 
 def create_direcotry(path, mode=0777):
@@ -10,6 +12,8 @@ def create_direcotry(path, mode=0777):
         try:
             previous_mask = os.umask(0)
             os.makedirs(path, mode=mode)
+        except OSError as e:
+            logger.error(e.message)
         finally:
             # set the previous mask back
             os.umask(previous_mask)

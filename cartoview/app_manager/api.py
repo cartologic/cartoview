@@ -3,16 +3,20 @@ from __future__ import (absolute_import, division, print_function,
 import warnings
 from builtins import *
 
-from django.conf.urls import include, patterns, url
+from django.conf.urls import include, url
 from django.shortcuts import render
 from future import standard_library
 from tastypie.api import Api as TastypieApi
 from tastypie.utils import trailing_slash
-
 from .serializers import HTMLSerializer
 from cartoview.log_handler import get_logger
 logger = get_logger(__name__)
 standard_library.install_aliases()
+
+
+def home(request):
+    return render(request, 'app_manager/rest_api/home.html',
+                  {'apis': sorted(rest_api.apis.keys())})
 
 
 class BaseApi(TastypieApi):
@@ -47,7 +51,8 @@ class BaseApi(TastypieApi):
         for name in sorted(self._registry.keys()):
             resource = self._registry[name]
             resource.api_name = self.api_name
-            pattern_list.append((r"^%s" % api_pattern, include(resource.urls)))
+            pattern_list.append(
+                url(r"^%s" % api_pattern, include(resource.urls)))
 
         urlpatterns = self.prepend_urls()
         overridden_urls = self.override_urls()
@@ -60,7 +65,7 @@ class BaseApi(TastypieApi):
 
             urlpatterns += overridden_urls
 
-        urlpatterns += patterns('', *pattern_list)
+        urlpatterns += pattern_list
         return urlpatterns
 
 
@@ -85,13 +90,13 @@ class Api(object):
     def urls(self):
         pattern_list = [
             url(r'^$',
-                'cartoview.app_manager.api.home',
+                home,
                 name='cartoview_rest_url'),
         ]
         for name in sorted(self.apis.keys()):
             pattern_list.append(
                 url(r"^%s/" % name, include(self.apis[name].urls)))
-        self.urlpatterns = patterns('', *pattern_list)
+        self.urlpatterns = pattern_list
         return self.urlpatterns
 
     def register_app_urls(self, app_name):
@@ -100,8 +105,3 @@ class Api(object):
 
 
 rest_api = Api()
-
-
-def home(request):
-    return render(request, 'app_manager/rest_api/home.html',
-                  {'apis': sorted(rest_api.apis.keys())})

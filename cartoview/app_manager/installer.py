@@ -3,38 +3,42 @@ from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
 
 import importlib
-import logging
 import os
 import shutil
 import subprocess
+import sys
 import tempfile
+import threading
 import zipfile
-import yaml
 from builtins import *
 from io import BytesIO
-from .helpers import create_direcotry, change_path_permission
-from sys import stdout, exit, executable
+from sys import executable, exit
 from threading import Timer
+
 import pkg_resources
+import portalocker
 import requests
+import yaml
 from django.conf import settings
+from django.db import transaction
 from django.db.models import Max
 from future import standard_library
 
-from .config import App as AppConfig
-# TODO: find a cross platform function (fcntl is not supported by windows)
-try:
-    import fcntl
-except Exception:
-    pass
-from .models import App, AppStore, AppType
 from cartoview.log_handler import get_logger
+
+from .config import App as AppConfig
+from .helpers import change_path_permission, create_direcotry
+from .models import App, AppStore, AppType
+from .settings import create_apps_dir
+
 logger = get_logger(__name__)
 install_app_batch = getattr(settings, 'INSTALL_APP_BAT', None)
 standard_library.install_aliases()
 reload(pkg_resources)
 current_folder = os.path.abspath(os.path.dirname(__file__))
 temp_dir = os.path.join(current_folder, 'temp')
+
+lock = threading.Lock()
 
 
 class FinalizeInstaller:
@@ -43,14 +47,8 @@ class FinalizeInstaller:
 
     def save_pending_app_to_finlize(self):
         with open(settings.PENDING_APPS, 'wb') as outfile:
-            if 'fcntl' in globals():
-                fcntl.flock(outfile, fcntl.LOCK_EX | fcntl.LOCK_NB)
-                yaml.dump(self.apps_to_finlize, outfile,
-                          default_flow_style=False)
-                fcntl.flock(outfile, fcntl.LOCK_UN)
-            else:
-                yaml.dump(self.apps_to_finlize, outfile,
-                          default_flow_style=False)
+            portalocker.lock(outfile, portalocker.LOCK_EX)
+            yaml.dump(self.apps_to_finlize, outfile, default_flow_style=False)
         self.apps_to_finlize = []
 
     def restart_server(self):
@@ -81,8 +79,9 @@ class FinalizeInstaller:
                 self.docker_restart()
             else:
                 self.restart_server()
-        timer = Timer(0.1, _finalize_setup(app_name))
-        timer.start()
+        if 'test' not in sys.argv:
+            timer = Timer(0.1, _finalize_setup(app_name))
+            timer.start()
 
     def __call__(self, app_name):
         self.finalize_setup(app_name)
@@ -136,6 +135,7 @@ class AppAlreadyInstalledException(BaseException):
 class AppInstaller(object):
 
     def __init__(self, name, store_id=None, version=None, user=None):
+        create_apps_dir()
         self.user = user
         self.app_dir = os.path.join(settings.APPS_DIR, name)
         self.name = name
@@ -157,13 +157,9 @@ class AppInstaller(object):
         """
         get app information form app store rest url
         """
-        try:
-            q = requests.get(self.store.url + ''.join(
-                [str(item) for item in args]))
-            return q.json()
-        except Exception as e:
-            logger.error(e.message)
-            return None
+        q = requests.get(self.store.url + ''.join(
+            [str(item) for item in args]))
+        return q.json()
 
     def extract_move_app(self, zipped_app):
         extract_to = tempfile.mkdtemp(dir=temp_dir)
@@ -188,7 +184,8 @@ class AppInstaller(object):
             if not os.access(temp_dir, os.W_OK):
                 change_path_permission(temp_dir)
             self.extract_move_app(zip_ref)
-        except Exception as e:
+        except shutil.Error as e:
+            logger.error(e.message)
             raise e
         finally:
             zip_ref.close()
@@ -217,39 +214,59 @@ class AppInstaller(object):
         app.save()
         return app
 
-    def install(self, restart=True):
-        self.upgrade = False
-        if os.path.exists(self.app_dir):
-            installed_app = App.objects.get(name=self.name)
-            if installed_app.version < self.version["version"]:
-                self.upgrade = True
-            else:
-                raise AppAlreadyInstalledException()
-        installed_apps = []
-        for name, version in list(self.version["dependencies"].items()):
-            # use try except because AppInstaller.__init__ will handle upgrade
-            # if version not match
-            try:
-                app_installer = AppInstaller(
-                    name, self.store.id, version, user=self.user)
-                installed_apps += app_installer.install(restart=False)
-            except AppAlreadyInstalledException as e:
-                logger.error(e.message)
-        self._download_app()
-        reload(pkg_resources)
-        self.check_then_finlize(restart, installed_apps)
-        return installed_apps
+    def _rollback(self):
+        shutil.rmtree(self.app_dir)
+        apps_config = AppConfig()
+        app_conf = apps_config.get_by_name(self.name)
+        if app_conf:
+            del app_conf
 
+    def install(self, restart=True):
+        with lock:
+            self.upgrade = False
+            if os.path.exists(self.app_dir):
+                try:
+                    installed_app = App.objects.get(name=self.name)
+                    if installed_app.version < self.version["version"]:
+                        self.upgrade = True
+                    else:
+                        raise AppAlreadyInstalledException()
+                except App.DoesNotExist:
+                    # NOTE:the following code handle if app downloaded and for some reason not added to the portal
+                    self._rollback()
+            installed_apps = []
+            for name, version in list(self.version["dependencies"].items()):
+                # use try except because AppInstaller.__init__ will handle upgrade
+                # if version not match
+                try:
+                    app_installer = AppInstaller(
+                        name, self.store.id, version, user=self.user)
+                    installed_apps += app_installer.install(restart=False)
+                except AppAlreadyInstalledException as e:
+                    logger.error(e.message)
+            self._download_app()
+            reload(pkg_resources)
+            self.check_then_finlize(restart, installed_apps)
+            return installed_apps
+
+    @transaction.atomic
     def check_then_finlize(self, restart, installed_apps):
         try:
             installer = importlib.import_module('%s.installer' % self.name)
-            installed_apps.append(self.add_app(installer))
-            installer.install()
+            new_app = self.add_app(installer)
+            installed_apps.append(new_app)
+            try:
+                installer.install()
+            except Exception as e:
+                logger.error(e.message)
             FINALIZE_SETUP.apps_to_finlize.append(self.name)
             if restart:
                 FINALIZE_SETUP(self.name)
         except ImportError as ex:
             logger.error(ex.message)
+            if os.path.exists(self.app_dir):
+                self._rollback()
+                raise ex
 
     def completely_remove(self):
         app = App.objects.get(name=self.name)
@@ -263,7 +280,8 @@ class AppInstaller(object):
         process = subprocess.Popen("{} {} {}".format(
             executable, manage_py, command), shell=True)
         out, err = process.communicate()
-        logger.error(out, err)
+        logger.info(out)
+        logger.error(err)
 
     def delete_app_tables(self):
         from django.contrib.contenttypes.models import ContentType
@@ -285,18 +303,22 @@ class AppInstaller(object):
 
         :return:
         """
-        installed_apps = App.objects.all()
-        for app in installed_apps:
-            app_installer = AppInstaller(
-                app.name, self.store.id, app.version, user=self.user)
-            dependencies = app_installer.version["dependencies"]
-            if self.name in dependencies:
-                app_installer.uninstall(restart=False)
-        installer = importlib.import_module('%s.installer' % self.name)
-        installer.uninstall()
-        self.delete_app_tables()
-        self.completely_remove()
-        app_dir = os.path.join(settings.APPS_DIR, self.name)
-        shutil.rmtree(app_dir)
-        if restart:
-            FINALIZE_SETUP.restart_server()
+        with lock:
+            uninstalled = False
+            installed_apps = App.objects.all()
+            for app in installed_apps:
+                app_installer = AppInstaller(
+                    app.name, self.store.id, app.version, user=self.user)
+                dependencies = app_installer.version["dependencies"]
+                if self.name in dependencies:
+                    app_installer.uninstall(restart=False)
+            installer = importlib.import_module('%s.installer' % self.name)
+            installer.uninstall()
+            self.delete_app_tables()
+            self.completely_remove()
+            app_dir = os.path.join(settings.APPS_DIR, self.name)
+            shutil.rmtree(app_dir)
+            uninstalled = True
+            if restart:
+                FINALIZE_SETUP.restart_server()
+            return uninstalled

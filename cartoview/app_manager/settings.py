@@ -19,12 +19,17 @@ standard_library.install_aliases()
 # BASE_DIR must be defined in project.settings
 
 
-def load_apps():
+def create_apps_dir():
     from django.conf import settings
     if not os.path.exists(settings.APPS_DIR):
         create_direcotry(settings.APPS_DIR)
         if not os.access(settings.APPS_DIR, os.W_OK):
             change_path_permission(settings.APPS_DIR)
+
+
+def load_apps():
+    from django.conf import settings
+    create_apps_dir()
     if settings.APPS_DIR not in sys.path:
         sys.path.append(settings.APPS_DIR)
 

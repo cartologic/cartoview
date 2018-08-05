@@ -1,18 +1,19 @@
+import json
+
 from django.core.urlresolvers import reverse
+from geonode.api.api import OwnersResource
+from geonode.api.authorization import (GeonodeApiKeyAuthentication,
+                                       GeoNodeAuthorization)
+from geonode.api.resourcebase_api import MapResource, ResourceBaseResource
+from geonode.base.models import ResourceBase
+from geonode.layers.models import Attribute, Layer
+from geonode.maps.models import MapLayer
 from tastypie import fields
+from tastypie.authentication import MultiAuthentication, SessionAuthentication
 from tastypie.constants import ALL, ALL_WITH_RELATIONS
 from tastypie.resources import ModelResource
-import json
-from geonode.api.api import OwnersResource
-from geonode.api.resourcebase_api import MapResource
-from geonode.base.models import ResourceBase
+from cartoview.app_manager.models import App, AppInstance
 from cartoview.app_manager.rest import LayerFilterExtensionResource
-from geonode.maps.models import MapLayer
-from geonode.layers.models import Attribute
-from tastypie.authentication import MultiAuthentication, SessionAuthentication
-from geonode.api.authorization import (
-    GeoNodeAuthorization, GeonodeApiKeyAuthentication)
-from geonode.layers.models import Layer
 
 type_filter = {
     'app': 'appinstance',
@@ -20,6 +21,26 @@ type_filter = {
     'map': 'map',
     'layer': 'Layer'
 }
+
+
+class ExtendedResourceBaseResource(ResourceBaseResource):
+    class Meta(ResourceBaseResource.Meta):
+        queryset = ResourceBase.objects.polymorphic_queryset().distinct()\
+            .order_by('-date')
+        resource_name = 'base'
+
+    def get_object_list(self, request):
+        __inactive_apps = [
+            app.id for app in App.objects.all() if not app.config.active]
+        __inactive_apps_instances = [instance.id for instance in
+                                     AppInstance.objects.filter(
+                                         app__id__in=__inactive_apps)]
+        active_app_instances = super(ExtendedResourceBaseResource, self)\
+            .get_object_list(
+            request).exclude(
+            id__in=__inactive_apps_instances)
+
+        return active_app_instances
 
 
 class AllResourcesResource(ModelResource):
@@ -33,7 +54,7 @@ class AllResourcesResource(ModelResource):
         resource_name = 'all_resources'
         queryset = ResourceBase.objects.distinct()
         fields = ['id', 'title', 'abstract',
-                  'type', 'featured', 'owner__username','app', 'owner', 'urls', 'thumbnail_url']
+                  'type', 'featured', 'owner__username', 'app', 'owner', 'urls', 'thumbnail_url']
         filtering = {
             'id': ALL,
             'title': ALL,

@@ -25,6 +25,22 @@
         <div id="slide-pane">
             {% include "search/_general_filters.html" %}
         </div>
+        <div id="slide-pane">
+              <nav class="filter" ng-cloak>
+                <h4><a href="#" class="toggle toggle-nav"><i class="fa fa-chevron-right"></i> {% trans "Apps" %}</a></h4>
+                <ul class="nav closed" id="apps">
+                  {% verbatim %}
+                  <li class="apps_filter" ng-repeat="app in apps" ng-if="apps.length > 0">
+                    <a class="page-title app_filter_item" data-value="{{ app.name }}" data-filter="app__name__in" ng-click="multiple_choice_listener($event)" class="{{app.active}}">{{ app.title }}
+                    </a>
+                    <div>
+                      <span class="badge pull-right">{{ app.app_instance_count }}</span>
+                    </div>
+                  </li>
+                  {% endverbatim %}
+                </ul>
+              </nav>
+        </div>
       </div>
     </div>
 

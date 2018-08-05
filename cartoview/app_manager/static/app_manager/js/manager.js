@@ -106,6 +106,9 @@
         var _getDependents = function (app, appsHash, dependents) {
             angular.forEach(app.store.installedApps.objects, function (installedApp) {
                 var currentApp = appsHash[installedApp.name];
+                // NOTE:this line will raise an error while uninstalling app
+                // It was working fine before this commit in gitlab f976590bd981b05f062f055f1aed3040b190f8e9
+                // I this our app market result for apps was changed without handle this change here
                 if (dependents.indexOf(currentApp) == -1 && currentApp.latest_version.dependencies[app.name]) {
                     dependents.push(currentApp)
                     _getDependents(currentApp, appsHash, dependents)

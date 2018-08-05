@@ -1,0 +1,54 @@
+sudo: required
+
+language: python
+
+cache:
+  directories:
+    - $HOME/.cache/pip
+
+before_cache:
+  - rm -f $HOME/.cache/pip/log/debug.log
+
+python:
+  - "2.7"
+
+virtualenv:
+  system_site_packages: true
+
+branches:
+  only:
+    - master
+    - stand_alone
+
+install:
+  - sudo apt-get -qq -y update
+  - sudo apt-get purge postgresql* -y
+  - sudo apt-get install software-properties-common python-software-properties -y
+  - sudo add-apt-repository -y ppa:ubuntugis/ubuntugis-unstable
+  - sudo apt-get -qq -y update
+  - sudo apt-get upgrade -y --allow-unauthenticated
+  - sudo apt-get install -y gcc gettext python-pip libpq-dev sqlite3 git gdal-bin lsof psmisc
+  - sudo apt-get install -y python-gdal python-psycopg2 python-imaging python-lxml
+  - sudo apt-get install -y python-dev libgdal-dev libgeoip-dev python-ldap libxml2 libxml2-dev libxslt-dev git default-jdk
+  - sudo apt-get install -y libmemcached-dev libsasl2-dev zlib1g-dev python-pylibmc python-setuptools
+  - sudo apt-get install -y curl build-essential build-essential python-dev libffi-dev libssl-dev
+  - sudo add-apt-repository -y ppa:webupd8team/java
+  - sudo apt-get update
+  - sudo apt-get install -y --force-yes oracle-java8-installer ant maven2 --no-install-recommends
+  - sudo update-java-alternatives --set java-8-oracle
+  - pip install celery
+  - pip install geonode>2.7.5.dev20180125135927
+  - pip install -e . --upgrade
+  - pip install django-autocomplete-light==2.3.3
+  - pip install coveralls
+
+script:
+  - coverage run --source=cartoview --omit="*/migrations/*,*/apps/*" ./manage.py test
+
+after_success:
+  - coveralls
+
+notifications:
+  email:
+    - hisham.karam@cartologic.com
+    - hishamwaleedkaram@gmail.com

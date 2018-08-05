@@ -3,9 +3,9 @@
  */
 'use strict';
 
-(function() {
+(function () {
 
-	var module = angular.module('geonode_main_search', [], function(
+	var module = angular.module('geonode_main_search', [], function (
 		$locationProvider) {
 		if (window.navigator.userAgent.indexOf("MSIE") == -1) {
 			$locationProvider.html5Mode({
@@ -19,7 +19,7 @@
 	});
 
 	// Used to set the class of the filters based on the url parameters
-	module.set_initial_filters_from_query = function(data, url_query,
+	module.set_initial_filters_from_query = function (data, url_query,
 		filter_param) {
 		for (var i = 0; i < data.length; i++) {
 			if (url_query == data[i][filter_param] || url_query.indexOf(data[i][
@@ -34,7 +34,7 @@
 	}
 
 	// Load categories, keywords, and regions
-	module.load_categories = function($http, $rootScope, $location) {
+	module.load_categories = function ($http, $rootScope, $location) {
 		var params = typeof FILTER_TYPE == 'undefined' ? {} : {
 			'type': FILTER_TYPE
 		};
@@ -43,7 +43,7 @@
 		}
 		$http.get(CATEGORIES_ENDPOINT, {
 			params: params
-		}).success(function(data) {
+		}).success(function (data) {
 			if ($location.search().hasOwnProperty('category__identifier__in')) {
 				data.objects = module.set_initial_filters_from_query(data.objects,
 					$location.search()['category__identifier__in'], 'identifier');
@@ -55,7 +55,7 @@
 		});
 	}
 
-	module.load_keywords = function($http, $rootScope, $location) {
+	module.load_keywords = function ($http, $rootScope, $location) {
 		var params = typeof FILTER_TYPE == 'undefined' ? {} : {
 			'type': FILTER_TYPE
 		};
@@ -64,7 +64,7 @@
 		}
 		$http.get(KEYWORDS_ENDPOINT, {
 			params: params
-		}).success(function(data) {
+		}).success(function (data) {
 			if ($location.search().hasOwnProperty('keywords__slug__in')) {
 				data.objects = module.set_initial_filters_from_query(data.objects,
 					$location.search()['keywords__slug__in'], 'slug');
@@ -76,7 +76,7 @@
 		});
 	}
 
-	module.load_regions = function($http, $rootScope, $location) {
+	module.load_regions = function ($http, $rootScope, $location) {
 		var params = typeof FILTER_TYPE == 'undefined' ? {} : {
 			'type': FILTER_TYPE
 		};
@@ -85,7 +85,7 @@
 		}
 		$http.get(REGIONS_ENDPOINT, {
 			params: params
-		}).success(function(data) {
+		}).success(function (data) {
 			if ($location.search().hasOwnProperty('regions__name__in')) {
 				data.objects = module.set_initial_filters_from_query(data.objects,
 					$location.search()['regions__name__in'], 'name');
@@ -97,7 +97,7 @@
 		});
 	}
 
-	module.load_owners = function($http, $rootScope, $location) {
+	module.load_owners = function ($http, $rootScope, $location) {
 		var params = typeof FILTER_TYPE == 'undefined' ? {} : {
 			'type': FILTER_TYPE
 		};
@@ -106,7 +106,7 @@
 		}
 		$http.get(OWNERS_ENDPOINT, {
 			params: params
-		}).success(function(data) {
+		}).success(function (data) {
 			if ($location.search().hasOwnProperty('owner__username__in')) {
 				data.objects = module.set_initial_filters_from_query(data.objects,
 					$location.search()['owner__username__in'], 'identifier');
@@ -117,9 +117,30 @@
 			}
 		});
 	}
+	module.load_apps = function ($http, $rootScope, $location) {
+		var params = typeof FILTER_TYPE == 'undefined' ? {} : {
+			'type': FILTER_TYPE
+		};
+		params['single_instance'] = false
+		if ($location.search().hasOwnProperty('app_name__in')) {
+			params['app_name__in'] = $location.search()['app__name__in'];
+		}
+		$http.get(APPS_ENDPOINT, {
+			params: params
+		}).success(function (data) {
+			if ($location.search().hasOwnProperty('app__name__in')) {
+				data.objects = module.set_initial_filters_from_query(data.objects,
+					$location.search()['app__name__in'], 'identifier');
+			}
+			$rootScope.apps = data.objects;
+			if (HAYSTACK_FACET_COUNTS && $rootScope.query_data) {
+				module.haystack_facets($http, $rootScope, $location);
+			}
+		});
+	}
 
 	// Update facet counts for categories and keywords
-	module.haystack_facets = function($http, $rootScope, $location) {
+	module.haystack_facets = function ($http, $rootScope, $location) {
 		var data = $rootScope.query_data;
 		if ("categories" in $rootScope) {
 			$rootScope.category_counts = data.meta.facets.category;
@@ -173,7 +194,7 @@
 	/*
 	 * Load categories and keywords
 	 */
-	module.run(function($http, $rootScope, $location) {
+	module.run(function ($http, $rootScope, $location) {
 		/*
 		 * Load categories and keywords if the filter is available in the page
 		 * and set active class if needed
@@ -189,6 +210,9 @@
 		}
 		if ($('#owners').length > 0) {
 			module.load_owners($http, $rootScope, $location);
+		}
+		if ($('#apps').length > 0) {
+			module.load_apps($http, $rootScope, $location);
 		}
 
 
@@ -221,9 +245,9 @@
 	 * Load data from api and defines the multiple and single choice handlers
 	 * Syncs the browser url with the selections
 	 */
-	module.controller('geonode_search_controller', function($injector, $scope,
+	module.controller('geonode_search_controller', function ($injector, $scope,
 		$location, $http, Configs, $parse) {
-		$scope.loading=true
+		$scope.loading = true
 		$scope.query = $location.search();
 		$scope.query.limit = $scope.query.limit || CLIENT_RESULTS_LIMIT;
 		$scope.query.offset = $scope.query.offset || 0;
@@ -237,7 +261,7 @@
 					params: {
 						name: data.app__name
 					}
-				}).success(function(res) {
+				}).success(function (res) {
 					$scope.app_name = res.objects[0].name;
 				})
 			} else {
@@ -245,9 +269,9 @@
 			}
 			$http.get(Configs.url, {
 				params: data || {}
-			}).success(function(data) {
-				$scope.loading=false
-				$scope.results = data.objects.sort(function(x, y) {
+			}).success(function (data) {
+				$scope.loading = false
+				$scope.results = data.objects.sort(function (x, y) {
 					return (x.featured === y.featured) ? 0 : x.featured ? -1 : 1;
 				});
 				$scope.total_counts = data.meta.total_count;
@@ -266,7 +290,7 @@
 				//Update facet/keyword/category counts from search results
 				if (HAYSTACK_FACET_COUNTS) {
 					module.haystack_facets($http, $scope.$root, $location);
-					$("#types").find("a").each(function() {
+					$("#types").find("a").each(function () {
 						if ($(this)[0].id in data.meta.facets.subtype) {
 							$(this).find("span").text(data.meta.facets.subtype[$(this)[0].id]);
 						} else if ($(this)[0].id in data.meta.facets.type) {
@@ -285,7 +309,7 @@
 		 * Pagination
 		 */
 		// Control what happens when the total results change
-		$scope.$watch('total_counts', function() {
+		$scope.$watch('total_counts', function () {
 			$scope.numpages = Math.round(
 				($scope.total_counts / $scope.query.limit) + 0.49
 			);
@@ -305,7 +329,7 @@
 			};
 		});
 
-		$scope.paginate_down = function() {
+		$scope.paginate_down = function () {
 			if ($scope.page > 1) {
 				$scope.page -= 1;
 				$scope.query.offset = $scope.query.limit * ($scope.page - 1);
@@ -313,7 +337,7 @@
 			}
 		}
 
-		$scope.paginate_up = function() {
+		$scope.paginate_up = function () {
 			if ($scope.numpages > $scope.page) {
 				$scope.page += 1;
 				$scope.query.offset = $scope.query.limit * ($scope.page - 1);
@@ -327,7 +351,7 @@
 
 		if (!Configs.hasOwnProperty("disableQuerySync")) {
 			// Keep in sync the page location with the query object
-			$scope.$watch('query', function() {
+			$scope.$watch('query', function () {
 				$location.search($scope.query);
 			}, true);
 		}
@@ -336,7 +360,7 @@
 		 * Add the selection behavior to the element, it adds/removes the 'active' class
 		 * and pushes/removes the value of the element from the query object
 		 */
-		$scope.multiple_choice_listener = function($event) {
+		$scope.multiple_choice_listener = function ($event) {
 			var element = $($event.target);
 			var query_entry = [];
 			var data_filter = element.attr('data-filter');
@@ -382,7 +406,7 @@
 			query_api($scope.query);
 		}
 
-		$scope.single_choice_listener = function($event) {
+		$scope.single_choice_listener = function ($event) {
 			var element = $($event.target);
 			var query_entry = [];
 			var data_filter = element.attr('data-filter');
@@ -421,14 +445,14 @@
 			autoHilightFirst: false
 		});
 
-		$('#text_search_input').keypress(function(e) {
+		$('#text_search_input').keypress(function (e) {
 			if (e.which == 13) {
 				$('#text_search_btn').click();
 				$('.yourlabs-autocomplete').hide();
 			}
 		});
 
-		$('#text_search_input').bind('selectChoice', function(e, choice,
+		$('#text_search_input').bind('selectChoice', function (e, choice,
 			text_autocomplete) {
 			if (choice[0].children[0] == undefined) {
 				$('#text_search_input').val($(choice[0]).text());
@@ -436,7 +460,7 @@
 			}
 		});
 
-		$('#text_search_btn').click(function() {
+		$('#text_search_btn').click(function () {
 			if (HAYSTACK_SEARCH)
 				$scope.query['q'] = $('#text_search_input').val();
 			else
@@ -455,7 +479,7 @@
 			appendAutocomplete: $('#region_search_input'),
 			placeholder: gettext('Enter your region here ...')
 		});
-		$('#region_search_input').bind('selectChoice', function(e, choice,
+		$('#region_search_input').bind('selectChoice', function (e, choice,
 			region_autocomplete) {
 			if (choice[0].children[0] == undefined) {
 				$('#region_search_input').val(choice[0].innerHTML);
@@ -463,12 +487,12 @@
 			}
 		});
 
-		$('#region_search_btn').click(function() {
+		$('#region_search_btn').click(function () {
 			$scope.query['regions__name__in'] = $('#region_search_input').val();
 			query_api($scope.query);
 		});
 
-		$scope.feature_select = function($event) {
+		$scope.feature_select = function ($event) {
 			var element = $($event.target);
 			var article = $(element.parents('article')[0]);
 			if (article.hasClass('resource_selected')) {
@@ -489,7 +513,7 @@
 			'date__lte': ''
 		};
 		var init_date = true;
-		$scope.$watch('date_query', function() {
+		$scope.$watch('date_query', function () {
 			if ($scope.date_query.date__gte != '' && $scope.date_query.date__lte !=
 				'') {
 				$scope.query['date__range'] = $scope.date_query.date__gte + ',' +
@@ -550,18 +574,18 @@
 			var leafletData = $injector.get('leafletData'),
 				map = leafletData.getMap('filter-map');
 
-			map.then(function(map) {
-				map.on('moveend', function() {
+			map.then(function (map) {
+				map.on('moveend', function () {
 					$scope.query['extent'] = map.getBounds().toBBoxString();
 					query_api($scope.query);
 				});
 			});
 
 			var showMap = false;
-			$('#_extent_filter').click(function(evt) {
+			$('#_extent_filter').click(function (evt) {
 				showMap = !showMap
 				if (showMap) {
-					leafletData.getMap().then(function(map) {
+					leafletData.getMap().then(function (map) {
 						map.invalidateSize();
 					});
 				}

@@ -7,14 +7,12 @@ import importlib
 import json
 import os
 from builtins import *
-from urllib.parse import urljoin
 
 from django.conf import settings
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
-from django.core.files import File
 from django.core.urlresolvers import reverse
 from django.db import transaction
 from django.db.models import F, Max, Min
@@ -64,32 +62,14 @@ if not os.path.exists(temp_dir):
     os.makedirs(temp_dir)
 
 
-def save_thumbnail(filename, image):
-    thumb_folder = 'thumbs'
-    upload_path = os.path.join(settings.MEDIA_ROOT, thumb_folder)
-    if not os.path.exists(upload_path):
-        os.makedirs(upload_path)
-
-    with open(os.path.join(upload_path, filename), 'wb') as f:
-        thumbnail = File(f)
-        thumbnail.write(image)
-
-    url_path = os.path.join(
-        settings.MEDIA_URL,
-        thumb_folder,
-        filename).replace(
-        '\\',
-        '/')
-    url = urljoin(settings.SITEURL, url_path)
-
-    return url
-
-
 def get_apps_names():
-    return [
-        n for n in os.listdir(settings.APPS_DIR)
-        if os.path.isdir(os.path.join(settings.APPS_DIR, n))
-    ]
+    apps = []
+    if os.path.exists(settings.APPS_DIR):
+        apps = [
+            n for n in os.listdir(settings.APPS_DIR)
+            if os.path.isdir(os.path.join(settings.APPS_DIR, n))
+        ]
+    return apps
 
 
 def installed_apps():
@@ -101,12 +81,16 @@ def installed_apps():
 @staff_member_required
 def manage_apps(request):
     from cartoview.version import get_backward_compatible, get_current_version
+    from pkg_resources import parse_version
     apps = App.objects.all()
+    _version = parse_version(get_current_version())._version
+    release = _version.release
+    version = [str(x) for x in release]
     context = {
         'apps': apps,
         'site_apps': get_apps_names(),
         'version_info': {
-            'current_version': get_current_version(),
+            'current_version': ".".join(version),
             'backward_versions': get_backward_compatible()
         }
     }
@@ -613,12 +597,12 @@ class StandardAppViews(AppViews):
         return render(request, template, context)
 
     def get_url_patterns(self):
-        return patterns('',
-                        url(r'^new/$', self.new,
-                            name='%s.new' % self.app_name),
-                        url(r'^(?P<instance_id>\d+)/edit/$',
-                            self.edit, name='%s.edit' % self.app_name),
-                        url(r'^(?P<instance_id>\d+)/view/$',
-                            self.view_app,
-                            name='%s.view' % self.app_name)
-                        )
+        return [
+            url(r'^new/$', self.new,
+                name='%s.new' % self.app_name),
+            url(r'^(?P<instance_id>\d+)/edit/$',
+                self.edit, name='%s.edit' % self.app_name),
+            url(r'^(?P<instance_id>\d+)/view/$',
+                self.view_app,
+                name='%s.view' % self.app_name)
+        ]

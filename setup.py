@@ -2,11 +2,7 @@ from distutils.core import setup
 
 from setuptools import find_packages
 
-try:
-    import pypandoc
-    long_description = pypandoc.convert('README.md', 'rst')
-except (IOError, ImportError):
-    long_description = open('README.md').read()
+long_description = open('README.md').read()
 setup(
     name='cartoview',
     packages=find_packages(),
@@ -14,11 +10,11 @@ setup(
     description='Cartoview is a GIS web mapping application framework to \
     easily share and deploy apps based on Geonode',
     long_description=long_description,
+    long_description_content_type='text/markdown',
     author='Cartologic',
     author_email='info@cartologic.com',
     url='https://github.com/cartologic/cartoview',
     include_package_data=True,
-    python_requires='>=2.7.12, !=3.0.*, !=3.1.*, !=3.2.*, <4',
     keywords=[
         'cartoview',
         'gis',
@@ -33,4 +29,5 @@ setup(
         "Framework :: Django :: 1.8",
         "Topic :: Scientific/Engineering :: GIS"],
     license="BSD",
-    install_requires=['future', 'six==1.10.0', 'geonode>=2.8rc11'])
+    install_requires=['future', 'six==1.10.0', 'portalocker==1.2.1',
+                      'geonode>2.7.5.dev20180125135927', 'Faker>=0.8.4'])

@@ -7,7 +7,7 @@ import ast
 import re
 import dj_database_url
 import cartoview
-
+import sys
 INSTALLED_APPS += ("cartoview",
                    "cartoview.cartoview_api.apps.CartoviewAPIConfig",
                    "cartoview.app_manager", "cartoview.site_management",
@@ -61,7 +61,8 @@ try:
     from .local_settings import *
 except Exception as e:
     pass
-
+if 'test' in sys.argv:
+    DATABASES = {'default': {'ENGINE': 'django.db.backends.sqlite3', }}
 if 'datastore' in DATABASES:
     OGC_SERVER['default']['DATASTORE'] = 'datastore'
 
@@ -73,5 +74,8 @@ if 'geonode.geoserver' in INSTALLED_APPS and "LOCAL_GEOSERVER" in \
 # NOTE:set cartoview_stand_alone environment var if you are not using cartoview_proect_template
 CARTOVIEW_STAND_ALONE = strtobool(os.getenv('CARTOVIEW_STAND_ALONE', 'FALSE'))
 if CARTOVIEW_STAND_ALONE:
+    from cartoview.app_manager.settings import load_apps
+    INSTALLED_APPS += load_apps()
+if 'test' in sys.argv:
     from cartoview.app_manager.settings import load_apps
     INSTALLED_APPS += load_apps()

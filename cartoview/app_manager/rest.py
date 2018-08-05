@@ -3,7 +3,7 @@ from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
 
 import json
-from cartoview.app_manager.models import App, AppInstance, AppStore, AppType
+
 from django.conf import settings
 from django.conf.urls import url
 from django.core.exceptions import ObjectDoesNotExist
@@ -11,7 +11,8 @@ from django.core.urlresolvers import reverse
 from future import standard_library
 from geonode.api.api import ProfileResource
 from geonode.api.authorization import GeoNodeAuthorization
-from geonode.api.resourcebase_api import CommonMetaApi
+from geonode.api.resourcebase_api import (CommonMetaApi, LayerResource,
+                                          MapResource)
 from geonode.layers.models import Attribute
 from geonode.maps.models import MapLayer
 from geonode.people.models import Profile
@@ -23,8 +24,11 @@ from tastypie.http import HttpGone
 from tastypie.resources import ModelResource
 from tastypie.utils import trailing_slash
 
+from cartoview.app_manager.models import App, AppInstance, AppStore, AppType
+
 from .resources import FileUploadResource
-from geonode.api.resourcebase_api import LayerResource, MapResource
+from .utils import populate_apps
+
 standard_library.install_aliases()
 
 
@@ -149,6 +153,7 @@ class AppResource(FileUploadResource):
                 bundle=bundle, **self.remove_api_resource_names(kwargs))
             app.config.active = active
             app.apps_config.save()
+            populate_apps()
         except ObjectDoesNotExist:
             return HttpGone()
 
@@ -206,6 +211,19 @@ class AppInstanceResource(ModelResource):
         allowed_methods = ['get', 'post', 'put']
         excludes = ['csw_anytext', 'metadata_xml']
         authorization = GeoNodeAuthorization()
+
+    def get_object_list(self, request):
+        __inactive_apps = [
+            app.id for app in App.objects.all() if not app.config.active]
+        __inactive_apps_instances = [instance.id for instance in
+                                     AppInstance.objects.filter(
+                                         app__id__in=__inactive_apps)]
+        active_app_instances = super(AppInstanceResource, self)\
+            .get_object_list(
+            request).exclude(
+            id__in=__inactive_apps_instances)
+
+        return active_app_instances
 
     def dehydrate_owner(self, bundle):
         return bundle.obj.owner.username
