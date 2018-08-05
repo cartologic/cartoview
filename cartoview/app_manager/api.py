@@ -1,5 +1,6 @@
 from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
+
 import warnings
 from builtins import *
 
@@ -9,8 +10,11 @@ from future import standard_library
 from tastypie.api import Api as TastypieApi
 from tastypie.utils import trailing_slash
 
-from .serializers import HTMLSerializer
+from cartoview.app_manager.api import home as app_manager_rest_home
 from cartoview.log_handler import get_logger
+
+from .serializers import HTMLSerializer
+
 logger = get_logger(__name__)
 standard_library.install_aliases()
 
@@ -86,7 +90,7 @@ class Api(object):
     def urls(self):
         pattern_list = [
             url(r'^$',
-                'cartoview.app_manager.api.home',
+                app_manager_rest_home,
                 name='cartoview_rest_url'),
         ]
         for name in sorted(self.apis.keys()):
