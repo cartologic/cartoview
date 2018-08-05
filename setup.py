@@ -15,7 +15,6 @@ setup(
     author_email='info@cartologic.com',
     url='https://github.com/cartologic/cartoview',
     include_package_data=True,
-    python_requires='>=2.7.12, !=3.0.*, !=3.1.*, !=3.2.*, <4',
     keywords=[
         'cartoview',
         'gis',
