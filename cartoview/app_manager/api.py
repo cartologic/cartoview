@@ -1,6 +1,5 @@
 from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
-
 import warnings
 from builtins import *
 
@@ -9,14 +8,15 @@ from django.shortcuts import render
 from future import standard_library
 from tastypie.api import Api as TastypieApi
 from tastypie.utils import trailing_slash
-
-from cartoview.app_manager.api import home as app_manager_rest_home
-from cartoview.log_handler import get_logger
-
 from .serializers import HTMLSerializer
-
+from cartoview.log_handler import get_logger
 logger = get_logger(__name__)
 standard_library.install_aliases()
+
+
+def home(request):
+    return render(request, 'app_manager/rest_api/home.html',
+                  {'apis': sorted(rest_api.apis.keys())})
 
 
 class BaseApi(TastypieApi):
@@ -90,7 +90,7 @@ class Api(object):
     def urls(self):
         pattern_list = [
             url(r'^$',
-                app_manager_rest_home,
+                home,
                 name='cartoview_rest_url'),
         ]
         for name in sorted(self.apis.keys()):
@@ -105,8 +105,3 @@ class Api(object):
 
 
 rest_api = Api()
-
-
-def home(request):
-    return render(request, 'app_manager/rest_api/home.html',
-                  {'apis': sorted(rest_api.apis.keys())})
