@@ -5,5 +5,5 @@ __compatible_with__ = []
 
 
 def get_current_version():
-    import geonode.version
-    return geonode.version.get_version(__version__)
+    from .version import get_version
+    return get_version(__version__)

@@ -1,5 +1,7 @@
 [![GitHub stars](https://img.shields.io/github/stars/cartologic/cartoview.svg)](https://github.com/cartologic/cartoview/stargazers)
 [![GitHub forks](https://img.shields.io/github/forks/cartologic/cartoview.svg)](https://github.com/cartologic/cartoview/network)
+[![Coverage Status](https://coveralls.io/repos/github/cartologic/cartoview/badge.svg?branch=master)](https://coveralls.io/github/cartologic/cartoview?branch=master)
+[![Build Status](https://travis-ci.org/cartologic/cartoview.svg?branch=master)](https://travis-ci.org/cartologic/cartoview)
 [![GitHub license](https://img.shields.io/github/license/cartologic/cartoview.svg)](https://github.com/cartologic/cartoview/blob/master/LICENSE)
 [![GitHub issues](https://img.shields.io/github/issues/cartologic/cartoview.svg)](https://github.com/cartologic/cartoview/issues)
 [![Twitter](https://img.shields.io/twitter/url/https/github.com/cartologic/cartoview.svg?style=social)](https://twitter.com/intent/tweet?text=Wow:&url=https%3A%2F%2Fgithub.com%2Fcartologic%2Fcartoview)
@@ -11,6 +13,8 @@
 ## What is Cartoview?
   - CartoView is a GIS Web Mapping Application Market.
   - Cartoview extends the popular [GeoNode](http://geonode.org/) SDI to provide the ability to create, share, and visualize GIS Web Mapping Applications very easily and very quickly from the browser without programming.
+
+***
 
 ## Docker Installation:
   - install [docker](https://docs.docker.com/v17.12/install/#server) and [docker-compose](https://docs.docker.com/compose/install/#prerequisites)
@@ -34,6 +38,8 @@
       - `docker-compose logs --follow --tail=100 <service_name>`
   - start the containers with `docker-compose up -d` or `make up`
   - stop the containers with `docker-compose down` or `make down`
+
+***
 
 ## How To Add Cartoview To Existing Geonode:
   - install cartoview with pip:
@@ -65,7 +71,4 @@
           from cartoview.app_manager.settings import load_apps
           INSTALLED_APPS += load_apps()
           ```
-      - restart your server
-
-## Docs:
-  - [How to use and install](http://cartologic.github.io)
+      - **restart your server**

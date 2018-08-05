@@ -30,4 +30,4 @@ setup(
         "Topic :: Scientific/Engineering :: GIS"],
     license="BSD",
     install_requires=['future', 'six==1.10.0', 'portalocker==1.2.1',
-                      'geonode>2.7.5.dev20180125135927', 'Faker>=0.8.4'])
+                      'geonode>2.7.5.dev20180125135927,<2.9', 'Faker>=0.8.4'])
