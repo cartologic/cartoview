@@ -6,6 +6,7 @@ import importlib
 import os
 import shutil
 import subprocess
+import sys
 import tempfile
 import zipfile
 from builtins import *
@@ -74,8 +75,9 @@ class FinalizeInstaller:
                 self.docker_restart()
             else:
                 self.restart_server()
-        timer = Timer(0.1, _finalize_setup(app_name))
-        timer.start()
+        if 'test' not in sys.argv:
+            timer = Timer(0.1, _finalize_setup(app_name))
+            timer.start()
 
     def __call__(self, app_name):
         self.finalize_setup(app_name)
