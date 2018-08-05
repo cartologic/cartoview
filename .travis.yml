@@ -37,7 +37,7 @@ install:
   - sudo apt-get install -y --force-yes oracle-java8-installer ant maven2 --no-install-recommends
   - sudo update-java-alternatives --set java-8-oracle
   - pip install celery
-  - pip install geonode>2.7.5.dev20180125135927
+  - pip install "geonode>2.7.5.dev20180125135927,<2.9"
   - pip install -e . --upgrade
   - pip install django-autocomplete-light==2.3.3
   - pip install coveralls
