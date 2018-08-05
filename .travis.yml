@@ -46,3 +46,4 @@ after_success:
 notifications:
   email:
     - hisham.karam@cartologic.com
+    - hishamwaleedkaram@gmail.com
