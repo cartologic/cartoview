@@ -14,6 +14,8 @@
   - CartoView is a GIS Web Mapping Application Market.
   - Cartoview extends the popular [GeoNode](http://geonode.org/) SDI to provide the ability to create, share, and visualize GIS Web Mapping Applications very easily and very quickly from the browser without programming.
 
+***
+
 ## Docker Installation:
   - install [docker](https://docs.docker.com/v17.12/install/#server) and [docker-compose](https://docs.docker.com/compose/install/#prerequisites)
   - clone cartoview and navigate to cartoview folder
@@ -36,6 +38,8 @@
       - `docker-compose logs --follow --tail=100 <service_name>`
   - start the containers with `docker-compose up -d` or `make up`
   - stop the containers with `docker-compose down` or `make down`
+
+***
 
 ## How To Add Cartoview To Existing Geonode:
   - install cartoview with pip:
@@ -67,7 +71,4 @@
           from cartoview.app_manager.settings import load_apps
           INSTALLED_APPS += load_apps()
           ```
-      - restart your server
-
-## Docs:
-  - [How to use and install](http://cartologic.github.io)
+      - **restart your server**
