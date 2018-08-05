@@ -87,9 +87,10 @@ def app_url(app_name):
         name=app + '_base_url')
 
 
-apps_config = AppsConfig()
-for app_config in apps_config:
-    import_app_rest(app_config.name)
+def load_apps_urls():
+    apps_config = AppsConfig()
+    for app_config in apps_config:
+        import_app_rest(app_config.name)
 
-for app_config in apps_config:
-    urlpatterns.append(app_url(app_config.name))
+    for app_config in apps_config:
+        urlpatterns.append(app_url(app_config.name))
