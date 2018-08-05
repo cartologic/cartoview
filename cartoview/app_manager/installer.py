@@ -8,6 +8,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import threading
 import zipfile
 from builtins import *
 from io import BytesIO
@@ -28,6 +29,7 @@ from cartoview.log_handler import get_logger
 from .config import App as AppConfig
 from .helpers import change_path_permission, create_direcotry
 from .models import App, AppStore, AppType
+from .settings import create_apps_dir
 
 logger = get_logger(__name__)
 install_app_batch = getattr(settings, 'INSTALL_APP_BAT', None)
@@ -35,6 +37,8 @@ standard_library.install_aliases()
 reload(pkg_resources)
 current_folder = os.path.abspath(os.path.dirname(__file__))
 temp_dir = os.path.join(current_folder, 'temp')
+
+lock = threading.Lock()
 
 
 class FinalizeInstaller:
@@ -131,6 +135,7 @@ class AppAlreadyInstalledException(BaseException):
 class AppInstaller(object):
 
     def __init__(self, name, store_id=None, version=None, user=None):
+        create_apps_dir()
         self.user = user
         self.app_dir = os.path.join(settings.APPS_DIR, name)
         self.name = name
@@ -217,31 +222,32 @@ class AppInstaller(object):
             del app_conf
 
     def install(self, restart=True):
-        self.upgrade = False
-        if os.path.exists(self.app_dir):
-            try:
-                installed_app = App.objects.get(name=self.name)
-                if installed_app.version < self.version["version"]:
-                    self.upgrade = True
-                else:
-                    raise AppAlreadyInstalledException()
-            except App.DoesNotExist:
-                # NOTE:the following code handle if app downloaded and for some reason not added to the portal
-                self._rollback()
-        installed_apps = []
-        for name, version in list(self.version["dependencies"].items()):
-            # use try except because AppInstaller.__init__ will handle upgrade
-            # if version not match
-            try:
-                app_installer = AppInstaller(
-                    name, self.store.id, version, user=self.user)
-                installed_apps += app_installer.install(restart=False)
-            except AppAlreadyInstalledException as e:
-                logger.error(e.message)
-        self._download_app()
-        reload(pkg_resources)
-        self.check_then_finlize(restart, installed_apps)
-        return installed_apps
+        with lock:
+            self.upgrade = False
+            if os.path.exists(self.app_dir):
+                try:
+                    installed_app = App.objects.get(name=self.name)
+                    if installed_app.version < self.version["version"]:
+                        self.upgrade = True
+                    else:
+                        raise AppAlreadyInstalledException()
+                except App.DoesNotExist:
+                    # NOTE:the following code handle if app downloaded and for some reason not added to the portal
+                    self._rollback()
+            installed_apps = []
+            for name, version in list(self.version["dependencies"].items()):
+                # use try except because AppInstaller.__init__ will handle upgrade
+                # if version not match
+                try:
+                    app_installer = AppInstaller(
+                        name, self.store.id, version, user=self.user)
+                    installed_apps += app_installer.install(restart=False)
+                except AppAlreadyInstalledException as e:
+                    logger.error(e.message)
+            self._download_app()
+            reload(pkg_resources)
+            self.check_then_finlize(restart, installed_apps)
+            return installed_apps
 
     @transaction.atomic
     def check_then_finlize(self, restart, installed_apps):
@@ -274,7 +280,8 @@ class AppInstaller(object):
         process = subprocess.Popen("{} {} {}".format(
             executable, manage_py, command), shell=True)
         out, err = process.communicate()
-        logger.error(out, err)
+        logger.info(out)
+        logger.error(err)
 
     def delete_app_tables(self):
         from django.contrib.contenttypes.models import ContentType
@@ -296,18 +303,22 @@ class AppInstaller(object):
 
         :return:
         """
-        installed_apps = App.objects.all()
-        for app in installed_apps:
-            app_installer = AppInstaller(
-                app.name, self.store.id, app.version, user=self.user)
-            dependencies = app_installer.version["dependencies"]
-            if self.name in dependencies:
-                app_installer.uninstall(restart=False)
-        installer = importlib.import_module('%s.installer' % self.name)
-        installer.uninstall()
-        self.delete_app_tables()
-        self.completely_remove()
-        app_dir = os.path.join(settings.APPS_DIR, self.name)
-        shutil.rmtree(app_dir)
-        if restart:
-            FINALIZE_SETUP.restart_server()
+        with lock:
+            uninstalled = False
+            installed_apps = App.objects.all()
+            for app in installed_apps:
+                app_installer = AppInstaller(
+                    app.name, self.store.id, app.version, user=self.user)
+                dependencies = app_installer.version["dependencies"]
+                if self.name in dependencies:
+                    app_installer.uninstall(restart=False)
+            installer = importlib.import_module('%s.installer' % self.name)
+            installer.uninstall()
+            self.delete_app_tables()
+            self.completely_remove()
+            app_dir = os.path.join(settings.APPS_DIR, self.name)
+            shutil.rmtree(app_dir)
+            uninstalled = True
+            if restart:
+                FINALIZE_SETUP.restart_server()
+            return uninstalled
