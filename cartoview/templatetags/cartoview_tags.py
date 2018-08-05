@@ -37,41 +37,6 @@ def num_ratings(obj):
     return len(Rating.objects.filter(object_id=obj.pk, content_type=ct))
 
 
-@register.simple_tag
-def layers_counts():
-    return Layer.objects.count()
-
-
-@register.simple_tag
-def maps_counts():
-    return Map.objects.count()
-
-
-@register.simple_tag
-def apps_counts():
-    return AppInstance.objects.count()
-
-
-@register.simple_tag
-def users_counts():
-    return Profile.objects.exclude(username="AnonymousUser").count()
-
-
-@register.simple_tag
-def groups_counts():
-    return Group.objects.exclude(name="anonymous").count()
-
-
-@register.simple_tag
-def apps_url(url_name, *args, **kwargs):
-    url = None
-    try:
-        url = reverse(url_name, args=args, kwargs=kwargs)
-    except:
-        pass
-    return json.dumps(url)
-
-
 @register.assignment_tag(takes_context=True)
 def facets(context):
     request = context['request']
@@ -158,12 +123,6 @@ def facets(context):
                 facets['vector'] + facets['remote']
 
     return facets
-
-
-@register.filter(name='jsonify')
-def jsonify(values):
-    """Json Object"""
-    return mark_safe(json.dumps(values))
 
 
 @register.filter(name='objects_count')
