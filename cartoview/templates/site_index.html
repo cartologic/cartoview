@@ -140,34 +140,34 @@
             <div class="row" style="background: rgba(13, 64, 109, 0.68);">
                 <div class="col-xs-6 col-sm-6 col-md-2 col-md-offset-1 text-center center-counter">
                     <div class="row">
-                        <span class="count">{% layers_counts %}</span>
+                        <span class="count">{{cartoview_counters.layers}}</span>
                     </div>
                     <a href="{% url 'layer_browse' %}">Layers</a>
                 </div>
                 <div class="col-xs-6 col-sm-6 col-md-2 text-center center-counter">
                     <div class="row">
-                        <span class="count">{% maps_counts %}</span>
+                        <span class="count">{{cartoview_counters.maps}}</span>
                     </div>
 
                     <a href="{% url 'maps_browse' %}">Maps</a>
                 </div>
                 <div class="col-xs-6 col-sm-6 col-md-2 text-center center-counter ">
                     <div class="row">
-                        <span class="count">{% users_counts %}</span>
+                        <span class="count">{{cartoview_counters.users}}</span>
                     </div>
 
                     <a href="{% url 'profile_browse' %}">Users</a>
                 </div>
                 <div class="col-xs-6 col-sm-6 col-md-2 text-center center-counter ">
                     <div class="row">
-                        <span class="count">{% groups_counts %}</span>
+                        <span class="count">{{cartoview_counters.groups}}</span>
                     </div>
 
                     <a href="{% url 'group_list' %}">Groups</a>
                 </div>
                 <div class="col-xs-6 col-sm-6  col-md-2 text-center center-counter">
                     <div class="row">
-                        <span class="count">{% apps_counts %}</span>
+                        <span class="count">{{cartoview_counters.apps}}</span>
                     </div>
                     <a href="{% url 'appinstance_browse' %}">Apps</a>
                 </div>
