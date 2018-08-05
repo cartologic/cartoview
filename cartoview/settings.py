@@ -74,8 +74,6 @@ if 'geonode.geoserver' in INSTALLED_APPS and "LOCAL_GEOSERVER" in \
 # NOTE:set cartoview_stand_alone environment var if you are not using cartoview_proect_template
 CARTOVIEW_STAND_ALONE = strtobool(os.getenv('CARTOVIEW_STAND_ALONE', 'FALSE'))
 if CARTOVIEW_STAND_ALONE:
-    from cartoview.app_manager.settings import load_apps
-    INSTALLED_APPS += load_apps()
-if 'test' in sys.argv:
+    print("CARTOVIEW_STAND_ALONE={}".format(CARTOVIEW_STAND_ALONE))
     from cartoview.app_manager.settings import load_apps
     INSTALLED_APPS += load_apps()
