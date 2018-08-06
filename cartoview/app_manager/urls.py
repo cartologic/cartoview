@@ -94,3 +94,6 @@ def load_apps_urls():
 
     for app_config in apps_config:
         urlpatterns.append(app_url(app_config.name))
+
+
+load_apps_urls()
