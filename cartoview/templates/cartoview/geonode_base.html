@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% load static  i18n %}
+{% block extra_head %}
+    <link rel="shortcut icon" type="image/png" href="{{ STATIC_URL }}cartoview/img/icon.png"/>
+    <link href="{{ STATIC_URL }}cartoview/css/custom.css" rel="stylesheet"/>
+{% endblock %}
+{% block tabs %}
+    <li>
+
+        {% if apps and APPS_MENU %}
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+               aria-haspopup="true" aria-expanded="false">{% trans "Apps" %}<i
+                    class="fa fa-angle-down fa-lg"></i></a>
+            <ul class="dropdown-menu">
+                {% for app in apps|slice:":5" %}
+                    {% if app.single_instance %}
+                        <li><a href="{% url 'app_manager_base_url' %}{{ app.name }}"
+                               target="_parent">{{ app.title }}</a></li>
+                    {% else %}
+                        <li><a href="{% url 'appinstance_browse' %}?app__title={{ app.title }}" target="_parent"
+                        >{{ app.title }}</a></li>
+                    {% endif %}
+                {% endfor %}
+                {% if user.is_authenticated %}
+                    <li role="separator" class="divider"></li>
+                    <li><a href="{% url 'manage_apps' %}">{% trans "Manage Apps" %}</a>
+                    </li>
+                {% endif %}
+                <li role="separator" class="divider"></li>
+                <li><a href="{% url 'app_manager_base_url' %}">All apps</a></li>
+            </ul>
+        {% else %}
+            <li><a href="{% url 'app_manager_base_url' %}">{% trans "Apps" %}</a></li>
+        {% endif %}
+
+
+    </li>
+    {{ block.super }}
+
+{% endblock %}
+
+
+{% block footer %}
+    {% include 'cartoview/footer.html' %}
+{% endblock footer %}

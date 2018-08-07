@@ -20,7 +20,7 @@ class CartoviewHomeViewTest(TestCase):
     def test_view_uses_correct_template(self):
         resp = self.client.get(reverse('home'))
         self.assertEqual(resp.status_code, 200)
-        self.assertTemplateUsed(resp, 'site_index.html')
+        self.assertTemplateUsed(resp, 'index.html')
 
 
 class CartoviewCheckVersionViewTest(TestCase):

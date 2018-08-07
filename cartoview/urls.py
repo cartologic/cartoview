@@ -8,7 +8,6 @@ from cartoview.app_manager.rest import (AppInstanceResource, AppResource,
                                         LayerFilterExtensionResource)
 from cartoview.cartoview_api.views import layer_config_json, update_extent
 from cartoview.views import check_version
-from cartoview.views import index as cartoview_index
 from cartoview_api.rest import (AllResourcesResource, AttributeResource,
                                 ExtendedResourceBaseResource, MapLayerResource)
 
@@ -21,7 +20,6 @@ api.register(AttributeResource())
 api.register(MapLayerResource())
 api.register(ExtendedResourceBaseResource())
 urlpatterns = [
-    url(r'^/?$', cartoview_index, name='home'),
     url(r'^layer/(?P<layername>[^/]*)/json/?$',
         layer_config_json, name='layer_json'),
     url(r'^update/extent/(?P<typename>[^/]*)$', update_extent,
