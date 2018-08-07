@@ -70,6 +70,13 @@ def run_coverage(options):
 @task
 @needs(['run_test', ])
 def publish(options):
+    from cartoview.settings import BASE_DIR
+    dist_dir = os.path.join(BASE_DIR, 'dist')
+    build_dir = os.path.join(BASE_DIR, 'build')
+    if os.path.exists(dist_dir):
+        shutil.rmtree(dist_dir)
+    if os.path.exists(build_dir):
+        shutil.rmtree(build_dir)
     sh("pip install twine")
     sh("python setup.py sdist")
     sh("python setup.py bdist_wheel")

@@ -49,18 +49,15 @@
           
           from cartoview import settings as cartoview_settings
           
-          
+
           INSTALLED_APPS = cartoview_settings.INSTALLED_APPS
           ROOT_URLCONF = cartoview_settings.ROOT_URLCONF
 
 
           APPS_DIR = os.path.abspath(os.path.join(PROJECT_ROOT, "apps"))
           PENDING_APPS = os.path.join(PROJECT_ROOT, "pendingOperation.yml")
-
-
-          APPS_MENU = False
-
           
+          # NOTE: please comment the following line of you want to use geonode templates
           TEMPLATES[0]["DIRS"] = CARTOVIEW_TEMPLATE_DIRS
           TEMPLATES[0]["OPTIONS"]['context_processors'] += cartoview_settings.CARTOVIEW_CONTEXT_PROCESSORS
 
