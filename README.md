@@ -79,5 +79,5 @@
 ## How to run tests
 - You Can run tests with the following command 
     ```sh
-      python manage.py test cartoview --with-coverage --cover-package=cartoview
+      paver run_test
     ```
