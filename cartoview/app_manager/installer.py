@@ -38,7 +38,7 @@ reload(pkg_resources)
 current_folder = os.path.abspath(os.path.dirname(__file__))
 temp_dir = os.path.join(current_folder, 'temp')
 
-lock = threading.Lock()
+lock = threading.RLock()
 
 
 class FinalizeInstaller:
@@ -144,14 +144,18 @@ class AppInstaller(object):
         else:
             self.store = AppStore.objects.get(id=store_id)
         self.info = self._request_rest_data("app/?name=", name)['objects'][0]
-        if version is None or version == 'latest' or self.info[
-                "latest_version"]["version"] == version:
+        self.version = version
+        self.get_app_version()
+        self.app_serializer = AppJson(remove_unwanted(self.info))
+
+    def get_app_version(self):
+        if self.version is None or self.version == 'latest' or self.info[
+                "latest_version"]["version"] == self.version:
             self.version = self.info["latest_version"]
         else:
             data = self._request_rest_data("appversion/?app__name=", name,
-                                           "&version=", version)
+                                           "&version=", self.version)
             self.version = data['objects'][0]
-        self.app_serializer = AppJson(remove_unwanted(self.info))
 
     def _request_rest_data(self, *args):
         """
@@ -215,8 +219,11 @@ class AppInstaller(object):
         return app
 
     def _rollback(self):
+        from django.conf import settings
+        apps_file_path = os.path.join(settings.APPS_DIR, "apps.yml")
+        apps_config = AppsConfig(apps_file_path)
         shutil.rmtree(self.app_dir)
-        apps_config = AppConfig()
+        apps_config = AppConfig(apps_file_path)
         app_conf = apps_config.get_by_name(self.name)
         if app_conf:
             del app_conf
