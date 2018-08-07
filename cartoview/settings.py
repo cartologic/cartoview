@@ -17,7 +17,7 @@ CARTOVIEW_DIR = os.path.abspath(os.path.dirname(cartoview.__file__))
 BASE_DIR = os.path.dirname(CARTOVIEW_DIR)
 CARTOVIEW_TEMPLATE_DIRS = [os.path.join(CARTOVIEW_DIR, "templates")
                            ] + TEMPLATES[0]["DIRS"]
-TEMPLATES[0]["DIRS"] = CARTOVIEW_TEMPLATE_DIRS
+# TEMPLATES[0]["DIRS"] = CARTOVIEW_TEMPLATE_DIRS
 CARTOVIEW_STATIC_DIRS = [
     os.path.join(CARTOVIEW_DIR, "static"),
 ]
@@ -74,5 +74,6 @@ if 'geonode.geoserver' in INSTALLED_APPS and "LOCAL_GEOSERVER" in \
 # NOTE:set cartoview_stand_alone environment var if you are not using cartoview_proect_template
 CARTOVIEW_STAND_ALONE = strtobool(os.getenv('CARTOVIEW_STAND_ALONE', 'FALSE'))
 if CARTOVIEW_STAND_ALONE:
+    TEMPLATES[0]["DIRS"] = CARTOVIEW_TEMPLATE_DIRS
     from cartoview.app_manager.settings import load_apps
     INSTALLED_APPS += load_apps()
