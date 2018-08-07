@@ -56,9 +56,9 @@ def cleanup():
 def run_test(options):
     try:
         sh('CARTOVIEW_STAND_ALONE=True python manage.py test cartoview --with-coverage --cover-package=cartoview -v 2')
-    except:
-        pass
-    cleanup()
+    except Exception as e:
+        cleanup()
+        raise e
 
 
 @task
@@ -66,7 +66,9 @@ def run_coverage(options):
     sh('CARTOVIEW_STAND_ALONE=True coverage run --source=cartoview --omit="*/migrations/*, */apps/*,pavement.py" ./manage.py test')
     cleanup()
 
+
 @task
+@needs(['run_test', ])
 def publish(options):
     sh("pip install twine")
     sh("python setup.py sdist")
