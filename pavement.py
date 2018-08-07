@@ -65,3 +65,10 @@ def run_test(options):
 def run_coverage(options):
     sh('CARTOVIEW_STAND_ALONE=True coverage run --source=cartoview --omit="*/migrations/*, */apps/*,pavement.py" ./manage.py test')
     cleanup()
+
+@task
+def publish(options):
+    sh("pip install twine")
+    sh("python setup.py sdist")
+    sh("python setup.py bdist_wheel")
+    sh("twine upload dist/*")
