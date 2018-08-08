@@ -1,23 +1,12 @@
-import fileinput
-import glob
 import os
-import re
 import shutil
 import sys
-import time
 import logging
 import urllib2
 import zipfile
 from io import BytesIO
 
-from paver.easy import (BuildFailure, call_task, cmdopts, info, needs, options,
-                        path, sh, task)
-from setuptools.command import easy_install
-
-try:
-    from paver.path import pushd
-except ImportError:
-    from paver.easy import pushd
+from paver.easy import (needs, sh, task)
 
 assert sys.version_info >= (2, 6), \
     SystemError("GeoNode Build requires python 2.6 or better")
@@ -38,9 +27,9 @@ def setup_apps(options):
         zip_ref.extractall(APPS_DIR)
         zip_ref.close()
     except urllib2.HTTPError as e:
-        print "HTTP Error:", e.code, url
+        print "HTTP Error:", e.code
     except urllib2.URLError as e:
-        print "URL Error:", e.reason, url
+        print "URL Error:", e.reason
 
 
 def cleanup():
@@ -55,7 +44,8 @@ def cleanup():
 @needs(['setup_apps', ])
 def run_test(options):
     try:
-        sh('CARTOVIEW_STAND_ALONE=True python manage.py test cartoview --with-coverage --cover-package=cartoview -v 2')
+        sh('CARTOVIEW_STAND_ALONE=True python manage.py test ' +
+           'cartoview --with-coverage --cover-package=cartoview -v 2')
     except Exception as e:
         cleanup()
         raise e
@@ -63,7 +53,9 @@ def run_test(options):
 
 @task
 def run_coverage(options):
-    sh('CARTOVIEW_STAND_ALONE=True coverage run --source=cartoview --omit="*/migrations/*, */apps/*,pavement.py" ./manage.py test')
+    sh('CARTOVIEW_STAND_ALONE=True coverage run' +
+       ' --source=cartoview --omit="*/migrations/*, */apps/*,pavement.py"' +
+       ' ./manage.py test')
     cleanup()
 
 
