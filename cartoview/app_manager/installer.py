@@ -10,7 +10,6 @@ import sys
 import tempfile
 import threading
 import zipfile
-from builtins import *
 from io import BytesIO
 from sys import executable, exit
 from threading import Timer
@@ -27,6 +26,7 @@ from future import standard_library
 from cartoview.log_handler import get_logger
 
 from .config import App as AppConfig
+from .config import AppsConfig
 from .helpers import change_path_permission, create_direcotry
 from .models import App, AppStore, AppType
 from .settings import create_apps_dir
@@ -153,7 +153,7 @@ class AppInstaller(object):
                 "latest_version"]["version"] == self.version:
             self.version = self.info["latest_version"]
         else:
-            data = self._request_rest_data("appversion/?app__name=", name,
+            data = self._request_rest_data("appversion/?app__name=", self.name,
                                            "&version=", self.version)
             self.version = data['objects'][0]
 
@@ -198,7 +198,7 @@ class AppInstaller(object):
         apps = App.objects.all()
         max_value = apps.aggregate(
             Max('order'))['order__max'] if apps.exists() else 0
-        return max_value+1
+        return max_value + 1
 
     def add_app(self, installer):
         # save app configuration
@@ -239,12 +239,13 @@ class AppInstaller(object):
                     else:
                         raise AppAlreadyInstalledException()
                 except App.DoesNotExist:
-                    # NOTE:the following code handle if app downloaded and for some reason not added to the portal
+                    # NOTE:the following code handle if app downloaded and for
+                    # some reason not added to the portal
                     self._rollback()
             installed_apps = []
             for name, version in list(self.version["dependencies"].items()):
-                # use try except because AppInstaller.__init__ will handle upgrade
-                # if version not match
+                # use try except because AppInstaller.__init__ will handle
+                # upgrade if version not match
                 try:
                     app_installer = AppInstaller(
                         name, self.store.id, version, user=self.user)

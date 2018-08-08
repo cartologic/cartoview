@@ -3,7 +3,6 @@ from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
 
 import importlib
-from builtins import *
 
 from django.conf.urls import include, url
 from django.views.generic import TemplateView
@@ -11,8 +10,7 @@ from future import standard_library
 
 from cartoview.app_manager.rest import (AppInstanceResource, AppResource,
                                         AppStoreResource,
-                                        GeonodeMapLayerResource,
-                                        TagResource)
+                                        GeonodeMapLayerResource, TagResource)
 from cartoview.app_manager.utils import map_layers
 
 from . import views as app_manager_views

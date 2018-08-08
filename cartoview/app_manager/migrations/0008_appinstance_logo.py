@@ -15,6 +15,9 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='appinstance',
             name='logo',
-            field=models.ImageField(null=True, upload_to=cartoview.app_manager.models.get_app_logo_path, blank=True),
+            field=models.ImageField(
+                null=True,
+                upload_to=cartoview.app_manager.models.get_app_logo_path,
+                blank=True),
         ),
     ]

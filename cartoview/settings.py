@@ -71,7 +71,8 @@ if 'geonode.geoserver' in INSTALLED_APPS and "LOCAL_GEOSERVER" in \
     LOCAL_GEOSERVER["source"][
         "url"] = OGC_SERVER['default']['PUBLIC_LOCATION'] + "wms"
 
-# NOTE:set cartoview_stand_alone environment var if you are not using cartoview_proect_template
+# NOTE:set cartoview_stand_alone environment var if you are not using
+# cartoview_proect_template
 CARTOVIEW_STAND_ALONE = strtobool(os.getenv('CARTOVIEW_STAND_ALONE', 'FALSE'))
 if CARTOVIEW_STAND_ALONE:
     TEMPLATES[0]["DIRS"] = CARTOVIEW_TEMPLATE_DIRS

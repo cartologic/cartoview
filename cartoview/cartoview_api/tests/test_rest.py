@@ -14,7 +14,9 @@ class ExtendedResourceBaseResourceTest(ResourceTestCaseMixin, TestCase):
         self.password = 'admin'
 
     def get_credentials(self):
-        return self.create_basic(username=self.username, password=self.password)
+        return self.create_basic(
+            username=self.username,
+            password=self.password)
 
     def test_get_list(self):
         target_url = reverse(

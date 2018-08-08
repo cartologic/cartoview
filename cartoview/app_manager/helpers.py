@@ -1,11 +1,13 @@
 import os
 import stat
-world_permission = 0o777
+
 from cartoview.log_handler import get_logger
+
+world_permission = 0o777
 logger = get_logger(__name__)
 
 
-def create_direcotry(path, mode=0777):
+def create_direcotry(path, mode=0o777):
     # please read the following section
     # https://docs.python.org/2/library/os.html#mkdir-modebits
     if not os.path.exists(path):

@@ -18,7 +18,8 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='app',
             name='category',
-            field=models.ManyToManyField(related_name='apps', to='app_manager.AppType'),
+            field=models.ManyToManyField(related_name='apps',
+                                         to='app_manager.AppType'),
         ),
         migrations.DeleteModel(
             name='Logo',

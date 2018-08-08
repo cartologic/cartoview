@@ -3,7 +3,6 @@ from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
 
 import abc
-from builtins import *
 
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
@@ -58,7 +57,7 @@ def map_layers(request):
                         attribute_type__contains="gml:")
                     dehydrated_obj.data.update(
                         {'layer_type': qs.attribute_type})
-                except:
+                except BaseException:
                     dehydrated_obj.data.update(
                         {'layer_type': ""})
             result['objects'].append(dehydrated_obj)

@@ -19,8 +19,9 @@ class Command(BaseCommand):
                     app.save()
                     print('[%-2s] %-35s  updated' % (index + 1, app.name))
                 else:
-                    print('[%-2s] %-35s  Ignored because No Store Available' % (
-                        index + 1, app.name))
+                    print(
+                        '[%-2s] %-35s  Ignored because No Store Available' %
+                        (index + 1, app.name))
             except Exception as ex:
                 print('[%-2s] %-35s  Failed error message %-25s' % (
                     index + 1, app.name, ex.message))

@@ -6,7 +6,6 @@ import abc
 import importlib
 import json
 import os
-from builtins import *
 
 from django.conf import settings
 from django.conf.urls import url
@@ -528,7 +527,9 @@ class AppViews(with_metaclass(abc.ABCMeta, object)):
         self.set_keywords(keywords, instance_obj)
         # update the instance keywords
         res_json.update(dict(success=True, id=instance_obj.id))
-        return HttpResponse(json.dumps(res_json), content_type="application/json")
+        return HttpResponse(
+            json.dumps(res_json),
+            content_type="application/json")
 
     @abc.abstractmethod
     def new(self, request, template=None, context={}, *args, **kwargs):

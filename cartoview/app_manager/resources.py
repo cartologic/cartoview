@@ -1,8 +1,6 @@
 from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
 
-from builtins import *
-
 from django.conf.urls import url
 from django.db import models
 from django.forms.models import modelform_factory

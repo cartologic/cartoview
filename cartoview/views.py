@@ -8,6 +8,7 @@ from .version import get_current_version
 
 logger = get_logger(__name__)
 
+
 def check_version(request):
     r = requests.get("https://pypi.org/pypi/cartoview/json")
     _version = parse_version(get_current_version())._version

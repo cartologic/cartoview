@@ -37,9 +37,9 @@ def setup_apps(options):
             change_path_permission(APPS_DIR)
         zip_ref.extractall(APPS_DIR)
         zip_ref.close()
-    except urllib2.HTTPError, e:
+    except urllib2.HTTPError as e:
         print "HTTP Error:", e.code, url
-    except urllib2.URLError, e:
+    except urllib2.URLError as e:
         print "URL Error:", e.reason, url
 
 

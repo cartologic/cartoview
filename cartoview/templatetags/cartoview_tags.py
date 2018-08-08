@@ -2,23 +2,23 @@ from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
 
 import json
-from builtins import *
-from django.core.urlresolvers import reverse
+
 from agon_ratings.models import Rating
-from cartoview.app_manager.models import App, AppInstance
 from django import template
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.models import ContentType
+from django.core.urlresolvers import reverse
 from django.db.models import Count
 from django.utils.html import mark_safe
 from future import standard_library
-from django.conf import settings
 from geonode.documents.models import Document
-from geonode.groups.models import Group, GroupProfile
+from geonode.groups.models import GroupProfile
 from geonode.layers.models import Layer
 from geonode.maps.models import Map
-from geonode.people.models import Profile
 from guardian.shortcuts import get_objects_for_user
+
+from cartoview.app_manager.models import App, AppInstance
 
 standard_library.install_aliases()
 register = template.Library()
@@ -137,6 +137,6 @@ def reverse_url(url_name, *args, **kwargs):
     url = None
     try:
         url = reverse(url_name, args=args, kwargs=kwargs)
-    except:
+    except BaseException:
         pass
     return json.dumps(url)

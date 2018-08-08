@@ -1,15 +1,18 @@
 from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
+
 import warnings
-from builtins import *
 
 from django.conf.urls import include, url
 from django.shortcuts import render
 from future import standard_library
 from tastypie.api import Api as TastypieApi
 from tastypie.utils import trailing_slash
-from .serializers import HTMLSerializer
+
 from cartoview.log_handler import get_logger
+
+from .serializers import HTMLSerializer
+
 logger = get_logger(__name__)
 standard_library.install_aliases()
 

@@ -2,7 +2,6 @@ from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
 
 import json
-from builtins import *
 from datetime import datetime
 
 from django.conf import settings as geonode_settings
@@ -91,6 +90,7 @@ class App(models.Model):
     version = models.CharField(max_length=10)
     store = models.ForeignKey(AppStore, null=True)
     order = models.IntegerField(null=True, default=0)
+
     default_config = JSONField(default={})
 
     class meta(object):
@@ -162,7 +162,7 @@ class AppInstance(ResourceBase):
             return str(self.id)
         else:
             return '%s (%s)' % (self.title, self.id)
-    
+
     @property
     def config_obj(self):
         try:

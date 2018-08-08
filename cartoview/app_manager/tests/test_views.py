@@ -1,7 +1,6 @@
 from django.test import TestCase, RequestFactory
 from django.core.urlresolvers import reverse
 from geonode.people.models import Profile
-from cartoview.app_manager.views import manage_apps
 
 
 class CartoviewAppsViewTest(TestCase):
