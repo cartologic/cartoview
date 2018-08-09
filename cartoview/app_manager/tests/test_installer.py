@@ -1,14 +1,9 @@
-import os
-import shutil
 import threading
 
-from django.conf import settings
 from django.test import TestCase
 from geonode.people.models import Profile
 
-from cartoview.app_manager.helpers import create_direcotry
 from cartoview.app_manager.installer import AppInstaller
-from cartoview.app_manager.models import AppStore
 
 lock = threading.RLock()
 

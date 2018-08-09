@@ -14,6 +14,9 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='app',
             name='tags',
-            field=models.ManyToManyField(to='app_manager.AppTag', null=True, blank=True),
+            field=models.ManyToManyField(
+                to='app_manager.AppTag',
+                null=True,
+                blank=True),
         ),
     ]

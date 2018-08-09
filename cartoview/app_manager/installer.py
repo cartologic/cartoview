@@ -10,7 +10,6 @@ import sys
 import tempfile
 import threading
 import zipfile
-from builtins import *
 from io import BytesIO
 from sys import executable, exit
 from threading import Timer
@@ -26,7 +25,7 @@ from future import standard_library
 
 from cartoview.log_handler import get_logger
 
-from .config import App as AppConfig
+from .config import (App as AppConfig, AppsConfig)
 from .helpers import change_path_permission, create_direcotry
 from .models import App, AppStore, AppType
 from .settings import create_apps_dir
@@ -153,7 +152,7 @@ class AppInstaller(object):
                 "latest_version"]["version"] == self.version:
             self.version = self.info["latest_version"]
         else:
-            data = self._request_rest_data("appversion/?app__name=", name,
+            data = self._request_rest_data("appversion/?app__name=", self.name,
                                            "&version=", self.version)
             self.version = data['objects'][0]
 
@@ -198,9 +197,9 @@ class AppInstaller(object):
         apps = App.objects.all()
         max_value = apps.aggregate(
             Max('order'))['order__max'] if apps.exists() else 0
-        return max_value+1
+        return max_value + 1
 
-    def add_app(self, installer):
+    def add_app(self):
         # save app configuration
         app, created = App.objects.get_or_create(name=self.name)
         if created:
@@ -223,7 +222,6 @@ class AppInstaller(object):
         apps_file_path = os.path.join(settings.APPS_DIR, "apps.yml")
         apps_config = AppsConfig(apps_file_path)
         shutil.rmtree(self.app_dir)
-        apps_config = AppConfig(apps_file_path)
         app_conf = apps_config.get_by_name(self.name)
         if app_conf:
             del app_conf
@@ -239,12 +237,13 @@ class AppInstaller(object):
                     else:
                         raise AppAlreadyInstalledException()
                 except App.DoesNotExist:
-                    # NOTE:the following code handle if app downloaded and for some reason not added to the portal
+                    # NOTE:the following code handle if app downloaded and for
+                    # some reason not added to the portal
                     self._rollback()
             installed_apps = []
             for name, version in list(self.version["dependencies"].items()):
-                # use try except because AppInstaller.__init__ will handle upgrade
-                # if version not match
+                # use try except because AppInstaller.__init__ will handle
+                # upgrade if version not match
                 try:
                     app_installer = AppInstaller(
                         name, self.store.id, version, user=self.user)
@@ -259,13 +258,8 @@ class AppInstaller(object):
     @transaction.atomic
     def check_then_finlize(self, restart, installed_apps):
         try:
-            installer = importlib.import_module('%s.installer' % self.name)
-            new_app = self.add_app(installer)
+            new_app = self.add_app()
             installed_apps.append(new_app)
-            try:
-                installer.install()
-            except Exception as e:
-                logger.error(e.message)
             FINALIZE_SETUP.apps_to_finlize.append(self.name)
             if restart:
                 FINALIZE_SETUP(self.name)

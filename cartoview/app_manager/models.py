@@ -2,7 +2,6 @@ from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
 
 import json
-from builtins import *
 from datetime import datetime
 
 from django.conf import settings as geonode_settings
@@ -10,6 +9,7 @@ from django.contrib.gis.db import models
 from django.core.urlresolvers import reverse
 from django.db.models import signals
 from django.template.defaultfilters import slugify
+from django.utils.encoding import python_2_unicode_compatible
 from future import standard_library
 # Create your models here.
 from geonode.base.models import ResourceBase, resourcebase_post_save
@@ -32,6 +32,7 @@ class AppTypeManager(models.Manager):
         return super(AppTypeManager, self).get_queryset().distinct('apps')
 
 
+@python_2_unicode_compatible
 class AppType(models.Model):
     name = models.CharField(max_length=200, unique=True)
     objects = AppTypeManager()
@@ -39,10 +40,8 @@ class AppType(models.Model):
     def __str__(self):
         return self.name
 
-    def __unicode__(self):
-        return self.name
 
-
+@python_2_unicode_compatible
 class AppStore(models.Model):
     """
     to store links for cartoview appstores
@@ -54,10 +53,8 @@ class AppStore(models.Model):
     def __str__(self):
         return self.name
 
-    def __unicode__(self):
-        return self.name
 
-
+@python_2_unicode_compatible
 class App(models.Model):
     def only_filename(instance, filename):
         return filename
@@ -91,15 +88,13 @@ class App(models.Model):
     version = models.CharField(max_length=10)
     store = models.ForeignKey(AppStore, null=True)
     order = models.IntegerField(null=True, default=0)
+
     default_config = JSONField(default={})
 
     class meta(object):
         ordering = ['order']
 
     def __str__(self):
-        return self.title
-
-    def __unicode__(self):
         return self.title
 
     @property
@@ -162,7 +157,7 @@ class AppInstance(ResourceBase):
             return str(self.id)
         else:
             return '%s (%s)' % (self.title, self.id)
-    
+
     @property
     def config_obj(self):
         try:

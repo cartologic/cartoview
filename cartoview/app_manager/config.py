@@ -1,17 +1,19 @@
 # -*- coding: utf-8 -*-
 from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
+
+import os
+
+import yaml
+from future import standard_library
+from future.utils import native
+
 # TODO: find a cross platform function (fcntl is not supported by windows)
 try:
     import fcntl
 except Exception:
     pass
-import os
-from builtins import *
 
-import yaml
-from future import standard_library
-from future.utils import native
 
 standard_library.install_aliases()
 
@@ -93,6 +95,7 @@ class Collection(object):
                 fcntl.flock(f, fcntl.LOCK_UN)
             else:
                 self._save(f)
+
 
 class App(Item):
 

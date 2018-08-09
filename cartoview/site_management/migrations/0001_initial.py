@@ -15,9 +15,19 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='SiteLogo',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('logo', models.ImageField(upload_to=cartoview.site_management.models.get_site_logo_path)),
-                ('site', models.OneToOneField(to='sites.Site')),
+                ('id',
+                 models.AutoField(
+                     verbose_name='ID',
+                     serialize=False,
+                     auto_created=True,
+                     primary_key=True)),
+                ('logo',
+                 models.ImageField(
+                     upload_to=cartoview.site_management.
+                     models.get_site_logo_path)),
+                ('site',
+                 models.OneToOneField(
+                     to='sites.Site')),
             ],
         ),
     ]

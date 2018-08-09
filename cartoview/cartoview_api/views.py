@@ -9,7 +9,7 @@ from cartoview.log_handler import get_logger
 
 try:
     import simplejson as json
-except:
+except BaseException:
     import json
 logger = get_logger(__name__)
 
@@ -36,7 +36,7 @@ def layer_config_json(request, layername):
     viewer = json.loads(viewer)
     try:
         layer.set_bounds_from_bbox(layer.bbox[0:4], layer.srid)
-    except:
+    except BaseException:
         layer.set_bounds_from_bbox(layer.bbox[0:4])
     center = [layer.center_x, layer.center_y]
     zoom = layer.zoom
@@ -77,7 +77,7 @@ def update_extent(request, typename):
     target_url = "{}rest/workspaces/{}/datastores/{}/featuretypes/{}"\
         .format(
             gs_url, workspace, store, lyr_name)
-    req = requests.put(target_url+"?recalculate=nativebbox,latlonbbox",
+    req = requests.put(target_url + "?recalculate=nativebbox,latlonbbox",
                        json=feature_type,
                        headers={'Accept': 'application/json'},
                        auth=HTTPBasicAuth(gs_user, gs_password))
@@ -89,7 +89,7 @@ def update_extent(request, typename):
         # srid = native_bbox["crs"]
         try:
             lyr.set_bounds_from_bbox(bbox, lyr.srid)
-        except:
+        except BaseException:
             lyr.set_bounds_from_bbox(bbox)
         lyr.save()
     return HttpResponse(json.dumps({"msg": "Success"}),

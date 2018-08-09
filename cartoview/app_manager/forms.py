@@ -2,15 +2,12 @@
 from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
 
-from builtins import *
-
 from django.forms import FileField, ModelForm
 from django.utils.translation import ugettext_lazy as _
 # TODO: Review this file. Legacy??!
 from future import standard_library
-from modeltranslation.forms import TranslationModelForm
-
 from geonode.base.forms import ResourceBaseForm
+from modeltranslation.forms import TranslationModelForm
 
 from .models import App, AppInstance
 

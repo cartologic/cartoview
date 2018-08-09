@@ -41,7 +41,8 @@ class LayerFilterExtensionResource(LayerResource):
         if ('permission' in filters):
             permission = filters['permission']
             orm_filters.update({'permission': permission})
-        # NOTE: We change this filter name because it overrides geonode type filter(vector,raster)
+        # NOTE: We change this filter name because it overrides
+        # geonode type filter(vector,raster)
         if 'geom_type' in filters:
             layer_type = filters['geom_type']
             orm_filters.update({'geom_type': layer_type})
@@ -50,7 +51,8 @@ class LayerFilterExtensionResource(LayerResource):
 
     def apply_filters(self, request, applicable_filters):
         permission = applicable_filters.pop('permission', None)
-        # NOTE: We change this filter name from type to geom_type because it overrides geonode type filter(vector,raster)
+        # NOTE: We change this filter name from type to geom_type because it
+        # overrides geonode type filter(vector,raster)
         layer_geom_type = applicable_filters.pop('geom_type', None)
         filtered = super(LayerFilterExtensionResource, self).apply_filters(
             request, applicable_filters)
@@ -83,6 +85,7 @@ class AppResource(FileUploadResource):
     order = fields.IntegerField()
     active = fields.BooleanField()
     categories = fields.ListField()
+
     default_config = fields.DictField(default={})
     app_instance_count = fields.IntegerField()
 

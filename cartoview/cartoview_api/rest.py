@@ -12,6 +12,7 @@ from tastypie import fields
 from tastypie.authentication import MultiAuthentication, SessionAuthentication
 from tastypie.constants import ALL, ALL_WITH_RELATIONS
 from tastypie.resources import ModelResource
+
 from cartoview.app_manager.models import App, AppInstance
 from cartoview.app_manager.rest import LayerFilterExtensionResource
 
@@ -54,7 +55,8 @@ class AllResourcesResource(ModelResource):
         resource_name = 'all_resources'
         queryset = ResourceBase.objects.distinct()
         fields = ['id', 'title', 'abstract',
-                  'type', 'featured', 'owner__username', 'app', 'owner', 'urls', 'thumbnail_url']
+                  'type', 'featured', 'owner__username', 'app', 'owner',
+                  'urls', 'thumbnail_url']
         filtering = {
             'id': ALL,
             'title': ALL,
@@ -188,8 +190,12 @@ class MapLayerResource(ModelResource):
         filtered = super(MapLayerResource, self).apply_filters(
             request, applicable_filters)
         if layer_type:
-            filtered = [lyr.id for lyr in filtered if self.get_layer(lyr.name)and
-                        Attribute.objects.filter(attribute_type__contains="gml:", attribute_type__icontains=layer_type.lower(), layer=self.get_layer(lyr.name)).count() > 0]
+            filtered = [lyr.id for lyr in filtered
+                        if self.get_layer(lyr.name)and
+                        Attribute.objects.filter(
+                            attribute_type__contains="gml:",
+                            attribute_type__icontains=layer_type.lower(),
+                            layer=self.get_layer(lyr.name)).count() > 0]
             filtered = MapLayer.objects.filter(
                 id__in=filtered)
         return filtered
@@ -207,7 +213,7 @@ class MapLayerResource(ModelResource):
                 qs = layer.attribute_set.get(
                     attribute_type__contains="gml:")
                 return qs.attribute_type
-            except:
+            except BaseException:
                 pass
         return ""
 
