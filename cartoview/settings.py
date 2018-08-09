@@ -31,10 +31,6 @@ CARTOVIEW_CONTEXT_PROCESSORS = (
     'cartoview.app_manager.context_processors.site_logo'
 )
 TEMPLATES[0]["OPTIONS"]['context_processors'] += CARTOVIEW_CONTEXT_PROCESSORS
-# bower static files
-STATICFILES_DIRS += [
-    os.path.join(CARTOVIEW_DIR, "static"),
-]
 # django Media Section
 # uncomment the following if you want your files out of geonode folder
 MEDIA_ROOT = os.path.join(BASE_DIR, "uploaded")
