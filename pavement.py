@@ -125,7 +125,10 @@ def cleanup():
 @needs(['setup_apps', ])
 def run_test(options):
     try:
-        sh('CARTOVIEW_STAND_ALONE=True python manage.py test cartoview --with-coverage --cover-package=cartoview -v 2')
+        sh('CARTOVIEW_STAND_ALONE="True" coverage run' +
+            ' --source=cartoview --omit="*/migrations/*,*/apps/*"' +
+            ' ./manage.py test cartoview -v 3 ' +
+            '--settings cartoview.settings')
     except Exception as e:
         cleanup()
         raise e
