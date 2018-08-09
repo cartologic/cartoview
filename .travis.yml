@@ -58,7 +58,7 @@ before_script:
 
 script:
   - flake8
-  - coverage run --source=cartoview --omit="*/migrations/*,*/apps/*" ./manage.py test cartoview -v 3
+  - paver run_test
 
 after_success:
   - coveralls
