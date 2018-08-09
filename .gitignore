@@ -241,3 +241,5 @@ dist/
 vendor
 static/
 uploaded
+*.db
+.coverage*

@@ -33,7 +33,6 @@ def load_apps():
     create_apps_dir()
     if settings.APPS_DIR not in sys.path:
         sys.path.append(settings.APPS_DIR)
-
     apps_file_path = os.path.join(settings.APPS_DIR, "apps.yml")
     apps_config = AppsConfig(apps_file_path)
     CARTOVIEW_APPS = ()

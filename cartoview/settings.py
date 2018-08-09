@@ -62,7 +62,8 @@ try:
 except Exception as e:
     pass
 if 'test' in sys.argv:
-    DATABASES = {'default': {'ENGINE': 'django.db.backends.sqlite3', }}
+    DATABASES = {'default': {'ENGINE': 'django.db.backends.sqlite3',
+                             'NAME': os.path.join(BASE_DIR, 'test.db')}}
 if 'datastore' in DATABASES:
     OGC_SERVER['default']['DATASTORE'] = 'datastore'
 
@@ -74,7 +75,7 @@ if 'geonode.geoserver' in INSTALLED_APPS and "LOCAL_GEOSERVER" in \
 # NOTE:set cartoview_stand_alone environment var if you are not using
 # cartoview_proect_template
 CARTOVIEW_STAND_ALONE = strtobool(os.getenv('CARTOVIEW_STAND_ALONE', 'FALSE'))
-if CARTOVIEW_STAND_ALONE:
+if CARTOVIEW_STAND_ALONE or 'test' in sys.argv:
     TEMPLATES[0]["DIRS"] = CARTOVIEW_TEMPLATE_DIRS
     from cartoview.app_manager.settings import load_apps
     INSTALLED_APPS += load_apps()
