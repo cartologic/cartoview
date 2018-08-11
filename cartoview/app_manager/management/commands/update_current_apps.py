@@ -3,13 +3,13 @@ from cartoview.app_manager.installer import AppJson, remove_unwanted
 from cartoview.app_manager.models import App, AppStore
 from django.core.management.base import BaseCommand
 
-store = AppStore.objects.get(is_default=True)
-
 
 class Command(BaseCommand):
     help = 'Update existing apps'
 
     def handle(self, *args, **options):
+        # stores = AppStore.objects.filter(is_default=True)
+        # store = stores.first()
         for index, app in enumerate(App.objects.all()):
             try:
                 if app.store:
