@@ -43,7 +43,7 @@
 
 ## How To Add Cartoview To Existing Geonode:
   - install cartoview with pip:
-      - `pip install cartoview==1.8.2rc4 --no-cache-dir`
+      - `pip install cartoview==1.8.2 --no-cache-dir`
       - open geonode `settings.py` and add the following lines at the end of the file:
           ```python
           
