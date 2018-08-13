@@ -58,7 +58,7 @@
           PENDING_APPS = os.path.join(PROJECT_ROOT, "pendingOperation.yml")
           
           # NOTE: please comment the following line of you want to use geonode templates
-          TEMPLATES[0]["DIRS"] = CARTOVIEW_TEMPLATE_DIRS
+          TEMPLATES[0]["DIRS"] = CARTOVIEW_TEMPLATE_DIRS + TEMPLATES[0]["DIRS"]
           TEMPLATES[0]["OPTIONS"]['context_processors'] += cartoview_settings.CARTOVIEW_CONTEXT_PROCESSORS
 
 
