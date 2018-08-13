@@ -1,6 +1,6 @@
 [![GitHub stars](https://img.shields.io/github/stars/cartologic/cartoview.svg)](https://github.com/cartologic/cartoview/stargazers)
 [![GitHub forks](https://img.shields.io/github/forks/cartologic/cartoview.svg)](https://github.com/cartologic/cartoview/network)
-[![Coverage Status](https://coveralls.io/repos/github/cartologic/cartoview/badge.svg?branch=master&service=github)](https://coveralls.io/github/cartologic/cartoview?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/cartologic/cartoview/badge.svg?branch=master&service=github)](https://coveralls.io/github/cartologic/cartoview?branch=master&service=github)
 [![Build Status](https://travis-ci.org/cartologic/cartoview.svg?branch=master)](https://travis-ci.org/cartologic/cartoview)
 [![GitHub license](https://img.shields.io/github/license/cartologic/cartoview.svg)](https://github.com/cartologic/cartoview/blob/master/LICENSE)
 [![GitHub issues](https://img.shields.io/github/issues/cartologic/cartoview.svg)](https://github.com/cartologic/cartoview/issues)

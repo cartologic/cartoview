@@ -61,7 +61,9 @@ class LayerFilterExtensionResource(LayerResource):
                 attribute_set__in=Attribute.objects.filter(
                     attribute_type__icontains=layer_geom_type))
         if permission is not None:
-            filtered = get_objects_for_user(request.user, permission, filtered)
+            filtered = get_objects_for_user(
+                request.user, permission, klass=filtered)
+
         return filtered
 
     class Meta(LayerResource.Meta):
