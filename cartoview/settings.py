@@ -1,13 +1,15 @@
 # -*- coding: utf-8 -*-
+import ast
 import os
+import re
+import sys
 from distutils.util import strtobool
 
-from geonode.settings import *
-import ast
-import re
 import dj_database_url
+from geonode.settings import *
+
 import cartoview
-import sys
+
 INSTALLED_APPS += ("cartoview",
                    "cartoview.cartoview_api.apps.CartoviewAPIConfig",
                    "cartoview.app_manager", "cartoview.site_management",
@@ -15,8 +17,7 @@ INSTALLED_APPS += ("cartoview",
 ROOT_URLCONF = "cartoview.urls"
 CARTOVIEW_DIR = os.path.abspath(os.path.dirname(cartoview.__file__))
 BASE_DIR = os.path.dirname(CARTOVIEW_DIR)
-CARTOVIEW_TEMPLATE_DIRS = [os.path.join(CARTOVIEW_DIR, "templates")
-                           ] + TEMPLATES[0]["DIRS"]
+CARTOVIEW_TEMPLATE_DIRS = [os.path.join(CARTOVIEW_DIR, "templates"), ]
 # TEMPLATES[0]["DIRS"] = CARTOVIEW_TEMPLATE_DIRS
 CARTOVIEW_STATIC_DIRS = [
     os.path.join(CARTOVIEW_DIR, "static"),
@@ -72,6 +73,6 @@ if 'geonode.geoserver' in INSTALLED_APPS and "LOCAL_GEOSERVER" in \
 # cartoview_proect_template
 CARTOVIEW_STAND_ALONE = strtobool(os.getenv('CARTOVIEW_STAND_ALONE', 'FALSE'))
 if CARTOVIEW_STAND_ALONE or 'test' in sys.argv:
-    TEMPLATES[0]["DIRS"] = CARTOVIEW_TEMPLATE_DIRS
+    TEMPLATES[0]["DIRS"] = CARTOVIEW_TEMPLATE_DIRS + TEMPLATES[0]["DIRS"]
     from cartoview.app_manager.settings import load_apps
     INSTALLED_APPS += load_apps()
