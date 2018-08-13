@@ -22,17 +22,6 @@ rest_api.register(AppInstanceResource())
 rest_api.register(GeonodeMapLayerResource())
 rest_api.register(TagResource())
 
-# from django.conf import settings
-#
-# for app_name in settings.CARTOVIEW_APPS:
-#     # print app_name
-#     try:
-#         # ensure that the folder is python module
-#         app_module = importlib.import_module(app_name + ".rest")
-#     except:
-#         # TODO: log the error
-#         pass
-
 urlpatterns = [
     url(r'^$', app_manager_views.index, name='app_manager_base_url'),
     url(r'^manage/$', app_manager_views.manage_apps, name='manage_apps'),
