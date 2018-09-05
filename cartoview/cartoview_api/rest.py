@@ -225,13 +225,13 @@ class MapLayerResource(ModelResource):
 
     class Meta:
         resource_name = "maplayers"
-        queryset = MapLayer.objects.all().distinct()
+        queryset = MapLayer.objects.distinct()
         filtering = {
             'id': ALL,
             'name': ALL,
             'map': ALL_WITH_RELATIONS,
-            'fixed': ALL
+            'fixed': ALL,
+            'local': ALL
         }
-        authorization = GeoNodeAuthorization()
         authentication = MultiAuthentication(
             SessionAuthentication(), GeonodeApiKeyAuthentication())
