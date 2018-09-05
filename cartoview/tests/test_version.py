@@ -52,7 +52,7 @@ class CartoviewTest(LiveServerTestCase):
 
     def test_get_current_version(self):
         v = get_current_version()
-        self.assertEqual(v, '1.8.2')
+        self.assertEqual(v, '1.8.3')
 
     @override_settings(CELERY_EAGER_PROPAGATES_EXCEPTIONS=True,
                        CELERY_ALWAYS_EAGER=True,
