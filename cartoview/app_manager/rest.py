@@ -33,11 +33,11 @@ standard_library.install_aliases()
 
 
 class LayerFilterExtensionResource(LayerResource):
-    def build_filters(self, filters=None):
+    def build_filters(self, filters=None,**kwargs):
         if filters is None:
             filters = {}
         orm_filters = super(LayerFilterExtensionResource,
-                            self).build_filters(filters)
+                            self).build_filters(filters, **kwargs)
         if ('permission' in filters):
             permission = filters['permission']
             orm_filters.update({'permission': permission})
