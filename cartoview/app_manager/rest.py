@@ -33,7 +33,7 @@ standard_library.install_aliases()
 
 
 class LayerFilterExtensionResource(LayerResource):
-    def build_filters(self, filters=None,**kwargs):
+    def build_filters(self, filters=None, **kwargs):
         if filters is None:
             filters = {}
         orm_filters = super(LayerFilterExtensionResource,

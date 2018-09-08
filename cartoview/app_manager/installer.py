@@ -255,19 +255,13 @@ class AppInstaller(object):
             self.check_then_finlize(restart, installed_apps)
             return installed_apps
 
-    @transaction.atomic
     def check_then_finlize(self, restart, installed_apps):
-        try:
+        with transaction.atomic():
             new_app = self.add_app()
             installed_apps.append(new_app)
             FINALIZE_SETUP.apps_to_finlize.append(self.name)
-            if restart:
-                FINALIZE_SETUP(self.name)
-        except ImportError as ex:
-            logger.error(ex.message)
-            if os.path.exists(self.app_dir):
-                self._rollback()
-                raise ex
+        if restart:
+            FINALIZE_SETUP(self.name)
 
     def completely_remove(self):
         app = App.objects.get(name=self.name)
