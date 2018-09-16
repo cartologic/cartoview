@@ -10,14 +10,18 @@ from geonode.settings import *
 
 import cartoview
 
-INSTALLED_APPS += ("cartoview",
-                   "cartoview.cartoview_api.apps.CartoviewAPIConfig",
-                   "cartoview.app_manager", "cartoview.site_management",
-                   "cartoview.apps_handler.apps.AppsHandlerConfig")
+CARTOVIEW_INSTALLED_APPS = ("cartoview",
+                            "cartoview.cartoview_api.apps.CartoviewAPIConfig",
+                            "cartoview.app_manager",
+                            "cartoview.site_management",
+                            "cartoview.apps_handler.apps.AppsHandlerConfig")
+INSTALLED_APPS += CARTOVIEW_INSTALLED_APPS
 ROOT_URLCONF = "cartoview.urls"
 CARTOVIEW_DIR = os.path.abspath(os.path.dirname(cartoview.__file__))
 BASE_DIR = os.path.dirname(CARTOVIEW_DIR)
-CARTOVIEW_TEMPLATE_DIRS = [os.path.join(CARTOVIEW_DIR, "templates"), ]
+CARTOVIEW_TEMPLATE_DIRS = [
+    os.path.join(CARTOVIEW_DIR, "templates"),
+]
 # TEMPLATES[0]["DIRS"] = CARTOVIEW_TEMPLATE_DIRS
 CARTOVIEW_STATIC_DIRS = [
     os.path.join(CARTOVIEW_DIR, "static"),
@@ -29,8 +33,7 @@ APPS_MENU = False
 DOCKER = os.getenv('DOCKER', False)
 CARTOVIEW_CONTEXT_PROCESSORS = (
     'cartoview.app_manager.context_processors.cartoview_processor',
-    'cartoview.app_manager.context_processors.site_logo'
-)
+    'cartoview.app_manager.context_processors.site_logo')
 TEMPLATES[0]["OPTIONS"]['context_processors'] += CARTOVIEW_CONTEXT_PROCESSORS
 # django Media Section
 # uncomment the following if you want your files out of geonode folder
@@ -59,8 +62,12 @@ try:
 except Exception as e:
     pass
 if 'test' in sys.argv:
-    DATABASES = {'default': {'ENGINE': 'django.db.backends.sqlite3',
-                             'NAME': os.path.join(BASE_DIR, 'test.db')}}
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'test.db')
+        }
+    }
 if 'datastore' in DATABASES:
     OGC_SERVER['default']['DATASTORE'] = 'datastore'
 

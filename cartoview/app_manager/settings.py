@@ -28,7 +28,6 @@ def create_apps_dir(APPS_DIR):
 
 
 def load_apps(APPS_DIR):
-    from django.conf import settings
     create_apps_dir(APPS_DIR)
     if APPS_DIR not in sys.path:
         sys.path.append(APPS_DIR)

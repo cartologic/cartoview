@@ -56,9 +56,7 @@ class FinalizeInstaller:
             working_dir = os.path.dirname(install_app_batch)
             # with open(log_file, 'a') as log:
             proc = subprocess.Popen(
-                install_app_batch,
-                shell=True,
-                cwd=working_dir)
+                install_app_batch, shell=True, cwd=working_dir)
             logger.warning(proc.stdout)
             logger.error(proc.stderr)
 
@@ -78,6 +76,7 @@ class FinalizeInstaller:
                 self.docker_restart()
             else:
                 self.restart_server()
+
         if 'test' not in sys.argv:
             timer = Timer(0.1, _finalize_setup(app_name))
             timer.start()
@@ -90,8 +89,10 @@ FINALIZE_SETUP = FinalizeInstaller()
 
 
 def remove_unwanted(dictionary):
-    app_fields = [field.name for field in
-                  sorted(App._meta.fields + App._meta.many_to_many)]
+    app_fields = [
+        field.name
+        for field in sorted(App._meta.fields + App._meta.many_to_many)
+    ]
     app_fields.append("type")
     return {k: v for k, v in dictionary.iteritems() if k in app_fields}
 
@@ -112,14 +113,12 @@ class AppJson(object):
         app.author_website = obj_property('author_website')
         app.home_page = obj_property('demo_url')
         for category in self.type:
-            category, created = AppType.objects.get_or_create(
-                name=category)
+            category, created = AppType.objects.get_or_create(name=category)
             app.category.add(category)
         app.status = obj_property('status')
         app.tags.clear()
         app.tags.add(*obj_property('tags'))
-        app.license = self.license.get(
-            'name', None) if self.license else None
+        app.license = self.license.get('name', None) if self.license else None
         app.single_instance = obj_property('single_instance')
         return app
 
@@ -132,9 +131,8 @@ class AppAlreadyInstalledException(BaseException):
 
 
 class AppInstaller(object):
-
     def __init__(self, name, store_id=None, version=None, user=None):
-        create_apps_dir()
+        create_apps_dir(settings.APPS_DIR)
         self.user = user
         self.app_dir = os.path.join(settings.APPS_DIR, name)
         self.name = name
@@ -160,8 +158,8 @@ class AppInstaller(object):
         """
         get app information form app store rest url
         """
-        q = requests.get(self.store.url + ''.join(
-            [str(item) for item in args]))
+        q = requests.get(self.store.url + ''.join([str(item)
+                                                   for item in args]))
         return q.json()
 
     def extract_move_app(self, zipped_app):
@@ -180,8 +178,7 @@ class AppInstaller(object):
     def _download_app(self):
         # TODO: improve download apps (server-side)
         response = requests.get(self.version["download_link"], stream=True)
-        zip_ref = zipfile.ZipFile(
-            BytesIO(response.content))
+        zip_ref = zipfile.ZipFile(BytesIO(response.content))
         try:
             create_direcotry(temp_dir)
             if not os.access(temp_dir, os.W_OK):
@@ -272,8 +269,8 @@ class AppInstaller(object):
 
     def execute_command(self, command):
         manage_py = os.path.join(settings.BASE_DIR, 'manage.py')
-        process = subprocess.Popen("{} {} {}".format(
-            executable, manage_py, command), shell=True)
+        process = subprocess.Popen(
+            "{} {} {}".format(executable, manage_py, command), shell=True)
         out, err = process.communicate()
         logger.info(out)
         logger.error(err)

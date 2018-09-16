@@ -49,7 +49,7 @@
           
           from cartoview import settings as cartoview_settings
 
-          INSTALLED_APPS = cartoview_settings.INSTALLED_APPS
+          INSTALLED_APPS += cartoview_settings.CARTOVIEW_INSTALLED_APPS
           ROOT_URLCONF = cartoview_settings.ROOT_URLCONF
 
           APPS_DIR = os.path.abspath(os.path.join(PROJECT_ROOT, "apps"))
