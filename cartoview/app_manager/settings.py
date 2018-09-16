@@ -20,20 +20,19 @@ standard_library.install_aliases()
 # BASE_DIR must be defined in project.settings
 
 
-def create_apps_dir():
-    from django.conf import settings
-    if not os.path.exists(settings.APPS_DIR):
-        create_direcotry(settings.APPS_DIR)
-        if not os.access(settings.APPS_DIR, os.W_OK):
-            change_path_permission(settings.APPS_DIR)
+def create_apps_dir(APPS_DIR):
+    if not os.path.exists(APPS_DIR):
+        create_direcotry(APPS_DIR)
+        if not os.access(APPS_DIR, os.W_OK):
+            change_path_permission(APPS_DIR)
 
 
-def load_apps():
+def load_apps(APPS_DIR):
     from django.conf import settings
-    create_apps_dir()
-    if settings.APPS_DIR not in sys.path:
-        sys.path.append(settings.APPS_DIR)
-    apps_file_path = os.path.join(settings.APPS_DIR, "apps.yml")
+    create_apps_dir(APPS_DIR)
+    if APPS_DIR not in sys.path:
+        sys.path.append(APPS_DIR)
+    apps_file_path = os.path.join(APPS_DIR, "apps.yml")
     apps_config = AppsConfig(apps_file_path)
     CARTOVIEW_APPS = ()
     for app_config in apps_config:
@@ -51,7 +50,7 @@ def load_apps():
                 if app_config.name not in CARTOVIEW_APPS:
                     # app_config.name.__str__() because Django don't like
                     # unicode_literals
-                    CARTOVIEW_APPS += (app_config.name.__str__(),)
+                    CARTOVIEW_APPS += (app_config.name.__str__(), )
             except Exception as e:
                 print(e.message)
                 logger.error(e.message)

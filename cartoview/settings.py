@@ -75,4 +75,4 @@ CARTOVIEW_STAND_ALONE = strtobool(os.getenv('CARTOVIEW_STAND_ALONE', 'FALSE'))
 if CARTOVIEW_STAND_ALONE or 'test' in sys.argv:
     TEMPLATES[0]["DIRS"] = CARTOVIEW_TEMPLATE_DIRS + TEMPLATES[0]["DIRS"]
     from cartoview.app_manager.settings import load_apps
-    INSTALLED_APPS += load_apps()
+    INSTALLED_APPS += load_apps(APPS_DIR)
