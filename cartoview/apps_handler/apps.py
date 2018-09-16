@@ -8,7 +8,6 @@ from django.apps import AppConfig
 from django.conf import settings
 from django.core.management import call_command
 from django.core.management.base import CommandError
-
 from cartoview.log_handler import get_logger
 
 pending_yaml = settings.PENDING_APPS
@@ -35,10 +34,12 @@ class AppsHandlerConfig(AppConfig):
                 pending_apps = yaml.load(f) or []
                 for app in pending_apps:
                     try:
-                        call_command("collectstatic", interactive=False,
-                                     ignore=['node_modules', '.git'])
-                        call_command("migrate", app,
-                                     interactive=False)
+                        if not settings.DEBUG:
+                            call_command(
+                                "collectstatic",
+                                interactive=False,
+                                ignore=['node_modules', '.git'])
+                        call_command("migrate", app, interactive=False)
                     except CommandError as e:
                         error = e.message
                         logger.error(error)
