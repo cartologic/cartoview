@@ -41,18 +41,33 @@
 		if ($location.search().hasOwnProperty('title__icontains')) {
 			params['title__icontains'] = $location.search()['title__icontains'];
 		}
-		$http.get(CATEGORIES_ENDPOINT, {
-			params: params
-		}).success(function (data) {
-			if ($location.search().hasOwnProperty('category__identifier__in')) {
-				data.objects = module.set_initial_filters_from_query(data.objects,
-					$location.search()['category__identifier__in'], 'identifier');
-			}
-			$rootScope.categories = data.objects;
-			if (HAYSTACK_FACET_COUNTS && $rootScope.query_data) {
-				module.haystack_facets($http, $rootScope, $location);
-			}
-		});
+		if (compareVersions(angular.version.full, '1.5.0')) {
+			$http.get(CATEGORIES_ENDPOINT, {
+				params: params
+			}).then(function (data) {
+				if ($location.search().hasOwnProperty('category__identifier__in')) {
+					data.objects = module.set_initial_filters_from_query(data.data.objects,
+						$location.search()['category__identifier__in'], 'identifier');
+				}
+				$rootScope.categories = data.objects;
+				if (HAYSTACK_FACET_COUNTS && $rootScope.query_data) {
+					module.haystack_facets($http, $rootScope, $location);
+				}
+			});
+		} else {
+			$http.get(CATEGORIES_ENDPOINT, {
+				params: params
+			}).success(function (data) {
+				if ($location.search().hasOwnProperty('category__identifier__in')) {
+					data.objects = module.set_initial_filters_from_query(data.objects,
+						$location.search()['category__identifier__in'], 'identifier');
+				}
+				$rootScope.categories = data.objects;
+				if (HAYSTACK_FACET_COUNTS && $rootScope.query_data) {
+					module.haystack_facets($http, $rootScope, $location);
+				}
+			});
+		}
 	}
 
 	module.load_keywords = function ($http, $rootScope, $location) {
@@ -62,18 +77,34 @@
 		if ($location.search().hasOwnProperty('title__icontains')) {
 			params['title__icontains'] = $location.search()['title__icontains'];
 		}
-		$http.get(KEYWORDS_ENDPOINT, {
-			params: params
-		}).success(function (data) {
-			if ($location.search().hasOwnProperty('keywords__slug__in')) {
-				data.objects = module.set_initial_filters_from_query(data.objects,
-					$location.search()['keywords__slug__in'], 'slug');
-			}
-			$rootScope.keywords = data.objects;
-			if (HAYSTACK_FACET_COUNTS && $rootScope.query_data) {
-				module.haystack_facets($http, $rootScope, $location);
-			}
-		});
+		if (compareVersions(angular.version.full, '1.5.0')) {
+			$http.get(KEYWORDS_ENDPOINT, {
+				params: params
+			}).then(function (data) {
+				if ($location.search().hasOwnProperty('keywords__slug__in')) {
+					data.objects = module.set_initial_filters_from_query(data.data.objects,
+						$location.search()['keywords__slug__in'], 'slug');
+				}
+				$rootScope.keywords = data.objects;
+				if (HAYSTACK_FACET_COUNTS && $rootScope.query_data) {
+					module.haystack_facets($http, $rootScope, $location);
+				}
+			});
+		} else {
+			$http.get(KEYWORDS_ENDPOINT, {
+				params: params
+			}).success(function (data) {
+				if ($location.search().hasOwnProperty('keywords__slug__in')) {
+					data.objects = module.set_initial_filters_from_query(data.objects,
+						$location.search()['keywords__slug__in'], 'slug');
+				}
+				$rootScope.keywords = data.objects;
+				if (HAYSTACK_FACET_COUNTS && $rootScope.query_data) {
+					module.haystack_facets($http, $rootScope, $location);
+				}
+			});
+		}
+
 	}
 
 	module.load_regions = function ($http, $rootScope, $location) {
@@ -83,18 +114,34 @@
 		if ($location.search().hasOwnProperty('title__icontains')) {
 			params['title__icontains'] = $location.search()['title__icontains'];
 		}
-		$http.get(REGIONS_ENDPOINT, {
-			params: params
-		}).success(function (data) {
-			if ($location.search().hasOwnProperty('regions__name__in')) {
-				data.objects = module.set_initial_filters_from_query(data.objects,
-					$location.search()['regions__name__in'], 'name');
-			}
-			$rootScope.regions = data.objects;
-			if (HAYSTACK_FACET_COUNTS && $rootScope.query_data) {
-				module.haystack_facets($http, $rootScope, $location);
-			}
-		});
+		if (compareVersions(angular.version.full, '1.5.0')) {
+			$http.get(REGIONS_ENDPOINT, {
+				params: params
+			}).then(function (data) {
+				if ($location.search().hasOwnProperty('regions__name__in')) {
+					data.objects = module.set_initial_filters_from_query(data.objects,
+						$location.search()['regions__name__in'], 'name');
+				}
+				$rootScope.regions = data.objects;
+				if (HAYSTACK_FACET_COUNTS && $rootScope.query_data) {
+					module.haystack_facets($http, $rootScope, $location);
+				}
+			});
+		} else {
+			$http.get(REGIONS_ENDPOINT, {
+				params: params
+			}).success(function (data) {
+				if ($location.search().hasOwnProperty('regions__name__in')) {
+					data.objects = module.set_initial_filters_from_query(data.objects,
+						$location.search()['regions__name__in'], 'name');
+				}
+				$rootScope.regions = data.objects;
+				if (HAYSTACK_FACET_COUNTS && $rootScope.query_data) {
+					module.haystack_facets($http, $rootScope, $location);
+				}
+			});
+		}
+
 	}
 
 	module.load_owners = function ($http, $rootScope, $location) {
@@ -104,18 +151,34 @@
 		if ($location.search().hasOwnProperty('title__icontains')) {
 			params['title__icontains'] = $location.search()['title__icontains'];
 		}
-		$http.get(OWNERS_ENDPOINT, {
-			params: params
-		}).success(function (data) {
-			if ($location.search().hasOwnProperty('owner__username__in')) {
-				data.objects = module.set_initial_filters_from_query(data.objects,
-					$location.search()['owner__username__in'], 'identifier');
-			}
-			$rootScope.owners = data.objects;
-			if (HAYSTACK_FACET_COUNTS && $rootScope.query_data) {
-				module.haystack_facets($http, $rootScope, $location);
-			}
-		});
+		if (compareVersions(angular.version.full, '1.5.0')) {
+			$http.get(OWNERS_ENDPOINT, {
+				params: params
+			}).then(function (data) {
+				if ($location.search().hasOwnProperty('owner__username__in')) {
+					data.objects = module.set_initial_filters_from_query(data.objects,
+						$location.search()['owner__username__in'], 'identifier');
+				}
+				$rootScope.owners = data.objects;
+				if (HAYSTACK_FACET_COUNTS && $rootScope.query_data) {
+					module.haystack_facets($http, $rootScope, $location);
+				}
+			});
+		} else {
+			$http.get(OWNERS_ENDPOINT, {
+				params: params
+			}).success(function (data) {
+				if ($location.search().hasOwnProperty('owner__username__in')) {
+					data.objects = module.set_initial_filters_from_query(data.objects,
+						$location.search()['owner__username__in'], 'identifier');
+				}
+				$rootScope.owners = data.objects;
+				if (HAYSTACK_FACET_COUNTS && $rootScope.query_data) {
+					module.haystack_facets($http, $rootScope, $location);
+				}
+			});
+		}
+
 	}
 	module.load_apps = function ($http, $rootScope, $location) {
 		var params = typeof FILTER_TYPE == 'undefined' ? {} : {
@@ -125,18 +188,34 @@
 		if ($location.search().hasOwnProperty('app_name__in')) {
 			params['app_name__in'] = $location.search()['app__name__in'];
 		}
-		$http.get(APPS_ENDPOINT, {
-			params: params
-		}).success(function (data) {
-			if ($location.search().hasOwnProperty('app__name__in')) {
-				data.objects = module.set_initial_filters_from_query(data.objects,
-					$location.search()['app__name__in'], 'identifier');
-			}
-			$rootScope.apps = data.objects;
-			if (HAYSTACK_FACET_COUNTS && $rootScope.query_data) {
-				module.haystack_facets($http, $rootScope, $location);
-			}
-		});
+		if (compareVersions(angular.version.full, '1.5.0')) {
+			$http.get(APPS_ENDPOINT, {
+				params: params
+			}).then(function (data) {
+				if ($location.search().hasOwnProperty('app__name__in')) {
+					data.objects = module.set_initial_filters_from_query(data.data.objects,
+						$location.search()['app__name__in'], 'identifier');
+				}
+				$rootScope.apps = data.data.objects;
+				if (HAYSTACK_FACET_COUNTS && $rootScope.query_data) {
+					module.haystack_facets($http, $rootScope, $location);
+				}
+			});
+		} else {
+			$http.get(APPS_ENDPOINT, {
+				params: params
+			}).success(function (data) {
+				if ($location.search().hasOwnProperty('app__name__in')) {
+					data.objects = module.set_initial_filters_from_query(data.objects,
+						$location.search()['app__name__in'], 'identifier');
+				}
+				$rootScope.apps = data.objects;
+				if (HAYSTACK_FACET_COUNTS && $rootScope.query_data) {
+					module.haystack_facets($http, $rootScope, $location);
+				}
+			});
+		}
+
 	}
 
 	// Update facet counts for categories and keywords
@@ -255,52 +334,109 @@
 
 		//Get data from apis and make them available to the page
 		function query_api(data) {
-			if (angular.isString(data.app__name)) {
-				$scope.appTitle = data.app__title;
-				$http.get(APPS_ENDPOINT, {
-					params: {
-						name: data.app__name
-					}
-				}).success(function (res) {
-					$scope.app_name = res.objects[0].name;
-				})
-			} else {
-				delete $scope.appTitle;
-			}
-			$http.get(Configs.url, {
-				params: data || {}
-			}).success(function (data) {
-				$scope.loading = false
-				$scope.results = data.objects.sort(function (x, y) {
-					return (x.featured === y.featured) ? 0 : x.featured ? -1 : 1;
-				});
-				$scope.total_counts = data.meta.total_count;
-				$scope.$root.query_data = data;
-				if (HAYSTACK_SEARCH) {
-					if ($location.search().hasOwnProperty('q')) {
-						$scope.text_query = $location.search()['q'].replace(/\+/g, " ");
-					}
+			if (angular.isString(data.app__name__in)) {
+				if (compareVersions(angular.version.full, '1.5.0')) {
+					$http.get(APPS_ENDPOINT, {
+						params: {
+							name: data.app__name__in
+						}
+					}).then(function (res) {
+						if (res.data.objects.length > 0) {
+							$scope.app_name = res.data.objects[0].name;
+							$scope.appTitle = res.data.objects[0].title;
+						} else {
+							$scope.appTitle = data.app__name__in;
+						}
+					})
 				} else {
-					if ($location.search().hasOwnProperty('title__icontains')) {
-						$scope.text_query = $location.search()['title__icontains'].replace(
-							/\+/g, " ");
-					}
+					$http.get(APPS_ENDPOINT, {
+						params: {
+							name: data.app__name__in
+						}
+					}).success(function (res) {
+						if (res.data.objects.length > 0) {
+							$scope.app_name = res.objects[0].name;
+							$scope.appTitle = res.objects[0].title;
+						} else {
+							$scope.appTitle = data.app__name__in;
+						}
+					})
 				}
 
-				//Update facet/keyword/category counts from search results
-				if (HAYSTACK_FACET_COUNTS) {
-					module.haystack_facets($http, $scope.$root, $location);
-					$("#types").find("a").each(function () {
-						if ($(this)[0].id in data.meta.facets.subtype) {
-							$(this).find("span").text(data.meta.facets.subtype[$(this)[0].id]);
-						} else if ($(this)[0].id in data.meta.facets.type) {
-							$(this).find("span").text(data.meta.facets.type[$(this)[0].id]);
-						} else {
-							$(this).find("span").text("0");
-						}
+			} else {
+				$scope.appTitle = "App Instance List";
+			}
+			if (compareVersions(angular.version.full, '1.5.0')) {
+				$http.get(Configs.url, {
+					params: data || {}
+				}).then(function (data) {
+					$scope.loading = false
+					$scope.results = data.data.objects.sort(function (x, y) {
+						return (x.featured === y.featured) ? 0 : x.featured ? -1 : 1;
 					});
-				}
-			});
+					$scope.total_counts = data.data.meta.total_count;
+					$scope.$root.query_data = data;
+					if (HAYSTACK_SEARCH) {
+						if ($location.search().hasOwnProperty('q')) {
+							$scope.text_query = $location.search()['q'].replace(/\+/g, " ");
+						}
+					} else {
+						if ($location.search().hasOwnProperty('title__icontains')) {
+							$scope.text_query = $location.search()['title__icontains'].replace(
+								/\+/g, " ");
+						}
+					}
+
+					//Update facet/keyword/category counts from search results
+					if (HAYSTACK_FACET_COUNTS) {
+						module.haystack_facets($http, $scope.$root, $location);
+						$("#types").find("a").each(function () {
+							if ($(this)[0].id in data.meta.facets.subtype) {
+								$(this).find("span").text(data.meta.facets.subtype[$(this)[0].id]);
+							} else if ($(this)[0].id in data.meta.facets.type) {
+								$(this).find("span").text(data.meta.facets.type[$(this)[0].id]);
+							} else {
+								$(this).find("span").text("0");
+							}
+						});
+					}
+				});
+			} else {
+				$http.get(Configs.url, {
+					params: data || {}
+				}).success(function (data) {
+					$scope.loading = false
+					$scope.results = data.objects.sort(function (x, y) {
+						return (x.featured === y.featured) ? 0 : x.featured ? -1 : 1;
+					});
+					$scope.total_counts = data.meta.total_count;
+					$scope.$root.query_data = data;
+					if (HAYSTACK_SEARCH) {
+						if ($location.search().hasOwnProperty('q')) {
+							$scope.text_query = $location.search()['q'].replace(/\+/g, " ");
+						}
+					} else {
+						if ($location.search().hasOwnProperty('title__icontains')) {
+							$scope.text_query = $location.search()['title__icontains'].replace(
+								/\+/g, " ");
+						}
+					}
+
+					//Update facet/keyword/category counts from search results
+					if (HAYSTACK_FACET_COUNTS) {
+						module.haystack_facets($http, $scope.$root, $location);
+						$("#types").find("a").each(function () {
+							if ($(this)[0].id in data.meta.facets.subtype) {
+								$(this).find("span").text(data.meta.facets.subtype[$(this)[0].id]);
+							} else if ($(this)[0].id in data.meta.facets.type) {
+								$(this).find("span").text(data.meta.facets.type[$(this)[0].id]);
+							} else {
+								$(this).find("span").text("0");
+							}
+						});
+					}
+				});
+			}
 		};
 		query_api($scope.query);
 

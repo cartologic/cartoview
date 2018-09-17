@@ -13,3 +13,7 @@
 {% block body %}{% endblock body %}
 {% block sidebar %}{% endblock sidebar %}
 {% endblock body_outer %}
+{% block extra_script %}
+    <script src="{{STATIC_URL}}compare-versions/index.js"></script>
+    {{block.super}}
+{% endblock %}

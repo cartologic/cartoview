@@ -239,7 +239,6 @@ cartoview.egg-info/
 node_modules
 dist/
 vendor
-static/
 uploaded
 *.db
 .coverage*
