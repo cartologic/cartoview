@@ -74,9 +74,7 @@ class App(models.Model):
         geonode_settings.AUTH_USER_MODEL, null=True, blank=True)
     single_instance = models.BooleanField(
         default=False, null=False, blank=False)
-    category = models.ManyToManyField(
-        AppType, related_name='apps')
-    license = models.CharField(max_length=100, null=True, blank=True)
+    category = models.ManyToManyField(AppType, related_name='apps')
     status = models.CharField(
         max_length=100, blank=False, null=False, default='Alpha')
     owner_url = models.URLField(null=True, blank=True)
