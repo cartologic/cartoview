@@ -46,9 +46,16 @@ class AppStore(models.Model):
     """
     to store links for cartoview appstores
     """
+    SERVER_CHOICES = (
+        ('Exchange', 'Exchange'),
+        ('Geoserver', 'Geoserver'),
+        ('QGISServer', 'QGISServer'),
+    )
     name = models.CharField(max_length=256)
     url = models.URLField(verbose_name="App Store URL")
     is_default = models.BooleanField(default=False)
+    server_type = models.CharField(
+        max_length=256, choices=SERVER_CHOICES, default="Geoserver")
 
     def __str__(self):
         return self.name
@@ -127,8 +134,10 @@ class App(models.Model):
 def get_app_logo_path(instance, filename):
     today = datetime.now()
     date_as_path = today.strftime("%Y/%m/%d")
-    return '/'.join(['app_instance_logos', slugify(instance.title),
-                     date_as_path, filename])
+    return '/'.join([
+        'app_instance_logos',
+        slugify(instance.title), date_as_path, filename
+    ])
 
 
 class AppInstance(ResourceBase):
@@ -138,16 +147,16 @@ class AppInstance(ResourceBase):
     """
 
     # Relation to the App model
-    app = models.ForeignKey(App, null=True, blank=True,
-                            on_delete=models.CASCADE)
+    app = models.ForeignKey(
+        App, null=True, blank=True, on_delete=models.CASCADE)
     config = models.TextField(null=True, blank=True)
-    map = models.ForeignKey(GeonodeMap, null=True,
-                            blank=True, on_delete=models.CASCADE)
+    map = models.ForeignKey(
+        GeonodeMap, null=True, blank=True, on_delete=models.CASCADE)
     logo = models.ImageField(
         upload_to=get_app_logo_path, blank=True, null=True)
 
     def get_absolute_url(self):
-        return reverse('appinstance_detail', args=(self.id,))
+        return reverse('appinstance_detail', args=(self.id, ))
 
     @property
     def name_long(self):

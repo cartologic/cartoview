@@ -36,8 +36,8 @@ class LayerFilterExtensionResource(LayerResource):
     def build_filters(self, filters=None, **kwargs):
         if filters is None:
             filters = {}
-        orm_filters = super(LayerFilterExtensionResource,
-                            self).build_filters(filters, **kwargs)
+        orm_filters = super(LayerFilterExtensionResource, self).build_filters(
+            filters, **kwargs)
         if ('permission' in filters):
             permission = filters['permission']
             orm_filters.update({'permission': permission})
@@ -219,10 +219,12 @@ class AppInstanceResource(ModelResource):
 
     def get_object_list(self, request):
         __inactive_apps = [
-            app.id for app in App.objects.all() if not app.config.active]
-        __inactive_apps_instances = [instance.id for instance in
-                                     AppInstance.objects.filter(
-                                         app__id__in=__inactive_apps)]
+            app.id for app in App.objects.all() if not app.config.active
+        ]
+        __inactive_apps_instances = [
+            instance.id for instance in AppInstance.objects.filter(
+                app__id__in=__inactive_apps)
+        ]
         active_app_instances = super(AppInstanceResource, self)\
             .get_object_list(
             request).exclude(
