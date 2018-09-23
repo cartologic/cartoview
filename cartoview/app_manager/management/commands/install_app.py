@@ -27,7 +27,7 @@ class Command(BaseCommand):
         app_name = options.get('name')
         app_version = options.get('app_version')
         store = AppStore.objects.get(is_default=True)
-        q = App.objects.filter(app_name=app_name)
+        q = App.objects.filter(name=app_name)
         try:
             if q.count() == 0 and q.first().version < app_version:
                 installer = AppInstaller(app_name, store.id, app_version)
