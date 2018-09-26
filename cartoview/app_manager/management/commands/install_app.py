@@ -29,7 +29,8 @@ class Command(BaseCommand):
         store = AppStore.objects.get(is_default=True)
         q = App.objects.filter(name=app_name)
         try:
-            if q.count() == 0 and q.first().version < app_version:
+            if q.count() == 0 or (q.first()
+                                  and q.first().version < app_version):
                 installer = AppInstaller(app_name, store.id, app_version)
                 installer.install()
         except Exception as ex:
