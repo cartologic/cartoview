@@ -268,7 +268,14 @@ class AppInstaller(object):
         app.delete()
 
     def execute_command(self, command):
-        manage_py = os.path.join(settings.BASE_DIR, 'manage.py')
+        project_dir = None
+        if hasattr(settings, 'BASE_DIR'):
+            project_dir = settings.BASE_DIR
+        elif hasattr(settings, 'PROJECT_ROOT'):
+            project_dir = settings.PROJECT_ROOT
+        elif hasattr(settings, 'APP_ROOT'):
+            project_dir = settings.APP_ROOT
+        manage_py = os.path.join(project_dir, 'manage.py')
         process = subprocess.Popen(
             "{} {} {}".format(executable, manage_py, command), shell=True)
         out, err = process.communicate()
