@@ -152,7 +152,9 @@ class AppInstaller(object):
         else:
             data = self._request_rest_data("appversion/?app__name=", self.name,
                                            "&version=", self.version)
-            self.version = data['objects'][0]
+            # TODO: handle if we can't get app version
+            self.version = data['objects'][0] if len(
+                data['objects']) > 0 else None
 
     def _request_rest_data(self, *args):
         """
@@ -308,8 +310,9 @@ class AppInstaller(object):
             for app in installed_apps:
                 app_installer = AppInstaller(
                     app.name, self.store.id, app.version, user=self.user)
-                dependencies = app_installer.version["dependencies"]
-                if self.name in dependencies:
+                dependencies = app_installer.version[
+                    "dependencies"] if app_installer.version else {}
+                if self.name in dependencies.keys():
                     app_installer.uninstall(restart=False)
             installer = importlib.import_module('%s.installer' % self.name)
             installer.uninstall()
