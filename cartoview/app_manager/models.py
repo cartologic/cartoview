@@ -212,8 +212,9 @@ def appinstance_post_save(instance, *args, **kwargs):
 @receiver(signals.pre_delete, sender=App)
 def pre_delete_app(sender, instance, using, **kwargs):
     app_config = instance.apps_config.get_by_name(instance.name)
-    del instance.apps_config[app_config]
-    instance.apps_config.save()
+    if app_config:
+        del instance.apps_config[app_config]
+        instance.apps_config.save()
 
 
 signals.pre_save.connect(pre_save_appinstance)
