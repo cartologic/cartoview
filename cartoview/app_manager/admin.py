@@ -1,18 +1,18 @@
 from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
-from django.core.exceptions import PermissionDenied
-from django.http import HttpResponseServerError
+
 from django.contrib import admin
+from django.http import HttpResponseServerError
 from future import standard_library
+
 from .installer import AppInstaller
 from .models import App, AppInstance, AppStore, AppType
 from .utils import populate_apps
+
 standard_library.install_aliases()
 
 
 def uninstall_selected(modeladmin, request, queryset):
-    if not modeladmin.has_delete_permission(request):
-        raise PermissionDenied
     for app in queryset:
         try:
             app_store = app.store.id if app.store else None

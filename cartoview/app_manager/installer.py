@@ -13,7 +13,6 @@ import zipfile
 from io import BytesIO
 from sys import executable, exit
 from threading import Timer
-
 import pkg_resources
 import portalocker
 import requests
@@ -50,15 +49,29 @@ class FinalizeInstaller:
             yaml.dump(self.apps_to_finlize, outfile, default_flow_style=False)
         self.apps_to_finlize = []
 
+    def django_reload(self):
+        try:
+            from django.utils.autoreload import restart_with_reloader
+            restart_with_reloader()
+            from .utils import populate_apps
+            populate_apps()
+        except Exception as e:
+            logger.error(e.message)
+            exit(0)
+
     def restart_server(self):
-        # log_file = os.path.join(working_dir, "install_app_log.txt")
-        if install_app_batch and os.path.exists(install_app_batch):
-            working_dir = os.path.dirname(install_app_batch)
-            # with open(log_file, 'a') as log:
-            proc = subprocess.Popen(
-                install_app_batch, shell=True, cwd=working_dir)
-            logger.warning(proc.stdout)
-            logger.error(proc.stderr)
+        try:
+            # log_file = os.path.join(working_dir, "install_app_log.txt")
+            if install_app_batch and os.path.exists(install_app_batch):
+                working_dir = os.path.dirname(install_app_batch)
+                # with open(log_file, 'a') as log:
+                proc = subprocess.Popen(
+                    install_app_batch, shell=True, cwd=working_dir)
+                logger.warning(proc.stdout)
+                logger.error(proc.stderr)
+        except Exception as e:
+            logger.error(e.message)
+            self.django_reload()
 
     def docker_restart(self):
         try:
@@ -71,14 +84,14 @@ class FinalizeInstaller:
         self.save_pending_app_to_finlize()
         docker = getattr(settings, 'DOCKER', None)
 
-        def _finalize_setup(app_name):
+        def _finalize_setup():
             if docker:
                 self.docker_restart()
             else:
                 self.restart_server()
 
         if 'test' not in sys.argv:
-            timer = Timer(0.1, _finalize_setup(app_name))
+            timer = Timer(0.1, _finalize_setup)
             timer.start()
 
     def __call__(self, app_name):
