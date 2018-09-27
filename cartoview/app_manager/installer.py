@@ -264,9 +264,6 @@ class AppInstaller(object):
 
     def completely_remove(self):
         app = App.objects.get(name=self.name)
-        app_config = app.apps_config.get_by_name(self.name)
-        del app.apps_config[app_config]
-        app.apps_config.save()
         app.delete()
 
     def execute_command(self, command):

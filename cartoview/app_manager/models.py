@@ -8,17 +8,18 @@ from django.conf import settings as geonode_settings
 from django.contrib.gis.db import models
 from django.core.urlresolvers import reverse
 from django.db.models import signals
+from django.dispatch import receiver
 from django.template.defaultfilters import slugify
 from django.utils.encoding import python_2_unicode_compatible
 from future import standard_library
-# Create your models here.
-from geonode.base.models import ResourceBase, resourcebase_post_save
-from geonode.maps.models import Map as GeonodeMap
-from geonode.security.models import remove_object_permissions
 from jsonfield import JSONField
 from taggit.managers import TaggableManager
 
 from cartoview.log_handler import get_logger
+# Create your models here.
+from geonode.base.models import ResourceBase, resourcebase_post_save
+from geonode.maps.models import Map as GeonodeMap
+from geonode.security.models import remove_object_permissions
 
 from .config import AppsConfig
 
@@ -206,6 +207,13 @@ def appinstance_post_save(instance, *args, **kwargs):
     if not isinstance(instance, AppInstance):
         return
     resourcebase_post_save(instance, args, kwargs)
+
+
+@receiver(signals.pre_delete, sender=App)
+def pre_delete_app(sender, instance, using, **kwargs):
+    app_config = instance.apps_config.get_by_name(instance.name)
+    del instance.apps_config[app_config]
+    instance.apps_config.save()
 
 
 signals.pre_save.connect(pre_save_appinstance)
