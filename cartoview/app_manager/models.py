@@ -126,6 +126,11 @@ class App(models.Model):
             App._apps_config = AppsConfig()
         return App._apps_config
 
+    def set_active(self, active=True):
+        self.config.active = active
+        self.apps_config.save()
+        return App._apps_config
+
     @property
     def config(self):
         return self.apps_config.get_by_name(self.name)

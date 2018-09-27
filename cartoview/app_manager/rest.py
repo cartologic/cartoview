@@ -156,8 +156,7 @@ class AppResource(FileUploadResource):
                 data={'pk': kwargs['pk']}, request=request)
             app = self.cached_obj_get(
                 bundle=bundle, **self.remove_api_resource_names(kwargs))
-            app.config.active = active
-            app.apps_config.save()
+            app.set_active(active)
             populate_apps()
         except ObjectDoesNotExist:
             return HttpGone()
