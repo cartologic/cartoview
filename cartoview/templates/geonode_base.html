@@ -48,7 +48,10 @@
                 {% if perms.announcements.can_manage %}
                 <li><a href="{% url "announcements_list" %}">{% trans "Announcements" %}</a></li>
                 {% endif %}
-                <li><a href="{% url "geonode.invitations:geonode-send-invite" %}">{% trans "Invite Users" %}</a></li>
+                {% url "geonode.invitations:geonode-send-invite" as invite_url %}
+                {% if invite_url %}
+                  <li><a href="{{invite_url}}">{% trans "Invite Users" %}</a></li>
+                {% endif %}
                 {% if user.is_superuser %}
                 <li><a href="/admin/people/profile/add/">{% trans "Add User" %}</a></li>
                 <li><a href="{% url "group_create" %}">{% trans "Create Group" %}</a></li>
