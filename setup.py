@@ -16,18 +16,16 @@ setup(
     url='https://github.com/cartologic/cartoview',
     include_package_data=True,
     keywords=[
-        'cartoview',
-        'gis',
-        'geonode',
-        "django",
-        "web mapping",
-        "applications",
-        "apps",
-        "application management"],
+        'cartoview', 'gis', 'geonode', "django", "web mapping", "applications",
+        "apps", "application management"
+    ],
     classifiers=[
-        "Development Status :: 4 - Beta",
-        "Framework :: Django :: 1.8",
-        "Topic :: Scientific/Engineering :: GIS"],
+        "Development Status :: 4 - Beta", "Framework :: Django :: 1.8",
+        "Topic :: Scientific/Engineering :: GIS"
+    ],
     license="BSD",
-    install_requires=['future', 'six==1.10.0', 'portalocker==1.2.1',
-                      'geonode>2.7.5.dev20180125135927,<2.9', 'Faker>=0.8.4'])
+    install_requires=[
+        'future', 'six==1.10.0', 'portalocker==1.2.1',
+        'geonode>2.7.5.dev20180125135927,<2.9', 'Faker>=0.8.4',
+        'cherrypy==11.0.0', 'cheroot==5.8.3'
+    ])
