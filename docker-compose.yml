@@ -55,7 +55,7 @@ services:
       -cartoview-internal:
   cartoview:
     image: cartoview/cartoview:latest
-    command: bash -c "pip install -e . && python server.py"
+    command: bash -c "pip install -e . && python manage.py cherry_server"
     restart: unless-stopped
     hostname: cartoview
     depends_on:
