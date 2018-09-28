@@ -28,10 +28,7 @@ uninstall_selected.short_description = "Uninstall Selected Apps"
 
 def suspend_selected(modeladmin, request, queryset):
     for app in queryset:
-        try:
-            app.set_active(False)
-        except Exception as e:
-            return HttpResponseServerError(e.message)
+        app.set_active(False)
     populate_apps()
 
 
@@ -40,10 +37,7 @@ suspend_selected.short_description = "Suspend Selected Apps"
 
 def activate_selected(modeladmin, request, queryset):
     for app in queryset:
-        try:
-            app.set_active()
-        except Exception as e:
-            return HttpResponseServerError(e.message)
+        app.set_active()
     populate_apps()
 
 
