@@ -2,6 +2,7 @@
 import ast
 import os
 import re
+import copy
 import sys
 from distutils.util import strtobool
 
@@ -75,6 +76,46 @@ if 'geonode.geoserver' in INSTALLED_APPS and "LOCAL_GEOSERVER" in \
         locals() and LOCAL_GEOSERVER in MAP_BASELAYERS:
     LOCAL_GEOSERVER["source"][
         "url"] = OGC_SERVER['default']['PUBLIC_LOCATION'] + "wms"
+
+# Logging settings
+# 'DEBUG', 'INFO', 'WARNING', 'ERROR', or 'CRITICAL'
+DJANGO_LOG_LEVEL = os.getenv('DJANGO_LOG_LEVEL', 'ERROR')
+
+installed_apps_conf = {
+    'handlers': ['console'],
+    'level': DJANGO_LOG_LEVEL,
+}
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format':
+            ('%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d'
+             ' %(message)s'),
+        },
+    },
+    'handlers': {
+        'console': {
+            'level': DJANGO_LOG_LEVEL,
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose',
+        }
+    },
+    'loggers':
+    {app: copy.deepcopy(installed_apps_conf)
+     for app in INSTALLED_APPS},
+    'root': {
+        'handlers': ['console'],
+        'level': DJANGO_LOG_LEVEL
+    },
+}
+
+LOGGING['loggers']['django.db.backends'] = {
+    'handlers': ['console'],
+    'propagate': False,
+    'level': 'WARNING',  # Django SQL logging is too noisy at DEBUG
+}
 
 # NOTE:set cartoview_stand_alone environment var if you are not using
 # cartoview_proect_template
