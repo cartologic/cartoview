@@ -57,23 +57,23 @@ class FinalizeInstaller:
             populate_apps()
         except Exception as e:
             logger.error(e.message)
-            exit(0)
+
+    def restart_script(self):
+        # log_file = os.path.join(working_dir, "install_app_log.txt")
+        if install_app_batch and os.path.exists(install_app_batch):
+            working_dir = os.path.dirname(install_app_batch)
+            # with open(log_file, 'a') as log:
+            proc = subprocess.Popen(
+                install_app_batch, shell=True, cwd=working_dir)
+            logger.warning(proc.stdout)
+            logger.error(proc.stderr)
 
     def restart_server(self):
-        try:
-            # log_file = os.path.join(working_dir, "install_app_log.txt")
-            if install_app_batch and os.path.exists(install_app_batch):
-                working_dir = os.path.dirname(install_app_batch)
-                # with open(log_file, 'a') as log:
-                proc = subprocess.Popen(
-                    install_app_batch, shell=True, cwd=working_dir)
-                logger.warning(proc.stdout)
-                logger.error(proc.stderr)
-        except Exception as e:
-            logger.error(e.message)
-            self.django_reload()
+        self.django_reload()
+        self.restart_script()
+        self.cherry_restart()
 
-    def docker_restart(self):
+    def cherry_restart(self):
         try:
             import cherrypy
             cherrypy.engine.restart()
@@ -86,7 +86,7 @@ class FinalizeInstaller:
 
         def _finalize_setup():
             if docker:
-                self.docker_restart()
+                self.cherry_restart()
             else:
                 self.restart_server()
 
