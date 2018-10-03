@@ -157,8 +157,9 @@ def uninstall_app(request, store_id, app_name):
 @login_required
 def move_up(request, app_id):
     app = App.objects.get(id=app_id)
-    prev_app = App.objects.get(order=App.objects.filter(
-        order__lt=app.order).aggregate(Max('order'))['order__max'])
+    prev_app = App.objects.get(
+        order=App.objects.filter(
+            order__lt=app.order).aggregate(Max('order'))['order__max'])
     order = app.order
     app.order = prev_app.order
     prev_app.order = order
@@ -173,8 +174,9 @@ def move_up(request, app_id):
 @login_required
 def move_down(request, app_id):
     app = App.objects.get(id=app_id)
-    next_app = App.objects.get(order=App.objects.filter(
-        order__gt=app.order).aggregate(Min('order'))['order__min'])
+    next_app = App.objects.get(
+        order=App.objects.filter(
+            order__gt=app.order).aggregate(Min('order'))['order__min'])
     order = app.order
     app.order = next_app.order
     next_app.order = order
@@ -234,10 +236,11 @@ def appinstance_detail(request, appinstanceid):
         return HttpResponse(
             loader.render_to_string(
                 '401.html',
-                RequestContext(request, {
-                    'error_message':
-                    _("You are not allowed to view this document.")
-                })),
+                RequestContext(
+                    request, {
+                        'error_message':
+                        _("You are not allowed to view this document.")
+                    })),
             status=403)
 
     if appinstance is None:
@@ -252,14 +255,14 @@ def appinstance_detail(request, appinstanceid):
             link_type='appinstance_thumbnail')
         context_dict = {
             'perms_list':
-                get_perms(request.user, appinstance.get_self_resource()),
+            get_perms(request.user, appinstance.get_self_resource()),
             'permissions_json':
-                _perms_info_json(appinstance),
+            _perms_info_json(appinstance),
             'resource':
-                appinstance,
+            appinstance,
             # 'appinstance_links': appinstance_links,
             'set_thumbnail_link':
-                set_thumbnail_link
+            set_thumbnail_link
             # 'imgtypes': IMGTYPES,
             # 'related': related
         }
@@ -300,10 +303,11 @@ def appinstance_metadata(request,
         return HttpResponse(
             loader.render_to_string(
                 '401.html',
-                RequestContext(request, {
-                    'error_message':
-                    _("You are not allowed to edit this instance.")
-                })),
+                RequestContext(
+                    request, {
+                        'error_message':
+                        _("You are not allowed to edit this instance.")
+                    })),
             status=403)
 
     if appinstance is None:
@@ -359,7 +363,8 @@ def appinstance_metadata(request,
             if new_author is None:
                 if metadata_author is None:
                     author_form = ProfileForm(
-                        request.POST, prefix="author",
+                        request.POST,
+                        prefix="author",
                         instance=metadata_author)
                 else:
                     author_form = ProfileForm(request.POST, prefix="author")
@@ -383,7 +388,7 @@ def appinstance_metadata(request,
                     category=new_category)
 
                 return HttpResponseRedirect(
-                    reverse('appinstance_detail', args=(appinstance.id,)))
+                    reverse('appinstance_detail', args=(appinstance.id, )))
             else:
                 the_appinstance = appinstance_form.save()
                 if new_poc is None:
@@ -395,7 +400,7 @@ def appinstance_metadata(request,
                     category=new_category)
 
                 return HttpResponseRedirect(
-                    reverse('appinstance_detail', args=(appinstance.id,)))
+                    reverse('appinstance_detail', args=(appinstance.id, )))
 
         if poc is not None:
             appinstance_form.fields['poc'].initial = poc.id
@@ -413,14 +418,16 @@ def appinstance_metadata(request,
             author_form = ProfileForm(prefix="author")
             author_form.hidden = True
 
-        return render_to_response(template,
-                                  RequestContext(request, {
-                                      "appinstance": appinstance,
-                                      "appinstance_form": appinstance_form,
-                                      "poc_form": poc_form,
-                                      "author_form": author_form,
-                                      "category_form": category_form,
-                                  }))
+        return render_to_response(
+            template,
+            RequestContext(
+                request, {
+                    "appinstance": appinstance,
+                    "appinstance_form": appinstance_form,
+                    "poc_form": poc_form,
+                    "author_form": author_form,
+                    "category_form": category_form,
+                }))
 
 
 def appinstance_remove(request, appinstanceid):
@@ -528,8 +535,7 @@ class AppViews(with_metaclass(abc.ABCMeta, object)):
         # update the instance keywords
         res_json.update(dict(success=True, id=instance_obj.id))
         return HttpResponse(
-            json.dumps(res_json),
-            content_type="application/json")
+            json.dumps(res_json), content_type="application/json")
 
     @abc.abstractmethod
     def new(self, request, template=None, context={}, *args, **kwargs):
@@ -537,13 +543,23 @@ class AppViews(with_metaclass(abc.ABCMeta, object)):
         pass
 
     @abc.abstractmethod
-    def edit(self, request, instance_id,
-             template=None, context={}, * args, **kwargs):
+    def edit(self,
+             request,
+             instance_id,
+             template=None,
+             context={},
+             *args,
+             **kwargs):
         """Implement Edit app instance View"""
         pass
 
     @abc.abstractmethod
-    def view_app(self, request, instance_id, template=None, context={}, * args,
+    def view_app(self,
+                 request,
+                 instance_id,
+                 template=None,
+                 context={},
+                 *args,
                  **kwargs):
         """Implement View app instance View"""
         pass
@@ -575,8 +591,13 @@ class StandardAppViews(AppViews):
 
     @method_decorator(login_required)
     @method_decorator(can_change_app_instance)
-    def edit(self, request, instance_id,
-             template=None, context={}, * args, **kwargs):
+    def edit(self,
+             request,
+             instance_id,
+             template=None,
+             context={},
+             *args,
+             **kwargs):
         if template is None:
             template = self.edit_template
         if request.method == 'POST':
@@ -591,18 +612,15 @@ class StandardAppViews(AppViews):
         if template is None:
             template = self.view_template
         instance = get_object_or_404(AppInstance, pk=instance_id)
-        context.update({
-            "instance": instance,
-            "app_name": self.app_name
-        })
+        context.update({"instance": instance, "app_name": self.app_name})
         return render(request, template, context)
 
     def get_url_patterns(self):
         return [
-            url(r'^new/$', self.new,
-                name='%s.new' % self.app_name),
+            url(r'^new/$', self.new, name='%s.new' % self.app_name),
             url(r'^(?P<instance_id>\d+)/edit/$',
-                self.edit, name='%s.edit' % self.app_name),
+                self.edit,
+                name='%s.edit' % self.app_name),
             url(r'^(?P<instance_id>\d+)/view/$',
                 self.view_app,
                 name='%s.view' % self.app_name)

@@ -21,8 +21,7 @@ from cartoview.log_handler import get_logger
 from geonode.base.models import ResourceBase, resourcebase_post_save
 from geonode.maps.models import Map as GeonodeMap
 from geonode.security.models import remove_object_permissions
-from geonode.security.utils import (remove_object_permissions,
-                                    set_owner_permissions)
+from geonode.security.utils import (set_owner_permissions)
 
 from .config import AppsConfig
 
@@ -183,14 +182,14 @@ class AppInstance(ResourceBase):
             return None
 
     def set_permissions(self, perm_spec):
-        
+
         remove_object_permissions(self)
         set_owner_permissions(self)
         if 'users' in perm_spec and "AnonymousUser" in perm_spec['users']:
             anonymous_group = Group.objects.get(name='anonymous')
             for perm in perm_spec['users']['AnonymousUser']:
                 assign_perm(perm, anonymous_group, self.get_self_resource())
-        
+
         if 'groups' in perm_spec:
             for group, perms in perm_spec['groups'].items():
                 group = Group.objects.get(name=group)
