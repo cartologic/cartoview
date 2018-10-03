@@ -21,10 +21,10 @@ class AppInstallerTest(TestCase):
         with lock:
             user = Profile.objects.filter(is_superuser=True).first()
             store_id = 1
-            app_name = "cartoview_basic_viewer"
-            app_version = "1.8.3"
+            app_name = "cartoview_dashboard"
+            app_version = "1.4.2"
             app_installer = AppInstaller(app_name, store_id, app_version, user)
-            installed_apps = app_installer.install()
+            installed_apps = app_installer.install(restart=False)
             self.assertEqual(len(installed_apps), 1)
             apps_admin_url = reverse(
                 "admin:%s_%s_changelist" % (App._meta.app_label,

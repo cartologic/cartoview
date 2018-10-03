@@ -63,7 +63,8 @@ try:
 except Exception as e:
     pass
 
-CARTOVIEW_TEST = 'test' in sys.argv
+CARTOVIEW_TEST = 'test' in sys.argv or ast.literal_eval(
+    os.getenv('CARTOVIEW_TEST', "False")) or 'run_cartoview_test' in sys.argv
 
 if CARTOVIEW_TEST:
     DATABASES = {

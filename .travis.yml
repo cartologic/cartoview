@@ -58,7 +58,7 @@ before_script:
 
 script:
   - flake8
-  - paver run_test
+  - paver run_cartoview_test
 
 after_success:
   - coveralls

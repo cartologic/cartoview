@@ -123,7 +123,7 @@ def cleanup():
 
 @task
 @needs(['setup_apps', ])
-def run_test(options):
+def run_cartoview_test(options):
     try:
         sh('CARTOVIEW_STAND_ALONE="True" coverage run' +
             ' --source=cartoview --omit="*/migrations/*,*/apps/*"' +
@@ -486,7 +486,7 @@ def stop_geoserver():
 
 
 @task
-@needs(['run_test', ])
+@needs(['run_cartoview_test', ])
 def publish(options):
     from cartoview.settings import BASE_DIR
     dist_dir = os.path.join(BASE_DIR, 'dist')

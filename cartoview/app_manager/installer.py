@@ -12,6 +12,7 @@ import zipfile
 from io import BytesIO
 from sys import executable, exit
 from threading import Timer
+
 import pkg_resources
 import portalocker
 import requests
@@ -23,7 +24,8 @@ from future import standard_library
 
 from cartoview.log_handler import get_logger
 
-from .config import (App as AppConfig, AppsConfig)
+from .config import App as AppConfig
+from .config import AppsConfig
 from .helpers import change_path_permission, create_direcotry
 from .models import App, AppStore, AppType
 from .settings import create_apps_dir
