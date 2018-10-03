@@ -5,6 +5,7 @@ import json
 from datetime import datetime
 
 from django.conf import settings as geonode_settings
+from django.contrib.auth.models import Group
 from django.contrib.gis.db import models
 from django.core.urlresolvers import reverse
 from django.db.models import signals
@@ -12,14 +13,15 @@ from django.dispatch import receiver
 from django.template.defaultfilters import slugify
 from django.utils.encoding import python_2_unicode_compatible
 from future import standard_library
+from guardian.shortcuts import assign_perm
 from jsonfield import JSONField
 from taggit.managers import TaggableManager
 
 from cartoview.log_handler import get_logger
-# Create your models here.
 from geonode.base.models import ResourceBase, resourcebase_post_save
 from geonode.maps.models import Map as GeonodeMap
 from geonode.security.models import remove_object_permissions
+from geonode.security.utils import (set_owner_permissions)
 
 from .config import AppsConfig
 
@@ -178,6 +180,21 @@ class AppInstance(ResourceBase):
         except BaseException as e:
             logger.error(e.message)
             return None
+
+    def set_permissions(self, perm_spec):
+
+        remove_object_permissions(self)
+        set_owner_permissions(self)
+        if 'users' in perm_spec and "AnonymousUser" in perm_spec['users']:
+            anonymous_group = Group.objects.get(name='anonymous')
+            for perm in perm_spec['users']['AnonymousUser']:
+                assign_perm(perm, anonymous_group, self.get_self_resource())
+
+        if 'groups' in perm_spec:
+            for group, perms in perm_spec['groups'].items():
+                group = Group.objects.get(name=group)
+                for perm in perms:
+                    assign_perm(perm, group, self.get_self_resource())
 
     @property
     def launch_url(self):
