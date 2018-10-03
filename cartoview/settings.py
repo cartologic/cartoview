@@ -62,7 +62,9 @@ try:
     from .local_settings import *
 except Exception as e:
     pass
+
 CARTOVIEW_TEST = 'test' in sys.argv
+
 if CARTOVIEW_TEST:
     DATABASES = {
         'default': {
