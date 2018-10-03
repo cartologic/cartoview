@@ -28,7 +28,7 @@ WORKDIR /code
 RUN pip install --upgrade pip
 RUN pip install --ignore-installed geoip django-geonode-client \
         geonode==2.8rc11 django-jsonfield django-jsonfield-compat \
-        cartoview==1.8.2 cherrypy==11.0.0 cheroot==5.8.3 \
+        cartoview==1.8.3 cherrypy==11.0.0 cheroot==5.8.3 \
         django-autocomplete-light==2.3.3  --no-cache-dir
 RUN pip install git+https://github.com/GeoNode/django-osgeo-importer.git
 RUN rm -rf /var/lib/apt/lists/*
