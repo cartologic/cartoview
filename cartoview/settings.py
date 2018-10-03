@@ -62,7 +62,8 @@ try:
     from .local_settings import *
 except Exception as e:
     pass
-if 'test' in sys.argv:
+CARTOVIEW_TEST = 'test' in sys.argv
+if CARTOVIEW_TEST:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
@@ -120,7 +121,7 @@ LOGGING['loggers']['django.db.backends'] = {
 # NOTE:set cartoview_stand_alone environment var if you are not using
 # cartoview_proect_template
 CARTOVIEW_STAND_ALONE = strtobool(os.getenv('CARTOVIEW_STAND_ALONE', 'FALSE'))
-if CARTOVIEW_STAND_ALONE or 'test' in sys.argv:
+if CARTOVIEW_STAND_ALONE or CARTOVIEW_TEST:
     TEMPLATES[0]["DIRS"] = CARTOVIEW_TEMPLATE_DIRS + TEMPLATES[0]["DIRS"]
     from cartoview.app_manager.settings import load_apps
     INSTALLED_APPS += load_apps(APPS_DIR)

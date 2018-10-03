@@ -90,7 +90,7 @@ class FinalizeInstaller:
             else:
                 self.restart_server()
 
-        if 'test' not in sys.argv:
+        if not settings.CARTOVIEW_TEST:
             timer = Timer(0.1, _finalize_setup)
             timer.start()
 

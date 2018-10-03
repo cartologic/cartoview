@@ -29,7 +29,7 @@ class AppsHandlerConfig(AppConfig):
             yaml.dump([], f)
 
     def execute_pending(self):
-        if os.path.exists(pending_yaml):
+        if os.path.exists(pending_yaml) and not settings.CARTOVIEW_TEST:
             with open(pending_yaml, 'r') as f:
                 pending_apps = yaml.load(f) or []
                 for app in pending_apps:
