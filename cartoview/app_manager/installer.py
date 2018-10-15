@@ -28,7 +28,7 @@ from .config import App as AppConfig
 from .config import AppsConfig
 from .helpers import change_path_permission, create_direcotry
 from .models import App, AppStore, AppType
-from .req_installer import ReqInstller
+from .req_installer import ReqInstaller
 from .settings import create_apps_dir
 
 logger = get_logger(__name__)
@@ -273,7 +273,7 @@ class AppInstaller(object):
         # TODO:add requirement file name as text
         req_file = os.path.join(self.app_dir, "req.txt")
         if os.path.exists(req_file):
-            req_installer = ReqInstller(req_file)
+            req_installer = ReqInstaller(req_file)
             req_installer.install_all(no_cache=True)
 
     def check_then_finlize(self, restart, installed_apps):
