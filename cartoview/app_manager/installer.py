@@ -28,6 +28,7 @@ from .config import App as AppConfig
 from .config import AppsConfig
 from .helpers import change_path_permission, create_direcotry
 from .models import App, AppStore, AppType
+from .req_installer import ReqInstller
 from .settings import create_apps_dir
 
 logger = get_logger(__name__)
@@ -268,10 +269,18 @@ class AppInstaller(object):
             self.check_then_finlize(restart, installed_apps)
             return installed_apps
 
+    def _install_requirements(self):
+        # TODO:add requirement file name as text
+        req_file = os.path.join(self.app_dir, "req.txt")
+        if os.path.exists(req_file):
+            req_installer = ReqInstller(req_file)
+            req_installer.install_all(no_cache=True)
+
     def check_then_finlize(self, restart, installed_apps):
         with transaction.atomic():
             new_app = self.add_app()
             installed_apps.append(new_app)
+            self._install_requirements()
             FINALIZE_SETUP.apps_to_finlize.append(self.name)
         if restart:
             FINALIZE_SETUP(self.name)
@@ -329,8 +338,7 @@ class AppInstaller(object):
             installer.uninstall()
             self.delete_app_tables()
             self.completely_remove()
-            app_dir = os.path.join(settings.APPS_DIR, self.name)
-            shutil.rmtree(app_dir)
+            shutil.rmtree(self.app_dir)
             uninstalled = True
             if restart:
                 FINALIZE_SETUP.restart_server()
