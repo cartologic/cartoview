@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
 
@@ -19,6 +20,9 @@ standard_library.install_aliases()
 
 # BASE_DIR must be defined in project.settings
 
+CARTOVIEW_APPS = ()
+APPS_SETTINGS = []
+
 
 def create_apps_dir(APPS_DIR):
     if not os.path.exists(APPS_DIR):
@@ -28,12 +32,13 @@ def create_apps_dir(APPS_DIR):
 
 
 def load_apps(APPS_DIR):
+    global CARTOVIEW_APPS
+    global APPS_SETTINGS
     create_apps_dir(APPS_DIR)
     if APPS_DIR not in sys.path:
         sys.path.append(APPS_DIR)
     apps_file_path = os.path.join(APPS_DIR, "apps.yml")
     apps_config = AppsConfig(apps_file_path)
-    CARTOVIEW_APPS = ()
     for app_config in apps_config:
         if app_config.active:
             try:
@@ -45,7 +50,9 @@ def load_apps(APPS_DIR):
                     # By doing this instead of import, app/settings.py can
                     # refer to local variables from settings.py without
                     # circular imports.
-                    execfile(app_settings_file)
+                    app_settings_file = os.path.realpath(app_settings_file)
+                    APPS_SETTINGS += (app_settings_file,)
+                    # execfile(app_settings_file)
                 if app_config.name not in CARTOVIEW_APPS:
                     # app_config.name.__str__() because Django don't like
                     # unicode_literals
@@ -53,5 +60,3 @@ def load_apps(APPS_DIR):
             except Exception as e:
                 print(e.message)
                 logger.error(e.message)
-
-    return CARTOVIEW_APPS

@@ -46,25 +46,33 @@
       - `pip install cartoview==1.8.3 --no-cache-dir`
       - open geonode `settings.py` and add the following lines at the end of the file:
           ```python
-          
-          from cartoview import settings as cartoview_settings
+            from cartoview import settings as cartoview_settings
+            INSTALLED_APPS += cartoview_settings.CARTOVIEW_INSTALLED_APPS
+            ROOT_URLCONF = cartoview_settings.ROOT_URLCONF
 
-          INSTALLED_APPS += cartoview_settings.CARTOVIEW_INSTALLED_APPS
-          ROOT_URLCONF = cartoview_settings.ROOT_URLCONF
+            APPS_DIR = os.path.abspath(os.path.join(PROJECT_ROOT, "apps"))
+            PENDING_APPS = os.path.join(PROJECT_ROOT, "pendingOperation.yml")
+            APPS_MENU = False
+            # NOTE: please comment the following line of you want to use geonode templates
+            TEMPLATES[0][
+                "DIRS"] = cartoview_settings.CARTOVIEW_TEMPLATE_DIRS + TEMPLATES[0]["DIRS"]
+            TEMPLATES[0]["OPTIONS"][
+                'context_processors'] += cartoview_settings.CARTOVIEW_CONTEXT_PROCESSORS
 
-          APPS_DIR = os.path.abspath(os.path.join(PROJECT_ROOT, "apps"))
-          PENDING_APPS = os.path.join(PROJECT_ROOT, "pendingOperation.yml")
-          APPS_MENU=False
-          # NOTE: please comment the following line of you want to use geonode templates
-          TEMPLATES[0][
-              "DIRS"] = cartoview_settings.CARTOVIEW_TEMPLATE_DIRS + TEMPLATES[0]["DIRS"]
-          TEMPLATES[0]["OPTIONS"][
-              'context_processors'] += cartoview_settings.CARTOVIEW_CONTEXT_PROCESSORS
+            STATICFILES_DIRS += cartoview_settings.CARTOVIEW_STATIC_DIRS
 
-          STATICFILES_DIRS += cartoview_settings.CARTOVIEW_STATIC_DIRS
-
-          from cartoview.app_manager.settings import load_apps
-          INSTALLED_APPS += load_apps(APPS_DIR)
+            from cartoview import app_manager
+            from past.builtins import execfile
+            app_manager_settings = os.path.join(
+                os.path.dirname(app_manager.__file__), "settings.py")
+            execfile(os.path.realpath(app_manager_settings))
+            load_apps(APPS_DIR)
+            INSTALLED_APPS += CARTOVIEW_APPS
+            for settings_file in APPS_SETTINGS:
+                try:
+                    execfile(settings_file)
+                except Exception as e:
+                    pass
           ```
       - **restart your server**
 
