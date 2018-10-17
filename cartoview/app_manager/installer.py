@@ -10,6 +10,7 @@ import tempfile
 import threading
 import zipfile
 from io import BytesIO
+from os import R_OK, access
 from sys import executable, exit
 from threading import Timer
 
@@ -270,11 +271,12 @@ class AppInstaller(object):
             return installed_apps
 
     def _install_requirements(self):
-        # TODO:add requirement file name as text
+        # TODO:add requirement file name as settings var
         req_file = os.path.join(self.app_dir, "req.txt")
-        if os.path.exists(req_file):
-            req_installer = ReqInstaller(req_file)
-            req_installer.install_all(no_cache=True)
+        libs_dir = os.path.join(self.app_dir, "libs")
+        if os.path.exists(req_file) and access(req_file, R_OK):
+            req_installer = ReqInstaller(req_file, targer=libs_dir)
+            req_installer.install_all()
 
     def check_then_finlize(self, restart, installed_apps):
         with transaction.atomic():
