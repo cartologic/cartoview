@@ -46,6 +46,7 @@ def load_apps(APPS_DIR):
                 app_module = importlib.import_module(app_config.name)
                 app_dir = os.path.dirname(app_module.__file__)
                 app_settings_file = os.path.join(app_dir, 'settings.py')
+                libs_dir = os.path.join(app_dir, 'libs')
                 if os.path.exists(app_settings_file):
                     # By doing this instead of import, app/settings.py can
                     # refer to local variables from settings.py without
@@ -53,6 +54,8 @@ def load_apps(APPS_DIR):
                     app_settings_file = os.path.realpath(app_settings_file)
                     APPS_SETTINGS += (app_settings_file,)
                     # execfile(app_settings_file)
+                if os.path.exists(libs_dir) and libs_dir not in sys.path:
+                    sys.path.append(libs_dir)
                 if app_config.name not in CARTOVIEW_APPS:
                     # app_config.name.__str__() because Django don't like
                     # unicode_literals
