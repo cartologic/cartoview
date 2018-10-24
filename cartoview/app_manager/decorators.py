@@ -1,4 +1,5 @@
 from .utils import resolve_appinstance
+from django.conf import settings
 from django.utils.translation import ugettext as _
 
 PERMISSION_MSG_DELETE = _("You are not permitted to delete this Instance")
@@ -32,4 +33,13 @@ def can_view_app_instance(function):
         return function(request, *args, **kwargs)
     wrap.__doc__ = function.__doc__
     wrap.__name__ = function.__name__
+    return wrap
+
+
+def restart_enabled(func):
+    def wrap(*args, **kwargs):
+        if not getattr(settings, "CARTOVIEW_TEST", False):
+            return func(*args, **kwargs)
+        else:
+            pass
     return wrap

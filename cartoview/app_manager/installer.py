@@ -27,6 +27,7 @@ from cartoview.log_handler import get_logger
 
 from .config import App as AppConfig
 from .config import AppsConfig
+from .decorators import restart_enabled
 from .helpers import change_path_permission, create_direcotry
 from .models import App, AppStore, AppType
 from .req_installer import ReqInstaller
@@ -71,9 +72,9 @@ class FinalizeInstaller:
             logger.warning(proc.stdout)
             logger.error(proc.stderr)
 
+    @restart_enabled
     def restart_server(self):
-        if not getattr(settings, "CARTOVIEW_TEST", False): 
-            self.django_reload()
+        self.django_reload()
         self.restart_script()
         self.cherry_restart()
 
@@ -93,8 +94,6 @@ class FinalizeInstaller:
                 self.cherry_restart()
             else:
                 self.restart_server()
-
-        
         timer = Timer(0.1, _finalize_setup)
         timer.start()
 
