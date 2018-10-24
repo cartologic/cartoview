@@ -18,9 +18,11 @@ python:
 virtualenv:
   system_site_packages: true
 branches:
-  only:
-    - master
-    - stand_alone
+  except:
+    - 2.6.x_compatible
+    - 1.4.4-(mapground)
+    - mapground(1.8)
+    - exchange-1.4.x
 install:
   - sudo apt-get -qq -y update
   - sudo apt-get install -y gcc gettext python-pip libpq-dev sqlite3 git gdal-bin lsof
