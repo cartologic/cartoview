@@ -72,7 +72,8 @@ class FinalizeInstaller:
             logger.error(proc.stderr)
 
     def restart_server(self):
-        self.django_reload()
+        if not getattr(settings, "CARTOVIEW_TEST", False): 
+            self.django_reload()
         self.restart_script()
         self.cherry_restart()
 
@@ -93,9 +94,9 @@ class FinalizeInstaller:
             else:
                 self.restart_server()
 
-        if not getattr(settings, "CARTOVIEW_TEST", False):
-            timer = Timer(0.1, _finalize_setup)
-            timer.start()
+        
+        timer = Timer(0.1, _finalize_setup)
+        timer.start()
 
     def __call__(self, app_name):
         self.finalize_setup(app_name)

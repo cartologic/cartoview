@@ -24,7 +24,7 @@ class AppInstallerTest(TestCase):
             app_name = "cartoview_dashboard"
             app_version = "1.4.2"
             app_installer = AppInstaller(app_name, store_id, app_version, user)
-            installed_apps = app_installer.install(restart=False)
+            installed_apps = app_installer.install()
             self.assertEqual(len(installed_apps), 1)
             apps_admin_url = reverse(
                 "admin:%s_%s_changelist" % (App._meta.app_label,
