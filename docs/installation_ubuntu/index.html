@@ -1,0 +1,1011 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      <meta http-equiv="x-ua-compatible" content="ie=edge">
+      
+        <meta name="description" content="GIS Web Mapping Applications.Cartoview enables the rapid deployment of easy-to-manage and easy-to-use spatial web applications">
+      
+      
+        <link rel="canonical" href="http://www.cartologic.com/installation_ubuntu/">
+      
+      
+        <meta name="author" content="Cartologic">
+      
+      
+        <meta name="lang:clipboard.copy" content="Copy to clipboard">
+      
+        <meta name="lang:clipboard.copied" content="Copied to clipboard">
+      
+        <meta name="lang:search.language" content="en">
+      
+        <meta name="lang:search.pipeline.stopwords" content="True">
+      
+        <meta name="lang:search.pipeline.trimmer" content="True">
+      
+        <meta name="lang:search.result.none" content="No matching documents">
+      
+        <meta name="lang:search.result.one" content="1 matching document">
+      
+        <meta name="lang:search.result.other" content="# matching documents">
+      
+        <meta name="lang:search.tokenizer" content="[\s\-]+">
+      
+      <link rel="shortcut icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-3.0.5">
+    
+    
+      
+        <title>Installation - ubuntu - Cartologic</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/application.451f80e5.css">
+      
+      
+    
+    
+      <script src="../assets/javascripts/modernizr.1aa3b519.js"></script>
+    
+    
+      
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700|Roboto+Mono">
+        <style>body,input{font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono","Courier New",Courier,monospace}</style>
+      
+    
+    <link rel="stylesheet" href="../assets/fonts/material-icons.css">
+    
+    
+  </head>
+  
+    <body dir="ltr">
+  
+    <svg class="md-svg">
+      <defs>
+        
+        
+          <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448"
+    viewBox="0 0 416 448" id="__github">
+  <path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19-18.125
+        8.5-18.125-8.5-10.75-19-3.125-20.5 3.125-20.5 10.75-19 18.125-8.5
+        18.125 8.5 10.75 19 3.125 20.5zM320 304q0 10-3.125 20.5t-10.75
+        19-18.125 8.5-18.125-8.5-10.75-19-3.125-20.5 3.125-20.5 10.75-19
+        18.125-8.5 18.125 8.5 10.75 19 3.125 20.5zM360
+        304q0-30-17.25-51t-46.75-21q-10.25 0-48.75 5.25-17.75 2.75-39.25
+        2.75t-39.25-2.75q-38-5.25-48.75-5.25-29.5 0-46.75 21t-17.25 51q0 22 8
+        38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0
+        37.25-1.75t35-7.375 30.5-15 20.25-25.75 8-38.375zM416 260q0 51.75-15.25
+        82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5-41.75
+        1.125q-19.5 0-35.5-0.75t-36.875-3.125-38.125-7.5-34.25-12.875-30.25-20.25-21.5-28.75q-15.5-30.75-15.5-82.75
+        0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25
+        30.875q36.75-8.75 77.25-8.75 37 0 70 8 26.25-20.5
+        46.75-30.25t47.25-9.75q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34
+        99.5z" />
+</svg>
+        
+      </defs>
+    </svg>
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
+    
+      <a href="#cartoview" tabindex="1" class="md-skip">
+        Skip to content
+      </a>
+    
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid">
+    <div class="md-flex">
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <a href="http://www.cartologic.com/" title="Cartologic" class="md-header-nav__button md-logo">
+          
+            <i class="md-icon"></i>
+          
+        </a>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--menu md-header-nav__button" for="__drawer"></label>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch">
+        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
+          
+            
+              <span class="md-header-nav__topic">
+                Cartologic
+              </span>
+              <span class="md-header-nav__topic">
+                Installation - ubuntu
+              </span>
+            
+          
+        </div>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        
+          
+            <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
+            
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query" data-md-state="active">
+      <label class="md-icon md-search__icon" for="__search"></label>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">
+        &#xE5CD;
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="result">
+          <div class="md-search-result__meta">
+            Type to start searching
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+          
+        
+      </div>
+      
+        <div class="md-flex__cell md-flex__cell--shrink">
+          <div class="md-header-nav__source">
+            
+
+
+  
+
+
+  <a href="https://github.com/cartologic/cartoview/" title="Go to repository" class="md-source" data-md-source="github">
+    
+      <div class="md-source__icon">
+        <svg viewBox="0 0 24 24" width="24" height="24">
+          <use xlink:href="#__github" width="24" height="24"></use>
+        </svg>
+      </div>
+    
+    <div class="md-source__repository">
+      GitHub
+    </div>
+  </a>
+
+          </div>
+        </div>
+      
+    </div>
+  </nav>
+</header>
+    
+    <div class="md-container">
+      
+        
+      
+      
+      <main class="md-main">
+        <div class="md-main__inner md-grid" data-md-component="container">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" data-md-level="0">
+  <label class="md-nav__title md-nav__title--site" for="__drawer">
+    <a href="http://www.cartologic.com/" title="Cartologic" class="md-nav__button md-logo">
+      
+        <i class="md-icon"></i>
+      
+    </a>
+    Cartologic
+  </label>
+  
+    <div class="md-nav__source">
+      
+
+
+  
+
+
+  <a href="https://github.com/cartologic/cartoview/" title="Go to repository" class="md-source" data-md-source="github">
+    
+      <div class="md-source__icon">
+        <svg viewBox="0 0 24 24" width="24" height="24">
+          <use xlink:href="#__github" width="24" height="24"></use>
+        </svg>
+      </div>
+    
+    <div class="md-source__repository">
+      GitHub
+    </div>
+  </a>
+
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-1" type="checkbox" id="nav-1" checked>
+    
+    <label class="md-nav__link" for="nav-1">
+      Cartoview
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-1">
+        Cartoview
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href=".." title="About" class="md-nav__link">
+      About
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../key_features/" title="Key Features" class="md-nav__link">
+      Key Features
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../demo/" title="Demos" class="md-nav__link">
+      Demos
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        Installation - ubuntu
+      </label>
+    
+    <a href="./" title="Installation - ubuntu" class="md-nav__link md-nav__link--active">
+      Installation - ubuntu
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#this-document-describes-the-installation-of-cartoview-on-ubuntu-with-geonode-263" title="This document describes the Installation of CartoView on Ubuntu with GeoNode 2.6.3" class="md-nav__link">
+    This document describes the Installation of CartoView on Ubuntu with GeoNode 2.6.3
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#installation-requirements" title="Installation Requirements" class="md-nav__link">
+    Installation Requirements
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#install-required-packages-on-ubuntu-linux" title="Install Required Packages on ubuntu linux" class="md-nav__link">
+    Install Required Packages on ubuntu linux
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#database-installation" title="Database Installation" class="md-nav__link">
+    Database Installation
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#database-configuration" title="Database Configuration" class="md-nav__link">
+    Database Configuration
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#install-geoserver" title="Install GeoServer" class="md-nav__link">
+    Install GeoServer
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#geonode-263-installation" title="GeoNode 2.6.3 Installation" class="md-nav__link">
+    GeoNode 2.6.3 Installation
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cartoview-libraries-installation" title="CartoView Libraries Installation" class="md-nav__link">
+    CartoView Libraries Installation
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#deployment-notes" title="Deployment Notes" class="md-nav__link">
+    Deployment Notes
+  </a>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../installation_windows/" title="Installation - windows" class="md-nav__link">
+      Installation - windows
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../installation_docker/" title="Installation - docker" class="md-nav__link">
+      Installation - docker
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../installation_vagrant/" title="Installation - vagrant" class="md-nav__link">
+      Installation - vagrant
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../market/" title="Install App" class="md-nav__link">
+      Install App
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../developers/" title="Developers" class="md-nav__link">
+      Developers
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../upload_to_app_market/" title="Upload App to App Market" class="md-nav__link">
+      Upload App to App Market
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../contrib/" title="Contribute" class="md-nav__link">
+      Contribute
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../QA/" title="Frequently Asked Questions" class="md-nav__link">
+      Frequently Asked Questions
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../issues/" title="Issues" class="md-nav__link">
+      Issues
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#this-document-describes-the-installation-of-cartoview-on-ubuntu-with-geonode-263" title="This document describes the Installation of CartoView on Ubuntu with GeoNode 2.6.3" class="md-nav__link">
+    This document describes the Installation of CartoView on Ubuntu with GeoNode 2.6.3
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#installation-requirements" title="Installation Requirements" class="md-nav__link">
+    Installation Requirements
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#install-required-packages-on-ubuntu-linux" title="Install Required Packages on ubuntu linux" class="md-nav__link">
+    Install Required Packages on ubuntu linux
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#database-installation" title="Database Installation" class="md-nav__link">
+    Database Installation
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#database-configuration" title="Database Configuration" class="md-nav__link">
+    Database Configuration
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#install-geoserver" title="Install GeoServer" class="md-nav__link">
+    Install GeoServer
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#geonode-263-installation" title="GeoNode 2.6.3 Installation" class="md-nav__link">
+    GeoNode 2.6.3 Installation
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cartoview-libraries-installation" title="CartoView Libraries Installation" class="md-nav__link">
+    CartoView Libraries Installation
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#deployment-notes" title="Deployment Notes" class="md-nav__link">
+    Deployment Notes
+  </a>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/cartologic/cartoview/edit/master/docs/installation_ubuntu.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
+                
+                
+                <h1 id="cartoview">CartoView<a class="headerlink" href="#cartoview" title="Permanent link">&para;</a></h1>
+<h2 id="this-document-describes-the-installation-of-cartoview-on-ubuntu-with-geonode-263">This document describes the Installation of CartoView on Ubuntu with GeoNode 2.6.3<a class="headerlink" href="#this-document-describes-the-installation-of-cartoview-on-ubuntu-with-geonode-263" title="Permanent link">&para;</a></h2>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>In case of any other version of GeoNode before 2.5 these steps will not be applicable.</p>
+</div>
+<h2 id="installation-requirements">Installation Requirements<a class="headerlink" href="#installation-requirements" title="Permanent link">&para;</a></h2>
+<ul>
+<li>
+<p>Install <a href="https://www.python.org/download/releases/2.7/">Python2.7</a>.</p>
+</li>
+<li>
+<p>Install Django
+<div class="codehilite"><pre><span></span>sudo apt-get update
+sudo apt-get install python-django
+</pre></div></p>
+</li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For more information about Djano installation visit <a href="https://pypi.python.org/pypi/Django/1.8.7">1.8.7 &lt;= Django &lt;1.9a0</a>.</p>
+</div>
+<h2 id="install-required-packages-on-ubuntu-linux">Install Required Packages on ubuntu linux<a class="headerlink" href="#install-required-packages-on-ubuntu-linux" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Run the following command  <div class="codehilite"><pre><span></span> sudo apt-get update
+ sudo apt-get install python-virtualenv python-dev libxml2 libxml2-dev libxslt1-dev zlib1g-dev libjpeg-dev libpq-dev libgdal-dev git default-jdk
+</pre></div>
+
+
+</li>
+</ul>
+<h2 id="database-installation">Database Installation<a class="headerlink" href="#database-installation" title="Permanent link">&para;</a></h2>
+<ul>
+<li>
+<p>Install PostgreSQL Database
+    <div class="codehilite"><pre><span></span>sudo apt-get install postgresql postgresql-contrib
+</pre></div></p>
+</li>
+<li>
+<p>Install PostGIS ( Extension to support Geographic objects that allows location queries to be run in SQL. )</p>
+<div class="codehilite"><pre><span></span>sudo apt-get install postgis
+</pre></div>
+
+</li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note<p>you can install pgAdmin ( PostgreSQL GUI tool using ): <code>sudo apt-get install pgadmin3</code></p>
+</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note<p>For more Information about PostgreSQL visit <a href="https://www.postgresql.org/download/linux/ubuntu/">postgresql</a>.</p>
+</p>
+</div>
+<h2 id="database-configuration">Database Configuration<a class="headerlink" href="#database-configuration" title="Permanent link">&para;</a></h2>
+<ul>
+<li>You will need to log in with a user called postgres created by the installation to manage the database
+ <div class="codehilite"><pre><span></span>sudo -i -u postgres
+</pre></div></li>
+<li>Change the postgres user password
+ <div class="codehilite"><pre><span></span>psql
+\password
+</pre></div></li>
+<li>Exit the PostgreSQL prompt by typing
+ <div class="codehilite"><pre><span></span>\q
+</pre></div></li>
+<li>Create two new databases cartoView and cartoview_datastore
+ <div class="codehilite"><pre><span></span>createdb cartoview
+createdb cartoview_datastore
+</pre></div></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You can change the databases' name but make sure to change thier names in the local_settings.py file in cartoview project directory</p>
+</div>
+<ul>
+<li>Add PostGIS extension to the created databases</li>
+</ul>
+<div class="codehilite"><pre><span></span>psql &lt;database-name&gt;
+CREATE EXTENSION postgis;
+</pre></div>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For more information about PostgreSQL configuration visit <a href="https://www.digitalocean.com/community/tutorials/how-to-install-and-use-postgresql-on-ubuntu-14-04">postgreSQL</a></p>
+</div>
+<h2 id="install-geoserver">Install GeoServer<a class="headerlink" href="#install-geoserver" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Install Java 8 (needed by GeoServer)
+<div class="codehilite"><pre><span></span>sudo apt-add-repository ppa:webupd8team/java
+sudo apt-get update
+sudo apt-get install oracle-java8-installer
+</pre></div></li>
+</ul>
+<p>1) Download  <a href="https://tomcat.apache.org/download-90.cgi">Tomcat v9</a></p>
+<p>2) Extract the tar folder and rename it tomcat</p>
+<p>3) Download GeoServer war file from <a href="http://build.geonode.org/geoserver/latest/geoserver-2.9.x-oauth2.war">here</a></p>
+<p>4) Rename the war file to geoserver.war</p>
+<p>5) Copy the war file inside webapps directory in tomcat</p>
+<p>6) Create tomcat user by editing the tomcat-users.xml file:</p>
+<div class="codehilite"><pre><span></span>        sudo nano path/to/tomcat/conf/tomcat-users.xml
+</pre></div>
+
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Make sure to change path/to/tomcat in the previous command with your tomcat path</p>
+</div>
+<p>7) Paste the following line in tomcat-users.xml
+<code>&lt;user username="admin" password="password"roles="manager-gui,admin-gui"/&gt;</code>
+just before <code>&lt;/tomcat-users &gt;</code> and change the username and password</p>
+<p>8) Edit context files in host-manager directory</p>
+<div class="codehilite"><pre><span></span> sudo nano path/to/tomcat/webapps/host-manager/META-INF/context.xml
+</pre></div>
+
+
+<p>9) Comment the line <code>&lt;Valve className="org.apache.catalina.valves.RemoteAddrValve"
+         allow="127\.\d+\.\d+\.\d+|::1|0:0:0:0:0:0:0:1" /&gt;</code> by changing it to
+                 <code>&lt;!--&lt;Valve className="org.apache.catalina.valves.RemoteAddrValve"
+                                 allow="127\.\d+\.\d+\.\d+|::1|0:0:0:0:0:0:0:1" /&gt;--&gt;</code></p>
+<p>10) Edit context files in manager directory</p>
+<div class="codehilite"><pre><span></span>sudo nano path/to/tomcat/webapps/manager/META-INF/context.xml
+</pre></div>
+
+
+<p>11) Comment the line <code>&lt;Valve className="org.apache.catalina.valves.RemoteAddrValve"
+        allow="127\.\d+\.\d+\.\d+|::1|0:0:0:0:0:0:0:1" /&gt;</code>  by changing it to
+                <code>&lt;!--&lt;Valve className="org.apache.catalina.valves.RemoteAddrValve"
+                                allow="127\.\d+\.\d+\.\d+|::1|0:0:0:0:0:0:0:1" /&gt;--&gt;</code>  </p>
+<ul>
+<li>Start tomcat server</li>
+</ul>
+<p><code>sh path/to/your/tomcat/bin/startup.sh</code></p>
+<ul>
+<li>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+  For more information about tomcat Installation and Configuration of tomcat visit <a href="https://www.digitalocean.com/community/tutorials/how-to-install-apache-tomcat-8-on-ubuntu-16-04">tomcat</a></div>
+</li>
+<li>
+<div class="admonition warning">
+<p class="admonition-title">Important</p>
+Cartview must be up and running</div>
+</li>
+<li>
+<div class="admonition warning">
+<p class="admonition-title">Important</p>
+<p>In Production Configure GeoServer before uploading layers from <a href="http://docs.geonode.org/en/master/tutorials/admin/geoserver_geonode_security/#geoserver-security-backend">here</a></p>
+</div>
+</li>
+</ul>
+<h2 id="geonode-263-installation">GeoNode 2.6.3 Installation<a class="headerlink" href="#geonode-263-installation" title="Permanent link">&para;</a></h2>
+<ul>
+<li>
+<p>Follow these setps if you don't have Geonode installed on your ubuntu system.<br/></p>
+</li>
+<li>
+<p>Create and activate the python virtual environment</p>
+<div class="codehilite"><pre><span></span>virtualenv &amp;lt;your_virtual_env_name&amp;gt;
+source &amp;lt;your_virtual_env_name&amp;gt;/bin/activate
+</pre></div>
+
+
+</li>
+<li>
+<p>Install pip ( a package management system used install and manage software packages written in Python )</p>
+<div class="codehilite"><pre><span></span>sudo apt-get install python-pip
+</pre></div>
+
+
+</li>
+<li>
+<p>Install geonode 2.6.3</p>
+<div class="codehilite"><pre><span></span>pip install geonode==2.6.3
+sudo apt-get install python-gdal
+</pre></div>
+
+
+</li>
+<li>
+<p>Create a symbolic link of OSGeo in your virtualenv needed by GDAL to run properly  </p>
+<div class="codehilite"><pre><span></span>ln -s /usr/lib/python2.7/dist-packages/osgeo  &amp;lt;your_virtual_env_name&amp;gt;/lib/python2.7/site-packages/osgeo
+</pre></div>
+
+
+</li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note<p>To Verify installation add any layer in [Geonode][1]</p>
+</p>
+</div>
+<h2 id="cartoview-libraries-installation">CartoView Libraries Installation<a class="headerlink" href="#cartoview-libraries-installation" title="Permanent link">&para;</a></h2>
+<ul>
+<li>
+<p>Install CartoView</p>
+<p><code>pip install cartoview</code></p>
+</li>
+<li>
+<p>Install CartoView_Django Project</p>
+<div class="codehilite"><pre><span></span>django-admin.py startproject template=https://github.com/cartologic/cartoview-project-template/archive/master.zip --name django.env,uwsgi.ini,.bowerrc,server.py &amp;lt;your_project_name&amp;gt;
+</pre></div>
+
+
+</li>
+<li>
+<p>Go to your Project Folder</p>
+<div class="codehilite"><pre><span></span>   cd &amp;lt;your_project_name&amp;gt;
+</pre></div>
+
+
+</li>
+<li>
+<p>Detect changes in <code>app_manager</code> App</p>
+<div class="codehilite"><pre><span></span>   python manage.py makemigrations app_manager
+</pre></div>
+
+
+</li>
+<li>
+<p>Create account Table</p>
+<div class="codehilite"><pre><span></span>   python manage.py migrate account
+</pre></div>
+
+
+</li>
+<li>
+<p>Create Rest of tables :</p>
+<div class="codehilite"><pre><span></span>    python manage.py migrate
+</pre></div>
+
+
+</li>
+<li>
+<p>Load default User</p>
+<div class="codehilite"><pre><span></span>    python manage.py loaddata sample_admin.json
+</pre></div>
+
+
+</li>
+<li>
+<p>Load default oauth app</p>
+<div class="codehilite"><pre><span></span>   python manage.py loaddata json/default_oauth_apps.json
+</pre></div>
+
+
+</li>
+<li>
+<p>Test Development Server
+by running this Command :</p>
+<div class="codehilite"><pre><span></span>      python manage.py runserver 0.0.0.0:8000
+</pre></div>
+
+
+</li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Info</p>
+<p><strong>(Optional)</strong> if you want to override any  variable settings (for example to change the
+  database password ,name or hostname ) rename<code>local_settings.py.sample</code> to <code>local_settings.py</code> then override settings you want inside <code>local_settings.py</code></p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Don't Forget to Change <code>&lt;your_project_name&gt;</code> to desired name.</p>
+</div>
+<div class="admonition important">
+<p class="admonition-title">Apps From GeoApp Market</p>
+<ul>
+<li>
+<p>To Install apps from <a href="http://www.cartoview.org">GeoApp Market</a></p>
+</li>
+<li>
+<p>Load Default Store</p>
+<p><code>python manage.py loaddata app_stores.json</code></p>
+</li>
+<li>
+<p>Install <a href="https://nodejs.org/en/">nodejs</a> and then install <a href="https://bower.io/">bower</a> we need them to install app_manager dependencies</p>
+</li>
+<li>In this step we will install required files in your project folder type :
+    <code>bower install</code></li>
+<li>
+<p>Collect Required files type:
+    ```</p>
+<p>python manage.py collectstatic --noinput
+<code>- Now you Can Install Apps from [Geo App Market][2]
+- Go to</code>apps<code>tab and click</code>manage apps``` Button and install app you want</p>
+</li>
+</ul>
+</div>
+<h2 id="deployment-notes">Deployment Notes<a class="headerlink" href="#deployment-notes" title="Permanent link">&para;</a></h2>
+<ul>
+<li>
+<div class="admonition warning">
+<p class="admonition-title">Important</p>
+In Production Configure GeoServer before uploading layers from <a href="http://docs.geonode.org/en/master/tutorials/admin/geoserver_geonode_security/#geoserver-security-backend">here</a></div>
+</li>
+<li>
+<div class="admonition warning">
+<p class="admonition-title">Important</p>
+<p>Once CartoView is installed it is expected to install all apps from the App Store automatically
+At the moment CartoView will fully support Apache server only
+For nginx deployments, CartoView will be able to detect new apps and get the updates, how ever to apply the updates, web server restart will be required to complete    the process
+CartoView will not be able to restart nginx when new apps are installed.
+After you install or update apps from the app manager page you will need to restart nginx manually until this issue is addressed in the future</p>
+<ul>
+<li>Follow these steps to get apps working on nginx<ul>
+<li>Collect static files using this commands
+    <code>python manage.py collectstatic --noinput</code></li>
+<li>Restart server now you should restart server after installing any app</li>
+</ul>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+                
+                  
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid">
+        
+          <a href="../demo/" title="Demos" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
+            </div>
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                Demos
+              </span>
+            </div>
+          </a>
+        
+        
+          <a href="../installation_windows/" title="Installation - windows" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                Installation - windows
+              </span>
+            </div>
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+          <div class="md-footer-copyright__highlight">
+            Cartologic
+          </div>
+        
+        powered by
+        <a href="https://www.mkdocs.org">MkDocs</a>
+        and
+        <a href="https://squidfunk.github.io/mkdocs-material/">
+          Material for MkDocs</a>
+      </div>
+      
+        
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../assets/javascripts/application.583bbe55.js"></script>
+      
+      <script>app.initialize({version:"1.0.4",url:{base:".."}})</script>
+      
+    
+    
+      
+    
+  </body>
+</html>

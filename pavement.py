@@ -498,6 +498,7 @@ def publish(options):
     sh("pip install twine")
     sh("python setup.py sdist")
     sh("python setup.py bdist_wheel")
+    sh("mkdocs build --config-file=./mkdocs/mkdocs.yml")
     sh("twine upload dist/*")
 
 

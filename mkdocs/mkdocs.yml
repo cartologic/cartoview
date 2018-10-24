@@ -6,6 +6,7 @@ copyright: Cartologic
 site_author: Cartologic
 remote_branch: master
 remote_name: io
+site_dir: ../docs
 pages:
     -  Cartoview:
         - 'About': 'index.md'
@@ -33,12 +34,26 @@ extra:
     code: 'Source Code Pro'
 
 markdown_extensions:
-  - admonition
   - footnotes
-  - codehilite(linenums=true)
-  - toc(permalink=true)
+  - admonition
+  - codehilite:
+      guess_lang: false
+  - toc:
+      permalink: true
   - meta
+  - pymdownx.arithmatex
+  - pymdownx.betterem:
+      smart_enable: all
+  - pymdownx.caret
+  - pymdownx.critic
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_generator: !!python/name:pymdownx.emoji.to_svg
+  - pymdownx.inlinehilite
+  - pymdownx.magiclink
+  - pymdownx.mark
+  - pymdownx.smartsymbols
   - pymdownx.superfences
-  - pymdownx.tasklist(custom_checkbox=true)
-#  - pymdownx.emoji:
-      #emoji_generator: !!python/name:pymdownx.emoji.to_svg
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tilde
