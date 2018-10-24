@@ -28,7 +28,8 @@ CARTOVIEW_STATIC_DIRS = [
     os.path.join(CARTOVIEW_DIR, "static"),
 ]
 STATICFILES_DIRS += CARTOVIEW_STATIC_DIRS
-APPS_DIR = os.path.abspath(os.path.join(CARTOVIEW_DIR, "apps"))
+APPS_DIR = os.path.abspath(os.path.join(
+    os.path.dirname(CARTOVIEW_DIR), "apps"))
 PENDING_APPS = os.path.join(APPS_DIR, "pendingOperation.yml")
 APPS_MENU = False
 DOCKER = os.getenv('DOCKER', False)
@@ -43,7 +44,9 @@ MEDIA_URL = "/uploaded/"
 LOCAL_MEDIA_URL = "/uploaded/"
 # static section
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
-DATABASE_URL = os.getenv('DATABASE_URL', None)
+DATABASE_URL = os.getenv(
+    'DATABASE_URL', 'sqlite:////{}/database.sqlite'.format(
+    os.path.dirname(CARTOVIEW_DIR)))
 DATASTORE_DATABASE_URL = os.getenv('DATASTORE_DATABASE_URL', None)
 if DATABASE_URL:
     DATABASES['default'] = dj_database_url.parse(
