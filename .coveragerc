@@ -1,0 +1,5 @@
+[run]
+omit = cartoview/app_manager/settings.py,
+       cartoview/wsgi.py,
+       cartoview/settings.py,
+       */migrations/*

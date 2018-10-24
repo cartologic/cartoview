@@ -241,5 +241,4 @@ dist/
 vendor
 uploaded
 *.db
-.coverage*
 database.sqlite
