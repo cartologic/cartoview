@@ -27,6 +27,6 @@ setup(
     install_requires=[
         'future', 'six==1.10.0', 'portalocker==1.2.1',
         'geonode>2.7.5.dev20180125135927,<2.9', 'Faker>=0.8.4',
-        'cherrypy==11.0.0', 'cheroot==5.8.3', 'mkdocs==1.0.4',
+        'cherrypy==11.0.0', 'cheroot==5.8.3', 'mkdocs==0.17.5',
         'mkdocs-material==3.0.5'
     ])
