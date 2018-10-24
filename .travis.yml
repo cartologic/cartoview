@@ -1,42 +1,39 @@
 sudo: required
-
 language: python
-
 cache:
   directories:
-    - $HOME/.cache/pip
-
+    - "$HOME/.cache/pip"
 before_cache:
   - rm -f $HOME/.cache/pip/log/debug.log
 addons:
-  postgresql: "9.6"
+  postgresql: '9.6'
   apt:
     packages:
-    - postgresql-9.6-postgis-2.3
-    - libevent-dev
-
+      - postgresql-9.6-postgis-2.3
+      - libevent-dev
 services:
   - postgresql
-
 python:
-  - "2.7"
-
+  - '2.7'
 virtualenv:
   system_site_packages: true
-
 branches:
   only:
     - master
     - stand_alone
-
 install:
   - sudo apt-get -qq -y update
-  - sudo apt-get install -y gcc gettext python-pip libpq-dev sqlite3 git gdal-bin lsof psmisc
+  - sudo apt-get install -y gcc gettext python-pip libpq-dev sqlite3 git gdal-bin lsof
+    psmisc
   - sudo apt-get install -y python-gdal python-psycopg2 python-imaging python-lxml
-  - sudo apt-get install -y python-dev libgdal-dev libgeoip-dev python-ldap libxml2 libxml2-dev libxslt-dev git default-jdk
-  - sudo apt-get install -y python-dev libxml2 libxml2-dev libxslt1-dev zlib1g-dev libjpeg-dev libpq-dev libgdal-dev git default-jdk
-  - sudo apt-get install -y libmemcached-dev libsasl2-dev zlib1g-dev python-pylibmc python-setuptools
-  - sudo apt-get install -y curl build-essential build-essential python-dev libffi-dev libssl-dev
+  - sudo apt-get install -y python-dev libgdal-dev libgeoip-dev python-ldap libxml2
+    libxml2-dev libxslt-dev git default-jdk
+  - sudo apt-get install -y python-dev libxml2 libxml2-dev libxslt1-dev zlib1g-dev libjpeg-dev
+    libpq-dev libgdal-dev git default-jdk
+  - sudo apt-get install -y libmemcached-dev libsasl2-dev zlib1g-dev python-pylibmc
+    python-setuptools
+  - sudo apt-get install -y curl build-essential build-essential python-dev libffi-dev
+    libssl-dev
   - sudo add-apt-repository -y ppa:webupd8team/java
   - sudo apt-get update
   - sudo apt-get install -y --force-yes oracle-java8-installer ant maven2 --no-install-recommends
@@ -50,19 +47,23 @@ install:
   - paver setup_geoserver
   - paver start_geoserver
   - pip install coveralls
-
 before_script:
   - psql -U postgres -c "create extension postgis"
   - chmod +x scripts/database/setup.sh
   - scripts/database/setup.sh
-
 script:
   - flake8
   - paver run_cartoview_test
-
 after_success:
-  - coveralls
-
+- coveralls
+deploy:
+  provider: pypi
+  user: cartologic
+  password:
+    secure: I55fbMkUDNnPVRejHETev9viO7nY9bD+wXzPk0MoLKhx5KceyAPYXnznVYMid7FVzBZzP6pLT9k8lZTC+Xv6ZET8GK/cgwPd+i3n8upk2PKAzjUCxutXrxTPHCKyd9HHz051Wt/0vJvhKsw37E/WPFach007gGjF2J/diGdEFtvrKYE+ixYd6wu6VevKGtCce4Wt2HY7fZ7rfhHbEdX/k2hOzrBiD5fwHp+GJdcczGpzKdtdKvdhkUEDsBs6y1hUgGbCF9i3TiagEA3/Md/bG4mU4P+B1oAkdXue9TVLOEMXD1rpdR/EMm0FwMsnZWtaYTTkvEmPrYBhLcN7NlM0/VaSJ6ejbD9nk+37uE2h7S/xKsmCezzYEDeDAXmMa3WDQQrSYLuypN8DgxFhYiac+qYIBSMUOyI+EJXSpJ9iHaseofvF+32DAm6U6P2kEpda619HuEEF++JxthVJ01hAaQDoezEisirXT0pWKEQcSbTeI5hTP0kCxxlpqgg1CNmSvSXQbTMs9FyOTIJBHkhj4rLnTI+UPv99ig0CFzQO2HbBa+4kiWl4LpGZrNd9ei1wlxpSScJsQbu3bYUfpRqY7AiPkYkaIb1jCCWwxS/AgBX7YbT4os/E+zBQGvldQncCXhtVYA6+cpGzZM29lKUHy4KMNsiB744a48AGGUv04cg=
+  on:
+    all_branches: true
+    condition: $TRAVIS_BRANCH =~ ^(\d+\.)?(\d+\.)?(\*|\d+)$
 notifications:
   email:
     - hisham.karam@cartologic.com
