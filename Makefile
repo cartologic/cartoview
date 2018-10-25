@@ -6,7 +6,7 @@ sync: up
 	# set up the database tablea
 	docker-compose exec cartoview python manage.py migrate
 	docker-compose exec cartoview python manage.py loaddata sample_admin.json
-	docker-compose exec cartoview python manage.py loaddata scripts/json/default_oauth_apps.json
+	docker-compose exec cartoview python manage.py loaddata default_oauth_apps.json
 	docker-compose exec cartoview python manage.py loaddata app_stores.json
 	docker-compose exec cartoview python manage.py loaddata initial_data.json
 
