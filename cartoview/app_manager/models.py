@@ -13,15 +13,14 @@ from django.dispatch import receiver
 from django.template.defaultfilters import slugify
 from django.utils.encoding import python_2_unicode_compatible
 from future import standard_library
+from geonode.base.models import ResourceBase, resourcebase_post_save
+from geonode.maps.models import Map as GeonodeMap
+from geonode.security.models import remove_object_permissions
 from guardian.shortcuts import assign_perm
 from jsonfield import JSONField
 from taggit.managers import TaggableManager
 
 from cartoview.log_handler import get_logger
-from geonode.base.models import ResourceBase, resourcebase_post_save
-from geonode.maps.models import Map as GeonodeMap
-from geonode.security.models import remove_object_permissions
-from geonode.security.utils import (set_owner_permissions)
 
 from .config import AppsConfig
 
@@ -182,9 +181,12 @@ class AppInstance(ResourceBase):
             return None
 
     def set_permissions(self, perm_spec):
-
         remove_object_permissions(self)
-        set_owner_permissions(self)
+        try:
+            from geonode.security.utils import (set_owner_permissions)
+            set_owner_permissions(self)
+        except:
+            pass
         if 'users' in perm_spec and "AnonymousUser" in perm_spec['users']:
             anonymous_group = Group.objects.get(name='anonymous')
             for perm in perm_spec['users']['AnonymousUser']:
