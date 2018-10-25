@@ -275,7 +275,7 @@ class AppInstaller(object):
         req_file = os.path.join(self.app_dir, "req.txt")
         libs_dir = os.path.join(self.app_dir, "libs")
         if os.path.exists(req_file) and access(req_file, R_OK):
-            req_installer = ReqInstaller(req_file, targer=libs_dir)
+            req_installer = ReqInstaller(req_file, target=libs_dir)
             req_installer.install_all()
 
     def check_then_finlize(self, restart, installed_apps):

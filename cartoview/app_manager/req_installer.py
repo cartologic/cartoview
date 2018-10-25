@@ -16,7 +16,6 @@ class ReqInstaller(object):
         self.file = reqfile
         self.requirements = []
         self.target = target
-        self.preprocess_reqfile()
 
     def install_all(self, *args, **kwargs):
         from subprocess import call
