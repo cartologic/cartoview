@@ -3,16 +3,20 @@ import os
 from os import R_OK, access
 
 
-class ReqInstallerException(Exception):
-    pass
+class ReqFileException(Exception):
+    message = "requirement file doesn't exists!"
+
+
+class ReqFilePermissionException(Exception):
+    message = "can not read requirement file!"
 
 
 class ReqInstaller(object):
     def __init__(self, reqfile, target=None):
         if not os.path.exists(reqfile):
-            raise ReqInstallerException("requirement file doesn't exists!")
+            raise ReqFileException()
         if not access(reqfile, R_OK):
-            raise ReqInstallerException("can not read requirement file!")
+            raise ReqFilePermissionException()
         self.file = reqfile
         self.requirements = []
         self.target = target
