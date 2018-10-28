@@ -1,9 +1,12 @@
-from django.test import TestCase, RequestFactory
+from django.core.management import call_command
 from django.core.urlresolvers import reverse
+from django.test import RequestFactory, TestCase
 from geonode.people.models import Profile
 
 
 class CartoviewAppsViewTest(TestCase):
+    def setUp(self):
+        call_command("load_current_apps")
 
     def test_view_url_exists_at_desired_location(self):
         resp = self.client.get('/apps/')
@@ -24,6 +27,7 @@ class CartoviewManageAppsViewTest(TestCase):
     fixtures = ['sample_admin.json']
 
     def setUp(self):
+        call_command("load_current_apps")
         self.factory = RequestFactory()
         self.username = "staff_user"
         self.password = "staff_user"
