@@ -2,4 +2,5 @@
 omit = cartoview/app_manager/settings.py,
        cartoview/wsgi.py,
        cartoview/settings.py,
+       cartoview/celery.py,
        */migrations/*
