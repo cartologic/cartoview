@@ -65,9 +65,6 @@ class AppStore(models.Model):
 
 @python_2_unicode_compatible
 class App(models.Model):
-    def only_filename(instance, filename):
-        return filename
-
     name = models.CharField(max_length=200, null=True, blank=True)
     title = models.CharField(max_length=200, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
