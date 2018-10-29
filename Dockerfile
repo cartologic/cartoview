@@ -31,5 +31,10 @@ RUN pip install --ignore-installed geoip django-geonode-client \
         cartoview==1.8.3 cherrypy==11.0.0 cheroot==5.8.3 \
         django-autocomplete-light==2.3.3  --no-cache-dir
 RUN pip install git+https://github.com/GeoNode/django-osgeo-importer.git
-RUN rm -rf /var/lib/apt/lists/*
+RUN apt autoremove --purge -y && apt autoclean -y
+RUN rm -rf ~/.cache/pip
+RUN rm -rf /var/lib/apt/lists/* && apt-get clean && \
+        rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+RUN echo "Yes, do as I say!" | apt-get remove --force-yes login	\
+        && dpkg --remove --force-depends wget unzip 
 CMD ["/bin/bash"]
