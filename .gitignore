@@ -242,3 +242,4 @@ vendor
 uploaded
 *.db
 database.sqlite
+.vscode
