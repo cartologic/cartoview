@@ -1,72 +1,90 @@
-.manager-ct{
+.manager-ct {
     padding-top: 30px;
 }
-.row {
+
+/* .row {
     display: -webkit-box;
     display: -webkit-flex;
     display: -ms-flexbox;
-    display:         flex;
+    display: flex;
     flex-wrap: wrap;
 }
-.row > [class*='col-'] {
+
+.row>[class*='col-'] {
     display: flex;
     flex-direction: column;
-}
-.fill-empty{
+} */
+
+.fill-empty {
     flex-grow: 1
 }
-.app-logo{
+
+.app-logo {
     width: 60px;
     margin: 0 5px;
     height: auto;
 }
-.border-right{
+
+.border-right {
     border-right: 1px solid #f1efef;
 }
-.card-header{
+
+.card-header {
     border-bottom: 1px solid #f1efef;
 }
-.card-header-right{
+
+.card-header-right {
     align-content: center;
     align-items: flex-end;
     vertical-align: middle;
     display: flex;
     justify-content: center;
 }
-.loading-center{
+
+.loading-center {
     align-content: center;
     align-items: center;
     vertical-align: middle;
     display: flex;
     justify-content: center;
 }
-.list-group-item-text{
+
+.list-group-item-text {
     padding-bottom: 10px;
 
 }
-.flex-element{
+
+.flex-element {
     display: flex;
     flex-grow: 1;
 }
-.card-store-info-extra{
+
+.card-store-info-extra {
     margin-right: 10px
 }
-.description{
+
+.description {
     padding-left: 10px;
     padding-right: 10px;
     white-space: normal;
 }
-.search-box{
+
+.search-box {
     margin-top: 5px;
     margin-bottom: 5px;
 }
-.btn-group, .btn-group-vertical {
+
+.btn-group,
+.btn-group-vertical {
     width: 100% !important;
 }
-.btn-group>.btn, .btn-group-vertical>.btn {
+
+.btn-group>.btn,
+.btn-group-vertical>.btn {
     margin: 5px !important;
 }
-.rotating{
+
+.rotating {
     -webkit-animation-name: rotate;
     -webkit-animation-duration: 2s;
     -webkit-animation-iteration-count: infinite;
@@ -80,23 +98,40 @@
     animation-iteration-count: infinite;
     animation-timing-function: linear;
 }
+
 @-webkit-keyframes rotate {
-    from {-webkit-transform: rotate(0deg);}
-    to {-webkit-transform: rotate(360deg);}
+    from {
+        -webkit-transform: rotate(0deg);
+    }
+
+    to {
+        -webkit-transform: rotate(360deg);
+    }
 }
 
 @-moz-keyframes rotate {
-    from {-moz-transform: rotate(0deg);}
-    to {-moz-transform: rotate(360deg);}
+    from {
+        -moz-transform: rotate(0deg);
+    }
+
+    to {
+        -moz-transform: rotate(360deg);
+    }
 }
 
 @keyframes rotate {
-    from {transform: rotate(0deg);}
-    to {transform: rotate(360deg);}
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
 }
-.restart-msg{
+
+.restart-msg {
     position: fixed;
-    top:0;
+    top: 0;
     left: 0;
     bottom: 0;
     right: 0;
@@ -104,19 +139,21 @@
     background-color: rgba(200, 200, 200, 0.7);
 
 }
+
 .restart-msg .centered {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  /* bring your own prefixes */
-  transform: translate(-50%, -50%);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    /* bring your own prefixes */
+    transform: translate(-50%, -50%);
 }
 
 /*Apps reorder*/
-.reorder-btn-ct{
+.reorder-btn-ct {
     height: 40px;
-text-align: right;
+    text-align: right;
 }
+
 /**
  * The dnd-list should always have a min-height,
  * otherwise you can't drop to it once it's empty
@@ -125,7 +162,8 @@ text-align: right;
     min-height: 42px;
     padding-left: 0px;
 }
-.row{
+
+.row {
     margin-left: -10px !important;
     margin-right: -10px !important;
 }
@@ -168,12 +206,323 @@ text-align: right;
     background-color: #dff0d8;
     color: #3c763d;
 }
+
 @media screen and (max-width: 768px) {
-    .card-header-right{
+    .card-header-right {
         align-content: center;
         align-items: center;
         vertical-align: middle;
         display: flex;
         justify-content: center;
     }
+}
+
+.cards-container {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    margin-top: 3%;
+}
+
+.card-continer {
+    width: 30%;
+}
+.card-inner-img{
+    width: 100%;
+    height: 215px;
+}
+.card-actions{
+    text-align: center;
+}
+
+/* === card component ====== 
+ * Variation of the panel component
+ * version 2018.10.30
+ * https://codepen.io/jstneg/pen/EVKYZj
+ */
+.card {
+    background-color: #fff;
+    border: 1px solid transparent;
+    border-radius: 6px;
+}
+
+.card>.card-link {
+    color: #333;
+}
+
+.card>.card-link:hover {
+    text-decoration: none;
+}
+
+.card>.card-link .card-img img {
+    border-radius: 6px 6px 0 0;
+}
+
+.card .card-img {
+    position: relative;
+    padding: 0;
+    display: table;
+    width: 100%;
+}
+
+.card .card-img .card-caption {
+    position: absolute;
+    right: 0;
+    bottom: 16px;
+    left: 0;
+}
+
+.card .card-body {
+    display: flex;
+    flex-direction: column;
+    padding: 12px;
+}
+
+.card .card-header {
+    border-radius: 6px 6px 0 0;
+    padding: 8px;
+}
+
+.card .card-footer {
+    border-radius: 0 0 6px 6px;
+    padding: 8px;
+}
+
+.card .card-left {
+    position: relative;
+    float: left;
+    padding: 0 0 8px 0;
+}
+
+.card .card-right {
+    position: relative;
+    float: left;
+    padding: 8px 0 0 0;
+}
+
+.card .card-body h1:first-child,
+.card .card-body h2:first-child,
+.card .card-body h3:first-child,
+.card .card-body h4:first-child,
+.card .card-body .h1,
+.card .card-body .h2,
+.card .card-body .h3,
+.card .card-body .h4 {
+    margin-top: 0;
+}
+
+.card .card-body .heading {
+    display: block;
+}
+
+.card .card-body .heading:last-child {
+    margin-bottom: 0;
+}
+
+.card .card-body .lead {
+    text-align: center;
+    font-size: medium;
+    margin-bottom: 15px;
+    font-weight: bold;
+}
+
+@media(max-width: 768px) {
+    .cards-container {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        justify-content: space-around;
+    }
+    .card-continer {
+        width: 100%;
+    }
+}
+@media(min-width: 768px) {
+    .card .card-left {
+        float: left;
+        padding: 0 8px 0 0;
+    }
+
+    .card .card-right {
+        float: left;
+        padding: 0 0 0 8px;
+    }
+
+    .card .card-4-8 .card-left {
+        width: 33.33333333%;
+    }
+
+    .card .card-4-8 .card-right {
+        width: 66.66666667%;
+    }
+
+    .card .card-5-7 .card-left {
+        width: 41.66666667%;
+    }
+
+    .card .card-5-7 .card-right {
+        width: 58.33333333%;
+    }
+
+    .card .card-6-6 .card-left {
+        width: 50%;
+    }
+
+    .card .card-6-6 .card-right {
+        width: 50%;
+    }
+
+    .card .card-7-5 .card-left {
+        width: 58.33333333%;
+    }
+
+    .card .card-7-5 .card-right {
+        width: 41.66666667%;
+    }
+
+    .card .card-8-4 .card-left {
+        width: 66.66666667%;
+    }
+
+    .card .card-8-4 .card-right {
+        width: 33.33333333%;
+    }
+}
+
+/* -- default theme ------ */
+.card-default {
+    border-color: #ddd;
+    background-color: #fff;
+    margin-bottom: 24px;
+}
+
+.card-default>.card-header,
+.card-default>.card-footer {
+    color: #333;
+    background-color: #ddd;
+}
+
+.card-default>.card-header {
+    border-bottom: 1px solid #ddd;
+    padding: 8px;
+}
+
+.card-default>.card-footer {
+    border-top: 1px solid #ddd;
+    padding: 8px;
+}
+
+.card-default>.card-body {}
+
+.card-default>.card-img:first-child img {
+    border-radius: 6px 6px 0 0;
+}
+
+.card-default>.card-left {
+    padding-right: 4px;
+}
+
+.card-default>.card-right {
+    padding-left: 4px;
+}
+
+.card-default p:last-child {
+    margin-bottom: 0;
+}
+
+.card-default .card-caption {
+    color: #fff;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+
+/* -- text-highlight theme ------ */
+.card-app {
+    border-color: #999;
+    background-color: #ededed;
+    margin-bottom: 24px;
+}
+
+.card-app>.card-heading,
+.card-app>.card-footer {
+    color: #333;
+    background-color: #fdfdfd;
+}
+
+.card-app>.card-heading {
+    border-bottom: 1px solid #ddd;
+    padding: 8px;
+}
+
+.card-app>.card-footer {
+    border-top: 1px solid #ddd;
+    padding: 8px;
+}
+
+.card-app>.card-img:first-child img {
+    border-radius: 6px 6px 0 0;
+}
+
+.card-app>.card-left {
+    padding-right: 4px;
+}
+
+.card-app>.card-right {
+    padding-left: 4px;
+}
+
+.card-app .card-caption {
+    color: #fff;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.card-app p:last-child {
+    margin-bottom: 0;
+}
+
+.card-app .text-highlight {
+    text-align: center;
+    color: #337ab7;
+    font-size: 3em;
+    text-transform: uppercase;
+    line-height: 0.7em;
+    margin: 24px 0 16px;
+}
+
+.card-app .text-highlight small {
+    font-size: 0.4em;
+    color: #66a5da;
+}
+
+.card-app .details {
+    text-align: center;
+    margin-bottom: 24px;
+    padding: 0 18px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.card-app .details li {
+    text-align: center;
+    margin-bottom: 8px;
+}
+
+.card-app .buy-now {
+    text-transform: uppercase;
+}
+
+.card-app table .text-highlight {
+    font-size: 1.2em;
+    font-weight: 700;
+    text-align: left;
+}
+
+.card-app table .note {
+    color: #666;
+    font-size: 0.8em;
 }

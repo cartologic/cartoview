@@ -80,7 +80,6 @@
         }
 
         function AppResource(store) {
-            console.log(store)
             return $resource(store.url + 'app/:storeId?server_type__name=:server_type&cartoview_version=:version', {
                 storeId: '@id',
                 server_type: store.server_type,
