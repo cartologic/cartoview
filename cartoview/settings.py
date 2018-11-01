@@ -29,8 +29,8 @@ CARTOVIEW_STATIC_DIRS = [
     os.path.join(CARTOVIEW_DIR, "static"),
 ]
 STATICFILES_DIRS += CARTOVIEW_STATIC_DIRS
-APPS_DIR = os.path.abspath(os.path.join(
-    os.path.dirname(CARTOVIEW_DIR), "apps"))
+APPS_DIR = os.path.abspath(
+    os.path.join(os.path.dirname(CARTOVIEW_DIR), "apps"))
 PENDING_APPS = os.path.join(APPS_DIR, "pendingOperation.yml")
 APPS_MENU = False
 DOCKER = os.getenv('DOCKER', False)
@@ -47,7 +47,7 @@ LOCAL_MEDIA_URL = "/uploaded/"
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
 DATABASE_URL = os.getenv(
     'DATABASE_URL', 'sqlite:////{}/database.sqlite'.format(
-    os.path.dirname(CARTOVIEW_DIR)))
+        os.path.dirname(CARTOVIEW_DIR)))
 DATASTORE_DATABASE_URL = os.getenv('DATASTORE_DATABASE_URL', None)
 if DATABASE_URL:
     DATABASES['default'] = dj_database_url.parse(
@@ -143,7 +143,7 @@ if CARTOVIEW_STAND_ALONE or CARTOVIEW_TEST:
         except Exception as e:
             print(e.message)
 
-# amqp settings
+# Celery settings
 CELERY_TASK_DEFAULT_QUEUE = "default"
 CELERY_TASK_DEFAULT_EXCHANGE = "default"
 CELERY_TASK_DEFAULT_EXCHANGE_TYPE = "direct"
@@ -197,7 +197,6 @@ CELERY_TASK_QUEUES = (
     Queue('email', GEONODE_EXCHANGE, routing_key='email'),
 )
 
-
 CELERY_TASK_QUEUES += (
     Queue("broadcast", GEOSERVER_EXCHANGE, routing_key="#"),
     Queue("email.events", GEOSERVER_EXCHANGE, routing_key="email"),
@@ -207,9 +206,7 @@ CELERY_TASK_QUEUES += (
         GEOSERVER_EXCHANGE,
         routing_key="geoserver.catalog"),
     Queue(
-        "geoserver.data",
-        GEOSERVER_EXCHANGE,
-        routing_key="geoserver.catalog"),
+        "geoserver.data", GEOSERVER_EXCHANGE, routing_key="geoserver.catalog"),
     Queue(
         "geoserver.events",
         GEOSERVER_EXCHANGE,
@@ -243,3 +240,8 @@ USE_TZ = True
 
 CELERY_ENABLE_UTC = True
 CELERY_TIMEZONE = "UTC"
+
+try:
+    from .local_settings import *  #noqa
+except Exception as e:
+    print(e.message)
