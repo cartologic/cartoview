@@ -5,7 +5,7 @@ from contextlib import contextmanager
 
 from django.conf import settings
 
-from sqlalchemy import Column, Integer, String, create_engine, exists
+from sqlalchemy import Column, Integer, String, create_engine
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.ext.declarative import declarative_base, declared_attr
 from sqlalchemy.orm import scoped_session, sessionmaker
@@ -119,8 +119,10 @@ class CartoApps(BaseModel, apps_orm.Base):
     @classmethod
     def app_exists(cls, app_name):
         with apps_orm.session() as session:
-            return session.query(
-                exists().where(cls.name == app_name)).scalar() is not None
+            exists = session.query(
+                session.query(cls).filter(
+                    cls.name == app_name).exists()).scalar()
+            return exists
 
     @classmethod
     def delete_app(cls, app_name):
