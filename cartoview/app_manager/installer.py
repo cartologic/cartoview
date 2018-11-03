@@ -25,8 +25,7 @@ from cartoview.apps_handler.handlers import CartoApps, apps_orm
 from cartoview.log_handler import get_logger
 from cartoview.store_api.api import StoreAppResource, StoreAppVersion
 
-from .decorators import restart_enabled
-from .helpers import change_path_permission, create_direcotry
+from .decorators import restart_enabled, rollback_on_failure
 from .models import App, AppStore, AppType
 from .req_installer import ReqInstaller
 from .settings import create_apps_dir
@@ -35,8 +34,6 @@ logger = get_logger(__name__)
 install_app_batch = getattr(settings, 'INSTALL_APP_BAT', None)
 standard_library.install_aliases()
 reload(pkg_resources)
-current_folder = os.path.abspath(os.path.dirname(__file__))
-temp_dir = os.path.join(current_folder, 'temp')
 
 lock = threading.RLock()
 
@@ -181,13 +178,14 @@ class AppInstaller(object):
                                                    for item in args]))
         return q.json()
 
+    @rollback_on_failure
     def extract_move_app(self, zipped_app):
-        extract_to = tempfile.mkdtemp(dir=temp_dir)
+        extract_to = tempfile.mkdtemp()
         zipped_app.extractall(extract_to)
         if self.upgrade and os.path.exists(self.app_dir):
             # move old version to temporary dir so that we can restore in
             # case of failure
-            old_version_temp_dir = tempfile.mkdtemp(dir=temp_dir)
+            old_version_temp_dir = tempfile.mkdtemp()
             shutil.move(self.app_dir, old_version_temp_dir)
         self.old_app_temp_dir = os.path.join(extract_to, self.name)
         shutil.move(self.old_app_temp_dir, settings.APPS_DIR)
@@ -195,13 +193,9 @@ class AppInstaller(object):
         shutil.rmtree(extract_to)
 
     def _download_app(self):
-        # TODO: improve download apps (server-side)
         response = requests.get(self.version.download_link, stream=True)
         zip_ref = zipfile.ZipFile(BytesIO(response.content))
         try:
-            create_direcotry(temp_dir)
-            if not os.access(temp_dir, os.W_OK):
-                change_path_permission(temp_dir)
             self.extract_move_app(zip_ref)
         except shutil.Error as e:
             logger.error(e.message)
@@ -209,12 +203,14 @@ class AppInstaller(object):
         finally:
             zip_ref.close()
 
+    @rollback_on_failure
     def get_app_order(self):
         apps = App.objects.all()
         max_value = apps.aggregate(
             Max('order'))['order__max'] if apps.exists() else 0
         return max_value + 1
 
+    @rollback_on_failure
     def add_carto_app(self):
         with apps_orm.session() as session:
             if not CartoApps.app_exists(self.name):
@@ -232,14 +228,14 @@ class AppInstaller(object):
                     })
                 session.commit()
 
+    @rollback_on_failure
     def add_app(self):
         # save app configuration
         app, created = App.objects.get_or_create(name=self.name)
         if created:
-            # append app in order
             if app.order is None or app.order == 0:
                 app.order = self.get_app_order()
-            self.add_carto_app()
+        self.add_carto_app()
         app = self.app_serializer.get_app_object(app)
         app.version = self.version.version
         app.installed_by = self.user
@@ -249,8 +245,9 @@ class AppInstaller(object):
 
     def _rollback(self):
         CartoApps.delete_app(self.name)
-        shutil.rmtree(self.app_dir)
+        self.delete_app_dir()
 
+    @rollback_on_failure
     def install(self, restart=True):
         with lock:
             self.upgrade = False
@@ -280,6 +277,7 @@ class AppInstaller(object):
             self.check_then_finlize(restart, installed_apps)
             return installed_apps
 
+    @rollback_on_failure
     def _install_requirements(self):
         # TODO:add requirement file name as settings var
         req_file = os.path.join(self.app_dir, "req.txt")
@@ -288,6 +286,7 @@ class AppInstaller(object):
             req_installer = ReqInstaller(req_file, target=libs_dir)
             req_installer.install_all()
 
+    @rollback_on_failure
     def check_then_finlize(self, restart, installed_apps):
         with transaction.atomic():
             new_app = self.add_app()
@@ -297,9 +296,21 @@ class AppInstaller(object):
             timer = Timer(0.1, RestartHelper.restart_server)
             timer.start()
 
+    def delete_app(self):
+        try:
+            app = App.objects.get(name=self.name)
+            app.delete()
+        except App.DoesNotExist:
+            pass
+
+    def delete_app_dir(self):
+        if os.path.exists(self.app_dir):
+            shutil.rmtree(self.app_dir)
+
     def completely_remove(self):
-        app = App.objects.get(name=self.name)
-        app.delete()
+        self.delete_app()
+        self.delete_app_tables()
+        self.delete_app_dir()
 
     def execute_command(self, command):
         project_dir = None
@@ -348,9 +359,7 @@ class AppInstaller(object):
                     app_installer.uninstall(restart=False)
             installer = importlib.import_module('%s.installer' % self.name)
             installer.uninstall()
-            self.delete_app_tables()
             self.completely_remove()
-            shutil.rmtree(self.app_dir)
             uninstalled = True
             if restart:
                 RestartHelper.restart_server()
