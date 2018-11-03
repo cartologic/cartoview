@@ -137,25 +137,26 @@ class CartoApps(BaseModel, apps_orm.Base):
 
     @classmethod
     def set_app_active(cls, app_name, active=True):
+        return cls.update_app(app_name, {"active": active})
+
+    @classmethod
+    def update_app(cls, app_name, props_dict=dict()):
         obj = None
         if cls.app_exists(app_name):
             with apps_orm.session() as session:
                 query = session.query(cls).filter(cls.name == app_name)
-                query.update({"active": active})
+                query.update(props_dict)
                 session.commit()
                 obj = query.first()
         return obj
 
     @classmethod
+    def set_app_pending(cls, app_name, pending=True):
+        return cls.update_app(app_name, {"pending": pending})
+
+    @classmethod
     def set_app_order(cls, app_name, order):
-        obj = None
-        if cls.app_exists(app_name):
-            with apps_orm.session() as session:
-                query = session.query(cls).filter(cls.name == app_name)
-                query.update({"order": order})
-                session.commit()
-                obj = query.first()
-        return obj
+        return cls.update_app(app_name, {"order": order})
 
 
 apps_orm.create_all()

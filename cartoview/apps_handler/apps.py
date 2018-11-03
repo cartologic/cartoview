@@ -30,6 +30,7 @@ class AppsHandlerConfig(AppConfig):
                             interactive=False,
                             ignore=['node_modules', '.git'])
                     call_command("migrate", app.name, interactive=False)
+                    CartoApps.set_app_pending(app.name, False)
                 except CommandError as e:
                     error = e.message
                     logger.error(error)
