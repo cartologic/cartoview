@@ -16,7 +16,6 @@
 
 
 <div class="col-md-10 col-md-offset-1 manager-ct" ng-app="cartoview.appManager.manager">
-
     <cartoview-app-manager></cartoview-app-manager>
     <cartoview-app-installer></cartoview-app-installer>
 
@@ -45,6 +44,13 @@
                 </div>
 
             </div>
+            {% verbatim %}
+            <div ng-repeat="appMessage in appsErrors" ng-show="appsErrors.length > 0">
+                <div class="centered alert alert-{{appMessage.type}}">
+                    {{appMessage.msg}}
+                </div>
+            </div>
+            {% endverbatim %}
             <div class="form-group" ng-show="stores.objects.length > 1">
                 <label>{% trans "Store" %}</label>
                 <select class="form-control"
@@ -77,7 +83,7 @@
                     <div class="card card-app">
                         <div class="card-img">
                             <a href="#">
-                            <img src="{{ app.latest_version.logo }}" class="card-inner-img">
+                            <img ng-src="{{app.latest_version.logo}}" class="card-inner-img">
                             <div class="card-caption">
                                 <span class="label label-warning">Status: {{app.status}}</span>
                             </div>
@@ -162,6 +168,9 @@
     {{ block.super }}
     <script>
         const versionInfo={{version_info|dump_json}}
+        const URLS={
+            bulkInstall:"{% url 'bulk_install'  api_name='api' resource_name='app' %}"
+        }
     </script>
     <script type="text/javascript" src="{{ STATIC_URL }}compare-versions/index.js"></script>
     <script type="text/javascript" src="{% url 'check_version' %}"></script>

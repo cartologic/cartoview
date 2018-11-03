@@ -123,10 +123,16 @@
             return _getDependents(app, appsHash, [app]);
         };
         this.install = function (app) {
-            var url = "../install/" + app.store.id;
-            url += "/" + app.name;
-            url += "/" + app.latest_version.version + "/";
-            return $http.post(url);
+            var url = urls.BULK_INSTALL;
+            const data = {
+                apps: [{
+                    app_name: app.name,
+                    version: app.latest_version.version,
+                    store_id: app.store.id
+                }],
+                restart: false,
+            }
+            return $http.post(url, data);
 
         };
         this.uninstall = function (app) {
@@ -170,6 +176,7 @@
                 $scope.selectedStoreId = null;
                 var appsHash = {};
                 $scope.loading = true;
+                $scope.appsErrors = [];
                 $scope.storeError = false;
                 $scope.busy = false;
                 $scope.compatible = function (cartoviewVersions) {
@@ -283,27 +290,51 @@
                     }, 5000);
                 };
 
-                function install(app) {
-                    $scope.installing = app;
-                    app.messages = [];
-                    AppInstaller.install(app).success(function (res) {
-                        if (res.success) {
-                            updateStore(app.store);
-                        } else {
-                            app.messages = res.messages;
-                        }
+                function install(requiredApp) {
+                    $scope.installing = requiredApp;
+                    $scope.appsErrors = [];
+                    AppInstaller.install(requiredApp).success(function (res) {
+                        res.forEach(function (appResult) {
+                            if (appResult.success) {
+                                updateStore(requiredApp.store);
+                            } else {
+                                const msgData = {
+                                    type: appResult.success ? "success" : "danger",
+                                    msg: appResult.app_name + ": " + appResult.message
+                                }
+                                $scope.appsErrors.push(msgData)
+                            }
+                        }, this)
                     }).error(function (res, status) {
                         $scope.installing = null;
                         var error;
                         if (status == -1) {
                             error = "Cannot connect to the server"
-                        } else if (status == 500) {
+                        } else if (status >= 400) {
                             error = "Cannot install app " + app.title;
                         }
-                        app.messages.push({
-                            type: "error",
-                            msg: error
-                        });
+                        // app.messages.push({
+                        //     type: "error",
+                        //     msg: error
+                        // });
+                        if (Array.isArray(res)) {
+                            res.forEach(function (message) {
+                                const msgData = {
+                                    type: message.success ? "success" : "danger",
+                                    msg: message.app_name + ": " + message.message
+                                }
+                                $scope.appsErrors.push(msgData)
+                            }, this)
+                        }
+                        if (res.error_message) {
+                            const msgData = {
+                                type: "danger",
+                                msg: res.error_message
+                            }
+                            $scope.appsErrors.push(msgData)
+                        }
+                        console.log($scope.appsErrors);
+
                     });
                 }
                 $scope.install = function (app, upgrade) {
