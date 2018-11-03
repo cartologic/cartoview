@@ -1,10 +1,8 @@
 # -*- coding: utf-8 -*-
-import inspect
 import os
 from contextlib import contextmanager
 
 from django.conf import settings
-
 from sqlalchemy import Column, Integer, String, create_engine
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.ext.declarative import declarative_base, declared_attr
@@ -41,21 +39,6 @@ class AppsORM(object):
 
     def create_all(self):
         self.Base.metadata.create_all(self.engine, checkfirst=True)
-
-    def create_table_with_name(self, table_name):
-        self.Base.metadata.tables[table_name].create(
-            bind=self.engine, extend_existing=True)
-
-    def table_exist(self, table):
-        tb_name = table if type(table) == str else table.__table__.name
-        return self.engine.dialect.has_table(self.engine.connect(), tb_name)
-
-    def create_table_with_class(self, klass):
-        if not inspect.isclass(klass):
-            raise ValueError('{} is not a class'.format(klass))
-        assert (issubclass(klass, self.Base))
-        if not self.table_exist(klass):
-            klass.__table__.create(self.engine, extend_existing=True)
 
     def get_or_create(self, model, **kwargs):
         with self.session() as session:
