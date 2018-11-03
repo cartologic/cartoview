@@ -107,7 +107,10 @@ class AppResource(FileUploadResource):
         return {}
 
     def dehydrate_active(self, bundle):
-        return bundle.obj.config.active
+        active = False
+        if bundle.obj.config and not bundle.obj.config.pending:
+            active = bundle.obj.config.active
+        return active
 
     def dehydrate_categories(self, bundle):
         return [category.name for category in bundle.obj.category.all()]
