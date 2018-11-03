@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import inspect
 import os
 from contextlib import contextmanager
@@ -157,6 +158,3 @@ class CartoApps(BaseModel, apps_orm.Base):
     @classmethod
     def set_app_order(cls, app_name, order):
         return cls.update_app(app_name, {"order": order})
-
-
-apps_orm.create_all()
