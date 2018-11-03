@@ -18,11 +18,11 @@ class AppsHandlerDBException(Exception):
 
 
 class AppsORM(object):
-    def __init__(self, engine=None):
-        self._db_name = "apps.sqlite"
+    def __init__(self, db_name="apps.sqlite", engine=None, debug=False):
+        self._db_name = db_name
         self.Base = declarative_base()
         self.engine = engine if engine else create_engine(
-            self.get_connection_string(), echo=False)
+            self.get_connection_string(), echo=debug)
         self.AutoMapBase = automap_base()
         self.AutoMapBase.prepare(self.engine, reflect=True)
         self.Base.metadata.reflect(bind=self.engine)
