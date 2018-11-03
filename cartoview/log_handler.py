@@ -2,14 +2,15 @@ import logging
 from sys import stdout
 
 formatter = logging.Formatter(
-    '[%(asctime)s] p%(process)s  { %(name)s %(pathname)s:%(lineno)d} \
-                            %(levelname)s - %(message)s', '%m-%d %H:%M:%S')
+    '[%(levelname)s %(asctime)s] {%(name)s:%(lineno)d} - %(message)s',
+    '%m-%d %H:%M:%S')
 
 
-def get_logger(name=__name__):
+def get_logger(name=__name__, with_formatter=True):
     logger = logging.getLogger(name)
     logger.setLevel(logging.DEBUG)
     handler = logging.StreamHandler(stdout)
-    handler.setFormatter(formatter)
+    if with_formatter:
+        handler.setFormatter(formatter)
     logger.addHandler(handler)
     return logger

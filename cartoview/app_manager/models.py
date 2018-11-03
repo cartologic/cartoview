@@ -20,9 +20,8 @@ from guardian.shortcuts import assign_perm
 from jsonfield import JSONField
 from taggit.managers import TaggableManager
 
+from cartoview.apps_handler.handlers import CartoApps
 from cartoview.log_handler import get_logger
-
-from .config import AppsConfig
 
 logger = get_logger(__name__)
 
@@ -117,22 +116,15 @@ class App(models.Model):
             logger.error(e.message)
             return None
 
-    _apps_config = None
-
-    @property
-    def apps_config(self):
-        if App._apps_config is None:
-            App._apps_config = AppsConfig()
-        return App._apps_config
-
     def set_active(self, active=True):
-        self.config.active = active
-        self.apps_config.save()
-        return App._apps_config
+        # self.config.active = active
+        # self.apps_config.save()
+        # return App._apps_config
+        return CartoApps.set_app_active(self.name, active)
 
     @property
     def config(self):
-        return self.apps_config.get_by_name(self.name)
+        return CartoApps.get_app_by_name(self.name)
 
 
 def get_app_logo_path(instance, filename):
@@ -227,10 +219,11 @@ def appinstance_post_save(instance, *args, **kwargs):
 
 @receiver(signals.pre_delete, sender=App)
 def pre_delete_app(sender, instance, using, **kwargs):
-    app_config = instance.apps_config.get_by_name(instance.name)
-    if app_config:
-        del instance.apps_config[app_config]
-        instance.apps_config.save()
+    CartoApps.delete_app(instance.name)
+    # app_config = instance.apps_config.get_by_name(instance.name)
+    # if app_config:
+    #     del instance.apps_config[app_config]
+    #     instance.apps_config.save()
 
 
 signals.pre_save.connect(pre_save_appinstance)

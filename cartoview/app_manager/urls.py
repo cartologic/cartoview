@@ -13,7 +13,7 @@ from cartoview.app_manager.rest import (AppInstanceResource, AppResource,
                                         GeonodeMapLayerResource, TagResource)
 from . import views as app_manager_views
 from .api import rest_api
-from .config import AppsConfig
+from cartoview.apps_handler.handlers import CartoApps, apps_orm
 
 standard_library.install_aliases()
 rest_api.register(AppResource())
@@ -31,8 +31,9 @@ urlpatterns = [
     url(r'^uninstall/(?P<store_id>\d+)/(?P<app_name>.*)/$',
         app_manager_views.uninstall_app,
         name='cartoview_uninstall_app_url'),
-    url(r'^appinstances/$', TemplateView.as_view(
-        template_name='app_manager/app_instance_list.html'),
+    url(r'^appinstances/$',
+        TemplateView.as_view(
+            template_name='app_manager/app_instance_list.html'),
         name='appinstance_browse'),
     url(r'^appinstance/(?P<appinstanceid>\d+)/?$',
         app_manager_views.appinstance_detail,
@@ -46,12 +47,14 @@ urlpatterns = [
     url(r'^movedown/(?P<app_id>\d+)/$',
         app_manager_views.move_down,
         name='move_down'),
-    url(r'^save_app_orders/$', app_manager_views.save_app_orders,
+    url(r'^save_app_orders/$',
+        app_manager_views.save_app_orders,
         name='save_app_orders'),
     url(r'^(?P<appinstanceid>\d+)/remove$',
         app_manager_views.appinstance_remove,
         name="appinstance_remove"),
-    url(r'^rest/', include(rest_api.urls)), ]
+    url(r'^rest/', include(rest_api.urls)),
+]
 
 
 def import_app_rest(app_name):
@@ -66,18 +69,16 @@ def import_app_rest(app_name):
 def app_url(app_name):
     app = str(app_name)
     return url(
-        r'^' + app + '/',
-        include('%s.urls' % app),
-        name=app + '_base_url')
+        r'^' + app + '/', include('%s.urls' % app), name=app + '_base_url')
 
 
 def load_apps_urls():
-    apps_config = AppsConfig()
-    for app_config in apps_config:
-        import_app_rest(app_config.name)
-
-    for app_config in apps_config:
-        urlpatterns.append(app_url(app_config.name))
+    with apps_orm.session() as session:
+        carto_apps = session.query(CartoApps).filter(
+            CartoApps.active == True).all()  # noqa
+    for carto_app in carto_apps:
+        import_app_rest(carto_app.name)
+        urlpatterns.append(app_url(carto_app.name))
 
 
 load_apps_urls()

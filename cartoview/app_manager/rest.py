@@ -25,6 +25,7 @@ from tastypie.resources import ModelResource
 from tastypie.utils import trailing_slash
 
 from cartoview.app_manager.models import App, AppInstance, AppStore, AppType
+from cartoview.apps_handler.handlers import CartoApps
 from cartoview.log_handler import get_logger
 
 from .installer import AppInstaller, RestartHelper
@@ -95,7 +96,10 @@ class AppResource(FileUploadResource):
     app_instance_count = fields.IntegerField()
 
     def dehydrate_order(self, bundle):
-        return bundle.obj.config.order
+        carto_app = bundle.obj.config
+        if carto_app:
+            return carto_app.order
+        return 0
 
     def dehydrate_default_config(self, bundle):
         if bundle.obj.default_config:
@@ -249,8 +253,8 @@ class AppResource(FileUploadResource):
         for i in range(0, len(ids_list)):
             app = App.objects.get(id=ids_list[i])
             app.order = i + 1
-            app.config.order = app.order
             app.save()
+            CartoApps.set_app_order(app.name, app.order)
             if i == (len(ids_list) - 1):
                 app.apps_config.save()
         self.log_throttled_access(request)
