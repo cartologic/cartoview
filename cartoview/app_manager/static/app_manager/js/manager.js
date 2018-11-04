@@ -123,15 +123,29 @@
             return _getDependents(app, appsHash, [app]);
         };
         this.install = function (app) {
-            var url = "../install/" + app.store.id;
-            url += "/" + app.name;
-            url += "/" + app.latest_version.version + "/";
-            return $http.post(url);
+            var url = urls.BULK_INSTALL;
+            const data = {
+                apps: [{
+                    app_name: app.name,
+                    version: app.latest_version.version,
+                    store_id: app.store.id
+                }],
+                restart: false,
+            }
+            return $http.post(url, data);
 
         };
         this.uninstall = function (app) {
             var url = "../uninstall/" + app.store.id + "/" + app.name + "/";
             return $http.post(url);
+        }
+        this.restart = function () {
+            var url = urls.RESTART_SERVER;
+            return $http.get(url);
+        }
+        this.pingServer = function () {
+            var url = '/';
+            return $http.get(url);
         }
     });
     app.directive("alertsPanel", function () {
@@ -170,6 +184,7 @@
                 $scope.selectedStoreId = null;
                 var appsHash = {};
                 $scope.loading = true;
+                $scope.appsErrors = [];
                 $scope.storeError = false;
                 $scope.busy = false;
                 $scope.compatible = function (cartoviewVersions) {
@@ -283,27 +298,55 @@
                     }, 5000);
                 };
 
-                function install(app) {
-                    $scope.installing = app;
-                    app.messages = [];
-                    AppInstaller.install(app).success(function (res) {
-                        if (res.success) {
-                            updateStore(app.store);
-                        } else {
-                            app.messages = res.messages;
-                        }
+                function install(requiredApp) {
+                    $scope.installing = requiredApp;
+                    $scope.appsErrors = [];
+                    AppInstaller.install(requiredApp).success(function (res) {
+                        res.forEach(function (appResult) {
+                            if (appResult.success) {
+                                updateStore(requiredApp.store);
+                            } else {
+                                const msgData = {
+                                    type: appResult.success ? "success" : "danger",
+                                    msg: appResult.app_name + ": " + appResult.message
+                                }
+                                $scope.appsErrors.push(msgData)
+                            }
+                        }, this)
                     }).error(function (res, status) {
                         $scope.installing = null;
-                        var error;
                         if (status == -1) {
-                            error = "Cannot connect to the server"
-                        } else if (status == 500) {
-                            error = "Cannot install app " + app.title;
+                            var error = "Cannot connect to the server"
+                            app.messages.push({
+                                type: "danger",
+                                msg: error
+                            });
+                        } else if (status >= 400) {
+                            var error = "Cannot install app " + app.title;
+                            app.messages.push({
+                                type: "danger",
+                                msg: error
+                            });
                         }
-                        app.messages.push({
-                            type: "error",
-                            msg: error
-                        });
+
+                        if (Array.isArray(res)) {
+                            res.forEach(function (message) {
+                                const msgData = {
+                                    type: message.success ? "success" : "danger",
+                                    msg: message.app_name + ": " + message.message
+                                }
+                                $scope.appsErrors.push(msgData)
+                            }, this)
+                        }
+                        if (res.error_message) {
+                            const msgData = {
+                                type: "danger",
+                                msg: res.error_message
+                            }
+                            $scope.appsErrors.push(msgData)
+                        }
+                        console.log($scope.appsErrors);
+
                     });
                 }
                 $scope.install = function (app, upgrade) {
@@ -405,6 +448,48 @@
                             })
                         }
                     });
+
+                }
+                $scope.restart = function () {
+                    $scope.appsErrors = []
+                    $scope.restarting = true;
+                    var restarted = false
+                    AppInstaller.restart().error(function (res, status) {
+                        if (status == 500) {
+                            $scope.restarting = false;
+                            const msgData = {
+                                type: "danger",
+                                msg: "Failed to restart Server"
+                            }
+                            $scope.appsErrors.push(msgData)
+                            restarted = true
+                        }
+                    });
+
+                    function waitForRestart() {
+                        AppInstaller.pingServer().success(function (res) {
+                            restarted = true
+                            $scope.restarting = false;
+                        }).error(function (res, status) {
+                            if (status == 500) {
+                                $scope.restarting = false;
+                                const msgData = {
+                                    type: "danger",
+                                    msg: "Failed to restart Server"
+                                }
+                                $scope.appsErrors.push(msgData)
+                                restarted = true
+                            }
+                        });
+                        if (!restarted) {
+                            $timeout(function () {
+                                waitForRestart()
+                            }, 3000);
+                        }
+                    }
+                    $timeout(function () {
+                        waitForRestart()
+                    }, 2000);
 
                 }
             }

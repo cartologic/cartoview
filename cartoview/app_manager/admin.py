@@ -17,7 +17,10 @@ def uninstall_selected(modeladmin, request, queryset):
         try:
             app_store = app.store.id if app.store else None
             installer = AppInstaller(
-                app.name, store_id=app_store, user=request.user)
+                app.name,
+                store_id=app_store,
+                user=request.user,
+                version=app.version)
             installer.uninstall()
         except Exception as e:
             return HttpResponseServerError(e.message)

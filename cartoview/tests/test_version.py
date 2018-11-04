@@ -2,7 +2,6 @@ import os
 
 import dj_database_url
 import gisdata
-import timeout_decorator
 from django.conf import settings
 from django.test.testcases import LiveServerTestCase
 from django.test.utils import override_settings
@@ -10,12 +9,15 @@ from geonode.layers.models import Layer
 from geonode.layers.utils import upload
 from geonode.tests.utils import get_web_page
 
-from cartoview import get_current_version
+import timeout_decorator
 
 
 class CartoviewTest(LiveServerTestCase):
     port = 8000
-    fixtures = ['sample_admin.json', 'default_oauth_apps.json', ]
+    fixtures = [
+        'sample_admin.json',
+        'default_oauth_apps.json',
+    ]
 
     # @classmethod
     # def setUpClass(cls):
@@ -46,17 +48,14 @@ class CartoviewTest(LiveServerTestCase):
         settings.DATASTORE_URL = 'postgis://cartoview:cartoview@' +\
         'localhost:5432/cartoview_datastore'
         postgis_db = dj_database_url.parse(
-        settings.DATASTORE_URL, conn_max_age=600)
+            settings.DATASTORE_URL, conn_max_age=600)
         settings.DATABASES['datastore'] = postgis_db
         settings.OGC_SERVER['default']['DATASTORE'] = 'datastore'
 
-    def test_get_current_version(self):
-        v = get_current_version()
-        self.assertEqual(v, '1.8.5')
-
-    @override_settings(CELERY_EAGER_PROPAGATES_EXCEPTIONS=True,
-                       CELERY_ALWAYS_EAGER=True,
-                       BROKER_BACKEND='memory')
+    @override_settings(
+        CELERY_EAGER_PROPAGATES_EXCEPTIONS=True,
+        CELERY_ALWAYS_EAGER=True,
+        BROKER_BACKEND='memory')
     @timeout_decorator.timeout(6000)
     def test_layer_upload(self):
         layers = {}
@@ -67,14 +66,11 @@ class CartoviewTest(LiveServerTestCase):
             basename, extension = os.path.splitext(filename)
             if extension.lower() in ['.tif', '.shp', '.zip']:
                 expected_layers.append(
-                    os.path.join(
-                        gisdata.GOOD_DATA,
-                        filename))
+                    os.path.join(gisdata.GOOD_DATA, filename))
 
         for filename in os.listdir(gisdata.BAD_DATA):
             not_expected_layers.append(
-                os.path.join(gisdata.BAD_DATA, filename)
-            )
+                os.path.join(gisdata.BAD_DATA, filename))
         uploaded = upload(gisdata.DATA_DIR, console=None)
 
         for item in uploaded:
@@ -84,8 +80,8 @@ class CartoviewTest(LiveServerTestCase):
                     continue
                 else:
                     msg = ('Could not upload file "%s", '
-                           'and it is not in %s' % (
-                               item['file'], not_expected_layers))
+                           'and it is not in %s' % (item['file'],
+                                                    not_expected_layers))
                     assert errors, msg
             else:
                 msg = ('Upload should have returned either "name" or '
@@ -108,9 +104,8 @@ class CartoviewTest(LiveServerTestCase):
             gs_username, gs_password = settings.OGC_SERVER['default'][
                 'USER'], settings.OGC_SERVER['default']['PASSWORD']
             page = get_web_page(
-                os.path.join(
-                    settings.OGC_SERVER['default']['LOCATION'],
-                    'rest/layers'),
+                os.path.join(settings.OGC_SERVER['default']['LOCATION'],
+                             'rest/layers'),
                 username=gs_username,
                 password=gs_password)
             if page.find('rest/layers/%s.html' % layer_name) > 0:

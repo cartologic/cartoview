@@ -45,6 +45,7 @@ TEST_DATA_URL = 'http://build.cartoview.net/cartoview_test_data.zip'
 dev_config = None
 with open("dev_config.yml", 'r') as f:
     dev_config = yaml.load(f)
+APPS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "apps")
 
 
 def grab(src, dest, name):
@@ -76,10 +77,11 @@ def grab(src, dest, name):
             block_size = 1024
             wrote = 0
             with open('output.bin', 'wb') as f:
-                for data in tqdm(r.iter_content(block_size),
-                                 total=math.ceil(total_size//block_size),
-                                 unit='KB',
-                                 unit_scale=False):
+                for data in tqdm(
+                        r.iter_content(block_size),
+                        total=math.ceil(total_size // block_size),
+                        unit='KB',
+                        unit_scale=False):
                     wrote = wrote + len(data)
                     f.write(data)
             print(" total_size [%d] / wrote [%d] " % (total_size, wrote))
@@ -96,9 +98,8 @@ def grab(src, dest, name):
 
 @task
 def setup_apps(options):
-    from cartoview.app_manager.helpers import (
-        create_direcotry, change_path_permission)
-    from cartoview.settings import APPS_DIR
+    from cartoview.app_manager.helpers import (create_direcotry,
+                                               change_path_permission)
     try:
         f = urllib2.urlopen(TEST_DATA_URL)
         zip_ref = zipfile.ZipFile(BytesIO(f.read()))
@@ -114,7 +115,6 @@ def setup_apps(options):
 
 
 def cleanup():
-    from cartoview.settings import APPS_DIR
     try:
         shutil.rmtree(APPS_DIR)
     except shutil.Error as e:
@@ -122,13 +122,15 @@ def cleanup():
 
 
 @task
-@needs(['setup_apps', ])
+@needs([
+    'setup_apps',
+])
 def run_cartoview_test(options):
     try:
         sh('CARTOVIEW_STAND_ALONE="True" coverage run' +
-            ' --source=cartoview --omit="*/migrations/*,*/apps/*"' +
-            ' ./manage.py test cartoview -v 3 ' +
-            '--settings cartoview.settings')
+           ' --source=cartoview --omit="*/migrations/*,*/apps/*"' +
+           ' ./manage.py test cartoview -v 3 ' +
+           '--settings cartoview.settings')
     except Exception as e:
         cleanup()
         raise e
@@ -167,8 +169,7 @@ def _install_data_dir():
     justcopy(original_data_dir, target_data_dir)
 
     try:
-        config = path(
-            'geoserver/data/global.xml')
+        config = path('geoserver/data/global.xml')
         with open(config) as f:
             xml = f.read()
             m = re.search('proxyBaseUrl>([^<]+)', xml)
@@ -192,10 +193,12 @@ def _install_data_dir():
                 1)] + "http://localhost:8000/o/authorize/" + xml[m.end(1):]
             m = re.search('redirectUri>([^<]+)', xml)
             xml = xml[:m.start(
-                1)] + "http://localhost:8080/geoserver/index.html" + xml[m.end(1):]
+                1
+            )] + "http://localhost:8080/geoserver/index.html" + xml[m.end(1):]
             m = re.search('checkTokenEndpointUrl>([^<]+)', xml)
             xml = xml[:m.start(
-                1)] + "http://localhost:8000/api/o/v4/tokeninfo/" + xml[m.end(1):]
+                1
+            )] + "http://localhost:8000/api/o/v4/tokeninfo/" + xml[m.end(1):]
             m = re.search('logoutUri>([^<]+)', xml)
             xml = xml[:m.start(
                 1)] + "http://localhost:8000/account/logout/" + xml[m.end(1):]
@@ -206,7 +209,8 @@ def _install_data_dir():
 
     try:
         config = path(
-            'geoserver/data/security/role/geonode REST role service/config.xml')
+            'geoserver/data/security/role/geonode REST role service/config.xml'
+        )
         with open(config) as f:
             xml = f.read()
             m = re.search('baseUrl>([^<]+)', xml)
@@ -227,8 +231,8 @@ def setup_geoserver(options):
     """Prepare a testing instance of GeoServer."""
     # only start if using Geoserver backend
     _backend = os.environ.get('BACKEND', OGC_SERVER['default']['BACKEND'])
-    if (_backend == 'geonode.qgis_server' or
-            'geonode.geoserver' not in INSTALLED_APPS):
+    if (_backend == 'geonode.qgis_server'
+            or 'geonode.geoserver' not in INSTALLED_APPS):
         return
 
     download_dir = path('downloaded')
@@ -243,16 +247,10 @@ def setup_geoserver(options):
         os.path.basename(dev_config['JETTY_RUNNER_URL'])
 
     grab(
-        options.get(
-            'geoserver',
-            dev_config['GEOSERVER_URL']),
-        geoserver_bin,
+        options.get('geoserver', dev_config['GEOSERVER_URL']), geoserver_bin,
         "geoserver binary")
     grab(
-        options.get(
-            'jetty',
-            dev_config['JETTY_RUNNER_URL']),
-        jetty_runner,
+        options.get('jetty', dev_config['JETTY_RUNNER_URL']), jetty_runner,
         "jetty runner")
 
     if not geoserver_dir.exists():
@@ -269,9 +267,7 @@ def setup_geoserver(options):
     _install_data_dir()
 
 
-@cmdopts([
-    ('java_path=', 'j', 'Full path to java install for Windows')
-])
+@cmdopts([('java_path=', 'j', 'Full path to java install for Windows')])
 @task
 def start_geoserver(options):
     """
@@ -280,8 +276,8 @@ def start_geoserver(options):
     from geonode.settings import INSTALLED_APPS, OGC_SERVER
     # only start if using Geoserver backend
     _backend = os.environ.get('BACKEND', OGC_SERVER['default']['BACKEND'])
-    if (_backend == 'geonode.qgis_server' or
-            'geonode.geoserver' not in INSTALLED_APPS):
+    if (_backend == 'geonode.qgis_server'
+            or 'geonode.geoserver' not in INSTALLED_APPS):
         return
 
     GEOSERVER_BASE_URL = OGC_SERVER['default']['LOCATION']
@@ -315,8 +311,8 @@ def start_geoserver(options):
             info('Port %s is already in use' % jetty_port)
         else:
             info(
-                'Something else raised the socket.error exception while checking port %s' %
-                jetty_port)
+                'Something else raised the socket.error exception while checking port %s'
+                % jetty_port)
             print(e)
     finally:
         s.close()
@@ -337,6 +333,7 @@ def start_geoserver(options):
                     print "Chances are that you have Geoserver currently running.  You \
                             can either stop all servers with paver stop or start only \
                             the django application with paver start_django."
+
                     sys.exit(1)
                 loggernullpath = "../../downloaded/null.txt"
 
@@ -347,14 +344,16 @@ def start_geoserver(options):
                 javapath_opt = None
                 if os.environ.get('JAVA_HOME', None):
                     print "Using the JAVA_HOME environment variable"
-                    javapath_opt = os.path.join(os.path.abspath(
-                        os.environ['JAVA_HOME']), "bin", "java.exe")
+                    javapath_opt = os.path.join(
+                        os.path.abspath(os.environ['JAVA_HOME']), "bin",
+                        "java.exe")
                 elif options.get('java_path'):
                     javapath_opt = options.get('java_path')
                 else:
                     print "Paver cannot find java in the Windows Environment.  \
                     Please provide the --java_path flag with your full path to \
                     java.exe e.g. --java_path=C:/path/to/java/bin/java.exe"
+
                     sys.exit(1)
                 # if there are spaces
                 javapath = 'START /B "" "' + javapath_opt + '"'
@@ -370,8 +369,7 @@ def start_geoserver(options):
                 ' --port %(jetty_port)i'
                 ' --log %(log_file)s'
                 ' %(config)s'
-                ' > %(loggernullpath)s &' % locals()
-            ))
+                ' > %(loggernullpath)s &' % locals()))
 
         info('Starting GeoServer on %s' % url)
 
@@ -404,7 +402,8 @@ def waitfor(url, timeout=300):
 
 @task
 def run_coverage(options):
-    sh('CARTOVIEW_STAND_ALONE=True coverage run --source=cartoview --omit="*/migrations/*, */apps/*,pavement.py" ./manage.py test')
+    sh('CARTOVIEW_STAND_ALONE=True coverage run --source=cartoview --omit="*/migrations/*, */apps/*,pavement.py" ./manage.py test'
+       )
     cleanup()
 
 
@@ -421,20 +420,29 @@ def kill(arg1, arg2):
 
     while running and time.time() - t0 < time_out:
         if os.name == 'nt':
-            p = Popen('tasklist | find "%s"' % arg1, shell=True,
-                      stdin=PIPE, stdout=PIPE, stderr=PIPE, close_fds=False)
+            p = Popen(
+                'tasklist | find "%s"' % arg1,
+                shell=True,
+                stdin=PIPE,
+                stdout=PIPE,
+                stderr=PIPE,
+                close_fds=False)
         else:
-            p = Popen('ps aux | grep %s' % arg1, shell=True,
-                      stdin=PIPE, stdout=PIPE, stderr=PIPE, close_fds=True)
+            p = Popen(
+                'ps aux | grep %s' % arg1,
+                shell=True,
+                stdin=PIPE,
+                stdout=PIPE,
+                stderr=PIPE,
+                close_fds=True)
 
         lines = p.stdout.readlines()
 
         running = False
         for line in lines:
             # this kills all java.exe and python including self in windows
-            if ('%s' %
-                arg2 in line) or (os.name == 'nt' and '%s' %
-                                  arg1 in line):
+            if ('%s' % arg2 in line) or (os.name == 'nt'
+                                         and '%s' % arg1 in line):
                 running = True
 
                 # Get pid
@@ -454,8 +462,8 @@ def kill(arg1, arg2):
 
     if running:
         raise Exception('Could not stop %s: '
-                        'Running processes are\n%s'
-                        % (arg1, '\n'.join([l.strip() for l in lines])))
+                        'Running processes are\n%s' % (arg1, '\n'.join(
+                            [l.strip() for l in lines])))
 
 
 @task
@@ -486,7 +494,9 @@ def stop_geoserver():
 
 
 @task
-@needs(['run_cartoview_test', ])
+@needs([
+    'run_cartoview_test',
+])
 def publish(options):
     from cartoview.settings import BASE_DIR
     dist_dir = os.path.join(BASE_DIR, 'dist')
