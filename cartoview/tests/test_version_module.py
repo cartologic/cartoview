@@ -12,7 +12,7 @@ class CartoviewVersionModule(TestCase):
         self.assertTrue(isinstance(version_text, basestring))
         cond1 = "current_version" in version_text
         cond2 = "backward_versions" in version_text
-        self.assertTrue(cond1 and cond2)  # noqa
+        self.assertTrue(cond1 and cond2)
 
     def test_get_version(self):
         stable = (1, 8, 5, 'final', 0)

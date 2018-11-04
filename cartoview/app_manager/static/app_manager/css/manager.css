@@ -329,6 +329,17 @@
     font-weight: bold;
 }
 
+.manager-actions-btn {
+    margin: 8px
+}
+
+.manager-actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
 @media(max-width: 768px) {
     .cards-container {
         position: relative;
@@ -336,6 +347,10 @@
         flex-direction: column;
         flex-wrap: wrap;
         justify-content: space-around;
+    }
+    .manager-actions {
+        flex-direction: column;
+        justify-content: center;
     }
 
     .card-continer {

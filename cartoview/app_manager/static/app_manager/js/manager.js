@@ -139,6 +139,14 @@
             var url = "../uninstall/" + app.store.id + "/" + app.name + "/";
             return $http.post(url);
         }
+        this.restart = function () {
+            var url = urls.RESTART_SERVER;
+            return $http.get(url);
+        }
+        this.pingServer = function () {
+            var url = '/';
+            return $http.get(url);
+        }
     });
     app.directive("alertsPanel", function () {
         return {
@@ -307,16 +315,20 @@
                         }, this)
                     }).error(function (res, status) {
                         $scope.installing = null;
-                        var error;
                         if (status == -1) {
-                            error = "Cannot connect to the server"
+                            var error = "Cannot connect to the server"
+                            app.messages.push({
+                                type: "danger",
+                                msg: error
+                            });
                         } else if (status >= 400) {
-                            error = "Cannot install app " + app.title;
+                            var error = "Cannot install app " + app.title;
+                            app.messages.push({
+                                type: "danger",
+                                msg: error
+                            });
                         }
-                        // app.messages.push({
-                        //     type: "error",
-                        //     msg: error
-                        // });
+
                         if (Array.isArray(res)) {
                             res.forEach(function (message) {
                                 const msgData = {
@@ -436,6 +448,48 @@
                             })
                         }
                     });
+
+                }
+                $scope.restart = function () {
+                    $scope.appsErrors = []
+                    $scope.restarting = true;
+                    var restarted = false
+                    AppInstaller.restart().error(function (res, status) {
+                        if (status == 500) {
+                            $scope.restarting = false;
+                            const msgData = {
+                                type: "danger",
+                                msg: "Failed to restart Server"
+                            }
+                            $scope.appsErrors.push(msgData)
+                            restarted = true
+                        }
+                    });
+
+                    function waitForRestart() {
+                        AppInstaller.pingServer().success(function (res) {
+                            restarted = true
+                            $scope.restarting = false;
+                        }).error(function (res, status) {
+                            if (status == 500) {
+                                $scope.restarting = false;
+                                const msgData = {
+                                    type: "danger",
+                                    msg: "Failed to restart Server"
+                                }
+                                $scope.appsErrors.push(msgData)
+                                restarted = true
+                            }
+                        });
+                        if (!restarted) {
+                            $timeout(function () {
+                                waitForRestart()
+                            }, 3000);
+                        }
+                    }
+                    $timeout(function () {
+                        waitForRestart()
+                    }, 2000);
 
                 }
             }

@@ -58,9 +58,9 @@
                         ng-options="store.id as store.name for store in stores.objects">
                 </select>
             </div>
-            <div ng-if="!loading && !storeError"  class="row">
-                <div class="fill-empty"></div>
-                <a ng-click="reorder()" class="btn btn-primary pull-right">Reorder Installed Apps</a>
+            <div ng-if="!loading && !storeError"  class="row manager-actions">
+                <a ng-click="restart()" class="btn btn-danger manager-actions-btn ">Restart Server</a>
+                <a ng-click="reorder()" class="btn btn-primary manager-actions-btn ">Reorder Installed Apps</a>
             </div>
             <div  class="input-group search-box">
                 <input type="text" ng-disabled="loading || storeError" class="form-control" ng-model="search_term" placeholder="Search for an App" aria-describedby="basic-addon2">
@@ -168,9 +168,6 @@
     {{ block.super }}
     <script>
         const versionInfo={{version_info|dump_json}}
-        const URLS={
-            bulkInstall:"{% url 'bulk_install'  api_name='api' resource_name='app' %}"
-        }
     </script>
     <script type="text/javascript" src="{{ STATIC_URL }}compare-versions/index.js"></script>
     <script type="text/javascript" src="{% url 'check_version' %}"></script>

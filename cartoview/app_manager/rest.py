@@ -148,6 +148,10 @@ class AppResource(FileUploadResource):
                 (self._meta.resource_name, trailing_slash()),
                 self.wrap_view('install'),
                 name="bulk_install"),
+            url(r"^(?P<resource_name>%s)/restart-server%s$" %
+                (self._meta.resource_name, trailing_slash()),
+                self.wrap_view('restart_server'),
+                name="restart_server"),
             self._build_url_exp('install'),
             self._build_url_exp('reorder'),
             self._build_url_exp('uninstall', True),
@@ -220,6 +224,20 @@ class AppResource(FileUploadResource):
             RestartHelper.restart_server()
         return self.create_response(
             request, response_data, response_class=http.HttpAccepted)
+
+    def restart_server(self, request, **kwargs):
+        # from builtins import basestring
+        self.method_check(request, allowed=['get'])
+        self.is_authenticated(request)
+        self.throttle_check(request)
+        if not (request.user.is_active and request.user.is_staff):
+            return self.get_err_response(request,
+                                         "this action require staff member",
+                                         http.HttpForbidden)
+        RestartHelper.restart_server()
+        return self.create_response(
+            request, {"message": "Server Will be Restarted"},
+            response_class=http.HttpAccepted)
 
     def uninstall(self, request, **kwargs):
         pass

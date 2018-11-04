@@ -50,7 +50,7 @@ class RestartHelper(object):
             logger.error(e.message)
 
     @classmethod
-    def restart_script():
+    def restart_script(cls):
         # log_file = os.path.join(working_dir, "install_app_log.txt")
         if install_app_batch and os.path.exists(install_app_batch):
             working_dir = os.path.dirname(install_app_batch)
