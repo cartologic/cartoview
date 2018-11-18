@@ -39,12 +39,13 @@ class AppsHandlerConfig(AppConfig):
                             interactive=False,
                             ignore=['node_modules', '.git'])
                     call_command("migrate", app.name, interactive=False)
-                    CartoApps.set_app_pending(app.name, False)
                 except CommandError as e:
                     error = e.message
                     logger.error(error)
                     if error and "does not have migrations" not in error:
                         self.delete_application_on_fail(app.name)
+                finally:
+                    CartoApps.set_app_pending(app.name, False)
 
     def ready(self):
         apps_dir = getattr(settings, 'APPS_DIR', None)
