@@ -17,21 +17,21 @@ from django.db import transaction
 from django.db.models import F, Max, Min
 from django.forms.utils import ErrorList
 from django.http import Http404, HttpResponse, HttpResponseRedirect
-from django.shortcuts import get_object_or_404, render, render_to_response
+from django.shortcuts import get_object_or_404, render
 from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext as _
 from django.views.decorators.http import require_POST
 from future import standard_library
 from future.utils import with_metaclass
+from guardian.shortcuts import get_perms
+
+from cartoview.app_manager.forms import AppInstanceEditForm
+from cartoview.log_handler import get_logger
 from geonode.base.forms import CategoryForm
 from geonode.base.models import TopicCategory
 from geonode.people.forms import ProfileForm
 from geonode.security.views import _perms_info_json
 from geonode.utils import build_social_links
-from guardian.shortcuts import get_perms
-
-from cartoview.app_manager.forms import AppInstanceEditForm
-from cartoview.log_handler import get_logger
 
 from .decorators import (PERMISSION_MSG_DELETE, PERMISSION_MSG_METADATA,
                          PERMISSION_MSG_VIEW, can_change_app_instance,
