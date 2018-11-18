@@ -28,7 +28,6 @@ from cartoview.store_api.api import StoreAppResource, StoreAppVersion
 from .decorators import restart_enabled, rollback_on_failure
 from .models import App, AppStore, AppType
 from .req_installer import ReqInstaller
-from .settings import create_apps_dir
 
 logger = get_logger(__name__)
 install_app_batch = getattr(settings, 'INSTALL_APP_BAT', None)
@@ -125,7 +124,6 @@ class AppAlreadyInstalledException(BaseException):
 
 class AppInstaller(object):
     def __init__(self, name, store_id=None, version=None, user=None):
-        create_apps_dir(settings.APPS_DIR)
         self.user = user
         self.app_dir = os.path.join(settings.APPS_DIR, name)
         self.name = name

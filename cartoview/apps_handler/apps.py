@@ -1,10 +1,13 @@
 # -*- coding: utf-8 -*-
+import os
+
 from django.apps import AppConfig
 from django.conf import settings
 from django.core.management import call_command
 from django.core.management.base import CommandError
+
 from cartoview.log_handler import get_logger
-from cartoview.apps_handler.handlers import CartoApps, apps_orm
+
 pending_yaml = settings.PENDING_APPS
 
 logger = get_logger(__name__)
@@ -19,6 +22,7 @@ class AppsHandlerConfig(AppConfig):
         AppInstaller(appname).uninstall(restart=True)
 
     def execute_pending(self):
+        from cartoview.apps_handler.handlers import CartoApps, apps_orm
         with apps_orm.session() as session:
             pending_apps = session.query(CartoApps).filter(
                 CartoApps.pending == True).all()  # noqa
@@ -39,4 +43,6 @@ class AppsHandlerConfig(AppConfig):
                         self.delete_application_on_fail(app.name)
 
     def ready(self):
-        self.execute_pending()
+        apps_dir = getattr(settings, 'APPS_DIR', None)
+        if apps_dir and os.path.exists(apps_dir):
+            self.execute_pending()

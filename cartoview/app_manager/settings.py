@@ -9,9 +9,8 @@ import sys
 from future import standard_library
 from past.builtins import execfile
 
-from cartoview.app_manager.helpers import (change_path_permission,
-                                           create_direcotry)
 from cartoview.apps_handler.handlers import CartoApps, apps_orm
+from cartoview.apps_handler.utils import create_apps_dir
 from cartoview.log_handler import get_logger
 
 logger = get_logger(__name__, with_formatter=True)
@@ -22,13 +21,6 @@ standard_library.install_aliases()
 
 CARTOVIEW_APPS = ()
 APPS_SETTINGS = []
-
-
-def create_apps_dir(APPS_DIR):
-    if not os.path.exists(APPS_DIR):
-        create_direcotry(APPS_DIR)
-        if not os.access(APPS_DIR, os.W_OK):
-            change_path_permission(APPS_DIR)
 
 
 def load_apps(APPS_DIR):

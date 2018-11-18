@@ -174,7 +174,7 @@ class AppInstance(ResourceBase):
         try:
             from geonode.security.utils import (set_owner_permissions)
             set_owner_permissions(self)
-        except:
+        except BaseException:
             pass
         if 'users' in perm_spec and "AnonymousUser" in perm_spec['users']:
             anonymous_group = Group.objects.get(name='anonymous')
