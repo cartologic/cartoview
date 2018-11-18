@@ -146,7 +146,7 @@ class AppInstance(ResourceBase):
     app = models.ForeignKey(
         App, null=True, blank=True, on_delete=models.CASCADE)
     config = models.TextField(null=True, blank=True)
-    map = models.ForeignKey(
+    related_map = models.ForeignKey(
         GeonodeMap, null=True, blank=True, on_delete=models.CASCADE)
     logo = models.ImageField(
         upload_to=get_app_logo_path, blank=True, null=True)
@@ -160,6 +160,24 @@ class AppInstance(ResourceBase):
             return str(self.id)
         else:
             return '%s (%s)' % (self.title, self.id)
+
+    # NOTE:backward compatibility for old map field use by apps \
+    # in StandardAppViews
+    @property
+    def map_id(self):
+        return self.related_map_id
+
+    @map_id.setter
+    def map_id(self, value):
+        self.related_map_id = value
+
+    @property
+    def map(self):
+        return self.related_map
+
+    @map.setter
+    def map(self, value):
+        self.rerelated_map = value
 
     @property
     def config_obj(self):

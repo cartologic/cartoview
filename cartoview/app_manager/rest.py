@@ -294,7 +294,7 @@ class AppInstanceResource(ModelResource):
     launch_app_url = fields.CharField(null=True, blank=True)
     edit_url = fields.CharField(null=True, blank=True)
     app = fields.ForeignKey(AppResource, 'app', full=True, null=True)
-    map = fields.ForeignKey(MapResource, 'map', full=True, null=True)
+    map = fields.ForeignKey(MapResource, 'related_map', full=True, null=True)
     owner = fields.ForeignKey(
         ProfileResource, 'owner', full=True, null=True, blank=True)
     keywords = fields.ListField(null=True, blank=True)
