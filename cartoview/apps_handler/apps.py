@@ -38,8 +38,7 @@ class AppsHandlerConfig(AppConfig):
                 except CommandError as e:
                     error = e.message
                     logger.error(error)
-                    if "you cannot selectively sync unmigrated apps"\
-                            not in error:
+                    if error and "does not have migrations" not in error:
                         self.delete_application_on_fail(app.name)
 
     def ready(self):
