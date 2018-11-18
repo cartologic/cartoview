@@ -1,11 +1,12 @@
+# -*- coding: utf-8 -*-
 import requests
 from django.shortcuts import HttpResponse
-from geonode.geoserver.helpers import ogc_server_settings
-from geonode.layers.views import (_PERMISSION_MSG_MODIFY, _resolve_layer,
-                                  layer_detail)
 from requests.auth import HTTPBasicAuth
 
 from cartoview.log_handler import get_logger
+from geonode.geoserver.helpers import ogc_server_settings
+from geonode.layers.views import (_PERMISSION_MSG_MODIFY, _resolve_layer,
+                                  layer_detail)
 
 try:
     import simplejson as json

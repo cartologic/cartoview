@@ -1,14 +1,20 @@
 # -*- coding: utf-8 -*-
+from __future__ import (absolute_import, division, print_function,
+                        unicode_literals)
+
 import os
 from contextlib import contextmanager
 
 from django.conf import settings
+from future import standard_library
 from sqlalchemy import Column, Integer, String, create_engine
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.ext.declarative import declarative_base, declared_attr
 from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy.sql.expression import func
 from sqlalchemy.types import Boolean, DateTime
+
+standard_library.install_aliases()
 
 
 class AppsHandlerDBException(Exception):

@@ -136,6 +136,7 @@ def get_app_logo_path(instance, filename):
     ])
 
 
+@python_2_unicode_compatible
 class AppInstance(ResourceBase):
     """
     An App Instance  is any kind of App Instance that can be created
@@ -153,6 +154,9 @@ class AppInstance(ResourceBase):
 
     def get_absolute_url(self):
         return reverse('appinstance_detail', args=(self.id, ))
+
+    def __str__(self):
+        return self.title
 
     @property
     def name_long(self):

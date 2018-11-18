@@ -1,13 +1,7 @@
+# -*- coding: utf-8 -*-
 import json
 
 from django.core.urlresolvers import reverse
-from geonode.api.api import OwnersResource
-from geonode.api.authorization import (GeonodeApiKeyAuthentication,
-                                       GeoNodeAuthorization)
-from geonode.api.resourcebase_api import MapResource, ResourceBaseResource
-from geonode.base.models import ResourceBase
-from geonode.layers.models import Attribute, Layer
-from geonode.maps.models import MapLayer
 from tastypie import fields
 from tastypie.authentication import MultiAuthentication, SessionAuthentication
 from tastypie.constants import ALL, ALL_WITH_RELATIONS
@@ -15,6 +9,13 @@ from tastypie.resources import ModelResource
 
 from cartoview.app_manager.models import App, AppInstance
 from cartoview.app_manager.rest import LayerFilterExtensionResource
+from geonode.api.api import OwnersResource
+from geonode.api.authorization import (GeonodeApiKeyAuthentication,
+                                       GeoNodeAuthorization)
+from geonode.api.resourcebase_api import MapResource, ResourceBaseResource
+from geonode.base.models import ResourceBase
+from geonode.layers.models import Attribute, Layer
+from geonode.maps.models import MapLayer
 
 type_filter = {
     'app': 'appinstance',

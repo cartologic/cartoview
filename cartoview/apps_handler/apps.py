@@ -1,13 +1,18 @@
 # -*- coding: utf-8 -*-
+from __future__ import (absolute_import, division, print_function,
+                        unicode_literals)
+
 import os
 
 from django.apps import AppConfig
 from django.conf import settings
 from django.core.management import call_command
 from django.core.management.base import CommandError
+from future import standard_library
 
 from cartoview.log_handler import get_logger
 
+standard_library.install_aliases()
 pending_yaml = settings.PENDING_APPS
 
 logger = get_logger(__name__)
