@@ -18,7 +18,6 @@ from django.db.models import F, Max, Min
 from django.forms.utils import ErrorList
 from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render, render_to_response
-from django.template import RequestContext, loader
 from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext as _
 from django.views.decorators.http import require_POST
@@ -228,20 +227,13 @@ def appinstance_detail(request, appinstanceid):
                                           PERMISSION_MSG_VIEW)
 
     except Http404:
-        return HttpResponse(
-            loader.render_to_string('404.html', RequestContext(request, {})),
-            status=404)
+        return render(request, '404.html', context={}, status=404)
 
     except PermissionDenied:
-        return HttpResponse(
-            loader.render_to_string(
-                '401.html',
-                RequestContext(
-                    request, {
+        return render(request, '401.html', context={
                         'error_message':
                         _("You are not allowed to view this document.")
-                    })),
-            status=403)
+                    }, status=403)
 
     if appinstance is None:
         return HttpResponse(
@@ -279,9 +271,8 @@ def appinstance_detail(request, appinstanceid):
                     context_dict['exif_data'] = exif
             except BaseException as e:
                 logger.error(e.message + "Exif extraction failed.")
-
-        return render_to_response("app_manager/appinstance_detail.html",
-                                  RequestContext(request, context_dict))
+        return render(request, "app_manager/appinstance_detail.html",
+                      context=context_dict)
 
 
 @login_required
@@ -295,19 +286,11 @@ def appinstance_metadata(request,
                                           PERMISSION_MSG_METADATA)
 
     except Http404:
-        return HttpResponse(
-            loader.render_to_string('404.html', RequestContext(request, {})),
-            status=404)
+        return render(request, '404.html', context={}, status=404)
 
     except PermissionDenied:
-        return HttpResponse(
-            loader.render_to_string(
-                '401.html',
-                RequestContext(
-                    request, {
-                        'error_message':
-                        _("You are not allowed to edit this instance.")
-                    })),
+        return render(request, '401.html', context={
+            'error_message': _("You are not allowed to edit this instance.")},
             status=403)
 
     if appinstance is None:
@@ -417,17 +400,13 @@ def appinstance_metadata(request,
         else:
             author_form = ProfileForm(prefix="author")
             author_form.hidden = True
-
-        return render_to_response(
-            template,
-            RequestContext(
-                request, {
+        return render(request, template, context={
                     "appinstance": appinstance,
                     "appinstance_form": appinstance_form,
                     "poc_form": poc_form,
                     "author_form": author_form,
                     "category_form": category_form,
-                }))
+                })
 
 
 def appinstance_remove(request, appinstanceid):
