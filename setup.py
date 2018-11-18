@@ -25,7 +25,7 @@ setup(
     ],
     license="BSD",
     install_requires=[
-        'future', 'six==1.10.0', 'geonode>2.7.5.dev20180125135927,<2.9',
+        'future', 'six==1.10.0', 'geonode>2.7.5.dev20180125135927',
         'Faker>=0.8.4', 'cherrypy==11.0.0', 'cheroot==5.8.3', 'mkdocs==0.17.5',
         'mkdocs-material==3.0.5', 'SQLAlchemy==1.2.13'
     ])
