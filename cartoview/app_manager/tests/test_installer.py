@@ -22,7 +22,7 @@ class AppInstallerTest(TestCase):
             user = Profile.objects.filter(is_superuser=True).first()
             store_id = 1
             app_name = "cartoview_dashboard"
-            app_version = "1.4.2"
+            app_version = "1.4.3"
             app_installer = AppInstaller(app_name, store_id, app_version, user)
             installed_apps = app_installer.install()
             self.assertEqual(len(installed_apps), 1)
