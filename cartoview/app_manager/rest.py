@@ -10,13 +10,6 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
 from django.db import transaction
 from future import standard_library
-from geonode.api.api import ProfileResource
-from geonode.api.authorization import GeoNodeAuthorization
-from geonode.api.resourcebase_api import (CommonMetaApi, LayerResource,
-                                          MapResource)
-from geonode.layers.models import Attribute
-from geonode.maps.models import MapLayer
-from geonode.people.models import Profile
 from guardian.shortcuts import get_objects_for_user
 from taggit.models import Tag
 from tastypie import fields, http
@@ -27,6 +20,12 @@ from tastypie.utils import trailing_slash
 from cartoview.app_manager.models import App, AppInstance, AppStore, AppType
 from cartoview.apps_handler.handlers import CartoApps
 from cartoview.log_handler import get_logger
+from geonode.api.api import ProfileResource
+from geonode.api.authorization import GeoNodeAuthorization
+from geonode.api.resourcebase_api import (CommonMetaApi, LayerResource,
+                                          MapResource)
+from geonode.maps.models import MapLayer
+from geonode.people.models import Profile
 
 from .installer import AppInstaller, RestartHelper
 from .resources import FileUploadResource
@@ -73,8 +72,7 @@ class LayerFilterExtensionResource(LayerResource):
 
     class Meta(LayerResource.Meta):
         resource_name = "layers"
-        filtering = dict(LayerResource.Meta.filtering.items()
-                         + {'typename': ALL}.items())
+        filtering = dict(LayerResource.Meta.filtering, **dict(typename=ALL))
 
 
 class GeonodeMapLayerResource(ModelResource):
