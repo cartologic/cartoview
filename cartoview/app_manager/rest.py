@@ -54,7 +54,8 @@ class LayerFilterExtensionResource(LayerResource):
         return orm_filters
 
     def apply_filters(self, request, applicable_filters):
-        permission = applicable_filters.pop('permission', None)
+        permission = applicable_filters.pop(
+            'permission', None)
         # NOTE: We change this filter name from type to geom_type because it
         # overrides geonode type filter(vector,raster)
         layer_geom_type = applicable_filters.pop('geom_type', None)
@@ -62,18 +63,18 @@ class LayerFilterExtensionResource(LayerResource):
             request, applicable_filters)
         if layer_geom_type:
             filtered = filtered.filter(
-                attribute_set__in=Attribute.objects.filter(
-                    attribute_type__icontains=layer_geom_type))
+                attribute_set__attribute_type__icontains=layer_geom_type)
         if permission is not None:
-            filtered = get_objects_for_user(
-                request.user, permission, klass=filtered)
+            permitted_ids = get_objects_for_user(
+                request.user, permission).values('id')
+            filtered = filtered.filter(id__in=permitted_ids)
 
         return filtered
 
     class Meta(LayerResource.Meta):
         resource_name = "layers"
-        filtering = dict(LayerResource.Meta.filtering.items() +
-                         {'typename': ALL}.items())
+        filtering = dict(LayerResource.Meta.filtering.items()
+                         + {'typename': ALL}.items())
 
 
 class GeonodeMapLayerResource(ModelResource):
