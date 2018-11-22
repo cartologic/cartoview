@@ -1,4 +1,4 @@
-__version__ = (1, 8, 6, 'unstable', 0)
+__version__ = (1, 8, 6, 'rc', 0)
 __compatible_with__ = []
 
 
