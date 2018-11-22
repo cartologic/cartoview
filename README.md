@@ -9,7 +9,8 @@
   <img src="https://cartologic.github.io/img/cartoview-logo.png"/>
 </p>
 
-> ### This version(1.8.x) of Cartoview is compatibile with geonode 2.8.x only
+| WARNING: be careful this version(1.8.x) of Cartoview is compatibile with geonode 2.8.x only |
+| --- |
 ---
 ## What is Cartoview?
   - CartoView is a GIS Web Mapping Application Market.
