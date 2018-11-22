@@ -11,6 +11,7 @@
 
 | WARNING: be careful this version(1.10.x) of Cartoview is compatibile with geonode 2.10.x only |
 | --- |
+
 ---
 ## What is Cartoview?
   - CartoView is a GIS Web Mapping Application Market.
@@ -86,3 +87,9 @@
     ```sh
       paver run_test
     ```
+ ___
+## Previous Versions
+| Cartoview Version | Geonode Version | docs Link                                                                       |
+|-------------------|-----------------|---------------------------------------------------------------------------------|
+| 1.8.x             | 2.8.x           | [Here](https://github.com/cartologic/cartoview/blob/1.8.x/README.md)            |
+| 1.6.x             | 2.6.x           | [Here](https://github.com/cartologic/cartoview/blob/2.6.x_compatible/README.md) |
