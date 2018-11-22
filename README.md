@@ -9,7 +9,7 @@
   <img src="https://cartologic.github.io/img/cartoview-logo.png"/>
 </p>
 
-| WARNING: be careful this version(1.10.x) of Cartoview is compatibile with geonode 2.10.x only |
+| WARNING: be careful this version(1.10.x) of Cartoview is compatibile with geonode 2.10.x only,if you want to install another version please take alook on [this section](https://github.com/cartologic/cartoview/blob/hisham-dev/README.md#previous-versions) |
 | --- |
 
 ---
@@ -88,7 +88,7 @@
       paver run_test
     ```
  ___
-## Previous Versions
+# Previous Versions
 | Cartoview Version | Geonode Version | docs Link                                                                       |
 |-------------------|-----------------|---------------------------------------------------------------------------------|
 | 1.8.x             | 2.8.x           | [Here](https://github.com/cartologic/cartoview/blob/1.8.x/README.md)            |
