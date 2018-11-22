@@ -9,7 +9,6 @@ import sys
 from future import standard_library
 from past.builtins import execfile
 
-from cartoview.apps_handler.handlers import CartoApps, apps_orm
 from cartoview.apps_handler.utils import create_apps_dir
 from cartoview.log_handler import get_logger
 
@@ -24,6 +23,7 @@ APPS_SETTINGS = []
 
 
 def load_apps(APPS_DIR):
+    from cartoview.apps_handler.handlers import CartoApps, apps_orm
     global CARTOVIEW_APPS
     global APPS_SETTINGS
     create_apps_dir(APPS_DIR)
