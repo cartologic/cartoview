@@ -9,6 +9,7 @@
   <img src="https://cartologic.github.io/img/cartoview-logo.png"/>
 </p>
 
+> ### This version(1.8.x) of Cartoview is compatibile with geonode 2.8.x only
 ---
 ## What is Cartoview?
   - CartoView is a GIS Web Mapping Application Market.
@@ -43,7 +44,7 @@
 
 ## How To Add Cartoview To Existing Geonode:
   - install cartoview with pip:
-      - `pip install cartoview==1.8.5 --no-cache-dir`
+      - `pip install cartoview==1.8.6 --no-cache-dir`
       - open geonode `settings.py` and add the following lines at the end of the file:
           ```python
             from cartoview import settings as cartoview_settings
