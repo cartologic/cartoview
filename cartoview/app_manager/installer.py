@@ -26,6 +26,7 @@ from cartoview.log_handler import get_logger
 from cartoview.store_api.api import StoreAppResource, StoreAppVersion
 
 from .decorators import restart_enabled, rollback_on_failure
+from .exceptions import AppAlreadyInstalledException
 from .models import App, AppStore, AppType
 from .req_installer import ReqInstaller
 
@@ -116,10 +117,6 @@ class AppJson(object):
 
     def get_property_value(self, p):
         return getattr(self, p, None)
-
-
-class AppAlreadyInstalledException(BaseException):
-    message = "Application is already installed."
 
 
 class AppInstaller(object):

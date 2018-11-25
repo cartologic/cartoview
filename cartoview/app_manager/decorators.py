@@ -1,6 +1,8 @@
-from .utils import resolve_appinstance
 from django.conf import settings
 from django.utils.translation import ugettext as _
+
+from .exceptions import AppAlreadyInstalledException
+from .utils import resolve_appinstance
 
 PERMISSION_MSG_DELETE = _("You are not permitted to delete this Instance")
 PERMISSION_MSG_GENERIC = _("You do not have permissions for this Instance.")
@@ -52,8 +54,9 @@ def rollback_on_failure(func):
         try:
             return func(*args, **kwargs)
         except BaseException as e:
-            if hasattr(this, '_rollback'):
-                this._rollback()
-            raise e
+            if not isinstance(e, AppAlreadyInstalledException)
+               if hasattr(this, '_rollback'):
+                    this._rollback()
+                raise e
 
     return wrap
