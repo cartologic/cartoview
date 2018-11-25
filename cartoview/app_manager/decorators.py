@@ -54,9 +54,9 @@ def rollback_on_failure(func):
         try:
             return func(*args, **kwargs)
         except BaseException as e:
-            if not isinstance(e, AppAlreadyInstalledException)
-               if hasattr(this, '_rollback'):
+            if not isinstance(e, AppAlreadyInstalledException):
+                if hasattr(this, '_rollback'):
                     this._rollback()
-                raise e
+                    raise e
 
     return wrap
