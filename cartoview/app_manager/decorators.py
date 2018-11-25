@@ -42,9 +42,6 @@ def restart_enabled(func):
     def wrap(*args, **kwargs):
         if not getattr(settings, "CARTOVIEW_TEST", False):
             return func(*args, **kwargs)
-        else:
-            pass
-
     return wrap
 
 
