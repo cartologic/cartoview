@@ -4,23 +4,22 @@ import tempfile
 
 from django.test import TestCase
 
-from cartoview.app_manager.req_installer import (ReqFileException,
-                                                 ReqInstaller)
+from cartoview.apps_handler.req_installer import ReqFileException, ReqInstaller
 
 
 class ReqInstallerTest(TestCase):
     def setUp(self):
-        self.tmp_file = tempfile.NamedTemporaryFile(delete=False)
         self.tmp_dir = tempfile.mkdtemp()
+        self.req_file = os.path.join(self.tmp_dir, 'req.txt')
+        self.target_dir = os.path.join(self.tmp_dir, 'libs')
 
     def test_req_installer(self):
-        with open(self.tmp_file.name, "w") as f:
+        with open(self.req_file, "w") as f:
             f.write("pipenv")
-        req_installer = ReqInstaller(self.tmp_file.name, self.tmp_dir)
+        req_installer = ReqInstaller(self.tmp_dir, self.target_dir)
         req_installer.install_all()
-        self.assertTrue(len(os.listdir(self.tmp_dir)) > 0)
+        self.assertTrue(len(os.listdir(self.target_dir)) > 0)
         self.assertRaises(ReqFileException, ReqInstaller, "/dummy_path")
 
     def tearDown(self):
-        os.remove(self.tmp_file.name)
         shutil.rmtree(self.tmp_dir)
