@@ -9,9 +9,8 @@ ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
 RUN apt-get install software-properties-common python-software-properties -y
 RUN add-apt-repository -y ppa:ubuntugis/ubuntugis-unstable
-RUN apt-get update
-RUN apt-get upgrade -y
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get upgrade -y
+RUN apt-get install -y \
         gcc gettext \
         python-pip libpq-dev \
         sqlite3 git gdal-bin lsof psmisc \
@@ -24,13 +23,19 @@ RUN apt-get update && apt-get install -y \
         curl build-essential build-essential python-dev \
         --no-install-recommends
 RUN mkdir /code
+COPY . /cartoview
+WORKDIR /cartoview
+# install cartoview
+RUN pip install .
+# switch to project dir
 WORKDIR /code
+# remove cartoview
+RUN rm -rf /cartoview
+# upgrade pip to latest version
 RUN pip install --upgrade pip
+# install additional packages and fix requirements(django-autocomplete-light==2.3.3)
 RUN pip install --ignore-installed geoip django-geonode-client \
-        geonode==2.8rc11 django-jsonfield django-jsonfield-compat \
-        cartoview==1.8.3 cherrypy==11.0.0 cheroot==5.8.3 \
         django-autocomplete-light==2.3.3  --no-cache-dir
-RUN pip install git+https://github.com/GeoNode/django-osgeo-importer.git
 RUN apt autoremove --purge -y && apt autoclean -y
 RUN rm -rf ~/.cache/pip
 RUN rm -rf /var/lib/apt/lists/* && apt-get clean && \
