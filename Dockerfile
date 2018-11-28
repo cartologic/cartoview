@@ -22,6 +22,8 @@ RUN apt-get install -y \
         python-pylibmc python-setuptools \
         curl build-essential build-essential python-dev \
         --no-install-recommends
+# upgrade pip to latest version
+RUN pip install --upgrade pip
 RUN mkdir /code
 COPY . /cartoview
 WORKDIR /cartoview
@@ -31,8 +33,6 @@ RUN pip install .
 WORKDIR /code
 # remove cartoview
 RUN rm -rf /cartoview
-# upgrade pip to latest version
-RUN pip install --upgrade pip
 # install additional packages and fix requirements(django-autocomplete-light==2.3.3)
 RUN pip install --ignore-installed geoip django-geonode-client \
         django-autocomplete-light==2.3.3  --no-cache-dir
