@@ -185,7 +185,16 @@
 			'type': FILTER_TYPE
 		};
 		params['single_instance'] = false
+		if ($location.search().hasOwnProperty('app__name')) {
+			const oldVal = $location.search()['app__name']
+			$location.search('app__name', null)
+			$location.search('app__name__in', oldVal)
+		}
+		if ($location.search().hasOwnProperty('app__title')) {
+			$location.search('app__title', null)
+		}
 		if ($location.search().hasOwnProperty('app_name__in')) {
+
 			params['app_name__in'] = $location.search()['app__name__in'];
 		}
 		if (compareVersions(angular.version.full, '1.5.0')) {
