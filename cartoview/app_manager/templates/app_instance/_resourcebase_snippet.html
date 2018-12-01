@@ -27,13 +27,13 @@
                             <ul class="list-inline">
                                 <li><a href="/people/profile/{{ item.owner }}"><i class="fa fa-user"></i>{{ item.owner
                                     }}</a></li>
-                                <li><a href="{{ item.launch_app_url }}#info"><i class="fa fa-calendar-o"></i>{{
+                                <li><a href="{{item.detail_url}}#info"><i class="fa fa-calendar-o"></i>{{
                                     item.date|date:'d MMM y' }}</a></li>
                                 <li><a href="{{ item.launch_app_url }}"><i class="fa fa-eye"></i>{{ item.popular_count
                                     }}</a></li>
-                                <li><a href="{{ item.launch_app_url }}#share"><i class="fa fa-share"></i>{{
+                                <li><a href="{{item.detail_url}}#share"><i class="fa fa-share"></i>{{
                                     item.share_count }}</a></li>
-                                <li><a href="{{ item.launch_app_url }}#rate"><i class="fa fa-star"></i>{{ item.rating }}</a>
+                                <li><a href="{{item.detail_url}}#rate"><i class="fa fa-star"></i>{{ item.rating }}</a>
                                 </li>
                                 <li><a ng-if="item.detail_url.indexOf('/layers/') > -1"
                                        href="{% endverbatim %}{% url "new_map" %}?layer={% verbatim %}{{ item.detail_url.substring(8) }}">
