@@ -33,9 +33,9 @@
       <div class="row" ng-app="app_details">
         <div class="col-xs-12 col-sm-12 col-md-6 col-md-offset-3">
           {% if resource.thumbnail_url != "" and resource.thumbnail_url != None %}
-          <img class="img-responsive" style="min-height:200px;width:100%" src={{ resource.thumbnail_url }}  fallback-src="{{STATIC_URL}}{{ resource.app.name }}/logo.png">
+          <img class="img-responsive" style="min-height:200px;width:100%" ng-src="{{ resource.thumbnail_url }}" fallback-src="{{STATIC_URL}}{{ resource.app.name }}/logo.png">
           {% else %}
-          <img class="img-responsive" style="min-height:200px;width:100%" src={{ resource.map.thumbnail_url }}  fallback-src="{{STATIC_URL}}{{ resource.app.name }}/logo.png">
+          <img class="img-responsive" style="min-height:200px;width:100%" ng-src="{{ resource.map.thumbnail_url }}"  fallback-src="{{STATIC_URL}}{{ resource.app.name }}/logo.png">
           {% endif %}
         </div>
       </div>
@@ -168,6 +168,7 @@
 {% endblock %}
 
 {% block extra_script %}
+{{ block.super }}
 {% if SOCIAL_BUTTONS %}
 <div id="fb-root"></div>
 <script>(function(d, s, id) {
