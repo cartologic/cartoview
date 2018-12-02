@@ -48,10 +48,9 @@ class AppsThumbnail(Thumbnail):
         instance = self.instance
         if not isinstance(instance, AppInstance):
             return
-        elif (instance.thumbnail_url is not None or
-              instance.thumbnail_url != "") and instance.map is not None:
-            parent_app_thumbnail_url = instance.map.get_thumbnail_url()
-            instance.thumbnail_url = parent_app_thumbnail_url
+        instance_map = getattr(instance, 'related_map', instance.map)
+        if instance_map:
+            instance.thumbnail_url = instance_map.get_thumbnail_url()
             instance.save()
 
 
