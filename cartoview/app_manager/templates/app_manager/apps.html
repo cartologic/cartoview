@@ -78,7 +78,7 @@
 
                                         {% else %}
                                         <div id="card-buttons">
-                                            <a href="{% url 'appinstance_browse' %}?app__name__in={{ app.name }}"
+                                            <a href="{% url 'appinstance_browse' %}?app__name__in={{ app.name }}&&app__title={{app.title}}"
                                                target="_parent" class="btn btn-sm btn-primary">Explore <span
                                                     class="badge">{{ app.appinstance_set.all|objects_count:request.user }}</span></a>
                                         </div>
