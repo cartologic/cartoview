@@ -72,7 +72,7 @@ class AppsHandler(object):
                             if _migrate:
                                 self.migrate(_app_name)
                 else:
-                    self.migrate(_app_name)
+                    self.migrate(app)
                 self.collectstatic()
                 CartoApps.set_app_pending(app.name, False)
 
