@@ -7,8 +7,6 @@ import os
 import sys
 
 from future import standard_library
-from past.builtins import execfile
-from cartoview.apps_handler.utils import create_apps_dir
 from cartoview.log_handler import get_logger
 
 logger = get_logger(__name__, with_formatter=True)
@@ -22,6 +20,7 @@ APPS_SETTINGS = []
 
 
 def load_apps(APPS_DIR):
+    from cartoview.apps_handler.utils import create_apps_dir
     from cartoview.apps_handler.handlers import CartoApps, apps_orm
     global CARTOVIEW_APPS
     global APPS_SETTINGS
@@ -48,7 +47,6 @@ def load_apps(APPS_DIR):
                 # circular imports.
                 app_settings_file = os.path.realpath(app_settings_file)
                 APPS_SETTINGS += (app_settings_file, )
-                # execfile(app_settings_file)
             if os.path.exists(libs_dir) and libs_dir not in sys.path:
                 logger.info("Install {} libs folder to the system.\n".format(
                     app.name))
