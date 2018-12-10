@@ -6,8 +6,13 @@ from django.core.management.base import BaseCommand
 from cartoview.app_manager.installer import AppInstaller
 from cartoview.app_manager.models import App, AppStore
 from cartoview.log_handler import get_logger
+from packaging import version
 
 logger = get_logger(__name__)
+
+
+def compare_version(v1, v2):
+    return version.parse(v1) < version.parse(v2)
 
 
 class Command(BaseCommand):
@@ -29,8 +34,9 @@ class Command(BaseCommand):
         store = AppStore.objects.get(is_default=True)
         q = App.objects.filter(name=app_name)
         try:
-            if q.count() == 0 or (q.first()
-                                  and q.first().version < app_version):
+            if q.count() == 0 or (q.first() and
+                                  compare_version(q.first().version,
+                                                  app_version)):
                 installer = AppInstaller(app_name, store.id, app_version)
                 installer.install()
         except Exception as ex:
