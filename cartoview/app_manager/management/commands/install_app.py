@@ -2,17 +2,17 @@
 from __future__ import print_function
 
 from django.core.management.base import BaseCommand
+from pkg_resources import parse_version
 
 from cartoview.app_manager.installer import AppInstaller
 from cartoview.app_manager.models import App, AppStore
 from cartoview.log_handler import get_logger
-from packaging import version
 
 logger = get_logger(__name__)
 
 
 def compare_version(v1, v2):
-    return version.parse(v1) < version.parse(v2)
+    return parse_version(v1) < parse_version(v2)
 
 
 class Command(BaseCommand):
