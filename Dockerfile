@@ -16,7 +16,7 @@ RUN apt-get install -y \
         sqlite3 git gdal-bin lsof psmisc \
         python-gdal python-psycopg2 \
         python-imaging python-lxml \
-        python-dev libgdal-dev libgeoip-dev \
+        python-dev libgdal-dev \
         python-ldap libxml2 libxml2-dev libxslt-dev \
         libmemcached-dev libsasl2-dev zlib1g-dev \
         python-pylibmc python-setuptools \
@@ -29,14 +29,13 @@ COPY . /cartoview
 WORKDIR /cartoview
 # install cartoview
 RUN pip install .
-# switch to project dir
-WORKDIR /code
 # remove cartoview
 RUN rm -rf /cartoview
-# install additional packages and fix requirements(django-autocomplete-light==2.3.3)
-RUN pip install --ignore-installed geoip django-geonode-client \
-        django-autocomplete-light==2.3.3  --no-cache-dir
+# switch to project dir
+WORKDIR /code
 RUN apt autoremove --purge -y && apt autoclean -y
+# install additional packages and fix requirements(django-autocomplete-light==2.3.3)
+RUN pip install --ignore-installed --no-cache-dir django-autocomplete-light==2.3.3  
 RUN rm -rf ~/.cache/pip
 RUN rm -rf /var/lib/apt/lists/* && apt-get clean && \
         rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
