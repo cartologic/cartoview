@@ -4,7 +4,7 @@ set -e
 
 # geonode required libraries
 apt-get update && apt-get install -y \
-	gcc \
+	build-essential gcc \
 	git wget gnupg \
 	gettext \
 	sqlite3 libxslt1-dev \
@@ -23,13 +23,13 @@ apt-get update && apt install postgresql-client libpq-dev python-psycopg2 -y
 # update python pip version
 pip install --upgrade pip
 
-# add stable gdal debian repo
-echo "deb http://http.us.debian.org/debian stretch main non-free contrib" >>/etc/apt/sources.list
+# add gdal debian repo
+echo "deb http://http.us.debian.org/debian buster main non-free contrib" >>/etc/apt/sources.list
 apt autoclean -y && apt autoremove -y && apt update -y
 apt-get install -y gdal-bin libgdal-dev libgeos-dev
 
 # install python gdal stable
-pip install GDAL==2.1.2
+pip install GDAL==2.3.2
 if [ "$GEONODE_DEV" = true ]; then
 	git clone https://github.com/GeoNode/geonode.git &&
 		cd /geonode && git reset --hard ${GEONODE_SHA1} && pip install . &&
