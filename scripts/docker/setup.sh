@@ -7,7 +7,7 @@ apt-get update && apt-get install -y \
 	build-essential gcc \
 	git wget gnupg \
 	gettext \
-	sqlite3 libxslt1-dev \
+	sqlite3 libxml2-dev libxslt1-dev \
 	python-imaging \
 	python-dev python-ldap \
 	libmemcached-dev libsasl2-dev zlib1g-dev \
