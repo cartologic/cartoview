@@ -1,44 +1,18 @@
-FROM ubuntu:16.04
+FROM python:2.7-slim
 LABEL "MAINTAINER"="Cartologic Development Team"
-ENV TERM xterm
-RUN apt-get update
-RUN apt-get install locales -y
-RUN locale-gen en_US.UTF-8 && update-locale
-ENV LANG en_US.UTF-8  
-ENV LANGUAGE en_US:en  
-ENV LC_ALL en_US.UTF-8
-RUN apt-get install software-properties-common python-software-properties -y
-RUN add-apt-repository -y ppa:ubuntugis/ubuntugis-unstable
-RUN apt-get update && apt-get upgrade -y
-RUN apt-get install -y \
-        gcc gettext \
-        python-pip libpq-dev \
-        sqlite3 git gdal-bin lsof psmisc \
-        python-gdal python-psycopg2 \
-        python-imaging python-lxml \
-        python-dev libgdal-dev \
-        python-ldap libxml2 libxml2-dev libxslt-dev \
-        libmemcached-dev libsasl2-dev zlib1g-dev \
-        python-pylibmc python-setuptools \
-        curl build-essential build-essential python-dev \
-        --no-install-recommends
-# upgrade pip to latest version
-RUN pip install --upgrade pip
-RUN mkdir /code
+ENV PYTHONUNBUFFERED 1
+ARG GEONODE_DEV=true
+ARG GEONODE_SHA1=992daf724e83cdb0c1eb776d147eba841ad02cd9
+ARG APP_DIR=/usr/src/carto_app
+# include GDAL HEADER Files
+# CPATH specifies a list of directories to be searched as if specified with -I,
+# but after any paths given with -I options on the command line.
+# This environment variable is used regardless of which language is being preprocessed.
+ENV CPATH "$CPATH:/usr/include/gdal:/usr/include"
+COPY scripts/docker/setup.sh ./
 COPY . /cartoview
-WORKDIR /cartoview
-# install cartoview
-RUN pip install .
-# remove cartoview
-RUN rm -rf /cartoview
+RUN chmod +x setup.sh
+RUN ./setup.sh
 # switch to project dir
-WORKDIR /code
-RUN apt autoremove --purge -y && apt autoclean -y
-# install additional packages and fix requirements(django-autocomplete-light==2.3.3)
-RUN pip install --ignore-installed --no-cache-dir django-autocomplete-light==2.3.3  
-RUN rm -rf ~/.cache/pip
-RUN rm -rf /var/lib/apt/lists/* && apt-get clean && \
-        rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-RUN echo "Yes, do as I say!" | apt-get remove --force-yes login	\
-        && dpkg --remove --force-depends wget unzip 
+WORKDIR ${APP_DIR}
 CMD ["/bin/bash"]
