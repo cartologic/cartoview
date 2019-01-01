@@ -56,7 +56,7 @@ django-crispy-forms==1.7.2
 django-cuser==2017.3.16
 django-downloadview==1.9
 django-extensions==2.0.7
-django-filter==2.0.0
+django-filter==1.1.0
 django-floppyforms==1.7.0
 django-forms-bootstrap==3.1.0
 django-geoexplorer==4.0.41
