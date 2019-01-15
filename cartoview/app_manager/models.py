@@ -109,6 +109,66 @@ class App(models.Model):
             return None
 
     @property
+    def urls(self):
+        admin_urls = logged_in_urls = anonymous_urls = None
+        try:
+            app_module = __import__(self.name)
+            if hasattr(app_module, 'urls_dict'):
+                urls_dict = getattr(app_module, 'urls_dict')
+                if 'admin' in list(urls_dict.keys()):
+                    admin_urls = urls_dict['admin']
+                else:
+                    admin_urls = None
+                if 'logged_in' in list(urls_dict.keys()):
+                    logged_in_urls = urls_dict['logged_in']
+                else:
+                    logged_in_urls = None
+                if 'anonymous' in list(urls_dict.keys()):
+                    anonymous_urls = urls_dict['anonymous']
+                else:
+                    anonymous_urls = None
+        except ImportError as e:
+            logger.error(e.message)
+        return (admin_urls, logged_in_urls, anonymous_urls)
+
+    @property
+    def open_url(self):
+        from django.core.urlresolvers import reverse
+        open_url = reverse('app_manager_base_url') + self.name
+        try:
+            app_module = __import__(self.name)
+            if hasattr(app_module, 'OPEN_URL_NAME'):
+                open_url = reverse(getattr(app_module, 'OPEN_URL_NAME'))
+        except ImportError as e:
+            logger.error(e.message)
+        return open_url
+
+    @property
+    def create_new_url(self):
+        from django.core.urlresolvers import reverse
+        create_new_url = reverse('{}.new'.format(self.name))
+        try:
+            app_module = __import__(self.name)
+            if hasattr(app_module, 'CREATE_NEW_URL_NAME'):
+                create_new_url = reverse(
+                    getattr(app_module, 'CREATE_NEW_URL_NAME'))
+        except ImportError as e:
+            logger.error(e.message)
+        return create_new_url
+
+    @property
+    def admin_urls(self):
+        return self.urls[0]
+
+    @property
+    def logged_in_urls(self):
+        return self.urls[1]
+
+    @property
+    def anonymous_urls(self):
+        return self.urls[2]
+
+    @property
     def new_url(self):
         try:
             return reverse("%s.new" % self.name)

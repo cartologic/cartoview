@@ -3,7 +3,6 @@ from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
 
 import abc
-import importlib
 import json
 import os
 
@@ -97,25 +96,6 @@ def manage_apps(request):
 
 def index(request):
     Apps = installed_apps()
-    for app in Apps:
-        module = importlib.import_module(app.name)
-        if hasattr(module, 'urls_dict'):
-            urls_dict = getattr(module, 'urls_dict')
-            if 'admin' in list(urls_dict.keys()):
-                app.admin_urls = urls_dict['admin']
-            else:
-                app.admin_urls = None
-            if 'logged_in' in list(urls_dict.keys()):
-                app.logged_in_urls = urls_dict['logged_in']
-            else:
-                app.logged_in_urls = None
-            if 'anonymous' in list(urls_dict.keys()):
-                app.anonymous_urls = urls_dict['anonymous']
-            else:
-                app.anonymous_urls = None
-        else:
-            app.admin_urls = app.logged_in_urls = app.anonymous_urls = None
-
     context = {'Apps': Apps}
     return render(request, 'app_manager/apps.html', context)
 
