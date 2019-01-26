@@ -7,7 +7,7 @@
                 <div class="col-xs-4 item-thumb">
                     <a href="{{ item.launch_app_url }}">
                         <img ng-src="{{ item.thumbnail_url || item.map.thumbnail_url }}"
-                             fallback-src="/static/{{ item.app.name }}/logo.png" loading-src
+                             fallback-src="/static/{{ !item.app ?  item.app__name:item.app.name }}/logo.png" loading-src
                              style="max-height: 205px"/>
                     </a>
                 </div>
@@ -20,7 +20,7 @@
                     <h4><a href="{{ item.launch_app_url }}">{{ item.title }}</a></h4>
                     <p class="abstract">{{ item.abstract | limitTo: 300 }}{{ item.abstract.length > 300 ? '...' :
                         ''}}</p>
-                    <p class="appName"><span class="badge">{{ item.app.title }}</span>
+                    <p class="appName"><span class="badge">{{ !item.app ?  item.app__title:item.app.title }}</span>
                     </p>
                     <div class="row">
                         <div class="col-xs-12 item-items">
