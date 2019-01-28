@@ -177,14 +177,20 @@ class AppInstaller(object):
     @rollback_on_failure
     def extract_move_app(self, zipped_app):
         extract_to = tempfile.mkdtemp()
+        libs_dir = None
         zipped_app.extractall(extract_to)
         if self.upgrade and os.path.exists(self.app_dir):
             # move old version to temporary dir so that we can restore in
             # case of failure
             old_version_temp_dir = tempfile.mkdtemp()
             shutil.move(self.app_dir, old_version_temp_dir)
-        self.old_app_temp_dir = os.path.join(extract_to, self.name)
-        shutil.move(self.old_app_temp_dir, settings.APPS_DIR)
+            old_lib_dir = os.path.join(old_version_temp_dir, 'libs')
+            if os.path.isdir(old_lib_dir) and os.path.exists(old_lib_dir):
+                libs_dir = old_lib_dir
+        self.new_app_dir = os.path.join(extract_to, self.name)
+        shutil.move(self.new_app_dir, settings.APPS_DIR)
+        if libs_dir:
+            shutil.copy(libs_dir, self.app_dir)
         # delete temp extract dir
         shutil.rmtree(extract_to)
 
@@ -243,7 +249,6 @@ class AppInstaller(object):
         CartoApps.delete_app(self.name)
         self.delete_app_dir()
 
-    @rollback_on_failure
     def install(self, restart=True):
         with lock:
             self.upgrade = False
@@ -355,8 +360,11 @@ class AppInstaller(object):
                 if app_installer.version else {}
                 if self.name in dependencies.keys():
                     app_installer.uninstall(restart=False)
-            installer = importlib.import_module('%s.installer' % self.name)
-            installer.uninstall()
+            try:
+                installer = importlib.import_module('%s.installer' % self.name)
+                installer.uninstall()
+            except ImportError as e:
+                logger.error(e.message)
             self.completely_remove()
             uninstalled = True
             if restart:
