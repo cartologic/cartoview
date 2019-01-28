@@ -25,14 +25,19 @@ class AppsHandler(object):
         AppInstaller(appname).uninstall(restart=True)
 
     def get_pending_apps(self, app_name):
-        apps = None
+        app = {"name": app_name,
+               "makemigrations": False,
+               "migrate": True
+               }
+        DEFAULT_APPS = [app, ]
+        apps = DEFAULT_APPS
         apps_dir = getattr(settings, 'APPS_DIR', None)
         _app_dir = os.path.join(apps_dir, app_name)
         app_data_file = os.path.join(_app_dir, 'installer.json')
         if os.path.exists(app_data_file) and os.access(app_data_file, os.R_OK):
             with open(app_data_file, 'r') as f:
                 app_data = json.load(f)
-                apps = app_data.get('apps', None)
+                apps = app_data.get('apps', DEFAULT_APPS)
         return apps
 
     def makemigrations(self, app_name):
