@@ -36,8 +36,13 @@ if [ "$GEONODE_DEV" = true ]; then
 		cd /geonode && git reset --hard ${GEONODE_SHA1} && pip install . &&
 		rm -rf /geonode
 fi
+
 # create required dirs
 mkdir -p ${APP_DIR}
+
+django-admin.py startproject \
+	--template=https://github.com/cartologic/Cartoview-project-template/archive/1.10.x.zip \
+	--name django.env,server.py,docker-compose.yml carto_app ${APP_DIR}
 
 # install cartoview
 cd /cartoview && pip install . && rm -rf /cartoview

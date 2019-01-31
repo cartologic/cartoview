@@ -14,5 +14,6 @@ COPY . /cartoview
 RUN chmod +x setup.sh
 RUN ./setup.sh
 # switch to project dir
+VOLUME ${APP_DIR}
 WORKDIR ${APP_DIR}
 CMD ["/bin/bash"]
