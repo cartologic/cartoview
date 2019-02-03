@@ -25,11 +25,10 @@ class AppsHandler(object):
         AppInstaller(appname).uninstall(restart=True)
 
     def get_pending_apps(self, app_name):
-        app = {"name": app_name,
-               "makemigrations": False,
-               "migrate": True
-               }
-        DEFAULT_APPS = [app, ]
+        app = {"name": app_name, "makemigrations": False, "migrate": True}
+        DEFAULT_APPS = [
+            app,
+        ]
         apps = DEFAULT_APPS
         apps_dir = getattr(settings, 'APPS_DIR', None)
         _app_dir = os.path.join(apps_dir, app_name)
@@ -60,26 +59,28 @@ class AppsHandler(object):
                 ignore=['node_modules', '.git'])
 
     def execute_pending(self):
-        from cartoview.apps_handler.handlers import CartoApps, apps_orm
-        with apps_orm.session() as session:
-            pending_apps = session.query(CartoApps).filter(
-                CartoApps.pending == True).all()  # noqa
-            for app in pending_apps:
-                _pending_apps = self.get_pending_apps(app.name)
-                if _pending_apps:
-                    for _app in _pending_apps:
-                        _app_name = _app.get('name', None)
-                        _make_migrations = _app.get('makemigrations', False)
-                        _migrate = _app.get('makemigrations', False)
-                        if _app_name:
-                            if _make_migrations:
-                                self.makemigrations(_app_name)
-                            if _migrate:
-                                self.migrate(_app_name)
-                else:
-                    self.migrate(app)
-                self.collectstatic()
-                CartoApps.set_app_pending(app.name, False)
+        from cartoview.apps_handler.config import CartoviewApp
+        CartoviewApp.load()
+        pending_apps = CartoviewApp.objects.get_pending_apps().values()
+        for app in pending_apps:
+            _pending_apps = self.get_pending_apps(app.name)
+            if _pending_apps:
+                for _app in _pending_apps:
+                    _app_name = _app.get('name', None)
+                    _make_migrations = _app.get('makemigrations', False)
+                    _migrate = _app.get('migrate', False)
+                    if _app_name:
+                        if _make_migrations:
+                            self.makemigrations(_app_name)
+                        if _migrate:
+                            self.migrate(_app_name)
+            else:
+                self.migrate(app)
+            self.collectstatic()
+            carto_app = CartoviewApp.objects.get(app.name)
+            carto_app.pending = False
+            carto_app.commit()
+            CartoviewApp.save()
 
     def __call__(self):
         apps_dir = getattr(settings, 'APPS_DIR', None)

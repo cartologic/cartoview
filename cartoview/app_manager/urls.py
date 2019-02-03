@@ -13,8 +13,7 @@ from cartoview.app_manager.rest import (AppInstanceResource, AppResource,
                                         GeonodeMapLayerResource, TagResource)
 from . import views as app_manager_views
 from .api import rest_api
-from cartoview.apps_handler.handlers import CartoApps, apps_orm
-
+from cartoview.apps_handler.config import CartoviewApp
 standard_library.install_aliases()
 rest_api.register(AppResource())
 rest_api.register(AppStoreResource())
@@ -73,12 +72,10 @@ def app_url(app_name):
 
 
 def load_apps_urls():
-    with apps_orm.session() as session:
-        carto_apps = session.query(CartoApps).filter(
-            CartoApps.active == True).all()  # noqa
-    for carto_app in carto_apps:
-        import_app_rest(carto_app.name)
-        urlpatterns.append(app_url(carto_app.name))
+    app_names = CartoviewApp.objects.get_active_apps().keys()
+    for app_name in app_names:
+        import_app_rest(app_name)
+        urlpatterns.append(app_url(app_name))
 
 
 load_apps_urls()

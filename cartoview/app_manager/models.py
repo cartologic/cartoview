@@ -13,15 +13,15 @@ from django.dispatch import receiver
 from django.template.defaultfilters import slugify
 from django.utils.encoding import python_2_unicode_compatible
 from future import standard_library
-from geonode.base.models import ResourceBase, resourcebase_post_save
-from geonode.maps.models import Map as GeonodeMap
-from geonode.security.models import remove_object_permissions
 from guardian.shortcuts import assign_perm
 from jsonfield import JSONField
 from taggit.managers import TaggableManager
 
-from cartoview.apps_handler.handlers import CartoApps
+from cartoview.apps_handler.config import CartoviewApp
 from cartoview.log_handler import get_logger
+from geonode.base.models import ResourceBase, resourcebase_post_save
+from geonode.maps.models import Map as GeonodeMap
+from geonode.security.models import remove_object_permissions
 
 logger = get_logger(__name__)
 
@@ -177,14 +177,16 @@ class App(models.Model):
             return None
 
     def set_active(self, active=True):
-        # self.config.active = active
-        # self.apps_config.save()
-        # return App._apps_config
-        return CartoApps.set_app_active(self.name, active)
+        app = CartoviewApp.objects.get(self.name, None)
+        if app:
+            app.active = active
+            app.commit()
+            CartoviewApp.save()
+        return app
 
     @property
     def config(self):
-        return CartoApps.get_app_by_name(self.name)
+        return CartoviewApp.objects.get(self.name, None)
 
 
 def get_app_logo_path(instance, filename):
@@ -297,15 +299,6 @@ def appinstance_post_save(instance, *args, **kwargs):
     if not isinstance(instance, AppInstance):
         return
     resourcebase_post_save(instance, args, kwargs)
-
-
-@receiver(signals.pre_delete, sender=App)
-def pre_delete_app(sender, instance, using, **kwargs):
-    CartoApps.delete_app(instance.name)
-    # app_config = instance.apps_config.get_by_name(instance.name)
-    # if app_config:
-    #     del instance.apps_config[app_config]
-    #     instance.apps_config.save()
 
 
 signals.pre_save.connect(pre_save_appinstance)

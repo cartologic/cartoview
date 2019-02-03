@@ -1,9 +1,12 @@
 import importlib
+
 from django.core.management.base import BaseCommand
-from geonode.people.models import Profile
-from cartoview.apps_handler.handlers import CartoApps, apps_orm
+
 from cartoview.app_manager.models import App, AppType
+from cartoview.apps_handler.config import CartoviewApp
 from cartoview.log_handler import get_logger
+from geonode.people.models import Profile
+
 logger = get_logger(with_formatter=True)
 
 
@@ -11,9 +14,7 @@ class Command(BaseCommand):
     help = 'Update existing apps'
 
     def handle(self, *args, **options):
-        with apps_orm.session() as session:
-            carto_apps = session.query(CartoApps).filter(
-                CartoApps.active == True).all()  # noqa
+        carto_apps = CartoviewApp.objects.get_active_apps().values()
         user = Profile.objects.filter(is_superuser=True).first()
         for carto_app in carto_apps:
             app_name = carto_app.name

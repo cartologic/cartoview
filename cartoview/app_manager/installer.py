@@ -20,7 +20,7 @@ from django.db import transaction
 from django.db.models import Max
 from future import standard_library
 
-from cartoview.apps_handler.handlers import CartoApps, apps_orm
+from cartoview.apps_handler.config import CartoviewApp
 from cartoview.log_handler import get_logger
 from cartoview.store_api.api import StoreAppResource, StoreAppVersion
 
@@ -214,21 +214,19 @@ class AppInstaller(object):
 
     @rollback_on_failure
     def add_carto_app(self):
-        with apps_orm.session() as session:
-            if not CartoApps.app_exists(self.name):
-                carto_app = CartoApps(
-                    name=self.name,
-                    active=True,
-                    order=self.get_app_order(),
-                    pending=True)
-                session.add(carto_app)
-                session.commit()
-            else:
-                carto_app = session.query(CartoApps).filter(
-                    CartoApps.name == self.name).update({
-                        "pending": True
-                    })
-                session.commit()
+        if not CartoviewApp.objects.app_exists(self.name):
+            CartoviewApp({
+                'name': self.name,
+                'active': True,
+                'order': self.get_app_order(),
+                'pending': True
+            })
+            CartoviewApp.save()
+        else:
+            carto_app = CartoviewApp.objects.get(self.name)
+            carto_app.pending = True
+            carto_app.commit()
+            CartoviewApp.save()
 
     @rollback_on_failure
     def add_app(self):
@@ -246,7 +244,9 @@ class AppInstaller(object):
         return app
 
     def _rollback(self):
-        CartoApps.delete_app(self.name)
+        app = CartoviewApp.objects.pop(self.name, None)
+        if app:
+            CartoviewApp.save()
         self.delete_app_dir()
 
     def install(self, restart=True):
@@ -285,8 +285,8 @@ class AppInstaller(object):
             req_installer = ReqInstaller(self.app_dir, target=libs_dir)
             req_installer.install_all()
         except BaseException as e:
-            if not (isinstance(e, ReqFileException) or
-                    isinstance(e, ReqFilePermissionException)):
+            if not (isinstance(e, ReqFileException)
+                    or isinstance(e, ReqFilePermissionException)):
                 raise e
 
     @rollback_on_failure
@@ -314,6 +314,8 @@ class AppInstaller(object):
         self.delete_app()
         self.delete_app_tables()
         self.delete_app_dir()
+        CartoviewApp.objects.pop(self.name, None)
+        CartoviewApp.save()
 
     def execute_command(self, command):
         project_dir = None

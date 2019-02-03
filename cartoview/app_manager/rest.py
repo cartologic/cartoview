@@ -21,7 +21,7 @@ from tastypie.resources import ModelResource
 from tastypie.utils import trailing_slash
 
 from cartoview.app_manager.models import App, AppInstance, AppStore, AppType
-from cartoview.apps_handler.handlers import CartoApps
+from cartoview.apps_handler.config import CartoviewApp
 from cartoview.log_handler import get_logger
 from geonode.api.api import ProfileResource
 from geonode.api.authorization import GeoNodeAuthorization
@@ -57,8 +57,7 @@ class LayerFilterExtensionResource(LayerResource):
         return orm_filters
 
     def apply_filters(self, request, applicable_filters):
-        permission = applicable_filters.pop(
-            'permission', None)
+        permission = applicable_filters.pop('permission', None)
         # NOTE: We change this filter name from type to geom_type because it
         # overrides geonode type filter(vector,raster)
         layer_geom_type = applicable_filters.pop('geom_type', None)
@@ -146,7 +145,7 @@ class AppResource(FileUploadResource):
         return url(exp, self.wrap_view(view), name=name)
 
     def prepend_urls(self):
-        return[
+        return [
             url(r"^(?P<resource_name>%s)/install%s$" %
                 (self._meta.resource_name, trailing_slash()),
                 self.wrap_view('install'),
@@ -278,9 +277,12 @@ class AppResource(FileUploadResource):
             app = App.objects.get(id=ids_list[i])
             app.order = i + 1
             app.save()
-            CartoApps.set_app_order(app.name, app.order)
+            cartoview_app = CartoviewApp.objects.get(app.name)
+            if cartoview_app:
+                cartoview_app.order = app.order
+                cartoview_app.commit()
             if i == (len(ids_list) - 1):
-                app.apps_config.save()
+                CartoviewApp.save()
         self.log_throttled_access(request)
         return self.create_response(request, {'success': True})
 
@@ -384,8 +386,8 @@ class AppInstanceResource(ModelResource):
 
         if not settings.SKIP_PERMS_FILTER:
 
-            filter_set = get_objects_for_user(
-                request.user, 'base.view_resourcebase')
+            filter_set = get_objects_for_user(request.user,
+                                              'base.view_resourcebase')
 
             filter_set = get_visible_resources(
                 filter_set,
@@ -404,8 +406,8 @@ class AppInstanceResource(ModelResource):
             else:
                 sqs = None
         else:
-            sqs = sqs.facet('type').facet(
-                'owner').facet('keywords').facet('regions').facet('category')
+            sqs = sqs.facet('type').facet('owner').facet('keywords').facet(
+                'regions').facet('category')
 
         if sqs:
             # Build the Facet dict
@@ -466,10 +468,10 @@ class AppInstanceResource(ModelResource):
     def prepend_urls(self):
         if settings.HAYSTACK_SEARCH:
             return [
-                url(r"^(?P<resource_name>%s)/search%s$" % (
-                    self._meta.resource_name, trailing_slash()
-                ),
-                    self.wrap_view('get_search'), name="api_get_search"),
+                url(r"^(?P<resource_name>%s)/search%s$" %
+                    (self._meta.resource_name, trailing_slash()),
+                    self.wrap_view('get_search'),
+                    name="api_get_search"),
             ]
         else:
             return []
@@ -539,16 +541,12 @@ class AppInstanceResource(ModelResource):
                 # Match exact phrase
                 phrase = query.replace('"', '')
                 sqs = (SearchQuerySet() if sqs is None else sqs).filter(
-                    SQ(title__exact=phrase) |
-                    SQ(description__exact=phrase) |
-                    SQ(content__exact=phrase)
-                )
+                    SQ(title__exact=phrase) | SQ(description__exact=phrase)
+                    | SQ(content__exact=phrase))
             else:
                 words = [
-                    w for w in re.split(
-                        '\W',
-                        query,
-                        flags=re.UNICODE) if w]
+                    w for w in re.split('\W', query, flags=re.UNICODE) if w
+                ]
                 for i, search_word in enumerate(words):
                     if i == 0:
                         sqs = (SearchQuerySet() if sqs is None else sqs) \
@@ -561,16 +559,14 @@ class AppInstanceResource(ModelResource):
                         pass
                     elif words[i - 1] == "OR":  # previous word OR this word
                         sqs = sqs.filter_or(
-                            SQ(title=Raw(search_word)) |
-                            SQ(description=Raw(search_word)) |
-                            SQ(content=Raw(search_word))
-                        )
+                            SQ(title=Raw(search_word))
+                            | SQ(description=Raw(search_word))
+                            | SQ(content=Raw(search_word)))
                     else:  # previous word AND this word
                         sqs = sqs.filter(
-                            SQ(title=Raw(search_word)) |
-                            SQ(description=Raw(search_word)) |
-                            SQ(content=Raw(search_word))
-                        )
+                            SQ(title=Raw(search_word))
+                            | SQ(description=Raw(search_word))
+                            | SQ(content=Raw(search_word)))
 
         # filter by category
         if category:
@@ -583,8 +579,7 @@ class AppInstanceResource(ModelResource):
         # selected
         if keywords:
             for keyword in keywords:
-                sqs = (
-                    SearchQuerySet() if sqs is None else sqs).filter_or(
+                sqs = (SearchQuerySet() if sqs is None else sqs).filter_or(
                     keywords_exact=keyword)
 
         # filter by regions: use filter_or with regions_exact
@@ -593,63 +588,51 @@ class AppInstanceResource(ModelResource):
         # selected
         if regions:
             for region in regions:
-                sqs = (
-                    SearchQuerySet() if sqs is None else sqs).filter_or(
+                sqs = (SearchQuerySet() if sqs is None else sqs).filter_or(
                     regions_exact__exact=region)
 
         # filter by owner
         if owner:
-            sqs = (
-                SearchQuerySet() if sqs is None else sqs).narrow(
-                    "owner__username:%s" % ','.join(map(str, owner)))
+            sqs = (SearchQuerySet() if sqs is None else sqs).narrow(
+                "owner__username:%s" % ','.join(map(str, owner)))
 
         # filter by app
         if app:
-            sqs = (
-                SearchQuerySet() if sqs is None else sqs).narrow(
-                    "app__name:%s" % ','.join(map(str, app)))
+            sqs = (SearchQuerySet() if sqs is None else sqs).narrow(
+                "app__name:%s" % ','.join(map(str, app)))
 
         # filter by date
         if date_start:
             sqs = (SearchQuerySet() if sqs is None else sqs).filter(
-                SQ(date__gte=date_start)
-            )
+                SQ(date__gte=date_start))
 
         if date_end:
             sqs = (SearchQuerySet() if sqs is None else sqs).filter(
-                SQ(date__lte=date_end)
-            )
+                SQ(date__lte=date_end))
 
         # Filter by geographic bounding box
         if bbox:
             left, bottom, right, top = bbox.split(',')
-            sqs = (
-                SearchQuerySet() if sqs is None else sqs).exclude(
-                SQ(
-                    bbox_top__lte=bottom) | SQ(
-                    bbox_bottom__gte=top) | SQ(
-                    bbox_left__gte=right) | SQ(
-                        bbox_right__lte=left))
+            sqs = (SearchQuerySet() if sqs is None else sqs).exclude(
+                SQ(bbox_top__lte=bottom) | SQ(bbox_bottom__gte=top)
+                | SQ(bbox_left__gte=right) | SQ(bbox_right__lte=left))
 
         # Apply sort
         if sort.lower() == "-date":
-            sqs = (
-                SearchQuerySet() if sqs is None else sqs).order_by("-date")
+            sqs = (SearchQuerySet() if sqs is None else sqs).order_by("-date")
         elif sort.lower() == "date":
-            sqs = (
-                SearchQuerySet() if sqs is None else sqs).order_by("date")
+            sqs = (SearchQuerySet() if sqs is None else sqs).order_by("date")
         elif sort.lower() == "title":
-            sqs = (SearchQuerySet() if sqs is None else sqs).order_by(
-                "title_sortable")
+            sqs = (SearchQuerySet()
+                   if sqs is None else sqs).order_by("title_sortable")
         elif sort.lower() == "-title":
-            sqs = (SearchQuerySet() if sqs is None else sqs).order_by(
-                "-title_sortable")
+            sqs = (SearchQuerySet()
+                   if sqs is None else sqs).order_by("-title_sortable")
         elif sort.lower() == "-popular_count":
-            sqs = (SearchQuerySet() if sqs is None else sqs).order_by(
-                "-popular_count")
+            sqs = (SearchQuerySet()
+                   if sqs is None else sqs).order_by("-popular_count")
         else:
-            sqs = (
-                SearchQuerySet() if sqs is None else sqs).order_by("-date")
+            sqs = (SearchQuerySet() if sqs is None else sqs).order_by("-date")
 
         return sqs
 
