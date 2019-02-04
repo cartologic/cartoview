@@ -540,9 +540,10 @@ class AppInstanceResource(ModelResource):
             if query.startswith('"') or query.startswith('\''):
                 # Match exact phrase
                 phrase = query.replace('"', '')
-                sqs = (SearchQuerySet() if sqs is None else sqs).filter(
+                sqs = (SearchQuerySet() if sqs is None else sqs)\
+                    .filter(
                     SQ(title__exact=phrase) | SQ(description__exact=phrase)
-                    | SQ(content__exact=phrase))
+                        | SQ(content__exact=phrase)) # noqa
             else:
                 words = [
                     w for w in re.split('\W', query, flags=re.UNICODE) if w
@@ -560,13 +561,13 @@ class AppInstanceResource(ModelResource):
                     elif words[i - 1] == "OR":  # previous word OR this word
                         sqs = sqs.filter_or(
                             SQ(title=Raw(search_word))
-                            | SQ(description=Raw(search_word))
-                            | SQ(content=Raw(search_word)))
+                            | SQ(description=Raw(search_word))  # noqa
+                            | SQ(content=Raw(search_word)))  # noqa
                     else:  # previous word AND this word
                         sqs = sqs.filter(
                             SQ(title=Raw(search_word))
-                            | SQ(description=Raw(search_word))
-                            | SQ(content=Raw(search_word)))
+                            | SQ(description=Raw(search_word))  # noqa
+                            | SQ(content=Raw(search_word)))  # noqa
 
         # filter by category
         if category:
@@ -615,7 +616,7 @@ class AppInstanceResource(ModelResource):
             left, bottom, right, top = bbox.split(',')
             sqs = (SearchQuerySet() if sqs is None else sqs).exclude(
                 SQ(bbox_top__lte=bottom) | SQ(bbox_bottom__gte=top)
-                | SQ(bbox_left__gte=right) | SQ(bbox_right__lte=left))
+                | SQ(bbox_left__gte=right) | SQ(bbox_right__lte=left)) # noqa
 
         # Apply sort
         if sort.lower() == "-date":

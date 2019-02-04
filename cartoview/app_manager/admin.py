@@ -7,7 +7,6 @@ from future import standard_library
 
 from .installer import AppInstaller
 from .models import App, AppInstance, AppStore, AppType
-from .utils import populate_apps
 
 standard_library.install_aliases()
 

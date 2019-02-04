@@ -286,7 +286,7 @@ class AppInstaller(object):
             req_installer.install_all()
         except BaseException as e:
             if not (isinstance(e, ReqFileException)
-                    or isinstance(e, ReqFilePermissionException)):
+                    or isinstance(e, ReqFilePermissionException)):  # noqa
                 raise e
 
     @rollback_on_failure
