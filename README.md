@@ -75,7 +75,7 @@
                 try:
                     execfile(settings_file)
                 except Exception as e:
-                    pass
+                    print(e.message)
           ```
       - **restart your server**
 
