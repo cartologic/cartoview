@@ -2,7 +2,6 @@ FROM python:2.7-slim
 LABEL "MAINTAINER"="Cartologic Development Team"
 ENV PYTHONUNBUFFERED 1
 ARG GEONODE_DEV=true
-ARG GEONODE_SHA1=992daf724e83cdb0c1eb776d147eba841ad02cd9
 ARG APP_DIR=/usr/src/carto_app
 # include GDAL HEADER Files
 # CPATH specifies a list of directories to be searched as if specified with -I,

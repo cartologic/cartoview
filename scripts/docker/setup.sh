@@ -33,7 +33,7 @@ pip install GDAL==2.3.2
 # install geonode from commit hash if dev enabled
 if [ "$GEONODE_DEV" = true ]; then
 	git clone https://github.com/GeoNode/geonode.git &&
-		cd /geonode && git reset --hard ${GEONODE_SHA1} && pip install . &&
+		cd /geonode && pip install . &&
 		rm -rf /geonode
 fi
 
