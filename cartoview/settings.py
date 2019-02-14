@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function
+
 import ast
 import copy
 import os
@@ -8,10 +9,10 @@ import sys
 from distutils.util import strtobool
 
 import dj_database_url
-from geonode.settings import *  # noqa
 from kombu import Exchange, Queue
 
 import cartoview
+from geonode.settings import *  # noqa
 
 CARTOVIEW_INSTALLED_APPS = ("cartoview",
                             "cartoview.cartoview_api.apps.CartoviewAPIConfig",
@@ -144,104 +145,6 @@ if CARTOVIEW_STAND_ALONE or CARTOVIEW_TEST:
             execfile(settings_file)
         except Exception as e:
             print(e.message)
-
-# Celery settings
-CELERY_TASK_DEFAULT_QUEUE = "default"
-CELERY_TASK_DEFAULT_EXCHANGE = "default"
-CELERY_TASK_DEFAULT_EXCHANGE_TYPE = "direct"
-CELERY_TASK_DEFAULT_ROUTING_KEY = "default"
-# Celery settings
-ASYNC_SIGNALS = ast.literal_eval(os.environ.get('ASYNC_SIGNALS', 'False'))
-RABBITMQ_SIGNALS_BROKER_URL = 'amqp://rabbitmq:5672'
-REDIS_SIGNALS_BROKER_URL = 'redis://redis:6379/0'
-LOCAL_SIGNALS_BROKER_URL = 'memory://'
-
-if ASYNC_SIGNALS:
-    _BROKER_URL = os.environ.get('BROKER_URL', RABBITMQ_SIGNALS_BROKER_URL)
-    # _BROKER_URL =  = os.environ.get('BROKER_URL', REDIS_SIGNALS_BROKER_URL)
-    CELERY_RESULT_BACKEND = _BROKER_URL
-    CELERY_RESULT_BACKEND = "rpc" + _BROKER_URL[4:]
-else:
-    _BROKER_URL = LOCAL_SIGNALS_BROKER_URL
-
-BROKER_URL = _BROKER_URL
-CELERY_BROKER_URL = BROKER_URL
-CELERY_RESULT_PERSISTENT = False
-
-# Allow to recover from any unknown crash.
-CELERY_ACKS_LATE = True
-
-# Set this to False in order to run async
-CELERY_TASK_ALWAYS_EAGER = False if ASYNC_SIGNALS else True
-CELERY_ALWAYS_EAGER = False if ASYNC_SIGNALS else True
-CELERY_TASK_IGNORE_RESULT = False
-
-# I use these to debug kombu crashes; we get a more informative message.
-CELERY_TASK_SERIALIZER = 'json'
-CELERY_RESULT_SERIALIZER = 'json'
-CELERY_ACCEPT_CONTENT = ['json']
-CELERY_TASK_CREATE_MISSING_QUEUES = True
-CELERY_TASK_RESULT_EXPIRES = 432000
-
-# Sometimes, Ask asks us to enable this to debug issues.
-# BTW, it will save some CPU cycles.
-CELERY_DISABLE_RATE_LIMITS = False
-CELERY_SEND_TASK_EVENTS = True
-CELERY_WORKER_DISABLE_RATE_LIMITS = False
-CELERY_WORKER_SEND_TASK_EVENTS = True
-GEONODE_EXCHANGE = Exchange("default", type="direct", durable=True)
-GEOSERVER_EXCHANGE = Exchange("geonode", type="topic", durable=False)
-CELERY_TASK_QUEUES = (
-    Queue('default', GEONODE_EXCHANGE, routing_key='default'),
-    Queue('geonode', GEONODE_EXCHANGE, routing_key='geonode'),
-    Queue('update', GEONODE_EXCHANGE, routing_key='update'),
-    Queue('cleanup', GEONODE_EXCHANGE, routing_key='cleanup'),
-    Queue('email', GEONODE_EXCHANGE, routing_key='email'),
-)
-
-CELERY_TASK_QUEUES += (
-    Queue("broadcast", GEOSERVER_EXCHANGE, routing_key="#"),
-    Queue("email.events", GEOSERVER_EXCHANGE, routing_key="email"),
-    Queue("all.geoserver", GEOSERVER_EXCHANGE, routing_key="geoserver.#"),
-    Queue(
-        "geoserver.catalog",
-        GEOSERVER_EXCHANGE,
-        routing_key="geoserver.catalog"),
-    Queue(
-        "geoserver.data", GEOSERVER_EXCHANGE, routing_key="geoserver.catalog"),
-    Queue(
-        "geoserver.events",
-        GEOSERVER_EXCHANGE,
-        routing_key="geonode.geoserver"),
-    Queue(
-        "notifications.events",
-        GEOSERVER_EXCHANGE,
-        routing_key="notifications"),
-    Queue(
-        "geonode.layer.viewer",
-        GEOSERVER_EXCHANGE,
-        routing_key="geonode.viewer"),
-)
-
-# Allow our remote workers to get tasks faster if they have a
-# slow internet connection (yes Gurney, I'm thinking of you).
-CELERY_MESSAGE_COMPRESSION = 'gzip'
-
-# The default beiing 5000, we need more than this.
-CELERY_MAX_CACHED_RESULTS = 32768
-
-# NOTE: I don't know if this is compatible with upstart.
-CELERYD_POOL_RESTARTS = True
-
-CELERY_TRACK_STARTED = True
-CELERY_SEND_TASK_SENT_EVENT = True
-BROKER_POOL_LIMIT = 1
-BROKER_CONNECTION_MAX_RETRIES = None
-TIME_ZONE = 'UTC'
-USE_TZ = True
-
-CELERY_ENABLE_UTC = True
-CELERY_TIMEZONE = "UTC"
 
 try:
     from .local_settings import *  #noqa
