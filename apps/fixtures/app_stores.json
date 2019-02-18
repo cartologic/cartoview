@@ -1,0 +1,12 @@
+[
+{
+    "fields": {
+        "url": "https://appstore.cartoview.net/api/v1/",
+        "is_default": true,
+        "name": "Cartoview App Store",
+        "server_type": "Geoserver"
+    },
+    "model": "apps.appstore",
+    "pk": 1
+}
+]

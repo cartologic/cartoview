@@ -42,7 +42,6 @@ INSTALLED_APPS = [
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
-    "geonode_oauth2",  # Our custom provider
     "wagtail.contrib.forms",
     "wagtail.contrib.redirects",
     "wagtail.embeds",
@@ -56,6 +55,12 @@ INSTALLED_APPS = [
     "wagtail.core",
     "modelcluster",
     "taggit",
+    "guardian",
+    # cartoview apps
+    "geonode_oauth2",  # Our custom provider
+    "apps",
+    "wagtail.contrib.modeladmin",
+    'wagtail.contrib.styleguide',
 ]
 
 MIDDLEWARE = [
@@ -100,6 +105,16 @@ DATABASES = {
         "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
     }
 }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'cartoview2',
+        'USER': 'hishamkaram',
+        'PASSWORD': 'clogic',
+        'HOST': 'localhost',
+        'PORT': '5432',
+    },
+}
 
 
 # Password validation
@@ -133,19 +148,20 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = "/static/"
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-MEDIA_URL = '/media/'
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
+MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 AUTHENTICATION_BACKENDS = (
     # Needed to login by username in Django admin, regardless of `allauth`
     "django.contrib.auth.backends.ModelBackend",
+    "guardian.backends.ObjectPermissionBackend",
     # `allauth` specific authentication methods, such as login by e-mail
     "allauth.account.auth_backends.AuthenticationBackend",
 )
-
+ANONYMOUS_USER_NAME = "AnonymousUser"
 OAUTH_SERVER_BASEURL = "http://try.cartoview.net"
 SITE_ID = 1
 LOGIN_REDIRECT_URL = "/accounts/profile"
 
-WAGTAIL_SITE_NAME = 'Cartoview'
+WAGTAIL_SITE_NAME = "Cartoview"
