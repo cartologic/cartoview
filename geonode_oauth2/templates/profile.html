@@ -1,0 +1,6 @@
+{% if not user.is_anonymous %}
+<h1>Hello {{ user }}!</h1>
+{% else %}
+<h1>Hello world!</h1>
+<a href="{% url 'account_login' %}">> Login</a>
+{% endif %}
