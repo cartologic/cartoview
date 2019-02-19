@@ -79,5 +79,12 @@ class OAuthUtils(object):
             access_token = self.refresh_token(access_token)
         return access_token.token
 
+    def get_requests_session(self, user):
+        token = self.get_access_token(user)
+        session = requests.Session()
+        auth_header = {'Authorization': 'Bearer {}'.format(token)}
+        session.headers.update(auth_header)
+        return requests_retry_session(session=session)
+
 
 geonode_oauth_utils = OAuthUtils()
