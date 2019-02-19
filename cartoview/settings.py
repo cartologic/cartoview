@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
+
+    # wagtail apps
     "wagtail.contrib.forms",
     "wagtail.contrib.redirects",
     "wagtail.embeds",
@@ -53,14 +55,16 @@ INSTALLED_APPS = [
     "wagtail.search",
     "wagtail.admin",
     "wagtail.core",
+    "wagtail.contrib.modeladmin",
+    'wagtail.contrib.styleguide',
     "modelcluster",
     "taggit",
+
+    # django guardian
     "guardian",
     # cartoview apps
     "geonode_oauth2",  # Our custom provider
     "apps",
-    "wagtail.contrib.modeladmin",
-    'wagtail.contrib.styleguide',
 ]
 
 MIDDLEWARE = [
@@ -152,6 +156,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static")
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
+# auth settings
 AUTHENTICATION_BACKENDS = (
     # Needed to login by username in Django admin, regardless of `allauth`
     "django.contrib.auth.backends.ModelBackend",
@@ -160,8 +165,8 @@ AUTHENTICATION_BACKENDS = (
     "allauth.account.auth_backends.AuthenticationBackend",
 )
 ANONYMOUS_USER_NAME = "AnonymousUser"
-OAUTH_SERVER_BASEURL = "http://try.cartoview.net"
-SITE_ID = 1
+OAUTH_SERVER_BASEURL = "<BASE_SERVER_URL>"
 LOGIN_REDIRECT_URL = "/accounts/profile"
 
 WAGTAIL_SITE_NAME = "Cartoview"
+SITE_ID = 1
