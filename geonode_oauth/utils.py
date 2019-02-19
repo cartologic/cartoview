@@ -63,6 +63,9 @@ class OAuthUtils(object):
         req = session.post(url, data=self._refresh_payload(token))
         msg = "url: {} \t status_code: {}".format(req.url, req.status_code)
         logger.info(msg)
+        if req.status_code == 401:
+            logger.error(req.text)
+            raise Exception("Your Token expired please login again")
         if req.status_code != 200:
             raise Exception("Failed to refresh token")
         else:
