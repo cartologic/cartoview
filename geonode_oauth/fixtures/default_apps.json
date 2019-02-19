@@ -1,0 +1,12 @@
+[{
+	"model": "socialaccount.socialapp",
+	"pk": 1,
+	"fields": {
+		"provider": "geonodeprovider",
+		"name": "indiana",
+		"client_id": "6ywB23Og4kSyasRR4IbN3fpClFuvVlyJxi8omTUt",
+		"secret": "O2Xs7kFctt5dPlvyZkJ6ieQ3TZow2knztg76VevN6DTGAVewDPscXyXe4UURsRuqXV868O5BPTtuKNWL7wuy5BU5BLrzYjZ2dJDDUbRuC58HwJtDdAEP9ERLHkJb0s8L",
+		"key": "",
+		"sites": [1]
+	}
+}]

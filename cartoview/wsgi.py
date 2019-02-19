@@ -1,5 +1,5 @@
 """
-WSGI config for geonode_oauth_client project.
+WSGI config for cartoview project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 

@@ -20,7 +20,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "c8(50gzg=^s6&m73&801%+@$24+&8duk$^^4ormfkbj!*q86fo"
+SECRET_KEY = "<secret_key>"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -63,7 +63,7 @@ INSTALLED_APPS = [
     # django guardian
     "guardian",
     # cartoview apps
-    "geonode_oauth2",  # Our custom provider
+    "geonode_oauth",  # Our custom provider
     "apps",
 ]
 
@@ -112,9 +112,9 @@ DATABASES = {
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'cartoview2',
-        'USER': 'hishamkaram',
-        'PASSWORD': 'clogic',
+        'NAME': '<database_name>',
+        'USER': '<user>',
+        'PASSWORD': '<pass>',
         'HOST': 'localhost',
         'PORT': '5432',
     },
@@ -170,3 +170,7 @@ LOGIN_REDIRECT_URL = "/accounts/profile"
 
 WAGTAIL_SITE_NAME = "Cartoview"
 SITE_ID = 1
+try:
+    from .local_settings import *  # noqa
+except BaseException as e:
+    print(e.message)
