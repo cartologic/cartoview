@@ -82,7 +82,8 @@ class App(models.Model):
         get_user_model(), null=True, blank=True, on_delete=models.SET_NULL)
     single_instance = models.BooleanField(
         default=False, null=False, blank=False)
-    category = models.ManyToManyField(AppType, related_name="apps")
+    category = models.ManyToManyField(
+        AppType, related_name="apps", blank=True)
     status = models.CharField(
         max_length=100, blank=False, null=False, default="Alpha")
     app_img_url = models.TextField(max_length=1000, blank=True, null=True)

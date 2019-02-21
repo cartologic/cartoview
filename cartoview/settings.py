@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     "allauth.socialaccount",
     "rest_framework",
     'rest_framework_swagger',
+    'rest_framework.authtoken',
 
     # wagtail apps
     "wagtail.contrib.forms",
@@ -171,8 +172,11 @@ AUTHENTICATION_BACKENDS = (
     "allauth.account.auth_backends.AuthenticationBackend",
 )
 ANONYMOUS_USER_NAME = "AnonymousUser"
+GUARDIAN_RAISE_403 = True
 OAUTH_SERVER_BASEURL = "<BASE_SERVER_URL>"
 LOGIN_REDIRECT_URL = "/accounts/profile"
+
+
 WAGTAIL_SITE_NAME = "Cartoview"
 SITE_ID = 1
 
@@ -187,8 +191,16 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
     ],
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+    ),
     'DEFAULT_PARSER_CLASSES': (
         'rest_framework.parsers.JSONParser',
+        'rest_framework.parsers.FormParser',
+        'rest_framework.parsers.MultiPartParser',
+        'rest_framework.parsers.FileUploadParser',
         'rest_framework_xml.parsers.XMLParser',
         'rest_framework_yaml.parsers.YAMLParser',
     ),
