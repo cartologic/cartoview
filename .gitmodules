@@ -1,3 +1,0 @@
-[submodule "app_manager/static/app_installer"]
-	path = app_manager/static/app_installer
-	url = https://github.com/cartologic/app-installer-frontend.git
