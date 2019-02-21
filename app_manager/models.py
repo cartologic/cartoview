@@ -56,6 +56,13 @@ class AppStore(models.Model):
     class Meta:
         ordering = ['-name']
 
+    def as_dict(self):
+        return {'name': self.name,
+                'id': self.id,
+                'url': self.url,
+                'is_default': self.is_default,
+                'type': self.server_type}
+
     def __str__(self):
         return self.name
 

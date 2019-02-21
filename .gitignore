@@ -118,3 +118,5 @@ dmypy.json
 .vscode
 
 .DS_Store
+node_modules
+cartoview_apps

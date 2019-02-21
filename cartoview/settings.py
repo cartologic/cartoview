@@ -64,7 +64,7 @@ INSTALLED_APPS = [
     "guardian",
     # cartoview apps
     "geonode_oauth",  # Our custom provider
-    "apps",
+    "app_manager",
 ]
 
 MIDDLEWARE = [
@@ -155,7 +155,9 @@ STATIC_URL = "/static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
-
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "cartoview", "static"),
+]
 # auth settings
 AUTHENTICATION_BACKENDS = (
     # Needed to login by username in Django admin, regardless of `allauth`
@@ -167,10 +169,10 @@ AUTHENTICATION_BACKENDS = (
 ANONYMOUS_USER_NAME = "AnonymousUser"
 OAUTH_SERVER_BASEURL = "<BASE_SERVER_URL>"
 LOGIN_REDIRECT_URL = "/accounts/profile"
-
 WAGTAIL_SITE_NAME = "Cartoview"
 SITE_ID = 1
+APPS_DIR = os.path.join(BASE_DIR, 'cartoview_apps')
 try:
     from .local_settings import *  # noqa
 except BaseException as e:
-    print(e.message)
+    print(e)

@@ -21,6 +21,7 @@ from wagtail.admin import urls as wagtailadmin_urls
 from wagtail.core import urls as wagtail_urls
 from wagtail.documents import urls as wagtaildocs_urls
 
+from app_manager.urls import urlpatterns as app_manager_urls
 from geonode_oauth import views
 
 urlpatterns = [
@@ -29,7 +30,9 @@ urlpatterns = [
     re_path(r"^accounts/profile$", views.ProfileView.as_view()),
     re_path(r"^admin/", include(wagtailadmin_urls)),
     re_path(r"^documents/", include(wagtaildocs_urls)),
-    re_path(r"", include(wagtail_urls)),
+    re_path(r"^apps/", include(app_manager_urls)),
+    re_path(r"^", include(wagtail_urls), name='index'),
 ]
 if not settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.MEDIA_URL,
+                          document_root=settings.MEDIA_ROOT)

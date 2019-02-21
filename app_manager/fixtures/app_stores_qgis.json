@@ -6,7 +6,7 @@
         "name": "Cartoview App Store",
         "server_type": "Exchange"
     },
-    "model": "apps.appstore",
+    "model": "app_manager.appstore",
     "pk": 1
 }
 ]

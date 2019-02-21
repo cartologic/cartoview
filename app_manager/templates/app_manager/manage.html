@@ -1,0 +1,29 @@
+{% load static apps_tags %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Manage Apps</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0, maximum-scale=1, user-scalable=no" />  
+    <link rel="shortcut icon" type="image/png" href="{% static 'cartoview/img/icon.png' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'app_installer/dist/installer.css' %}"/>
+</head>
+<body>
+	<div id="root">
+
+	</div>
+	<script type="text/javascript">
+		const urls={}
+		const AppInstallerProps = {
+			stores:{{stores|jsonify}}
+		}
+	</script>
+	<script src="{% static 'app_installer/dist/polyfill.js' %}"></script>
+	<script src="{% static 'app_installer/dist/react.js' %}"></script>
+	<script src="{% static 'app_installer/dist/semanticUI.js' %}"></script>
+	<script src="{% static 'app_installer/dist/extVendors.js' %}"></script>
+	<script src="{% static 'app_installer/dist/lodash.js' %}"></script>
+	<script src="{% static 'app_installer/dist/installer.bundle.js' %}"></script>
+
+</body>
+</html>
