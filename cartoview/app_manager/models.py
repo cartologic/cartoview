@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.postgres.fields import JSONField
@@ -70,7 +71,7 @@ class AppStore(models.Model):
 @python_2_unicode_compatible
 class App(models.Model):
     name = models.CharField(max_length=200, unique=True)
-    title = models.CharField(max_length=200, null=True, blank=True)
+    title = models.CharField(max_length=200, unique=True)
     description = models.TextField(null=True, blank=True)
     license = models.CharField(max_length=200, null=True, blank=True)
     tags = TaggableManager()

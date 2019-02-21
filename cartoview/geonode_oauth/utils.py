@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import requests
 from allauth.socialaccount.models import SocialToken
 from django.conf import settings

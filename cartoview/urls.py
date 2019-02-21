@@ -20,7 +20,7 @@ from django.urls import include, path, re_path
 from wagtail.admin import urls as wagtailadmin_urls
 from wagtail.core import urls as wagtail_urls
 from wagtail.documents import urls as wagtaildocs_urls
-from rest_framework.urls import urlpatterns as rest_urls
+from cartoview.api.urls import urlpatterns as api_urls
 from cartoview.app_manager.urls import urlpatterns as app_manager_urls
 from cartoview.geonode_oauth import views
 
@@ -31,8 +31,10 @@ urlpatterns = [
     re_path(r"^admin/", include(wagtailadmin_urls)),
     re_path(r"^documents/", include(wagtaildocs_urls)),
     re_path(r"^apps/", include(app_manager_urls)),
-    re_path(r'^api-auth/', include(rest_urls)),
-    re_path(r"^", include(wagtail_urls), name='index'),
+    re_path(r"^api/", include(api_urls)),
+    re_path(r'^api-auth/', include('rest_framework.urls',
+                                   namespace="rest_framework")),
+    re_path(r"^cms", include(wagtail_urls), name='index'),
 ]
 if not settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL,

@@ -1,5 +1,4 @@
-# from django.shortcuts import render
-
+# -*- coding: utf-8 -*-
 import requests
 from allauth.socialaccount.providers.oauth2.views import (
     OAuth2Adapter,
