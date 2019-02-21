@@ -179,14 +179,25 @@ SITE_ID = 1
 
 # apps settings
 APPS_DIR = os.path.join(BASE_DIR, os.pardir, 'cartoview_apps')
-
 # django rest framework settings
 REST_FRAMEWORK = {
-    # Use Django's standard `django.contrib.auth` permissions,
-    # or allow read-only access for unauthenticated users.
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 100,
+    'DEFAULT_METADATA_CLASS': 'rest_framework.metadata.SimpleMetadata',
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
-    ]
+    ],
+    'DEFAULT_PARSER_CLASSES': (
+        'rest_framework.parsers.JSONParser',
+        'rest_framework_xml.parsers.XMLParser',
+        'rest_framework_yaml.parsers.YAMLParser',
+    ),
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework_xml.renderers.XMLRenderer',
+        'rest_framework_yaml.renderers.YAMLRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
+    ),
 }
 try:
     from .local_settings import *  # noqa
