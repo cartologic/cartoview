@@ -1,0 +1,3 @@
+[submodule "cartoview/app_manager/static/app_installer"]
+	path = cartoview/app_manager/static/app_installer
+	url = https://github.com/cartologic/app-installer-frontend.git

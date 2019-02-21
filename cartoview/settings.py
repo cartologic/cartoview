@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
 # Quick-start development settings - unsuitable for production
@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
+    "rest_framework",
 
     # wagtail apps
     "wagtail.contrib.forms",
@@ -63,8 +64,10 @@ INSTALLED_APPS = [
     # django guardian
     "guardian",
     # cartoview apps
-    "geonode_oauth",  # Our custom provider
-    "app_manager",
+    "cartoview",
+    "cartoview.geonode_oauth",  # Our custom provider
+    "cartoview.app_manager",
+    "cartoview.api",
 ]
 
 MIDDLEWARE = [
@@ -171,7 +174,19 @@ OAUTH_SERVER_BASEURL = "<BASE_SERVER_URL>"
 LOGIN_REDIRECT_URL = "/accounts/profile"
 WAGTAIL_SITE_NAME = "Cartoview"
 SITE_ID = 1
-APPS_DIR = os.path.join(BASE_DIR, 'cartoview_apps')
+
+
+# apps settings
+APPS_DIR = os.path.join(BASE_DIR, os.pardir, 'cartoview_apps')
+
+# django rest framework settings
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ]
+}
 try:
     from .local_settings import *  # noqa
 except BaseException as e:

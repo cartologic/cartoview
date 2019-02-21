@@ -2,7 +2,7 @@ from django.apps import AppConfig
 
 
 class AppManagerConfig(AppConfig):
-    name = 'app_manager'
+    name = 'cartoview.app_manager'
 
     def ready(self):
         from .os_utils import create_apps_dir
