@@ -120,3 +120,4 @@ dmypy.json
 .DS_Store
 node_modules
 cartoview_apps
+media

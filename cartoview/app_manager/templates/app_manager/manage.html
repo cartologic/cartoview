@@ -9,20 +9,26 @@
     <link rel="stylesheet" type="text/css" href="{% static 'app_installer/dist/installer.css' %}"/>
 </head>
 <body>
-	<div id="root">
+	<!-- <div id="installer-app">
 
-	</div>
+	</div> -->
 	<script type="text/javascript">
-		const urls={}
-		const AppInstallerProps = {
-			stores:{{stores|jsonify}}
+		const urls={
+			storesURL:"{% url 'api:stores-list' %}",
+			appsURL:"{% url 'api:apps-list' %}",
+			install:"{% url 'api:apps-install' %}",
 		}
+		const appInstallerProps = {
+			urls:urls,
+			cartoview_version:'1.10.0'
+		}
+		window.appInstallerProps=appInstallerProps;
 	</script>
 	<script src="{% static 'app_installer/dist/polyfill.js' %}"></script>
 	<script src="{% static 'app_installer/dist/react.js' %}"></script>
+	<script src="{% static 'app_installer/dist/lodashLib.js' %}"></script>
 	<script src="{% static 'app_installer/dist/semanticUI.js' %}"></script>
 	<script src="{% static 'app_installer/dist/extVendors.js' %}"></script>
-	<script src="{% static 'app_installer/dist/lodash.js' %}"></script>
 	<script src="{% static 'app_installer/dist/installer.bundle.js' %}"></script>
 
 </body>

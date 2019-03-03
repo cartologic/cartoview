@@ -12,7 +12,7 @@ class GenericObject:
 
     def get_attributes(self):
         attrs = vars(self)
-        attrs.pop('_data')
+        attrs.pop('_data', None)
         return attrs
 
 

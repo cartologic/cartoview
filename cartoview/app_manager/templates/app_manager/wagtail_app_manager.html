@@ -1,0 +1,24 @@
+{% extends "wagtailadmin/base.html" %}
+{% load wagtailimages_tags i18n static %}
+
+{% block titletag %}{% trans "App Manager" %}{% endblock %}
+{% block extra_css %}
+{% endblock extra_css %}
+<style>
+	.iframe-installer {
+		height: 100%;
+		width: 100%;
+		border: none;
+	}
+</style>
+{{ block.super }}
+{% block extra_js %}
+{{ block.super }}
+
+{% endblock %}
+
+{% block content %}
+<div class="iframe-installer">
+		<iframe frameborder="0" style="overflow:hidden;overflow-x:hidden;overflow-y:hidden;height:100%;width:100%;position:absolute;top:0px;left:0px;right:0px;bottom:0px" height="100%" width="100%" src="{% url 'app_manager:manage-apps' %}"></iframe>
+</div>
+{% endblock %}

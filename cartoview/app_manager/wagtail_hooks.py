@@ -1,27 +1,15 @@
-# from .models import App, AppStore
-# from wagtail.contrib.modeladmin.options import ModelAdmin, modeladmin_register
+from wagtail.admin.menu import MenuItem
+from wagtail.core import hooks
+from django.conf.urls import re_path, include
+from django.urls import reverse
+@hooks.register('register_admin_urls')
+def register_admin_urls():
+    return [
+        re_path(r'^installer/', include('cartoview.app_manager.admin_urls')),
+    ]
 
 
-# class WagtailAppAdmin(ModelAdmin):
-#     model = App
-#     list_display = ('name', 'title', 'version')
-#     menu_icon = 'list-ol'
-
-
-# modeladmin_register(WagtailAppAdmin)
-
-
-# class WagtailAppStoreAdmin(ModelAdmin):
-#     model = AppStore
-#     menu_icon = 'list-ol'
-
-
-# modeladmin_register(WagtailAppStoreAdmin)
-
-
-# class WagtailAppTypeAdmin(ModelAdmin):
-#     model = AppType
-#     menu_icon = 'tag'
-
-
-# modeladmin_register(WagtailAppTypeAdmin)
+@hooks.register('register_admin_menu_item')
+def register_frank_menu_item():
+    return MenuItem('Plugins', reverse('app_installer:index'),
+                    classnames='icon icon-folder-inverse', order=300)
