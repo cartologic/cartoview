@@ -129,5 +129,4 @@ def set_app_default_permissions(sender, **kwargs):
     if created:
         for user in users:
             for app_permission in APPS_PERMISSIONS:
-                print(app_permission[0])
                 assign_perm(app_permission[0], user, obj=app)
