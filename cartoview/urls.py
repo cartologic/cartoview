@@ -39,6 +39,6 @@ urlpatterns = [
     path('api-token-auth/', obtain_auth_token, name='api_token_auth'),
     re_path(r"^cms", include(wagtail_urls), name='index'),
 ]
-if not settings.DEBUG:
+if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL,
                           document_root=settings.MEDIA_ROOT)
