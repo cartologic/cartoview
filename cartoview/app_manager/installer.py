@@ -8,11 +8,13 @@ import threading
 import zipfile
 from io import BytesIO
 from sys import executable, exit
+
 import pkg_resources
 import requests
 from django.conf import settings
 from django.db import transaction
 from django.db.models import Max
+from pkg_resources import parse_version
 
 from cartoview.log_handler import get_logger
 
@@ -36,8 +38,6 @@ class RestartHelper(object):
         try:
             from django.utils.autoreload import restart_with_reloader
             restart_with_reloader()
-            from .utils import populate_apps
-            populate_apps()
         except Exception as e:
             logger.error(str(e))
 
@@ -63,8 +63,8 @@ class RestartHelper(object):
         try:
             import cherrypy
             cherrypy.engine.restart()
-        except ImportError:
-            exit(0)
+        except ImportError as e:
+            logger.error(str(e))
 
 
 class AppJson(object):
@@ -124,7 +124,8 @@ class AppInstaller(object):
 
     def get_app_version(self):
         if not self.version or self.version == 'latest' or \
-                (self.info and self.info.latest_version.version == self.version):
+                (self.info and self.info.latest_version.version ==
+                    self.version):
             self.version = self.info.latest_version
         else:
             data = self._request_rest_data("appversion/?app__name=", self.name,
@@ -233,7 +234,8 @@ class AppInstaller(object):
             if os.path.exists(self.app_dir):
                 try:
                     installed_app = App.objects.get(name=self.name)
-                    if installed_app.version < self.version.version:
+                    if parse_version(installed_app.version) < \
+                            parse_version(self.version.version):
                         self.upgrade = True
                     else:
                         raise AppAlreadyInstalledException()
@@ -242,9 +244,10 @@ class AppInstaller(object):
                     # some reason not added to the portal
                     self._rollback()
             installed_apps = []
-            print(vars(self.version.dependencies))
             if self.version and hasattr(self.version, 'dependencies'):
-                for name, version in list(self.version.dependencies.get_attributes().items()):
+                for name, version in \
+                        list(self.version.dependencies.
+                             get_attributes().items()):
                     # use try except because AppInstaller.__init__ will handle
                     # upgrade if version not match
                     try:
@@ -300,7 +303,7 @@ class AppInstaller(object):
     def execute_command(self, command):
         project_dir = None
         if hasattr(settings, 'BASE_DIR'):
-            project_dir = settings.BASE_DIR
+            project_dir = os.path.join(settings.BASE_DIR, os.pardir)
         elif hasattr(settings, 'PROJECT_ROOT'):
             project_dir = settings.PROJECT_ROOT
         elif hasattr(settings, 'APP_ROOT'):
@@ -338,15 +341,10 @@ class AppInstaller(object):
             for app in installed_apps:
                 app_installer = AppInstaller(
                     app.name, self.store.id, app.version, user=self.user)
-                dependencies = app_installer.version.dependencies \
+                dependencies = self.version.dependencies.get_attributes() \
                     if app_installer.version else {}
                 if self.name in dependencies.keys():
                     app_installer.uninstall(restart=False)
-            try:
-                installer = importlib.import_module('%s.installer' % self.name)
-                installer.uninstall()
-            except ImportError as e:
-                logger.error(str(e))
             self.completely_remove()
             uninstalled = True
             if restart:
