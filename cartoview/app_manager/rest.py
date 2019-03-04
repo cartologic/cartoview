@@ -67,9 +67,12 @@ class LayerFilterExtensionResource(LayerResource):
             filtered = filtered.filter(
                 attribute_set__attribute_type__icontains=layer_geom_type)
         if permission is not None:
-            print(request.user)
-            permitted_ids = get_objects_for_user(request.user,
-                                                 permission).values('id')
+            try:
+                permitted_ids = get_objects_for_user(request.user,
+                                                     permission).values('id')
+            except BaseException:
+                permitted_ids = get_objects_for_user(
+                    request.user, permission, klass=filtered).values('id')
             filtered = filtered.filter(id__in=permitted_ids)
 
         return filtered
