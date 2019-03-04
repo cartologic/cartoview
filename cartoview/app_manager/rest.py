@@ -67,8 +67,9 @@ class LayerFilterExtensionResource(LayerResource):
             filtered = filtered.filter(
                 attribute_set__attribute_type__icontains=layer_geom_type)
         if permission is not None:
-            permitted_ids = get_objects_for_user(
-                request.user, permission, klass=filtered).values('id')
+            print(request.user)
+            permitted_ids = get_objects_for_user(request.user,
+                                                 permission).values('id')
             filtered = filtered.filter(id__in=permitted_ids)
 
         return filtered
@@ -616,7 +617,7 @@ class AppInstanceResource(ModelResource):
             left, bottom, right, top = bbox.split(',')
             sqs = (SearchQuerySet() if sqs is None else sqs).exclude(
                 SQ(bbox_top__lte=bottom) | SQ(bbox_bottom__gte=top)
-                | SQ(bbox_left__gte=right) | SQ(bbox_right__lte=left)) # noqa
+                | SQ(bbox_left__gte=right) | SQ(bbox_right__lte=left))  # noqa
 
         # Apply sort
         if sort.lower() == "-date":
