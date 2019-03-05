@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-from django.contrib.auth import get_user_model
 from django.core.exceptions import ObjectDoesNotExist
+from pkg_resources import parse_version
 from rest_framework import permissions, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -9,11 +9,10 @@ from cartoview.app_manager.exceptions import AppAlreadyInstalledException
 from cartoview.app_manager.installer import AppInstaller
 from cartoview.app_manager.models import App, AppStore, AppType
 from cartoview.log_handler import get_logger
-from pkg_resources import parse_version
 
-from .permissions import AppPermission
-from .serializers import (AppSerializer, AppStoreSerializer, AppTypeSerializer,
-                          UserSerializer)
+from ..permissions import AppPermission
+from ..serializers.app_manager import (AppSerializer, AppStoreSerializer,
+                                       AppTypeSerializer)
 
 logger = get_logger(__name__)
 
@@ -58,7 +57,8 @@ class AppViewSet(viewsets.ModelViewSet):
                                  "You don't have permission to install <> app".
                                  format(app_name)}, status=403)
             if parse_version(version) <= parse_version(qs.first().version):
-                return Response({"details": "app already installed"}, status=400)
+                return Response({"details": "app already installed"},
+                                status=400)
 
         try:
             installer = AppInstaller(
@@ -84,11 +84,5 @@ class AppViewSet(viewsets.ModelViewSet):
             installer.uninstall()
         except BaseException as e:
             return Response({"details": str(e)}, status=500)
-        print(app)
         serializer = AppSerializer(app)
         return Response(serializer.data, status=200)
-
-
-class UserViewSet(viewsets.ModelViewSet):
-    queryset = get_user_model().objects.all()
-    serializer_class = UserSerializer
