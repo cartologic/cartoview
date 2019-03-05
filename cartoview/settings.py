@@ -70,6 +70,7 @@ INSTALLED_APPS = [
     "cartoview.geonode_oauth",  # Our custom provider
     "cartoview.app_manager",
     "cartoview.api",
+    "cartoview.connections"
 ]
 
 MIDDLEWARE = [
@@ -210,6 +211,19 @@ REST_FRAMEWORK = {
         'rest_framework_yaml.renderers.YAMLRenderer',
         'rest_framework.renderers.BrowsableAPIRenderer',
     ),
+}
+CARTOVIEW_CONNECTION_HANDLERS = {
+    "BASIC": "cartoview.connections.auth.simple.BasicAuthSession",
+    "DIGEST": "cartoview.connections.auth.simple.DigestAuthSession",
+    "TOKEN": "cartoview.connections.auth.token.TokenAuthSession",
+    "NoAuth": "cartoview.connections.auth.base.NoAuthClass"
+}
+CARTOVIEW_SERVER_HANDLERS = {
+    "GEOSERVER": "cartoview.connections.servers.geoserver.Geoserver",
+}
+CARTOVIEW_CONNECTIONS = {
+    'connection_handlers': CARTOVIEW_CONNECTION_HANDLERS,
+    'server_handlers': CARTOVIEW_SERVER_HANDLERS
 }
 try:
     from .local_settings import *  # noqa
