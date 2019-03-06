@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     "wagtail.search",
     "wagtail.admin",
     "wagtail.core",
+    'wagtailgridder',
     "wagtail.contrib.modeladmin",
     'wagtail.contrib.styleguide',
     "modelcluster",
@@ -211,7 +212,12 @@ REST_FRAMEWORK = {
         'rest_framework_yaml.renderers.YAMLRenderer',
         'rest_framework.renderers.BrowsableAPIRenderer',
     ),
+    'DEFAULT_FILTER_BACKENDS': (
+        'django_filters.rest_framework.DjangoFilterBackend',
+    )
 }
+
+# connections app settings
 CARTOVIEW_CONNECTION_HANDLERS = {
     "BASIC": "cartoview.connections.auth.simple.BasicAuthSession",
     "DIGEST": "cartoview.connections.auth.simple.DigestAuthSession",
@@ -223,8 +229,15 @@ CARTOVIEW_SERVER_HANDLERS = {
 }
 CARTOVIEW_CONNECTIONS = {
     'connection_handlers': CARTOVIEW_CONNECTION_HANDLERS,
-    'server_handlers': CARTOVIEW_SERVER_HANDLERS
+    'server_handlers': CARTOVIEW_SERVER_HANDLERS,
+    'proxy': {
+        "default_headers": {
+            "Accept": "*",
+            "Accept-Language": "*",
+        }
+    }
 }
+
 try:
     from .local_settings import *  # noqa
 except BaseException as e:

@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+from urllib.parse import parse_qsl, unquote_plus, urlparse
+
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 
@@ -6,6 +9,27 @@ from cartoview.log_handler import get_logger
 from .exceptions import ConnectionTypeException
 
 logger = get_logger(__name__)
+
+
+class URL(object):
+    def __init__(self, url):
+        parts = urlparse(url)
+        _query = frozenset(parse_qsl(parts.query))
+        _path = unquote_plus(parts.path)
+        parts = parts._replace(query=_query, path=_path)
+        self.parts = parts
+
+    def __eq__(self, other):
+        return self.parts == other.parts
+
+    @classmethod
+    def compare_netloc(cls, source_url, target_url):
+        source = URL(source_url)
+        target = URL(target_url)
+        source.parts.netloc == target.parts.netloc
+
+    def __hash__(self):
+        return hash(self.parts)
 
 
 def urljoin(*args):

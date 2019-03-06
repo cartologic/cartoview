@@ -4,7 +4,7 @@ from rest_framework import routers
 from rest_framework_swagger.views import get_swagger_view
 
 from .views.app_manager import AppStoreViewSet, AppTypeViewSet, AppViewSet
-from .views.connections import ServerViewSet
+from .views.connections import ServerProxy, ServerViewSet
 from .views.users import UserViewSet
 
 schema_view = get_swagger_view(title='Cartoview API')
@@ -18,4 +18,5 @@ router.register(r'servers', ServerViewSet, 'servers')
 urlpatterns = ([
     re_path(r'^swagger$', schema_view),
     re_path(r'^', include(router.urls)),
+    re_path(r'^proxy/(?P<pk>[\d]+)/', ServerProxy.as_view()),
 ], 'api')

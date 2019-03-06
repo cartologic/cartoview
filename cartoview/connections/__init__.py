@@ -11,3 +11,9 @@ SUPPORTED_SERVERS = (
     GEOSERVER,
     GEONODE,
 )
+DEFAULT_PROXY_SETTINGS = {
+    "default_headers": {
+        "Accept": "*",
+        "Accept-Language": "*",
+    }
+}
