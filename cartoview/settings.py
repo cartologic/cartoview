@@ -71,7 +71,8 @@ INSTALLED_APPS = [
     "cartoview.geonode_oauth",  # Our custom provider
     "cartoview.app_manager",
     "cartoview.api",
-    "cartoview.connections"
+    "cartoview.connections",
+    "cartoview.layers"
 ]
 
 MIDDLEWARE = [
