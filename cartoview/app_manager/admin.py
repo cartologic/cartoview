@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.contrib import admin
-from .models import App, AppStore, AppType
+from .models import App, AppStore, AppType, AppInstance
 # Register your models here.
 
 
@@ -16,4 +16,9 @@ class AppStoreModelAdmin(admin.ModelAdmin):
 
 @admin.register(AppType)
 class AppTypeModelAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(AppInstance)
+class AppInstanceModelAdmin(admin.ModelAdmin):
     pass

@@ -6,10 +6,10 @@ from django.db import models
 from django.db.models import Max
 from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
-from django.utils.encoding import python_2_unicode_compatible
 from guardian.shortcuts import assign_perm
 from taggit.managers import TaggableManager
-
+from django.utils.translation import gettext_lazy as _
+from cartoview.layers.models import Layer
 # Create your models here.
 
 APPS_PERMISSIONS = (
@@ -24,7 +24,6 @@ class AppTypeManager(models.Manager):
         return super(AppTypeManager, self).get_queryset().distinct("apps")
 
 
-@python_2_unicode_compatible
 class AppType(models.Model):
     name = models.CharField(max_length=200, unique=True)
     objects = AppTypeManager()
@@ -36,16 +35,15 @@ class AppType(models.Model):
         return self.name
 
 
-@python_2_unicode_compatible
 class AppStore(models.Model):
     """
     to store links for cartoview appstores
     """
 
     SERVER_CHOICES = (
-        ("Exchange", "Exchange"),
-        ("Geoserver", "Geoserver"),
-        ("QGISServer", "QGISServer"),
+        ("Exchange", _("Exchange")),
+        ("Geoserver", _("Geoserver")),
+        ("QGISServer", _("QGISServer")),
     )
     name = models.CharField(max_length=256)
     url = models.URLField(verbose_name="App Store URL")
@@ -68,7 +66,6 @@ class AppStore(models.Model):
         return self.name
 
 
-@python_2_unicode_compatible
 class App(models.Model):
     name = models.CharField(max_length=200, unique=True)
     title = models.CharField(max_length=200, unique=True)
@@ -92,6 +89,8 @@ class App(models.Model):
         AppStore, null=True, blank=True, on_delete=models.SET_NULL)
     order = models.IntegerField(default=0, unique=True)
     default_config = JSONField(default=dict, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         ordering = ["order"]
@@ -100,7 +99,21 @@ class App(models.Model):
     def __str__(self):
         return self.title
 
-    def __unicode__(self):
+
+class AppInstance(models.Model):
+    title = models.CharField(max_length=255, null=True,
+                             blank=True, default=_("No title Provided"))
+    description = models.TextField(
+        null=True, blank=True, default=_("No Description Provided"))
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    layers = models.ManyToManyField(Layer)
+    app = models.ForeignKey(
+        App, related_name='instances', on_delete=models.CASCADE)
+
+    config = JSONField(default=None, null=True, blank=True)
+
+    def __str__(self):
         return self.title
 
 
