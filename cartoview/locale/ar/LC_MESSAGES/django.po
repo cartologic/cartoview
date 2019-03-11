@@ -1,0 +1,98 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-03-11 11:42+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
+"&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+
+#: cartoview/app_manager/apps.py:8
+#: cartoview/app_manager/templates/app_manager/wagtail_app_manager.html:4
+msgid "App Manager"
+msgstr "مدير التطبيقات"
+
+#: cartoview/app_manager/models.py:44
+msgid "Exchange"
+msgstr ""
+
+#: cartoview/app_manager/models.py:45
+msgid "Geoserver"
+msgstr ""
+
+#: cartoview/app_manager/models.py:46
+msgid "QGISServer"
+msgstr ""
+
+#: cartoview/app_manager/models.py:105
+msgid "No title Provided"
+msgstr "بلا عنوان"
+
+#: cartoview/app_manager/models.py:107
+msgid "No Description Provided"
+msgstr "بلا توصيف"
+
+#: cartoview/connections/apps.py:8
+msgid "Connections"
+msgstr "الاتصالات"
+
+#: cartoview/connections/models.py:36 cartoview/connections/models.py:84
+msgid "Server Type"
+msgstr "نوع الخادم"
+
+#: cartoview/connections/models.py:38
+msgid "Server Title"
+msgstr "لقب الخادم"
+
+#: cartoview/connections/models.py:40
+msgid "Base Server URL"
+msgstr "رابط الخادم الرئيسي"
+
+#: cartoview/connections/models.py:80
+msgid "Basic Authentication"
+msgstr ""
+
+#: cartoview/connections/models.py:81
+msgid "Digest Authentication"
+msgstr ""
+
+#: cartoview/connections/models.py:86
+msgid "User Password"
+msgstr "كلمه مرور المستخدم"
+
+#: cartoview/connections/models.py:88
+msgid "Authentication Type"
+msgstr "نوع المصادقه"
+
+#: cartoview/connections/models.py:103
+msgid "Access Token"
+msgstr "رمز وصول"
+
+#: cartoview/connections/models.py:107
+msgid "Authentication Header Value Prefix"
+msgstr "البادئة قيمة رأس التوثيق"
+
+#: cartoview/connections/utils.py:51
+msgid "CARTOVIEW_CONNECTIONS Improperly Configured"
+msgstr "CARTOVIEW_CONNECTIONS مكوّن بشكل غير صحيح"
+
+#: cartoview/layers/apps.py:8
+msgid "Layers"
+msgstr "الطبقات"
+
+#: cartoview/layers/validators.py:10
+#, python-format
+msgid "%(value)s is not a valid projection"
+msgstr "ليس إسقاطا صالحا %(value)s"

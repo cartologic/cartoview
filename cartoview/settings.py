@@ -78,6 +78,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -100,6 +101,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "django.template.context_processors.i18n",
             ]
         },
     }
@@ -155,6 +157,14 @@ USE_L10N = True
 
 USE_TZ = True
 
+LANGUAGES = (
+    ("en", "English"),
+    ("ar", "Arabic"),
+)
+
+LOCALE_PATHS = (
+    os.path.join(BASE_DIR, 'locale'),
+)
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
@@ -185,7 +195,7 @@ SITE_ID = 1
 
 
 # apps settings
-APPS_DIR = os.path.join(BASE_DIR, os.pardir, 'cartoview_apps')
+APPS_DIR = os.path.join(BASE_DIR, os.pardir, "cartoview_apps")
 # django rest framework settings
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
@@ -238,7 +248,6 @@ CARTOVIEW_CONNECTIONS = {
         }
     }
 }
-
 try:
     from .local_settings import *  # noqa
 except BaseException as e:

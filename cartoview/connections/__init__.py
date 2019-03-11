@@ -17,3 +17,4 @@ DEFAULT_PROXY_SETTINGS = {
         "Accept-Language": "*",
     }
 }
+default_app_config = 'cartoview.connections.apps.ConnectionsConfig'

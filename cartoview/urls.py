@@ -21,16 +21,17 @@ from rest_framework.authtoken.views import obtain_auth_token
 from wagtail.admin import urls as wagtailadmin_urls
 from wagtail.core import urls as wagtail_urls
 from wagtail.documents import urls as wagtaildocs_urls
-
+from django.conf.urls.i18n import i18n_patterns
 from cartoview.api.urls import urlpatterns as api_urls
 from cartoview.app_manager.urls import urlpatterns as app_manager_urls
 from cartoview.geonode_oauth import views
-
-urlpatterns = [
+urlpatterns = i18n_patterns(
     path("django-admin/", admin.site.urls),
+    re_path(r"^admin/", include(wagtailadmin_urls)),
+)
+urlpatterns += [
     re_path(r"^accounts/", include("allauth.urls")),
     re_path(r"^accounts/profile$", views.ProfileView.as_view()),
-    re_path(r"^admin/", include(wagtailadmin_urls)),
     re_path(r"^documents/", include(wagtaildocs_urls)),
     re_path(r"^apps/", include(app_manager_urls)),
     re_path(r"^api/", include(api_urls)),
