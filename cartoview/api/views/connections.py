@@ -1,15 +1,19 @@
 # -*- coding: utf-8 -*-
+from urllib.parse import unquote
+
 from django.conf import settings
 from django.http import HttpResponse
-from rest_framework import permissions, viewsets
-from rest_framework.views import APIView
+from rest_framework import permissions, status, viewsets
 from rest_framework.response import Response
-from cartoview.connections.models import Server
-from cartoview.log_handler import get_logger
-from cartoview.connections.utils import URL
-from rest_framework.status import HTTP_406_NOT_ACCEPTABLE
-from ..serializers.connections import ServerSerializer
+from rest_framework.views import APIView
+
 from cartoview.connections import DEFAULT_PROXY_SETTINGS
+from cartoview.connections.models import Server
+from cartoview.connections.utils import URL
+from cartoview.log_handler import get_logger
+
+from ..serializers.connections import ServerSerializer
+
 logger = get_logger(__name__)
 
 
@@ -56,21 +60,25 @@ class ServerProxy(APIView):
         # TODO:handle different types of http methods
         server = Server.objects.get(pk=pk)
         session = server.connection.session
-        url = request.GET.get('url')
+        url = request.GET.get('url', None)
+        if not url:
+            return Response(data={"error": "No URL Provided"},
+                            status=status.HTTP_400_BAD_REQUEST)
+        url = unquote(url)
         if not self.allowed_to_serve(server.url, url):
             return Response(data={
                 "error": "Not Allowed"
-            }, status=HTTP_406_NOT_ACCEPTABLE)
-        data = self.get_request_data(request)
+            }, status=status.HTTP_401_UNAUTHORIZED)
         logger.info("Recieved.....")
-        logger.info(data)
+        logger.error(url)
         req = session.request(request.method, url=url,
                               headers=self.get_default_headers(request),
                               data=self.get_request_data(request))
 
         logger.info("Served.....")
         # TODO: handle error message
-        response = HttpResponse(req.text, status=req.status_code,
+        # NOTE: we use content instead of text to handle files
+        response = HttpResponse(req.content, status=req.status_code,
                                 content_type=req.headers.get('content-type'))
         return response
 

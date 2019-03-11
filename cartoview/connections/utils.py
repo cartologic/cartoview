@@ -3,6 +3,7 @@ from urllib.parse import parse_qsl, unquote_plus, urlparse
 
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
+from django.utils.translation import gettext_lazy as _
 
 from cartoview.log_handler import get_logger
 
@@ -26,7 +27,7 @@ class URL(object):
     def compare_netloc(cls, source_url, target_url):
         source = URL(source_url)
         target = URL(target_url)
-        source.parts.netloc == target.parts.netloc
+        return source.parts.netloc == target.parts.netloc
 
     def __hash__(self):
         return hash(self.parts)

@@ -3,9 +3,11 @@ from django.contrib.contenttypes.fields import (GenericForeignKey,
                                                 GenericRelation)
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
+from django.forms.models import model_to_dict
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from fernet_fields import EncryptedTextField
-from django.forms.models import model_to_dict
+
 from cartoview.log_handler import get_logger
 
 from . import SUPPORTED_SERVERS
@@ -29,16 +31,18 @@ class BaseConnectionModel(models.Model):
 
 
 class Server(BaseConnectionModel):
-    SERVER_TYPES = ((s.value, s.title) for s in SUPPORTED_SERVERS)
+    SERVER_TYPES = [(s.value, s.title) for s in SUPPORTED_SERVERS]
     server_type = models.CharField(
         max_length=5, choices=SERVER_TYPES, help_text=_("Server Type"))
     title = models.CharField(max_length=150, null=False,
                              blank=False, help_text=_("Server Title"))
     url = models.URLField(blank=False, null=False,
                           help_text=_("Base Server URL"))
-    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
-    object_id = models.PositiveIntegerField()
+    content_type = models.ForeignKey(
+        ContentType, null=True, blank=True, on_delete=models.CASCADE)
+    object_id = models.PositiveIntegerField(null=True, blank=True)
     connection = GenericForeignKey('content_type', 'object_id')
+    refresh_interval = models.DurationField(default=timezone.timedelta(days=7))
 
     @property
     def server_handler_key(self):
@@ -54,7 +58,7 @@ class Server(BaseConnectionModel):
         Handler = get_handler_class_handler(
             self.server_handler_key, server=True)
         if self.connection:
-            handler = Handler(self.url, self.connection.session)
+            handler = Handler(self.url, self.id)
         return handler
 
     @property
