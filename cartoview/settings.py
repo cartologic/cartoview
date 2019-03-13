@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     "wagtail.core",
     'wagtailgridder',
     "wagtail.contrib.modeladmin",
+    'wagtailmenus',
     'wagtail.contrib.styleguide',
     "modelcluster",
     "taggit",
@@ -98,10 +99,14 @@ TEMPLATES = [
         "OPTIONS": {
             "context_processors": [
                 "django.template.context_processors.debug",
-                "django.template.context_processors.request",
+                "django.template.context_processors.i18n",
+                'django.template.context_processors.media',
+                'django.template.context_processors.request',
+                'django.template.context_processors.static',
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
-                "django.template.context_processors.i18n",
+                'wagtail.contrib.settings.context_processors.settings',
+                'wagtailmenus.context_processors.wagtailmenus',
             ]
         },
     }
@@ -135,12 +140,10 @@ DATABASES = {
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"
-    },
-    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
-    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
-    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
+    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},  # noqa
+    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},  # noqa
+    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},  # noqa
+    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},  # noqa
 ]
 
 
@@ -165,6 +168,9 @@ LANGUAGES = (
 LOCALE_PATHS = (
     os.path.join(BASE_DIR, 'locale'),
 )
+
+# Localization
+USE_L10N = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-11 11:42+0000\n"
+"POT-Creation-Date: 2019-03-12 22:21+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -43,6 +43,10 @@ msgstr "بلا عنوان"
 #: cartoview/app_manager/models.py:107
 msgid "No Description Provided"
 msgstr "بلا توصيف"
+
+#: cartoview/app_manager/wagtail_hooks.py:17
+msgid "Plugins"
+msgstr "الإضافات"
 
 #: cartoview/connections/apps.py:8
 msgid "Connections"

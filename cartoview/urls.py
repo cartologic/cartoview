@@ -14,6 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.conf import settings
+from django.conf.urls.i18n import i18n_patterns
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path, re_path
@@ -21,10 +22,11 @@ from rest_framework.authtoken.views import obtain_auth_token
 from wagtail.admin import urls as wagtailadmin_urls
 from wagtail.core import urls as wagtail_urls
 from wagtail.documents import urls as wagtaildocs_urls
-from django.conf.urls.i18n import i18n_patterns
+
 from cartoview.api.urls import urlpatterns as api_urls
 from cartoview.app_manager.urls import urlpatterns as app_manager_urls
 from cartoview.geonode_oauth import views
+
 urlpatterns = i18n_patterns(
     path("django-admin/", admin.site.urls),
     re_path(r"^admin/", include(wagtailadmin_urls)),
@@ -38,7 +40,7 @@ urlpatterns += [
     re_path(r'^api-auth/', include('rest_framework.urls',
                                    namespace="rest_framework")),
     path('api-token-auth/', obtain_auth_token, name='api_token_auth'),
-    re_path(r"^cms", include(wagtail_urls), name='index'),
+    re_path(r"^sites", include(wagtail_urls), name='index'),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL,
