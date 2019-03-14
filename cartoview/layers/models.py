@@ -25,6 +25,10 @@ class BaseLayer(models.Model):
     server = models.ForeignKey(
         Server, on_delete=models.CASCADE, related_name='layers')
     valid = models.BooleanField(default=True)
+    services = ArrayField(models.CharField(
+        max_length=15,
+        blank=False,
+        null=False), size=4, null=False, blank=False, default=[])
 
     @property
     def server_type(self):
