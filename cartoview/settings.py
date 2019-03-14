@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django.contrib.sites",
     # third-party apps
+    'crispy_forms',
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
@@ -233,7 +234,8 @@ REST_FRAMEWORK = {
         'django_filters.rest_framework.DjangoFilterBackend',
     )
 }
-
+# django Crispy forms settings
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 # connections app settings
 CARTOVIEW_CONNECTION_HANDLERS = {
     "BASIC": "cartoview.connections.auth.simple.BasicAuthSession",
