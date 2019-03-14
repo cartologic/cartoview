@@ -1,0 +1,31 @@
+html,
+body {
+	height: 100%;
+	margin: 0;
+}
+
+.content {
+	height: 100%;
+	min-height: 100%;
+}
+
+.content-inside {
+	padding-top: 58px;
+	height: 100%;
+	box-sizing: border-box;
+}
+
+.footer {
+	height: 50px;
+	margin-top: -50px;
+	box-sizing: border-box;
+}
+
+.inherit-height {
+	height: inherit;
+}
+
+* {
+	margin: 0px;
+	padding: 0px
+}

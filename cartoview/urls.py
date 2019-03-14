@@ -25,22 +25,23 @@ from wagtail.documents import urls as wagtaildocs_urls
 
 from cartoview.api.urls import urlpatterns as api_urls
 from cartoview.app_manager.urls import urlpatterns as app_manager_urls
-from cartoview.geonode_oauth import views
-
+from cartoview.geonode_oauth import views as geonode_oauth_views
+from .views import IndexView
 urlpatterns = i18n_patterns(
     path("django-admin/", admin.site.urls),
     re_path(r"^admin/", include(wagtailadmin_urls)),
 )
 urlpatterns += [
+    re_path(r"^$", IndexView.as_view(), name='index'),
     re_path(r"^accounts/", include("allauth.urls")),
-    re_path(r"^accounts/profile$", views.ProfileView.as_view()),
+    re_path(r"^accounts/profile$", geonode_oauth_views.ProfileView.as_view()),
     re_path(r"^documents/", include(wagtaildocs_urls)),
     re_path(r"^apps/", include(app_manager_urls)),
     re_path(r"^api/", include(api_urls)),
     re_path(r'^api-auth/', include('rest_framework.urls',
                                    namespace="rest_framework")),
     path('api-token-auth/', obtain_auth_token, name='api_token_auth'),
-    re_path(r"^sites", include(wagtail_urls), name='index'),
+    re_path(r"^sites", include(wagtail_urls), name='sites')
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL,
