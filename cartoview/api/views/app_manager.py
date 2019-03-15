@@ -20,13 +20,13 @@ logger = get_logger(__name__)
 class AppStoreViewSet(viewsets.ModelViewSet):
     queryset = AppStore.objects.all()
     serializer_class = AppStoreSerializer
-    permissions_classes = (permissions.IsAdminUser,)
+    permission_classes = (permissions.IsAdminUser,)
 
 
 class AppTypeViewSet(viewsets.ModelViewSet):
     queryset = AppType.objects.all()
     serializer_class = AppTypeSerializer
-    permissions_classes = (permissions.IsAdminUser,)
+    permission_classes = (permissions.IsAdminUser,)
 
     def perform_create(self, serializer):
         serializer.save(installed_by=self.request.user)
@@ -35,13 +35,13 @@ class AppTypeViewSet(viewsets.ModelViewSet):
 class AppViewSet(viewsets.ModelViewSet):
     queryset = App.objects.all()
     serializer_class = AppSerializer
-    permissions_classes = (AppPermission,)
+    permission_classes = (AppPermission,)
 
     def perform_create(self, serializer):
         serializer.save(installed_by=self.request.user)
 
     @action(detail=False, methods=['post'],
-            permission_classes=[permissions.IsAdminUser])
+            permission_classes=[AppPermission])
     def install(self, request):
         data = request.data
         app_name = data.get('app_name', None)
@@ -71,8 +71,8 @@ class AppViewSet(viewsets.ModelViewSet):
         serializer = AppSerializer(App.objects.get(name=app_name))
         return Response(serializer.data, status=200)
 
-    @action(detail=True, methods=['get'],
-            permission_classes=[AppPermission, permissions.IsAdminUser])
+    @action(detail=True, methods=['delete'],
+            permission_classes=[AppPermission])
     def uninstall(self, request, pk=None):
         try:
             app = App.objects.get(pk=pk)
