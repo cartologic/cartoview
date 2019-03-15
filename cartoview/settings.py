@@ -191,6 +191,7 @@ AUTHENTICATION_BACKENDS = (
     # `allauth` specific authentication methods, such as login by e-mail
     "allauth.account.auth_backends.AuthenticationBackend",
 )
+ACCOUNT_EMAIL_VERIFICATION = 'none'
 ANONYMOUS_USER_NAME = "AnonymousUser"
 GUARDIAN_RAISE_403 = True
 OAUTH_SERVER_BASEURL = "<BASE_SERVER_URL>"
