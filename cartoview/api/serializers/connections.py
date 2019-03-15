@@ -40,9 +40,15 @@ class SimpleAuthConnectionSerializer(serializers.ModelSerializer):
     class Meta:
         model = SimpleAuthConnection
         fields = '__all__'
+        extra_kwargs = {
+            'owner': {'read_only': True, 'required': False}
+        }
 
 
 class TokenAuthConnectionSerializer(serializers.ModelSerializer):
     class Meta:
         model = TokenAuthConnection
         fields = '__all__'
+        extra_kwargs = {
+            'owner': {'read_only': True, 'required': False}
+        }
