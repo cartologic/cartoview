@@ -13,6 +13,9 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from coderedcms import admin_urls as coderedadmin_urls
+from coderedcms import search_urls as coderedsearch_urls
+from coderedcms import urls as codered_urls
 from django.conf import settings
 from django.conf.urls.i18n import i18n_patterns
 from django.conf.urls.static import static
@@ -26,13 +29,24 @@ from wagtail.documents import urls as wagtaildocs_urls
 from cartoview.api.urls import urlpatterns as api_urls
 from cartoview.app_manager.urls import urlpatterns as app_manager_urls
 from cartoview.geonode_oauth import views as geonode_oauth_views
+
 from .views import IndexView
+
 urlpatterns = i18n_patterns(
     path("django-admin/", admin.site.urls),
-    re_path(r"^admin/", include(wagtailadmin_urls)),
+    path('admin/', include(coderedadmin_urls)),
 )
 urlpatterns += [
-    re_path(r"^$", IndexView.as_view(), name='index'),
+    # Documents
+    path('docs/', include(wagtaildocs_urls)),
+
+    # Search
+    path('search/', include(coderedsearch_urls)),
+
+    # For anything not caught by a more specific rule above, hand over to
+    # the page serving mechanism. This should be the last pattern in
+    # the list:
+    re_path(r'', include(codered_urls)),
     re_path(r"^accounts/", include("allauth.urls")),
     re_path(r"^accounts/profile$", geonode_oauth_views.ProfileView.as_view()),
     re_path(r"^documents/", include(wagtaildocs_urls)),

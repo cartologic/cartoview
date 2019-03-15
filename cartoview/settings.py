@@ -14,6 +14,7 @@ import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+PROJECT_DIR = BASE_DIR
 
 
 # Quick-start development settings - unsuitable for production
@@ -60,7 +61,9 @@ INSTALLED_APPS = [
     "wagtail.admin",
     "wagtail.core",
     'wagtailgridder',
-    "wagtail.contrib.modeladmin",
+    'wagtail.contrib.settings',
+    'wagtail.contrib.modeladmin',
+    'wagtail.contrib.table_block',
     'wagtailmenus',
     'wagtail.contrib.styleguide',
     "modelcluster",
@@ -74,7 +77,15 @@ INSTALLED_APPS = [
     "cartoview.app_manager",
     "cartoview.api",
     "cartoview.connections",
-    "cartoview.layers"
+    "cartoview.layers",
+
+    # CodeRed CMS
+    'coderedcms',
+    'bootstrap4',
+    'wagtailfontawesome',
+    'wagtailcache',
+    'wagtailimportexport',
+    'cartoview.website'
 ]
 
 MIDDLEWARE = [
@@ -257,6 +268,21 @@ CARTOVIEW_CONNECTIONS = {
         }
     }
 }
+
+# Bootstrap
+
+BOOTSTRAP4 = {
+    # set to blank since coderedcms already loads jquery and bootstrap
+    'jquery_url': '',
+    'base_url': '',
+    # remove green highlight on inputs
+    'success_css_class': ''
+}
+
+
+# Tags
+
+TAGGIT_CASE_INSENSITIVE = True
 try:
     from .local_settings import *  # noqa
 except BaseException as e:
