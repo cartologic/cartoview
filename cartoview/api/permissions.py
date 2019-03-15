@@ -7,17 +7,24 @@ class AppPermission(permissions.BasePermission):
 
     def has_object_permission(self, request, view, obj):
         permitted = False
-        if request.method in ("GET", "OPTIONS"):
+        if request.user.is_superuser:
+            return True
+        if request.method in SAFE_METHODS:
             permitted = True
         elif request.method in ("PATCH", "PUT"):
             permitted = request.user.has_perm('change_state', obj)
         elif request.method == "POST":
-            permitted = (request.user.has_perm('install_app', obj) or
-                         request.user.has_perm('uninstall_app', obj))
+            permitted = request.user.has_perm('install_app', obj)
+        elif request.method == "DELETE":
+            permitted = request.user.has_perm('uninstall_app', obj)
+            print(permitted)
         elif request.method == "GET":
             permitted = True
-        print(permitted)
         return permitted
+
+    def has_permission(self, request, view):
+        print("has permission")
+        return True
 
 
 class UserPermission(permissions.BasePermission):
