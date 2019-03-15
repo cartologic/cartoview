@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from rest_framework import permissions
+from rest_framework.permissions import SAFE_METHODS
 
 
 class AppPermission(permissions.BasePermission):
@@ -17,3 +18,17 @@ class AppPermission(permissions.BasePermission):
             permitted = True
         print(permitted)
         return permitted
+
+
+class UserPermission(permissions.BasePermission):
+    def has_object_permission(self, request, view, obj):
+        if request.method in SAFE_METHODS:
+            return True
+        elif request.user and request.user.is_superuser:
+            return True
+        elif obj == request.user:
+            return True
+        return False
+
+    def has_permission(self, request, view):
+        return True

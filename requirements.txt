@@ -5,7 +5,6 @@ attrs==18.2.0
 autopep8==1.4.2
 backcall==0.1.0
 beautifulsoup4==4.6.0
-black==18.9b0
 certifi==2018.10.15
 cffi==1.12.2
 chardet==3.0.4

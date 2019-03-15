@@ -5,17 +5,19 @@ body {
 }
 
 .content {
-	height: 100%;
+	padding-top: 58px;
 	min-height: 100%;
+	padding-bottom: 42px;
 }
 
 .content-inside {
 	padding-top: 58px;
-	height: 100%;
 	box-sizing: border-box;
+	padding-bottom: 42px;
 }
 
 .footer {
+	position: relative;
 	height: 50px;
 	margin-top: -50px;
 	box-sizing: border-box;
@@ -28,4 +30,8 @@ body {
 * {
 	margin: 0px;
 	padding: 0px
+}
+.center {
+	margin: auto;
+	/* margin-right: auto; */
 }
