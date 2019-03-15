@@ -28,7 +28,7 @@ class BaseLayer(models.Model):
     services = ArrayField(models.CharField(
         max_length=15,
         blank=False,
-        null=False), size=4, null=False, blank=False, default=[])
+        null=False), size=4, null=False, blank=False, default=list)
 
     @property
     def server_type(self):
