@@ -34,7 +34,7 @@ class UserCreateTests(APITestCase):
         count = get_user_model().objects.count()
         response = self.client.post(reverse(
             'api:users-list'), {'username': 'apitester1',
-                                'password': 'apitester1'})
+                                'password': 'apitester1'}, format='json')
         self.assertNotEqual(count+1, get_user_model().objects.count())
         self.assertEqual(response.status_code, 400)
 
