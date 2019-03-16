@@ -5,6 +5,7 @@ attrs==18.2.0
 autopep8==1.4.2
 backcall==0.1.0
 beautifulsoup4==4.6.0
+black==18.9b0
 certifi==2018.10.15
 cffi==1.12.2
 chardet==3.0.4
@@ -33,6 +34,7 @@ djangorestframework-xml==1.4.0
 djangorestframework-yaml==1.0.3
 draftjs-exporter==2.1.5
 flake8==3.6.0
+future==0.17.1
 html5lib==1.0.1
 idna==2.7
 ipython==7.3.0
