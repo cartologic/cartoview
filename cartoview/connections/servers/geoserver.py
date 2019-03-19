@@ -25,29 +25,48 @@ class Geoserver(BaseServer):
             return False
 
     @property
-    def wms_service(self):
-        username = None
-        password = None
-        if isinstance(self.session.auth, HTTPBasicAuth):
-            username = self.session.auth.username
-            password = self.session.auth.password
-        # TODO handle other auth type
-        wms = WebMapService(self.wms_url, version='1.1.1', username=username,
-                            password=password)
-        return wms
+    def operation_keys(self):
+        return [op.name for op in self.service.operations]
 
     @property
-    def wfs_service(self):
+    def getMapURL(self, method='Get'):
+        try:
+            base_url = next((m.get('url') for m in self.service
+                             .getOperationByName('GetMap').methods
+                             if m.get('type').lower() == method.lower()))
+        except StopIteration:
+            base_url = self.server.url
+        return base_url
+
+    @property
+    def getFeatureURL(self, method='{http://www.opengis.net/wfs}Get'):
+        try:
+            base_url = next((m.get('url') for m in
+                             self.service.getOperationByName('GetFeature')
+                             .methods if m.get('type').lower()
+                             == method.lower()))
+        except StopIteration:
+            base_url = self.server.url
+        return base_url
+
+    @property
+    def service(self):
+        ServiceClass = None
+        version = None
+        if self.server.resources_type == 'wms':
+            ServiceClass = WebMapService
+            version = '1.1.1'
+        elif self.server.resources_type == 'wfs':
+            ServiceClass = WebFeatureService
+            version = '1.1.0'
         username = None
         password = None
         if isinstance(self.session.auth, HTTPBasicAuth):
             username = self.session.auth.username
             password = self.session.auth.password
-        # TODO handle other auth type
-        wfs = WebFeatureService(url=self.wfs_url, version='1.1.0',
-                                username=username,
-                                password=password)
-        return wfs
+        wms = ServiceClass(self.server.url, version=version, username=username,
+                           password=password)
+        return wms
 
     def unique_layers(self):
         layers = self.get_wms_layers()+self.get_wfs_layers()
@@ -70,7 +89,7 @@ class Geoserver(BaseServer):
         extra.pop('_children', None)
         title = extra.pop('title')
         abstract = extra.pop('abstract')
-        services = extra.pop('services', [])
+        # services = extra.pop('services', [])
         try:
             bbox = ows_layer.boundingBox[:4]
             projection = ows_layer.boundingBox[-1]
@@ -84,8 +103,7 @@ class Geoserver(BaseServer):
                 "name": name,
                 "bounding_box": bbox,
                 "projection": projection,
-                "server": self.server,
-                "services": services}
+                "server": self.server}
         return data
 
     def get_wfs_layers(self):
@@ -94,29 +112,14 @@ class Geoserver(BaseServer):
         layers = [l[1] for l in items]
         return layers
 
-    def get_wms_layers(self):
-        wms = self.wms_service
-        items = wms.items()
+    def get_service_layers(self):
+        service = self.service
+        items = service.items()
         layers = [l[1] for l in items]
         return layers
 
-    def get_ows_layers(self):
-        wms_layers = self.get_wms_layers()
-        wfs_layers = self.get_wfs_layers()
-        layers = self.unique_layers()
-        for layer in layers:
-            layer.services = []
-            if any(l.id == layer.id for l in wfs_layers):
-                layer.services.append('WFS')
-            if any(l.id == layer.id for l in wms_layers):
-                layer.services.append('WMS')
-        return layers
-
-    def get_layers_data(self):
-        return [self.layer_dict(l) for l in self.get_ows_layers()]
-
     def get_layers(self):
-        return self.get_layers_data()
+        return [self.layer_dict(l) for l in self.get_service_layers()]
 
     def harvest(self):
         created_objs = []
@@ -129,15 +132,6 @@ class Geoserver(BaseServer):
                 created_objs.append(obj)
         return created_objs
 
-    @property
-    def wms_url(self):
-        return urljoin(self.url, 'wms')
-
-    @property
-    def wfs_url(self):
-        return urljoin(self.url, 'wfs')
-
-    @property
     def status_url(self):
         return urljoin(self.rest, 'about/status')
 

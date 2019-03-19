@@ -25,10 +25,6 @@ class BaseLayer(models.Model):
     server = models.ForeignKey(
         Server, on_delete=models.CASCADE, related_name='layers')
     valid = models.BooleanField(default=True)
-    services = ArrayField(models.CharField(
-        max_length=15,
-        blank=False,
-        null=False), size=4, null=False, blank=False, default=list)
 
     @property
     def server_type(self):
@@ -36,8 +32,18 @@ class BaseLayer(models.Model):
 
     @property
     def server_url(self):
+        if self.server:
+            return self.server.url
+        return None
+
+    @property
+    def server_proxy(self):
         return '{}?url='.format(reverse_lazy('api:server_proxy',
                                              args=(self.server.pk,)))
+
+    @property
+    def layer_type(self):
+        return self.server.resources_type
 
     class Meta:
         abstract = True
@@ -49,4 +55,4 @@ class Layer(BaseLayer):
     extra = JSONField()
 
     def __str__(self):
-        return self.name
+        return "{}({})".format(self.name, self.layer_type)

@@ -17,6 +17,8 @@ class LayerSerializer(serializers.ModelSerializer):
     )
     server_type = ServerTypeField(read_only=True, choices=Server.SERVER_TYPES)
     server_url = serializers.CharField(read_only=True)
+    server_proxy = serializers.CharField(read_only=True)
+    layer_type = serializers.CharField(read_only=True)
 
     class Meta:
         model = Layer
