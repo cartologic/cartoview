@@ -76,7 +76,8 @@ INSTALLED_APPS = [
     "cartoview.app_manager",
     "cartoview.api",
     "cartoview.connections",
-    "cartoview.layers"
+    "cartoview.layers",
+    "cartoview.maps"
 ]
 
 MIDDLEWARE = [
