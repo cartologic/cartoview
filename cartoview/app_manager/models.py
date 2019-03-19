@@ -9,7 +9,8 @@ from django.dispatch import receiver
 from guardian.shortcuts import assign_perm
 from taggit.managers import TaggableManager
 from django.utils.translation import gettext_lazy as _
-from cartoview.layers.models import Layer
+from cartoview.maps.models import Map
+from django.urls import reverse_lazy
 # Create your models here.
 
 APPS_PERMISSIONS = (
@@ -107,7 +108,8 @@ class AppInstance(models.Model):
         null=True, blank=True, default=_("No Description Provided"))
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    layers = models.ManyToManyField(Layer)
+    app_map = models.ForeignKey(
+        Map, related_name='app_instances', on_delete=models.CASCADE)
     app = models.ForeignKey(
         App, related_name='instances', on_delete=models.CASCADE)
 
@@ -115,6 +117,15 @@ class AppInstance(models.Model):
 
     def __str__(self):
         return self.title
+
+    @property
+    def map_url(self):
+        if self.app_map:
+            return reverse_lazy('api:maps-map_json', kwargs={'pk': self.pk})
+        return None
+
+    class Meta:
+        ordering = ('title', '-created_at', '-updated_at')
 
 
 @receiver(pre_save, sender=App)

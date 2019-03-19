@@ -7,12 +7,12 @@ from rest_framework.response import Response
 
 from cartoview.app_manager.exceptions import AppAlreadyInstalledException
 from cartoview.app_manager.installer import AppInstaller
-from cartoview.app_manager.models import App, AppStore, AppType
+from cartoview.app_manager.models import App, AppInstance, AppStore, AppType
 from cartoview.log_handler import get_logger
 
 from ..permissions import AppPermission
-from ..serializers.app_manager import (AppSerializer, AppStoreSerializer,
-                                       AppTypeSerializer)
+from ..serializers.app_manager import (AppInstanceSerializer, AppSerializer,
+                                       AppStoreSerializer, AppTypeSerializer)
 
 logger = get_logger(__name__)
 
@@ -27,6 +27,14 @@ class AppTypeViewSet(viewsets.ModelViewSet):
     queryset = AppType.objects.all()
     serializer_class = AppTypeSerializer
     permission_classes = (permissions.IsAdminUser,)
+
+    def perform_create(self, serializer):
+        serializer.save(installed_by=self.request.user)
+
+
+class AppInstanceViewSet(viewsets.ModelViewSet):
+    queryset = AppInstance.objects.all()
+    serializer_class = AppInstanceSerializer
 
     def perform_create(self, serializer):
         serializer.save(installed_by=self.request.user)

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from rest_framework import serializers
-
-from cartoview.app_manager.models import App, AppStore, AppType
+from .layers import LayerSerializer
+from cartoview.app_manager.models import App, AppInstance, AppStore, AppType
 
 
 class AppTypeSerializer(serializers.ModelSerializer):
@@ -27,4 +27,12 @@ class AppSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = App
+        fields = '__all__'
+
+
+class AppInstanceSerializer(serializers.ModelSerializer):
+    map_url = serializers.CharField(read_only=True)
+
+    class Meta:
+        model = AppInstance
         fields = '__all__'
