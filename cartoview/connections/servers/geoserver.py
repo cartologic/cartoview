@@ -59,13 +59,8 @@ class Geoserver(BaseServer):
         elif self.server.resources_type == 'wfs':
             ServiceClass = WebFeatureService
             version = '1.1.0'
-        username = None
-        password = None
-        if isinstance(self.session.auth, HTTPBasicAuth):
-            username = self.session.auth.username
-            password = self.session.auth.password
-        wms = ServiceClass(self.server.url, version=version, username=username,
-                           password=password)
+        wms = ServiceClass(self.server.url, version=version,
+                           **self.extra_kwargs)
         return wms
 
     def unique_layers(self):
