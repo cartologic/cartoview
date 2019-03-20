@@ -72,6 +72,7 @@ INSTALLED_APPS = [
     "guardian",
     # cartoview apps
     "cartoview",
+    "cartoview.base_resource",
     "cartoview.geonode_oauth",  # Our custom provider
     "cartoview.app_manager",
     "cartoview.api",

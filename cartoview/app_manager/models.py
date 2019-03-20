@@ -6,17 +6,18 @@ from django.db import models
 from django.db.models import Max
 from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
+from django.urls import reverse_lazy
+from django.utils.translation import gettext_lazy as _
 from guardian.shortcuts import assign_perm
 from taggit.managers import TaggableManager
-from django.utils.translation import gettext_lazy as _
+
+from cartoview.base_resource.models import BaseModel
 from cartoview.maps.models import Map
-from django.urls import reverse_lazy
-# Create your models here.
 
 APPS_PERMISSIONS = (
-    ('install_app', 'Install App'),
-    ('uninstall_app', 'Uninstall App'),
-    ('change_state', 'Change App State (active, suspend)'),
+    ('install_app', _('Install App')),
+    ('uninstall_app', _('Uninstall App')),
+    ('change_state', _('Change App State (active, suspend)')),
 )
 
 
@@ -101,13 +102,7 @@ class App(models.Model):
         return self.title
 
 
-class AppInstance(models.Model):
-    title = models.CharField(max_length=255, null=True,
-                             blank=True, default=_("No title Provided"))
-    description = models.TextField(
-        null=True, blank=True, default=_("No Description Provided"))
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+class AppInstance(BaseModel):
     app_map = models.ForeignKey(
         Map, related_name='app_instances', on_delete=models.CASCADE)
     app = models.ForeignKey(
@@ -121,11 +116,9 @@ class AppInstance(models.Model):
     @property
     def map_url(self):
         if self.app_map:
-            return reverse_lazy('api:maps-map_json', kwargs={'pk': self.pk})
+            return reverse_lazy('api:maps-map_json',
+                                kwargs={'pk': self.app_map.pk})
         return None
-
-    class Meta:
-        ordering = ('title', '-created_at', '-updated_at')
 
 
 @receiver(pre_save, sender=App)

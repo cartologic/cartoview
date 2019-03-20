@@ -3,11 +3,10 @@ from cartoview.layers.validators import validate_projection
 from django.contrib.postgres.fields import ArrayField, JSONField
 from django.core.validators import MaxValueValidator, MinValueValidator
 from cartoview.layers.models import Layer
+from cartoview.base_resource.models import BaseModel
 
 
-class Map(models.Model):
-    title = models.CharField(max_length=255)
-    description = models.TextField(null=True, blank=True)
+class Map(BaseModel):
     bounding_box = ArrayField(models.DecimalField(
         max_digits=30,
         decimal_places=15,
@@ -39,9 +38,7 @@ class Map(models.Model):
     ])
     rotation = models.IntegerField(null=False, blank=False, default=0)
     layers = models.ManyToManyField(Layer)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
     render_options = JSONField(default=dict, null=False, blank=True)
 
-    class Meta:
-        ordering = ('title', '-created_at', '-updated_at')
+    def __str__(self):
+        return self.title
