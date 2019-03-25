@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from rest_framework import serializers
-from .layers import LayerSerializer
+
 from cartoview.app_manager.models import App, AppInstance, AppStore, AppType
 
 
