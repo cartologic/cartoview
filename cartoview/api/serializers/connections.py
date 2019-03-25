@@ -24,6 +24,7 @@ class AuthField(serializers.RelatedField):
 
 class ServerSerializer(serializers.ModelSerializer):
     connection = AuthField(read_only=True)
+    operations = serializers.DictField(read_only=False)
 
     class Meta:
         model = Server
@@ -33,7 +34,8 @@ class ServerSerializer(serializers.ModelSerializer):
                   "server_type",
                   "title",
                   "url",
-                  "connection")
+                  "connection",
+                  "operations")
 
 
 class SimpleAuthConnectionSerializer(serializers.ModelSerializer):

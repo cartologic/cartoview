@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 import requests
+from owslib.crs import Crs
 from owslib.wfs import WebFeatureService
 from owslib.wms import WebMapService
-from requests.auth import HTTPBasicAuth
-from owslib.crs import Crs
+
 from cartoview.layers.models import Layer
 from cartoview.log_handler import get_logger
 
@@ -74,6 +74,12 @@ class Geoserver(BaseServer):
     def layer_dict(self, ows_layer):
         extra = ows_layer.__dict__
         extra.pop('parent', None)
+        extra_layers = extra.pop('layers', None)
+        if extra_layers:
+            pass
+            # NOTE: Handle nested layers
+            # extra_layers = [self.layer_dict(l) for l in extra_layers]
+            # extra.update({'layers': extra_layers})
         csr_options = extra.pop('crsOptions', [])
         srids = []
         for srid in csr_options:
@@ -125,8 +131,22 @@ class Geoserver(BaseServer):
             if qs.count() == 0:
                 obj = Layer.objects.create(**layer)
                 created_objs.append(obj)
+        self.server.operations = self.operations
+        self.server.save()
         return created_objs
 
+    @property
+    def operations(self):
+        data = {}
+        ops = self.service.operations
+        for op in ops:
+            data.update({op.name: {
+                'methods': op.methods,
+                'formats': op.formatOptions
+            }})
+        return data
+
+    @property
     def status_url(self):
         return urljoin(self.rest, 'about/status')
 

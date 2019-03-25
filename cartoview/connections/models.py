@@ -47,8 +47,9 @@ class Server(BaseConnectionModel):
     object_id = models.PositiveIntegerField(null=True, blank=True)
     connection = GenericForeignKey('content_type', 'object_id')
     refresh_interval = models.DurationField(default=timezone.timedelta(days=7))
+    operations = JSONField(default=dict, blank=True)
 
-    @property
+    @cached_property
     def server_handler_key(self):
         key = None
         for server in SUPPORTED_SERVERS:
