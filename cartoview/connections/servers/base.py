@@ -1,7 +1,11 @@
 # -*- coding: utf-8 -*-
-from abc import ABC, abstractproperty, abstractmethod
+from abc import ABC, abstractmethod, abstractproperty
+from functools import lru_cache
+
+from cartoview.connections.models import (Server, SimpleAuthConnection,
+                                          TokenAuthConnection)
+
 from ..auth.base import NoAuthClass
-from cartoview.connections.models import Server, SimpleAuthConnection, TokenAuthConnection
 
 
 class BaseServer(ABC):
@@ -11,6 +15,7 @@ class BaseServer(ABC):
             'connection').get(id=server_id)
 
     @property
+    @lru_cache(maxsize=256)
     def session(self):
         conn = self.server.connection
         if conn:
@@ -21,20 +26,21 @@ class BaseServer(ABC):
     @property
     def extra_kwargs(self):
         extra_kwargs = {}
-        if self.erver.connection:
+        if self.server.connection:
             auth_obj = self.server.connection
-            if isinstance(self.server.connection, SimpleAuthConnection):
-                extra_kwargs.update(
-                    {'username': auth_obj.username,
-                     'password': auth_obj.password})
-            elif isinstance(self.server.connection, TokenAuthConnection):
-                headers = {}
-                if auth_obj.prefix and auth_obj.prefix != "":
-                    headers['Authorization'] = "{} {}".format(auth_obj.prefix,
-                                                              auth_obj.token)
-                else:
-                    headers['Authorization'] = "{}".format(auth_obj.token)
-                extra_kwargs.update({'headers': headers})
+            if auth_obj:
+                if isinstance(self.server.connection, SimpleAuthConnection):
+                    extra_kwargs.update(
+                        {'username': auth_obj.username,
+                         'password': auth_obj.password})
+                elif isinstance(self.server.connection, TokenAuthConnection):
+                    headers = {}
+                    if auth_obj.prefix and auth_obj.prefix != "":
+                        headers['Authorization'] = "{} {}".format(auth_obj.prefix,
+                                                                  auth_obj.token)
+                    else:
+                        headers['Authorization'] = "{}".format(auth_obj.token)
+                    extra_kwargs.update({'headers': headers})
         return extra_kwargs
 
     @abstractmethod
@@ -46,9 +52,9 @@ class BaseServer(ABC):
         return NotImplemented
 
     @abstractproperty
-    def rest(self):
+    def is_alive(self):
         return NotImplemented
 
     @abstractproperty
-    def is_alive(self):
+    def operations(self):
         return NotImplemented

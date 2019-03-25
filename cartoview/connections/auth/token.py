@@ -1,9 +1,13 @@
-from .base import BaseSession
+from functools import lru_cache
+
 import requests
+
+from .base import BaseSession
 
 
 class TokenAuthSession(BaseSession):
     @classmethod
+    @lru_cache(maxsize=256)
     def get_session(cls, auth_obj):
         session = requests.Session()
         headers = {}

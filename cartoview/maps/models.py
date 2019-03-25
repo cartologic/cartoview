@@ -1,9 +1,10 @@
-from django.db import models
-from cartoview.layers.validators import validate_projection
 from django.contrib.postgres.fields import ArrayField, JSONField
 from django.core.validators import MaxValueValidator, MinValueValidator
-from cartoview.layers.models import Layer
+from django.db import models
+
 from cartoview.base_resource.models import BaseModel
+from cartoview.layers.models import Layer
+from cartoview.layers.validators import validate_projection
 
 
 class Map(BaseModel):

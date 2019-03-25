@@ -5,11 +5,15 @@ ESRI = ServerType("ARCGIS_SERVER", "ESRI", "ArcGIS Server")
 MAPSERVER = ServerType("MAPSERVER", "MS", "MapServer")
 GEOSERVER = ServerType("GEOSERVER", "GS", "Geoserver")
 GEONODE = ServerType("GEONODE", "G", "Geonode")
+GEOJSON = ServerType("GEOJSON", "GEOJSON", "GeoJSON")
+KML = ServerType("KML", "KML", "KML")
 SUPPORTED_SERVERS = (
     ESRI,
     MAPSERVER,
     GEOSERVER,
     GEONODE,
+    GEOJSON,
+    KML
 )
 DEFAULT_PROXY_SETTINGS = {
     "default_headers": {

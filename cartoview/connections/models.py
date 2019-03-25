@@ -2,12 +2,13 @@ from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.fields import (GenericForeignKey,
                                                 GenericRelation)
 from django.contrib.contenttypes.models import ContentType
+from django.contrib.postgres.fields import JSONField
 from django.db import models
 from django.forms.models import model_to_dict
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from fernet_fields import EncryptedTextField
-
+from django.utils.functional import cached_property
 from cartoview.log_handler import get_logger
 
 from . import SUPPORTED_SERVERS
@@ -33,9 +34,11 @@ class BaseConnectionModel(models.Model):
 class Server(BaseConnectionModel):
     SERVER_TYPES = [(s.value, s.title) for s in SUPPORTED_SERVERS]
     RESOURCES_TYPE = [('wms', _('Web Map Service')),
-                      ('wfs', _('Web Feature Service'))]
+                      ('wfs', _('Web Feature Service')),
+                      ('geojson', _('GeoJSON')),
+                      ('kml', _('KML')), ]
     server_type = models.CharField(
-        max_length=5, choices=SERVER_TYPES, help_text=_("Server Type"))
+        max_length=15, choices=SERVER_TYPES, help_text=_("Server Type"))
     resources_type = models.CharField(
         max_length=50, choices=RESOURCES_TYPE, help_text=_("Resources Type"))
     title = models.CharField(max_length=150, null=False,
@@ -57,13 +60,12 @@ class Server(BaseConnectionModel):
                 key = server.name
         return key
 
-    @property
+    @cached_property
     def handler(self):
         handler = None
         Handler = get_handler_class_handler(
             self.server_handler_key, server=True)
-        if self.connection:
-            handler = Handler(self.url, self.id)
+        handler = Handler(self.url, self.id)
         return handler
 
     @property

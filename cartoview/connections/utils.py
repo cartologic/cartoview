@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from functools import lru_cache
 from urllib.parse import parse_qsl, unquote_plus, urlparse
 
 from django.conf import settings
@@ -41,6 +42,7 @@ def get_module_class(name):
     return name.rsplit('.', 1)
 
 
+@lru_cache(maxsize=256)
 def get_handler_class_handler(handler_key, server=False):
     key = "server_handlers" if server else "connection_handlers"
     connections_settings = getattr(settings, "CARTOVIEW_CONNECTIONS", {})

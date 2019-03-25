@@ -1,9 +1,11 @@
 from .base import BaseSession
 import requests
+from functools import lru_cache
 
 
 class BasicAuthSession(BaseSession):
     @classmethod
+    @lru_cache(maxsize=256)
     def get_session(cls, auth_obj):
         session = requests.Session()
         session.auth = requests.auth.HTTPBasicAuth(
@@ -13,6 +15,7 @@ class BasicAuthSession(BaseSession):
 
 class DigestAuthSession(BaseSession):
     @classmethod
+    @lru_cache(maxsize=256)
     def get_session(cls, auth_obj):
         session = requests.Session()
         session.auth = requests.auth.HTTPDigestAuth(

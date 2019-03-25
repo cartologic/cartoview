@@ -2,8 +2,9 @@ from django.contrib.postgres.fields import ArrayField, JSONField
 from django.db import models
 from django.urls import reverse_lazy
 
-from cartoview.connections.models import Server
 from cartoview.base_resource.models import BaseModel
+from cartoview.connections.models import Server
+
 from .validators import validate_projection
 
 
@@ -33,6 +34,12 @@ class BaseLayer(models.Model):
         return None
 
     @property
+    def server_operations(self):
+        if self.server:
+            return self.server.operations
+        return {}
+
+    @property
     def server_proxy(self):
         return '{}?url='.format(reverse_lazy('api:server_proxy',
                                              args=(self.server.pk,)))
@@ -50,4 +57,5 @@ class Layer(BaseModel, BaseLayer):
     extra = JSONField()
 
     def __str__(self):
-        return "{}({})".format(self.name, self.layer_type)
+        return "{}({},{})<{}>".format(self.name, self.layer_type,
+                                      self.server_type, self.server)

@@ -6,7 +6,7 @@ from .forms import SimpleAuthConnectionForm
 
 @admin.register(Server)
 class ServerAdmin(admin.ModelAdmin):
-    list_display = ('server_type', 'title', 'url')
+    list_display = ('title', 'url', 'server_type')
     actions = ['harvest_resources']
 
     def harvest_resources(self, request, queryset):
