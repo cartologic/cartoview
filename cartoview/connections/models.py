@@ -33,14 +33,8 @@ class BaseConnectionModel(models.Model):
 
 class Server(BaseConnectionModel):
     SERVER_TYPES = [(s.value, s.title) for s in SUPPORTED_SERVERS]
-    RESOURCES_TYPE = [('wms', _('Web Map Service')),
-                      ('wfs', _('Web Feature Service')),
-                      ('geojson', _('GeoJSON')),
-                      ('kml', _('KML')), ]
     server_type = models.CharField(
         max_length=15, choices=SERVER_TYPES, help_text=_("Server Type"))
-    resources_type = models.CharField(
-        max_length=50, choices=RESOURCES_TYPE, help_text=_("Resources Type"))
     title = models.CharField(max_length=150, null=False,
                              blank=False, help_text=_("Server Title"))
     url = models.URLField(blank=False, null=False,

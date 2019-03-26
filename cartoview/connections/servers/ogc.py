@@ -7,18 +7,16 @@ from owslib.wms import WebMapService
 from cartoview.layers.models import Layer
 from cartoview.log_handler import get_logger
 
-from ...connections.utils import urljoin
+from ..utils import get_server_by_value
 from .base import BaseServer
 
 logger = get_logger(__name__)
 
 
-class Geoserver(BaseServer):
+class OGCServer(BaseServer):
     @property
     def is_alive(self):
-        req = self.session.get(self.status_url)
-        logger.info(self.status_url)
-        logger.info(req.status_code)
+        req = self.session.get(self.url)
         if req.status_code == requests.codes['ok']:
             return True
         else:
@@ -53,10 +51,11 @@ class Geoserver(BaseServer):
     def service(self):
         ServiceClass = None
         version = None
-        if self.server.resources_type == 'wms':
+        server = get_server_by_value(self.server.server_type)
+        if server.type == 'wms':
             ServiceClass = WebMapService
             version = '1.1.1'
-        elif self.server.resources_type == 'wfs':
+        elif server.type == 'wfs':
             ServiceClass = WebFeatureService
             version = '1.1.0'
         wms = ServiceClass(self.server.url, version=version,
@@ -145,11 +144,3 @@ class Geoserver(BaseServer):
                 'formats': op.formatOptions
             }})
         return data
-
-    @property
-    def status_url(self):
-        return urljoin(self.rest, 'about/status')
-
-    @property
-    def rest(self):
-        return urljoin(self.url, 'rest')

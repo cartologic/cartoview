@@ -8,6 +8,7 @@ from django.utils.translation import gettext_lazy as _
 
 from cartoview.log_handler import get_logger
 
+from . import SUPPORTED_SERVERS
 from .exceptions import ConnectionTypeException
 
 logger = get_logger(__name__)
@@ -40,6 +41,15 @@ def urljoin(*args):
 
 def get_module_class(name):
     return name.rsplit('.', 1)
+
+
+def get_server_by_value(value):
+    server = None
+    for s in SUPPORTED_SERVERS:
+        if s.value == value:
+            server = s
+            break
+    return server
 
 
 @lru_cache(maxsize=256)

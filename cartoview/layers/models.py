@@ -4,6 +4,7 @@ from django.urls import reverse_lazy
 
 from cartoview.base_resource.models import BaseModel
 from cartoview.connections.models import Server
+from cartoview.connections.utils import get_server_by_value
 
 from .validators import validate_projection
 
@@ -46,7 +47,8 @@ class BaseLayer(models.Model):
 
     @property
     def layer_type(self):
-        return self.server.resources_type
+        server = get_server_by_value(self.server.server_type)
+        return server.type
 
     class Meta:
         abstract = True

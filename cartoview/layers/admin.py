@@ -1,13 +1,21 @@
 from django.contrib import admin
 from .models import Layer
+from cartoview.connections.utils import get_server_by_value
 # Register your models here.
 
 
 @admin.register(Layer)
 class LayerAdminModel(admin.ModelAdmin):
-    list_display = ('title', 'server_type', 'get_server')
+    list_display = ("title", "get_server_type",
+                    "get_server_url", "projection", "valid")
 
-    def get_server(self, obj):
-        return obj.server
-    get_server.short_description = 'Server'
-    get_server.admin_order_field = 'server__title'
+    def get_server_type(self, obj):
+        server = get_server_by_value(obj.server.server_type)
+        return server.title
+    get_server_type.short_description = "Server Type"
+    get_server_type.admin_order_field = "server__server_type"
+
+    def get_server_url(self, obj):
+        return obj.server.url
+    get_server_url.short_description = "Server URL"
+    get_server_url.admin_order_field = "server__url"
