@@ -40,6 +40,9 @@ urlpatterns += [
     path('api-token-auth/', obtain_auth_token, name='api_token_auth'),
     re_path(r"^sites", include('wagtail.core.urls'), name='sites')
 ]
+# django static serve static production
+# from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+# urlpatterns += staticfiles_urlpatterns()
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL,
                           document_root=settings.MEDIA_ROOT)

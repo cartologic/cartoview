@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django.contrib.sites",
     # third-party apps
+    "channels",
     "crispy_forms",
     "allauth",
     "allauth.account",
@@ -80,6 +81,10 @@ INSTALLED_APPS = [
     "cartoview.layers",
     "cartoview.maps"
 ]
+
+# channels settings
+ASGI_APPLICATION = os.getenv(
+    "ASGI_APPLICATION", "cartoview.routing.application")
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -241,8 +246,8 @@ CARTOVIEW_CONNECTION_HANDLERS = {
     "NoAuth": "cartoview.connections.auth.base.NoAuthClass"
 }
 CARTOVIEW_SERVER_HANDLERS = {
-    "GEOSERVER": "cartoview.connections.servers.geoserver.Geoserver",
-    "MAPSERVER": "cartoview.connections.servers.mapserver.MapServer",
+    "OGC-WMS": "cartoview.connections.servers.ogc.OGCServer",
+    "OGC-WFS": "cartoview.connections.servers.ogc.OGCServer",
     "GEOJSON": "cartoview.connections.servers.ogr_handler.GeoJSON",
     "KML": "cartoview.connections.servers.ogr_handler.KML",
 }
@@ -253,7 +258,8 @@ CARTOVIEW_CONNECTIONS = {
         "default_headers": {
             "Accept": "*",
             "Accept-Language": "*",
-        }
+        },
+        "timeout": 5,
     }
 }
 try:
