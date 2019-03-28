@@ -1,5 +1,3 @@
-import json
-
 from rest_framework import permissions, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -26,5 +24,5 @@ class MapViewSet(viewsets.ModelViewSet):
         serializer = MapSerializer(map_obj)
         data = serializer.data
         center = data['center']
-        data.update({'layers': layers, 'center': json.loads(center)})
+        data.update({'layers': layers, 'center': center})
         return Response(data, status=200)
