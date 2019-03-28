@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     "allauth.account",
     "allauth.socialaccount",
     "rest_framework",
+    "generic_relations",
     "rest_framework_swagger",
     "rest_framework.authtoken",
 
