@@ -23,6 +23,5 @@ class MapViewSet(viewsets.ModelViewSet):
                   for lyr in map_obj.layers.all()]
         serializer = MapSerializer(map_obj)
         data = serializer.data
-        center = data['center']
-        data.update({'layers': layers, 'center': center})
+        data.update({'layers': layers})
         return Response(data, status=200)
