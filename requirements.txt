@@ -82,6 +82,7 @@ pytz==2018.7
 PyYAML==3.13
 requests==2.20.1
 requests-oauthlib==1.0.0
+rest-framework-generic-relations==1.2.1
 screen==1.0.1
 simplejson==3.16.0
 six==1.12.0
