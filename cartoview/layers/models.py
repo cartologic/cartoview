@@ -1,7 +1,7 @@
 from django.contrib.postgres.fields import ArrayField, JSONField
 from django.db import models
 from django.urls import reverse_lazy
-
+from django.contrib.auth import get_user_model
 from cartoview.base_resource.models import BaseModel
 from cartoview.connections.models import Server
 from cartoview.connections.utils import get_server_by_value
@@ -23,6 +23,9 @@ class BaseLayer(models.Model):
     server = models.ForeignKey(
         Server, on_delete=models.CASCADE, related_name='layers')
     valid = models.BooleanField(default=True)
+    owner = models.ForeignKey(
+        get_user_model(), on_delete=models.CASCADE, related_name="layers",
+        blank=True, null=True)
 
     @property
     def server_type(self):

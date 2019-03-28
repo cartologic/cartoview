@@ -12,6 +12,7 @@ from cartoview.connections.models import Server
 from cartoview.connections.utils import URL
 from cartoview.log_handler import get_logger
 
+from ..permissions import IsOwnerOrReadOnly
 from ..serializers.connections import ServerSerializer
 
 logger = get_logger(__name__)
@@ -20,6 +21,8 @@ logger = get_logger(__name__)
 class ServerViewSet(viewsets.ModelViewSet):
     queryset = Server.objects.all()
     serializer_class = ServerSerializer
+    permission_classes = (
+        permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly)
 
 
 class ServerProxy(APIView):
@@ -59,7 +62,7 @@ class ServerProxy(APIView):
     def serve(self, request, pk, *args, **kwargs):
         # TODO:handle different types of http methods
         server = Server.objects.get(pk=pk)
-        session = server.connection.session
+        session = server.handler.session
         url = request.GET.get('url', None)
         if not url:
             return Response(data={"error": "No URL Provided"},

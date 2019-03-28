@@ -1,16 +1,21 @@
-from rest_framework import viewsets
+import json
 
-from cartoview.maps.models import Map
+from rest_framework import permissions, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from ..serializers.maps import MapSerializer
+
+from cartoview.maps.models import Map
+
+from ..permissions import IsOwnerOrReadOnly
 from ..serializers.layers import LayerSerializer
-import json
+from ..serializers.maps import MapSerializer
 
 
 class MapViewSet(viewsets.ModelViewSet):
     queryset = Map.objects.all()
     serializer_class = MapSerializer
+    permission_classes = (
+        permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly)
 
     @action(detail=True, methods=['get'], url_name='map_json')
     def map_json(self, request, pk=None):
