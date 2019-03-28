@@ -246,6 +246,8 @@ CARTOVIEW_CONNECTION_HANDLERS = {
     "NoAuth": "cartoview.connections.auth.base.NoAuthClass"
 }
 CARTOVIEW_SERVER_HANDLERS = {
+    "ARCGIS_MSL": "cartoview.connections.servers.ogc.OGCServer",
+    "ARCGIS_FSL": "cartoview.connections.servers.ogc.OGCServer",
     "OGC-WMS": "cartoview.connections.servers.ogc.OGCServer",
     "OGC-WFS": "cartoview.connections.servers.ogc.OGCServer",
     "GEOJSON": "cartoview.connections.servers.ogr_handler.GeoJSON",
