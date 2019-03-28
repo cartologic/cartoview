@@ -12,9 +12,7 @@ class AppPermission(permissions.BasePermission):
 
     def has_object_permission(self, request, view, obj):
         permitted = False
-        if request.user.is_superuser:
-            permitted = True
-        elif request.method in SAFE_METHODS:
+        if request.user.is_superuser or request.method in SAFE_METHODS:
             permitted = True
         elif request.method in ("PATCH", "PUT"):
             permitted = request.user.has_perm('change_state', obj)
@@ -37,3 +35,11 @@ class UserPermission(permissions.BasePermission):
 
     def has_permission(self, request, view):
         return True
+
+
+class IsOwnerOrReadOnly(permissions.BasePermission):
+    def has_object_permission(self, request, view, obj):
+        if request.method in permissions.SAFE_METHODS or \
+                request.user and request.user.is_superuser:
+            return True
+        return obj.owner == request.user
