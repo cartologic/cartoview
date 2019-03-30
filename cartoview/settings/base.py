@@ -15,7 +15,8 @@ import sys
 from cartoview.log_handler import get_logger
 logger = get_logger(__name__)
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+SETTINGS_DIR = os.path.dirname(os.path.abspath(__file__))
+BASE_DIR = os.path.dirname(SETTINGS_DIR)
 
 
 # Quick-start development settings - unsuitable for production
@@ -157,7 +158,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = "UTC"
+TIME_ZONE = os.getenv("TIME_ZONE", "UTC")
 
 USE_I18N = True
 
@@ -198,7 +199,7 @@ ANONYMOUS_USER_NAME = "AnonymousUser"
 GUARDIAN_RAISE_403 = True
 OAUTH_SERVER_BASEURL = "<BASE_SERVER_URL>"
 LOGIN_REDIRECT_URL = "/accounts/profile"
-
+ANONYMOUS_GROUP_NAME = "public"
 
 WAGTAIL_SITE_NAME = "Cartoview"
 SITE_ID = 1
@@ -212,7 +213,8 @@ REST_FRAMEWORK = {
     "PAGE_SIZE": 100,
     "DEFAULT_METADATA_CLASS": "rest_framework.metadata.SimpleMetadata",
     "DEFAULT_PERMISSION_CLASSES": [
-        "rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly"
+        "rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly",
+        # "cartoview.api.permissions.BaseObjectPermissions",
     ],
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework.authentication.BasicAuthentication",
@@ -235,6 +237,7 @@ REST_FRAMEWORK = {
     ),
     "DEFAULT_FILTER_BACKENDS": (
         "django_filters.rest_framework.DjangoFilterBackend",
+        "rest_framework.filters.DjangoObjectPermissionsFilter",
     )
 }
 # django Crispy forms settings
