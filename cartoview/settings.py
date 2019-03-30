@@ -265,6 +265,14 @@ CARTOVIEW_CONNECTIONS = {
         "timeout": 5,
     }
 }
+# django cache settings
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
+        'LOCATION': 'cartoview_cache',
+    }
+}
+
 try:
     from .local_settings import *  # noqa
 except BaseException as e:
