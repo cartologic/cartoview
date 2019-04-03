@@ -1,20 +1,30 @@
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.fields import (GenericForeignKey,
                                                 GenericRelation)
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.postgres.fields import JSONField
+from django.core.cache import cache
 from django.db import models
+from django.db.models.signals import post_delete, post_save
+from django.dispatch import receiver
 from django.forms.models import model_to_dict
 from django.utils import timezone
+from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 from fernet_fields import EncryptedTextField
-from django.utils.functional import cached_property
+from guardian.shortcuts import assign_perm
+
 from cartoview.log_handler import get_logger
 
 from . import SUPPORTED_SERVERS
 from .utils import get_handler_class_handler
 
 logger = get_logger(__name__)
+CONNECTION_PERMISSIONS = (
+    ("use_for_read", _("Allow to use for read operations")),
+    ("use_for_write", _("Allow to use for write operations")),
+)
 
 
 class BaseConnectionModel(models.Model):
@@ -97,6 +107,9 @@ class SimpleAuthConnection(BaseConnectionModel):
     def __str__(self):
         return self.username
 
+    class Meta:
+        permissions = CONNECTION_PERMISSIONS
+
 
 class TokenAuthConnection(BaseConnectionModel):
     TOKEN_HANDLER_KEY = "TOKEN"
@@ -115,3 +128,32 @@ class TokenAuthConnection(BaseConnectionModel):
         handler = get_handler_class_handler(
             TokenAuthConnection.TOKEN_HANDLER_KEY)
         return handler.get_session(self)
+
+    class Meta:
+        permissions = CONNECTION_PERMISSIONS
+
+
+@receiver(post_save, sender=SimpleAuthConnection)
+@receiver(post_delete, sender=SimpleAuthConnection)
+def invalidate_simple_auth_cache(sender, instance, **kwargs):
+    cache.delete('simple_auth')
+
+
+@receiver(post_save, sender=TokenAuthConnection)
+@receiver(post_delete, sender=TokenAuthConnection)
+def invalidate_token_auth_cache(sender, instance, **kwargs):
+    cache.delete('token_auth')
+
+
+@receiver(post_save, sender=TokenAuthConnection)
+@receiver(post_save, sender=SimpleAuthConnection)
+def connection_post_save(sender, instance, created, **kwargs):
+    if created and instance.owner and \
+            instance.owner.username != settings.ANONYMOUS_USER_NAME:
+        users = get_user_model().objects.filter(is_superuser=True,)
+        if instance.owner:
+            users = users.union(get_user_model().objects.filter(
+                username=instance.owner.username))
+        for user in users:
+            for perm in CONNECTION_PERMISSIONS:
+                assign_perm(perm[0], user, instance)

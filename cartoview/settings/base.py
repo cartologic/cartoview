@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     "generic_relations",
     "rest_framework_swagger",
     "rest_framework.authtoken",
+    "django_filters",
 
     # wagtail apps
     "wagtail.contrib.forms",
@@ -81,7 +82,7 @@ INSTALLED_APPS = [
     "cartoview.api",
     "cartoview.connections",
     "cartoview.layers",
-    "cartoview.maps"
+    "cartoview.maps",
 ]
 
 # channels settings
@@ -213,7 +214,7 @@ REST_FRAMEWORK = {
     "PAGE_SIZE": 100,
     "DEFAULT_METADATA_CLASS": "rest_framework.metadata.SimpleMetadata",
     "DEFAULT_PERMISSION_CLASSES": [
-        "rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly",
+        "rest_framework.permissions.IsAuthenticatedOrReadOnly",
         # "cartoview.api.permissions.BaseObjectPermissions",
     ],
     "DEFAULT_AUTHENTICATION_CLASSES": (
@@ -237,7 +238,9 @@ REST_FRAMEWORK = {
     ),
     "DEFAULT_FILTER_BACKENDS": (
         "django_filters.rest_framework.DjangoFilterBackend",
-        "rest_framework.filters.DjangoObjectPermissionsFilter",
+        "rest_framework.filters.SearchFilter",
+        "rest_framework.filters.OrderingFilter",
+        # "rest_framework.filters.DjangoObjectPermissionsFilter",
     )
 }
 # django Crispy forms settings

@@ -11,6 +11,7 @@ class LayerSerializer(serializers.ModelSerializer):
     )
     server_info = serializers.SerializerMethodField()
     layer_type = serializers.CharField(read_only=True)
+    proxyable = serializers.BooleanField(read_only=True)
     owner = serializers.StringRelatedField(
         read_only=True, default=serializers.CurrentUserDefault())
 

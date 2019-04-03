@@ -2,17 +2,23 @@
 from abc import ABC, abstractmethod, abstractproperty
 from functools import lru_cache
 
+from django.contrib.auth import get_user_model
+
 from cartoview.connections.models import (Server, SimpleAuthConnection,
                                           TokenAuthConnection)
-
-from ..auth.base import NoAuthClass
+from cartoview.connections.utils import get_handler_class_handler
 
 
 class BaseServer(ABC):
-    def __init__(self, base_url, server_id):
+    def __init__(self, base_url, server_id, user_id=None):
         self.url = base_url
         self.server = Server.objects.prefetch_related(
             'connection').get(id=server_id)
+        USER = get_user_model()
+        if user_id:
+            self.user = USER.objects.get(id=user_id)
+        else:
+            self.user = USER.objects.filter(is_superuser=True).first()
 
     @property
     @lru_cache(maxsize=256)
@@ -21,7 +27,7 @@ class BaseServer(ABC):
         if conn:
             return conn.session
         else:
-            return NoAuthClass.requests_retry_session()
+            return get_handler_class_handler("NoAuth").requests_retry_session()
 
     @property
     def extra_kwargs(self):

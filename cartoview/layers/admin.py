@@ -1,11 +1,15 @@
 from django.contrib import admin
-from .models import Layer
+from guardian.admin import GuardedModelAdmin
+
 from cartoview.connections.utils import get_server_by_value
+
+from .models import Layer
+
 # Register your models here.
 
 
 @admin.register(Layer)
-class LayerAdminModel(admin.ModelAdmin):
+class LayerAdminModel(GuardedModelAdmin):
     list_display = ("title", "get_server_type",
                     "get_server_url", "projection", "valid")
 

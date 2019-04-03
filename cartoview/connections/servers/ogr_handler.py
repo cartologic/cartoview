@@ -53,6 +53,7 @@ class ORGHandler(BaseServer):
                 "name": name,
                 "bounding_box": bbox,
                 "projection": projection,
+                "owner": self.user,
                 "server": self.server}
         return data
 
