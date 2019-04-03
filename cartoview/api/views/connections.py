@@ -9,7 +9,7 @@ from rest_framework.views import APIView
 
 from cartoview.connections import DEFAULT_PROXY_SETTINGS
 from cartoview.connections.models import Server
-from cartoview.connections.utils import URL
+from cartoview.connections.utils import URL, get_handler_class_handler
 from cartoview.log_handler import get_logger
 
 from ..permissions import IsOwnerOrReadOnly
@@ -43,15 +43,15 @@ class ServerProxy(APIView):
         proxy_settings = self.get_proxy_settings()
         default_headers = {}
         if proxy_settings:
-            default_headers = proxy_settings.get('default_headers', {})
+            default_headers = proxy_settings.get("default_headers", {})
         accept = request.META.get(
-            'HTTP_ACCEPT', default_headers.get('Accept'))
-        lang = request.META.get('HTTP_ACCEPT_LANGUAGE',
-                                default_headers.get('Accept-Language'))
+            "HTTP_ACCEPT", default_headers.get("Accept"))
+        lang = request.META.get("HTTP_ACCEPT_LANGUAGE",
+                                default_headers.get("Accept-Language"))
         headers = {
-            'Accept': accept,
-            'Accept-Language': lang,
-            'Content-Type': request.META.get('CONTENT_TYPE'),
+            "Accept": accept,
+            "Accept-Language": lang,
+            "Content-Type": request.META.get("CONTENT_TYPE"),
         }
         return headers
 
@@ -62,8 +62,22 @@ class ServerProxy(APIView):
     def serve(self, request, pk, *args, **kwargs):
         # TODO:handle different types of http methods
         server = Server.objects.get(pk=pk)
-        session = server.handler.session
-        url = request.GET.get('url', None)
+        conn = server.connection
+        user = request.user
+        allowed = False
+        if server.connection:
+            if request.method in permissions.SAFE_METHODS:
+                allowed = user.has_perm('use_for_read', conn)
+            else:
+                allowed = user.has_perm('use_for_write', conn)
+        if allowed:
+            logger.info("ALLOWED To USE SESSION")
+            session = server.handler.session
+        else:
+            logger.info("NOT ALLOWED To USE SESSION")
+            session = get_handler_class_handler(
+                "NoAuth").requests_retry_session()
+        url = request.GET.get("url", None)
         if not url:
             return Response(data={"error": "No URL Provided"},
                             status=status.HTTP_400_BAD_REQUEST)
@@ -82,7 +96,7 @@ class ServerProxy(APIView):
         # TODO: handle error message
         # NOTE: we use content instead of text to handle files
         response = HttpResponse(req.content, status=req.status_code,
-                                content_type=req.headers.get('content-type'))
+                                content_type=req.headers.get("content-type"))
         return response
 
     def get(self, request, pk, *args, **kwargs):

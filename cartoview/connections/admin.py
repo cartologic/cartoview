@@ -2,6 +2,7 @@
 from django.contrib import admin
 from .models import Server, SimpleAuthConnection, TokenAuthConnection
 from .forms import SimpleAuthConnectionForm
+from guardian import admin as guardian_admin
 
 
 @admin.register(Server)
@@ -18,11 +19,11 @@ class ServerAdmin(admin.ModelAdmin):
 
 
 @admin.register(SimpleAuthConnection)
-class SimpleAuthConnectionAdmin(admin.ModelAdmin):
+class SimpleAuthConnectionAdmin(guardian_admin.GuardedModelAdmin):
     list_display = ('username', 'auth_type')
     form = SimpleAuthConnectionForm
 
 
 @admin.register(TokenAuthConnection)
-class TokenAuthConnectionAdmin(admin.ModelAdmin):
+class TokenAuthConnectionAdmin(guardian_admin.GuardedModelAdmin):
     list_display = ('prefix', 'token')

@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import Group
 from django.contrib.postgres.fields import JSONField
+from django.core.cache import cache
 from django.db import models
 from django.db.models import Max
-from django.db.models.signals import post_save, pre_save
+from django.db.models.signals import post_delete, post_save, pre_save
 from django.dispatch import receiver
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
@@ -15,9 +17,9 @@ from cartoview.base_resource.models import BaseModel
 from cartoview.maps.models import Map
 
 APPS_PERMISSIONS = (
-    ('install_app', _('Install App')),
-    ('uninstall_app', _('Uninstall App')),
-    ('change_state', _('Change App State (active, suspend)')),
+    ("install_app", _("Install App")),
+    ("uninstall_app", _("Uninstall App")),
+    ("change_state", _("Change App State (active, suspend)")),
 )
 
 
@@ -31,7 +33,7 @@ class AppType(models.Model):
     objects = AppTypeManager()
 
     class Meta:
-        ordering = ['-name']
+        ordering = ["-name"]
 
     def __str__(self):
         return self.name
@@ -55,14 +57,14 @@ class AppStore(models.Model):
     )
 
     class Meta:
-        ordering = ['-name']
+        ordering = ["-name"]
 
     def as_dict(self):
-        return {'name': self.name,
-                'id': self.id,
-                'url': self.url,
-                'is_default': self.is_default,
-                'type': self.server_type}
+        return {"name": self.name,
+                "id": self.id,
+                "url": self.url,
+                "is_default": self.is_default,
+                "type": self.server_type}
 
     def __str__(self):
         return self.name
@@ -104,9 +106,9 @@ class App(models.Model):
 
 class AppInstance(BaseModel):
     app_map = models.ForeignKey(
-        Map, related_name='app_instances', on_delete=models.CASCADE)
+        Map, related_name="app_instances", on_delete=models.CASCADE)
     app = models.ForeignKey(
-        App, related_name='instances', on_delete=models.CASCADE)
+        App, related_name="instances", on_delete=models.CASCADE)
 
     config = JSONField(default=None, null=True, blank=True)
 
@@ -116,8 +118,8 @@ class AppInstance(BaseModel):
     @property
     def map_url(self):
         if self.app_map:
-            return reverse_lazy('api:maps-map_json',
-                                kwargs={'pk': self.app_map.pk})
+            return reverse_lazy("api:maps-map_json",
+                                kwargs={"pk": self.app_map.pk})
         return None
 
 
@@ -128,7 +130,7 @@ def set_app_order(sender, instance, **kwargs):
     # set app correct order
     if instance.order == 0 or count > 1:
         max_order = App.objects.aggregate(
-            Max('order'))['order__max']
+            Max("order"))["order__max"]
         if max_order:
             instance.order = max_order+1
         else:
@@ -147,3 +149,17 @@ def set_app_default_permissions(sender, **kwargs):
         for user in users:
             for app_permission in APPS_PERMISSIONS:
                 assign_perm(app_permission[0], user, obj=app)
+
+
+@receiver(post_save, sender=AppInstance)
+@receiver(post_delete, sender=AppInstance)
+def invalidate_appinstance_cache(sender, instance, **kwargs):
+    cache.delete("appinstances")
+
+
+@receiver(post_save, sender=get_user_model())
+def add_default_user_group(sender, instance, **kwargs):
+    created = kwargs.get("created")
+    if created:
+        public_group = Group.objects.get(name="public")
+        instance.groups.add(public_group)

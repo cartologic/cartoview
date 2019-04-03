@@ -13,7 +13,7 @@ from cartoview.log_handler import get_logger
 from ..permissions import AppPermission
 from ..serializers.app_manager import (AppInstanceSerializer, AppSerializer,
                                        AppStoreSerializer, AppTypeSerializer)
-
+from ..filters import AppFilter, AppInstanceFilter
 logger = get_logger(__name__)
 
 
@@ -33,8 +33,9 @@ class AppTypeViewSet(viewsets.ModelViewSet):
 
 
 class AppInstanceViewSet(viewsets.ModelViewSet):
-    queryset = AppInstance.objects.all()
+    queryset = AppInstance.objects.all().prefetch_related("app_map")
     serializer_class = AppInstanceSerializer
+    filterset_class = AppInstanceFilter
 
     def perform_create(self, serializer):
         serializer.save(installed_by=self.request.user)
@@ -44,22 +45,23 @@ class AppViewSet(viewsets.ModelViewSet):
     queryset = App.objects.all()
     serializer_class = AppSerializer
     permission_classes = (AppPermission,)
+    filterset_class = AppFilter
 
     def perform_create(self, serializer):
         serializer.save(installed_by=self.request.user)
 
-    @action(detail=False, methods=['post'],
+    @action(detail=False, methods=["post"],
             permission_classes=[AppPermission])
     def install(self, request):
         data = request.data
-        app_name = data.get('app_name', None)
-        store_id = data.get('store_id', None)
-        version = data.get('app_version', None)
+        app_name = data.get("app_name", None)
+        store_id = data.get("store_id", None)
+        version = data.get("app_version", None)
         if not app_name or not store_id or not version:
             return Response({"details": "invalid data"}, status=400)
         qs = App.objects.filter(name=app_name)
         if qs.count() > 0:
-            permitted = request.user.has_perm('install_app', qs.first())
+            permitted = request.user.has_perm("install_app", qs.first())
             if not permitted:
                 return Response({"details":
                                  "You don't have permission to install <> app".
@@ -79,7 +81,7 @@ class AppViewSet(viewsets.ModelViewSet):
         serializer = AppSerializer(App.objects.get(name=app_name))
         return Response(serializer.data, status=200)
 
-    @action(detail=True, methods=['delete'],
+    @action(detail=True, methods=["delete"],
             permission_classes=[AppPermission])
     def uninstall(self, request, pk=None):
         try:
