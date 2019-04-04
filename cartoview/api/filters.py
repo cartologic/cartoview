@@ -15,13 +15,20 @@ BASE_FILTER_FIELDS = {
                    "lt", "lte"], }
 
 
-class MapFilter(django_filters.FilterSet):
+class BaseFilter(django_filters.FilterSet):
+    owner = django_filters.CharFilter(
+        lookup_expr='iexact', field_name='owner__username')
+
+
+class MapFilter(BaseFilter):
+
     class Meta:
         model = Map
         fields = BASE_FILTER_FIELDS
 
 
-class LayerFilter(django_filters.FilterSet):
+class LayerFilter(BaseFilter):
+
     class Meta:
         model = Layer
         fields = BASE_FILTER_FIELDS
@@ -33,7 +40,8 @@ class AppFilter(django_filters.FilterSet):
         fields = BASE_FILTER_FIELDS
 
 
-class AppInstanceFilter(django_filters.FilterSet):
+class AppInstanceFilter(BaseFilter):
+
     class Meta:
         model = AppInstance
         fields = BASE_FILTER_FIELDS
