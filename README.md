@@ -3,7 +3,7 @@
 
 ![Start](https://img.shields.io/github/stars/cartologic/cartoview.svg?style=social) ![Forks](https://img.shields.io/github/forks/cartologic/cartoview.svg?style=social) ![Watchers](https://img.shields.io/github/watchers/cartologic/cartoview.svg?style=social)
 ## Quick Start
-```python
+```
 git clone -b cartoview2 --single-branch https://github.com/cartologic/cartoview.git
 cd cartoview
 virtualenv venv
@@ -23,8 +23,7 @@ python manage.py runserver
 ```
 
 ---
-## License
-![License](https://img.shields.io/github/license/cartologic/cartoview.svg)
-## Stats
+## Additonal Info
 ![Contrib](https://img.shields.io/github/contributors/cartologic/cartoview.svg)
 ![Languages](https://img.shields.io/github/languages/top/cartologic/cartoview.svg)
+![License](https://img.shields.io/github/license/cartologic/cartoview.svg)
