@@ -17,7 +17,7 @@ python manage.py loaddata initial_groups.json
 python manage.py loaddata initial_users.json
 python manage.py createcachetable
 ```
-run server
+> run server
 ```python
 python manage.py runserver
 ```
