@@ -129,3 +129,4 @@ node_modules
 cartoview_apps
 .DS_Store
 conncurent_test.py
+\.idea/
