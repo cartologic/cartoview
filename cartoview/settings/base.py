@@ -13,11 +13,11 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 import os
 import sys
 from cartoview.log_handler import get_logger
+
 logger = get_logger(__name__)
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 SETTINGS_DIR = os.path.dirname(os.path.abspath(__file__))
 BASE_DIR = os.path.dirname(SETTINGS_DIR)
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
@@ -29,7 +29,6 @@ SECRET_KEY = os.getenv("SECRET_KEY", "<secret_key>")
 DEBUG = os.getenv("DEBUG", True)
 
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", ["*"])
-
 
 # Application definition
 
@@ -127,7 +126,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = os.getenv("WSGI_APPLICATION", "cartoview.wsgi.application")
 
-
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
@@ -142,7 +140,6 @@ DATABASES = {
     },
 }
 
-
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
 
@@ -152,7 +149,6 @@ AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},  # noqa
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},  # noqa
 ]
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
@@ -204,7 +200,6 @@ ANONYMOUS_GROUP_NAME = "public"
 
 WAGTAIL_SITE_NAME = "Cartoview"
 SITE_ID = 1
-
 
 # apps settings
 APPS_DIR = os.path.join(BASE_DIR, os.pardir, "cartoview_apps")
@@ -288,6 +283,7 @@ except BaseException as e:
 if APPS_DIR not in sys.path:
     sys.path.append(APPS_DIR)
 from cartoview.app_manager.config import CartoviewApp  # noqa
+
 CartoviewApp.load(apps_dir=APPS_DIR)
 for app in CartoviewApp.objects.get_active_apps().values():
     try:
@@ -298,10 +294,13 @@ for app in CartoviewApp.objects.get_active_apps().values():
         libs_dir = os.path.join(app_dir, "libs")
         if os.path.exists(app_settings_file):
             app_settings_file = os.path.realpath(app_settings_file)
-            exec(open(app_settings_file).read())
+            exec (open(app_settings_file).read())
         if os.path.exists(libs_dir) and libs_dir not in sys.path:
             sys.path.append(libs_dir)
         if app.name not in INSTALLED_APPS:
-            INSTALLED_APPS += (app.name.__str__(), )
+            INSTALLED_APPS += (app.name.__str__(),)
     except Exception as e:
         logger.error(str(e))
+
+if os.path.isfile('local_settings.py'):
+    from .local_settings import *
