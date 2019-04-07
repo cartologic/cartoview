@@ -26,9 +26,9 @@ BASE_DIR = os.path.dirname(SETTINGS_DIR)
 SECRET_KEY = os.getenv("SECRET_KEY", "<secret_key>")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv("DEBUG", True)
+DEBUG = bool(os.getenv("DEBUG", "True"))
 
-ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", ["*"])
+ALLOWED_HOSTS = eval(os.getenv("ALLOWED_HOSTS", '["*"]'))
 
 
 # Application definition
@@ -195,14 +195,14 @@ AUTHENTICATION_BACKENDS = (
     # `allauth` specific authentication methods, such as login by e-mail
     "allauth.account.auth_backends.AuthenticationBackend",
 )
-ACCOUNT_EMAIL_VERIFICATION = 'none'
-ANONYMOUS_USER_NAME = "AnonymousUser"
+ACCOUNT_EMAIL_VERIFICATION = os.getenv("ACCOUNT_EMAIL_VERIFICATION", "none")
+ANONYMOUS_USER_NAME = os.getenv("ANONYMOUS_USER_NAME", "AnonymousUser")
 GUARDIAN_RAISE_403 = True
-OAUTH_SERVER_BASEURL = "<BASE_SERVER_URL>"
-LOGIN_REDIRECT_URL = "/accounts/profile"
-ANONYMOUS_GROUP_NAME = "public"
+OAUTH_SERVER_BASEURL = os.get("OAUTH_SERVER_BASEURL", "<BASE_SERVER_URL>")
+LOGIN_REDIRECT_URL = os.get("LOGIN_REDIRECT_URL", "/accounts/profile")
+ANONYMOUS_GROUP_NAME = os.getenv("ANONYMOUS_GROUP_NAME", "public")
 
-WAGTAIL_SITE_NAME = "Cartoview"
+WAGTAIL_SITE_NAME = os.getenv("WAGTAIL_SITE_NAME", "Cartoview")
 SITE_ID = 1
 
 # django rest framework settings
@@ -265,7 +265,7 @@ CARTOVIEW_CONNECTIONS = {
             "Accept": "*",
             "Accept-Language": "*",
         },
-        "timeout": 5,
+        "timeout": int(os.getenv("PROXY_TIMEOUT", "4")),
     }
 }
 
