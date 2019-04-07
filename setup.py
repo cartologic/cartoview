@@ -1,7 +1,7 @@
 import os
 
 from setuptools import setup
-
+from setuptools import find_packages
 try:
     from pip._internal.req import parse_requirements
     from pip._internal.download import PipSession
@@ -32,7 +32,7 @@ documentation_extras = []
 setup(
     name='cartoview_2',
     version='0.0.2',
-    packages=['cartoview'],
+    packages=find_packages(),
     include_package_data=True,
     license='BSD',
     description='A GIS Web Mapping Application Market. Create, share, and visualize GIS Web Mapping Applications',
