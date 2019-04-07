@@ -10,7 +10,6 @@ except ImportError:
     from pip.download import PipSession
 CURRENT_FILE_PATH = os.path.abspath(__file__)
 CURRENT_DIR = os.path.dirname(CURRENT_FILE_PATH)
-session = PipSession()
 with open(os.path.join(os.path.dirname(__file__), 'README.md')) as readme:
     README = readme.read()
 
@@ -19,6 +18,7 @@ with open(os.path.join(os.path.dirname(__file__), 'README.md')) as readme:
 os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 # Package dependencies
+session = PipSession()
 install_reqs = parse_requirements(
     os.path.join(CURRENT_DIR, "requirements.txt"), session=session)
 reqs = [str(ir.req) for ir in install_reqs]
@@ -31,7 +31,7 @@ documentation_extras = []
 
 setup(
     name='cartoview_2',
-    version='0.0.2',
+    version=__import__('cartoview').__version__,
     packages=find_packages(),
     include_package_data=True,
     license='BSD',
