@@ -97,7 +97,6 @@ Unidecode==1.0.23
 uritemplate==3.0.0
 urllib3==1.24.1
 uvicorn==0.6.1
-uvloop==0.12.2
 wagtail==2.4
 wagtailgridder==0.9.30
 wagtailmenus==2.12
