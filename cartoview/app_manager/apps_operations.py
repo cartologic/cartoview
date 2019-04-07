@@ -26,13 +26,13 @@ class AppsHandler(object):
             app,
         ]
         apps = DEFAULT_APPS
-        apps_dir = getattr(settings, 'APPS_DIR', None)
+        apps_dir = getattr(settings, "APPS_DIR", None)
         _app_dir = os.path.join(apps_dir, app_name)
-        app_data_file = os.path.join(_app_dir, 'installer.json')
+        app_data_file = os.path.join(_app_dir, "installer.json")
         if os.path.exists(app_data_file) and os.access(app_data_file, os.R_OK):
-            with open(app_data_file, 'r') as f:
+            with open(app_data_file, "r") as f:
                 app_data = json.load(f)
-                apps = app_data.get('apps', DEFAULT_APPS)
+                apps = app_data.get("apps", DEFAULT_APPS)
         return apps
 
     def makemigrations(self, app_name):
@@ -52,7 +52,7 @@ class AppsHandler(object):
             call_command(
                 "collectstatic",
                 interactive=False,
-                ignore=['node_modules', '.git'])
+                ignore=["node_modules", ".git"])
 
     def execute_pending(self):
         from .config import CartoviewApp
@@ -62,9 +62,9 @@ class AppsHandler(object):
             _pending_apps = self.get_pending_apps(app.name)
             if _pending_apps:
                 for _app in _pending_apps:
-                    _app_name = _app.get('name', None)
-                    _make_migrations = _app.get('makemigrations', False)
-                    _migrate = _app.get('migrate', False)
+                    _app_name = _app.get("name", None)
+                    _make_migrations = _app.get("makemigrations", False)
+                    _migrate = _app.get("migrate", False)
                     if _app_name:
                         if _make_migrations:
                             self.makemigrations(_app_name)
@@ -79,7 +79,7 @@ class AppsHandler(object):
             CartoviewApp.save()
 
     def __call__(self):
-        apps_dir = getattr(settings, 'APPS_DIR', None)
+        apps_dir = getattr(settings, "APPS_DIR", None)
         if apps_dir and os.path.exists(apps_dir):
             self.execute_pending()
 

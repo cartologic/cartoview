@@ -148,7 +148,7 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},  # noqa
-    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},  # noqa
+    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
     {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},  # noqa
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},  # noqa
 ]
@@ -273,9 +273,9 @@ CARTOVIEW_CONNECTIONS = {
 CACHE_ENABLED = bool(os.getenv("CACHE_ENABLED", "True"))
 if CACHE_ENABLED:
     CACHES = {
-        'default': {
-            'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
-            'LOCATION': 'cartoview_cache',
+        "default": {
+            "BACKEND": "django.core.cache.backends.db.DatabaseCache",
+            "LOCATION": "cartoview_cache",
         }
     }
 
