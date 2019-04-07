@@ -37,6 +37,7 @@ setup(
     license='BSD',
     description='A GIS Web Mapping Application Market. Create, share, and visualize GIS Web Mapping Applications',
     long_description=README,
+    long_description_content_type='text/markdown',
     url='https://github.com/cartologic/cartoview_2/',
     author='cartologic',
     author_email='cartoview@cartologic.com',
