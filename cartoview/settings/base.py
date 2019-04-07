@@ -13,11 +13,11 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 import os
 import sys
 from cartoview.log_handler import get_logger
+
 logger = get_logger(__name__)
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 SETTINGS_DIR = os.path.dirname(os.path.abspath(__file__))
 BASE_DIR = os.path.dirname(SETTINGS_DIR)
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
@@ -29,7 +29,6 @@ SECRET_KEY = os.getenv("SECRET_KEY", "<secret_key>")
 DEBUG = bool(os.getenv("DEBUG", "True"))
 
 ALLOWED_HOSTS = eval(os.getenv("ALLOWED_HOSTS", '["*"]'))
-
 
 # Application definition
 
@@ -127,7 +126,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = os.getenv("WSGI_APPLICATION", "cartoview.wsgi.application")
 
-
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
@@ -142,7 +140,6 @@ DATABASES = {
     },
 }
 
-
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
 
@@ -152,7 +149,6 @@ AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},  # noqa
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},  # noqa
 ]
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/

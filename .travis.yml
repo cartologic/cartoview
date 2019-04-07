@@ -1,0 +1,17 @@
+language: python
+python:
+  - "3.6"
+# command to install dependencies
+install:
+  - pip install -r requirements.txt
+# command to run tests
+script:
+  - pytest
+deploy:
+  provider: pypi
+  on:
+    branch: master
+    tags: true
+  user: "cartologic"
+  password:
+    secure: v5ORRy9NsvQtQWQ9/rXJts1XgxeGCO5F3YjnZkzVB4mUS/zvud4Wy4hJq3bSQnfsoNwnIXUJ5nw9mRKKyEcAn7ULneOgmhYtrSkoq0cvFCG6LVhXDZ25m+TiP7ODpi5hIYfGgMrUsQF/3/lv36lxSHAAFuTM5/ZMoUW7vMdOa/6TDyyoWOfZgsB1ID3yZ3CyJEnPvw+ZbHr3GzZ8KKeVOSvIILppHL8ARdaQoln3dE7UMPcS1nHbxtvNnxtDcQmjCG0QfHuevOHaCOY6pC3rDqH1m9QsoV8NMdMwn4corb3nhPtC3hNIa2TYWpBYlDKSClYlfkhANtAwNVOfchM+ZT3x13+Amc+P6Mdb/e3Q4pKU4icQi2hemOn4mTLJoRMtjPLPPB3Gpv+rN34NUr0q4VT7MmiU7r8oKApVjH5q9O6eN5hQQnAVpfmqRWm1QQU0yLZoK6Jjn6HyFiOGOP7jCMu/2M7vUmi1S0tSZzk5vasbHO3zT4FB4qw84u7Q3b2aqSo1Go9Nv/jIIbtn1kB6brB03rVm92qo3cWkn4HHXQk2Fbi6zsP1edMXA6iWx4dbfx3aDIlWb3XHRKcWREsxnvWTGsdnscIuGLoG90gys2MzGgb8wuU2zhFGLUKmVnlTYaBRD0s4ymKyJR4pm+c/tCPlqUke42R0BmW+4TvhcAw=
