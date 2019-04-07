@@ -269,18 +269,22 @@ CARTOVIEW_CONNECTIONS = {
     }
 }
 
+# cache settings
+CACHE_ENABLED = bool(os.getenv("CACHE_ENABLED", "True"))
+if CACHE_ENABLED:
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
+            'LOCATION': 'cartoview_cache',
+        }
+    }
+
+
 try:
     from .local_settings import *  # noqa
 except BaseException as e:
     logger.error(str(e))
 
-# cache settings
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
-        'LOCATION': 'cartoview_cache',
-    }
-}
 
 STAND_ALONE = bool(os.getenv("STAND_ALONE", "True"))
 if STAND_ALONE:
