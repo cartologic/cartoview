@@ -129,8 +129,8 @@ documentation_extras = [
 
 setup(
     name='cartoview_2',
-    version='0.0.1',
-    packages=['cartoview_2'],
+    version='0.0.2',
+    packages=['cartoview'],
     include_package_data=True,
     license='BSD',
     description='A GIS Web Mapping Application Market. Create, share, and visualize GIS Web Mapping Applications',
