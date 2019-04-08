@@ -26,9 +26,9 @@ BASE_DIR = os.path.dirname(SETTINGS_DIR)
 SECRET_KEY = os.getenv("SECRET_KEY", "<secret_key>")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv("DEBUG", True)
+DEBUG = bool(os.getenv("DEBUG", "True"))
 
-ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", ["*"])
+ALLOWED_HOSTS = eval(os.getenv("ALLOWED_HOSTS", '["*"]'))
 
 # Application definition
 
@@ -145,7 +145,7 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},  # noqa
-    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},  # noqa
+    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
     {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},  # noqa
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},  # noqa
 ]
@@ -191,18 +191,16 @@ AUTHENTICATION_BACKENDS = (
     # `allauth` specific authentication methods, such as login by e-mail
     "allauth.account.auth_backends.AuthenticationBackend",
 )
-ACCOUNT_EMAIL_VERIFICATION = 'none'
-ANONYMOUS_USER_NAME = "AnonymousUser"
+ACCOUNT_EMAIL_VERIFICATION = os.getenv("ACCOUNT_EMAIL_VERIFICATION", "none")
+ANONYMOUS_USER_NAME = os.getenv("ANONYMOUS_USER_NAME", "AnonymousUser")
 GUARDIAN_RAISE_403 = True
-OAUTH_SERVER_BASEURL = "<BASE_SERVER_URL>"
-LOGIN_REDIRECT_URL = "/accounts/profile"
-ANONYMOUS_GROUP_NAME = "public"
+OAUTH_SERVER_BASEURL = os.get("OAUTH_SERVER_BASEURL", "<BASE_SERVER_URL>")
+LOGIN_REDIRECT_URL = os.get("LOGIN_REDIRECT_URL", "/accounts/profile")
+ANONYMOUS_GROUP_NAME = os.getenv("ANONYMOUS_GROUP_NAME", "public")
 
-WAGTAIL_SITE_NAME = "Cartoview"
+WAGTAIL_SITE_NAME = os.getenv("WAGTAIL_SITE_NAME", "Cartoview")
 SITE_ID = 1
 
-# apps settings
-APPS_DIR = os.path.join(BASE_DIR, os.pardir, "cartoview_apps")
 # django rest framework settings
 REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
@@ -263,44 +261,49 @@ CARTOVIEW_CONNECTIONS = {
             "Accept": "*",
             "Accept-Language": "*",
         },
-        "timeout": 5,
+        "timeout": int(os.getenv("PROXY_TIMEOUT", "4")),
     }
 }
-# django cache settings
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
-        'LOCATION': 'cartoview_cache',
+
+# cache settings
+CACHE_ENABLED = bool(os.getenv("CACHE_ENABLED", "True"))
+if CACHE_ENABLED:
+    CACHES = {
+        "default": {
+            "BACKEND": "django.core.cache.backends.db.DatabaseCache",
+            "LOCATION": "cartoview_cache",
+        }
     }
-}
+
 
 try:
     from .local_settings import *  # noqa
 except BaseException as e:
     logger.error(str(e))
 
-# NOTE: load cartoview apps
-if APPS_DIR not in sys.path:
-    sys.path.append(APPS_DIR)
-from cartoview.app_manager.config import CartoviewApp  # noqa
 
-CartoviewApp.load(apps_dir=APPS_DIR)
-for app in CartoviewApp.objects.get_active_apps().values():
-    try:
-        # ensure that the folder is python module
-        app_module = __import__(app.name)
-        app_dir = os.path.dirname(app_module.__file__)
-        app_settings_file = os.path.join(app_dir, "settings.py")
-        libs_dir = os.path.join(app_dir, "libs")
-        if os.path.exists(app_settings_file):
-            app_settings_file = os.path.realpath(app_settings_file)
-            exec (open(app_settings_file).read())
-        if os.path.exists(libs_dir) and libs_dir not in sys.path:
-            sys.path.append(libs_dir)
-        if app.name not in INSTALLED_APPS:
-            INSTALLED_APPS += (app.name.__str__(),)
-    except Exception as e:
-        logger.error(str(e))
-
-if os.path.isfile('local_settings.py'):
-    from .local_settings import *
+STAND_ALONE = bool(os.getenv("STAND_ALONE", "True"))
+if STAND_ALONE:
+    # apps settings
+    APPS_DIR = os.path.join(BASE_DIR, os.pardir, "cartoview_apps")
+    # NOTE: load cartoview apps
+    if APPS_DIR not in sys.path:
+        sys.path.append(APPS_DIR)
+    from cartoview.app_manager.config import CartoviewApp  # noqa
+    CartoviewApp.load(apps_dir=APPS_DIR)
+    for app in CartoviewApp.objects.get_active_apps().values():
+        try:
+            # ensure that the folder is python module
+            app_module = __import__(app.name)
+            app_dir = os.path.dirname(app_module.__file__)
+            app_settings_file = os.path.join(app_dir, "settings.py")
+            libs_dir = os.path.join(app_dir, "libs")
+            if os.path.exists(app_settings_file):
+                app_settings_file = os.path.realpath(app_settings_file)
+                exec(open(app_settings_file).read())
+            if os.path.exists(libs_dir) and libs_dir not in sys.path:
+                sys.path.append(libs_dir)
+            if app.name not in INSTALLED_APPS:
+                INSTALLED_APPS += (app.name.__str__(), )
+        except Exception as e:
+            logger.error(str(e))
