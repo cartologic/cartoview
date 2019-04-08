@@ -1,0 +1,3 @@
+include requirements.txt
+include README.md LICENSE
+recursive-include cartoview *.py *.html *.js *.css *.scss *.png
