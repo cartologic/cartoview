@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 import os
 import sys
 from cartoview.log_handler import get_logger
-
+from distutils.util import strtobool
 logger = get_logger(__name__)
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 SETTINGS_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -26,7 +26,7 @@ BASE_DIR = os.path.dirname(SETTINGS_DIR)
 SECRET_KEY = os.getenv("SECRET_KEY", "<secret_key>")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = bool(os.getenv("DEBUG", "True"))
+DEBUG = strtobool(os.getenv("DEBUG", "True"))
 
 ALLOWED_HOSTS = eval(os.getenv("ALLOWED_HOSTS", '["*"]'))
 
@@ -266,7 +266,7 @@ CARTOVIEW_CONNECTIONS = {
 }
 
 # cache settings
-CACHE_ENABLED = bool(os.getenv("CACHE_ENABLED", "True"))
+CACHE_ENABLED = strtobool(os.getenv("CACHE_ENABLED", "True"))
 if CACHE_ENABLED:
     CACHES = {
         "default": {
@@ -275,17 +275,11 @@ if CACHE_ENABLED:
         }
     }
 
-
-try:
-    from .local_settings import *  # noqa
-except BaseException as e:
-    logger.error(str(e))
-
-
-STAND_ALONE = bool(os.getenv("STAND_ALONE", "True"))
+# apps settings
+APPS_DIR = os.path.join(BASE_DIR, os.pardir, "cartoview_apps")
+STAND_ALONE = strtobool(os.getenv("STAND_ALONE", "False"))
 if STAND_ALONE:
-    # apps settings
-    APPS_DIR = os.path.join(BASE_DIR, os.pardir, "cartoview_apps")
+
     # NOTE: load cartoview apps
     if APPS_DIR not in sys.path:
         sys.path.append(APPS_DIR)
@@ -307,3 +301,7 @@ if STAND_ALONE:
                 INSTALLED_APPS += (app.name.__str__(), )
         except Exception as e:
             logger.error(str(e))
+try:
+    from .local_settings import *  # noqa
+except BaseException as e:
+    logger.error(str(e))
