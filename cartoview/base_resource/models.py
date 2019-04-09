@@ -9,6 +9,7 @@ class BaseModel(models.Model):
         null=True, blank=True, default=_("No Description Provided"))
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    thumbnail = models.ImageField(null=True, blank=True)
 
     class Meta:
         ordering = ('title', '-created_at', '-updated_at')
