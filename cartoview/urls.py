@@ -14,7 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.conf import settings
-from django.conf.urls.i18n import i18n_patterns
+# from django.conf.urls.i18n import i18n_patterns
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path, re_path
@@ -24,11 +24,10 @@ from cartoview.geonode_oauth import views as geonode_oauth_views
 
 from .views import IndexView
 
-urlpatterns = i18n_patterns(
+urlpatterns = [
     path("django-admin/", admin.site.urls),
     re_path(r"^admin/", include('wagtail.admin.urls')),
-)
-urlpatterns += [
+    re_path(r'^i18n/', include('django.conf.urls.i18n')),
     re_path(r"^$", IndexView.as_view(), name='index'),
     re_path(r"^accounts/", include("allauth.urls")),
     re_path(r"^accounts/profile$", geonode_oauth_views.ProfileView.as_view()),
@@ -40,6 +39,10 @@ urlpatterns += [
     path('api-token-auth/', obtain_auth_token, name='api_token_auth'),
     re_path(r"^sites", include('wagtail.core.urls'), name='sites')
 ]
+# urlpatterns = i18n_patterns(
+#     path("django-admin/", admin.site.urls),
+#     re_path(r"^admin/", include('wagtail.admin.urls')),
+# )
 # django static serve static production
 # from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 # urlpatterns += staticfiles_urlpatterns()
