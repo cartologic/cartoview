@@ -161,5 +161,5 @@ def invalidate_appinstance_cache(sender, instance, **kwargs):
 def add_default_user_group(sender, instance, **kwargs):
     created = kwargs.get("created")
     if created:
-        public_group = Group.objects.get(name="public")
+        public_group, _ = Group.objects.get_or_create(name="public")
         instance.groups.add(public_group)
