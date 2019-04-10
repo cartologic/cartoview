@@ -1,0 +1,19 @@
+{% load wagtailcore_tags wagtailimages_tags i18n %}
+
+<div class="page-header header-filter" data-parallax="true"
+     style='background-image: url("{{ value.background_image.file.url }}")'>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <h1 class="title">{{ value.main_text }}</h1>
+                {{ value.body_text|richtext }}
+                <br>
+                {% for single_item in self.links %}
+                    <a href="{{ single_item.link }}" target="_blank" class="btn btn-{{ single_item.theme }} btn-raised btn-lg">
+                        {% if single_item.icon %}<i class="fa fa-{{ single_item.icon }}"></i>&nbsp;{% endif %} {{ single_item.text }}
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
