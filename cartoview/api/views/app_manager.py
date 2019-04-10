@@ -4,16 +4,19 @@ from pkg_resources import parse_version
 from rest_framework import permissions, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from ..permissions import IsOwnerOrReadOnly
+
 from cartoview.app_manager.exceptions import AppAlreadyInstalledException
 from cartoview.app_manager.installer import AppInstaller
-from cartoview.app_manager.models import App, AppInstance, AppStore, AppType
+from cartoview.app_manager.models import (App, AppInstance, AppStore, AppType,
+                                          Bookmark)
 from cartoview.log_handler import get_logger
 
-from ..permissions import AppPermission
-from ..serializers.app_manager import (AppInstanceSerializer, AppSerializer,
-                                       AppStoreSerializer, AppTypeSerializer)
 from ..filters import AppFilter, AppInstanceFilter
+from ..permissions import AppPermission, IsOwnerOrReadOnly
+from ..serializers.app_manager import (AppInstanceSerializer, AppSerializer,
+                                       AppStoreSerializer, AppTypeSerializer,
+                                       BookmarkSerializer)
+
 logger = get_logger(__name__)
 
 
@@ -34,6 +37,15 @@ class AppInstanceViewSet(viewsets.ModelViewSet):
     serializer_class = AppInstanceSerializer
     filterset_class = AppInstanceFilter
     permission_classes = (IsOwnerOrReadOnly,)
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
+
+
+class BookmarkViewSet(viewsets.ModelViewSet):
+    queryset = Bookmark.objects.all()
+    serializer_class = BookmarkSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
