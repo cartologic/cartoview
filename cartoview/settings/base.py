@@ -14,6 +14,7 @@ import os
 import sys
 from cartoview.log_handler import get_logger
 from distutils.util import strtobool
+
 logger = get_logger(__name__)
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 SETTINGS_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -65,12 +66,13 @@ INSTALLED_APPS = [
     "wagtail.search",
     "wagtail.admin",
     "wagtail.core",
-    "wagtailgridder",
     "wagtail.contrib.modeladmin",
     "wagtailmenus",
     "wagtail.contrib.styleguide",
     "modelcluster",
     "taggit",
+    'wagtailfontawesome',
+    'wagtail_blocks',
 
     # django guardian
     "guardian",
@@ -83,6 +85,7 @@ INSTALLED_APPS = [
     "cartoview.connections",
     "cartoview.layers",
     "cartoview.maps",
+    "cartoview.cms",
 ]
 
 # channels settings
@@ -285,6 +288,7 @@ if STAND_ALONE:
     if APPS_DIR not in sys.path:
         sys.path.append(APPS_DIR)
     from cartoview.app_manager.config import CartoviewApp  # noqa
+
     CartoviewApp.load(apps_dir=APPS_DIR)
     for app in CartoviewApp.objects.get_active_apps().values():
         try:
@@ -295,11 +299,11 @@ if STAND_ALONE:
             libs_dir = os.path.join(app_dir, "libs")
             if os.path.exists(app_settings_file):
                 app_settings_file = os.path.realpath(app_settings_file)
-                exec(open(app_settings_file).read())
+                exec (open(app_settings_file).read())
             if os.path.exists(libs_dir) and libs_dir not in sys.path:
                 sys.path.append(libs_dir)
             if app.name not in INSTALLED_APPS:
-                INSTALLED_APPS += (app.name.__str__(), )
+                INSTALLED_APPS += (app.name.__str__(),)
         except Exception as e:
             logger.error(str(e))
 # file uploads settings

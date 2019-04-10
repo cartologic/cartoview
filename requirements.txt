@@ -15,6 +15,7 @@ cffi==1.12.2
 channels==2.1.7
 chardet==3.0.4
 Click==7.0
+colorama==0.4.1
 constantly==15.1.0
 coreapi==2.3.3
 coreschema==0.0.4
@@ -76,10 +77,14 @@ pycparser==2.19
 pyflakes==2.0.0
 Pygments==2.3.1
 PyHamcrest==1.9.0
+pyperclip==1.7.0
+pypiwin32==223
 pyproj==1.9.6
 python-dateutil==2.8.0
+python-dotenv==0.10.1
 python3-openid==3.1.0
 pytz==2018.7
+pywin32==224
 PyYAML==5.1
 redis==3.2.1
 requests==2.20.1
@@ -91,6 +96,7 @@ six==1.12.0
 sqlparse==0.3.0
 toml==0.10.0
 traitlets==4.3.2
+travis-encrypt==1.2.3
 Twisted==18.9.0
 txaio==18.8.1
 Unidecode==1.0.23
@@ -98,7 +104,8 @@ uritemplate==3.0.0
 urllib3==1.24.1
 uvicorn==0.6.1
 wagtail==2.4
-wagtailgridder==0.9.30
+wagtail-blocks==0.6.6
+wagtailfontawesome==1.1.4
 wagtailmenus==2.12
 wcwidth==0.1.7
 webencodings==0.5.1

@@ -1,0 +1,53 @@
+{% load wagtailcore_tags wagtailimages_tags i18n %}
+
+<nav class="navbar navbar-transparent navbar-color-on-scroll fixed-top navbar-expand-lg" color-on-scroll="100"
+     id="sectionsNav">
+    <div class="container">
+        <div class="navbar-translate">
+            <a class="navbar-brand" href="#">
+                <div class="logo-image">
+                    <img src="{{ value.logo.file.url }}" style="height: 46px;overflow: hidden;margin-top: -6px;" class="img-fluid" alt="{{ value.logo_text }}">
+                </div>
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="navbar-toggler-icon"></span>
+                <span class="navbar-toggler-icon"></span>
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav ml-auto">
+                {% if not user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'account_login' %}">
+                            <i class="material-icons">person</i> {% trans "Login" %}
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="dropdown nav-item">
+                        <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
+                            <i class="material-icons">person</i> {{ request.user.username }}
+                        </a>
+                        <div class="dropdown-menu dropdown-with-icons">
+                            <div hidden>
+                                <form id="logoutform" class="form-inline ml-auto" method="post"
+                                      action="{% url 'account_logout' %}">
+                                    {% csrf_token %}
+                                    {% if redirect_field_value %}
+                                        <input type="hidden" name="{{ redirect_field_name }}"
+                                               value="{{ redirect_field_value }}"/>
+                                    {% endif %}
+                                </form>
+                            </div>
+                            <a href="#" class="dropdown-item" onclick="document.getElementById('logoutform').submit()">
+                                <i class="material-icons">exit_to_app</i> {% trans "Logout" %}
+                            </a>
+                        </div>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>

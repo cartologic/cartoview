@@ -1,0 +1,40 @@
+{% extends 'cms/base_cms.html' %}
+{% load wagtailcore_tags %}
+
+{% block navbar %}
+    {% for body_block in page.body %}
+        {% if body_block.block_type == 'navigation_bar' %}
+            {% include_block body_block with block_id=body_block.id %}
+        {% endif %}
+    {% endfor %}
+{% endblock navbar %}
+
+
+{% block main_header %}
+    {% for body_block in page.body %}
+        {% if body_block.block_type == 'hero_area' %}
+            {% include_block body_block with block_id=body_block.id %}
+        {% endif %}
+    {% endfor %}
+{% endblock main_header %}
+
+
+{% block footer %}
+    {% for body_block in page.body %}
+        {% if body_block.block_type == 'footer' %}
+            {% include_block body_block with block_id=body_block.id %}
+        {% endif %}
+    {% endfor %}
+{% endblock footer %}
+
+
+{% block content %}
+    {% if not page.body %}
+        {% include 'cms/empty_page.html' %}
+    {% endif %}
+    {% for body_block in page.body %}
+        {% if body_block.block_type != 'navigation_bar' and body_block.block_type != 'hero_area' and body_block.block_type != 'footer' %}
+            {% include_block body_block with block_id=body_block.id %}
+        {% endif %}
+    {% endfor %}
+{% endblock content %}
