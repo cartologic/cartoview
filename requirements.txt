@@ -78,7 +78,6 @@ pyflakes==2.0.0
 Pygments==2.3.1
 PyHamcrest==1.9.0
 pyperclip==1.7.0
-pypiwin32==223
 pyproj==1.9.6
 python-dateutil==2.8.0
 python-dotenv==0.10.1
