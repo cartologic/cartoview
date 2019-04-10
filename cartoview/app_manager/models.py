@@ -111,6 +111,8 @@ class AppInstance(BaseModel):
         App, related_name="instances", on_delete=models.CASCADE)
 
     config = JSONField(default=None, null=True, blank=True)
+    owner = models.ForeignKey(
+        get_user_model(), null=True, blank=True, on_delete=models.SET_NULL)
 
     def __str__(self):
         return self.title

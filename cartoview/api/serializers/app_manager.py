@@ -2,6 +2,7 @@
 from rest_framework import serializers
 
 from cartoview.app_manager.models import App, AppInstance, AppStore, AppType
+from cartoview.maps.models import Map
 
 
 class AppTypeSerializer(serializers.ModelSerializer):
@@ -32,6 +33,8 @@ class AppSerializer(serializers.ModelSerializer):
 
 class AppInstanceSerializer(serializers.ModelSerializer):
     map_url = serializers.CharField(read_only=True)
+    app_map = serializers.PrimaryKeyRelatedField(queryset=Map.objects.all())
+    owner = serializers.StringRelatedField(many=False, read_only=False)
 
     class Meta:
         model = AppInstance

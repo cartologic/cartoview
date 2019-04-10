@@ -4,7 +4,7 @@ from pkg_resources import parse_version
 from rest_framework import permissions, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
-
+from ..permissions import IsOwnerOrReadOnly
 from cartoview.app_manager.exceptions import AppAlreadyInstalledException
 from cartoview.app_manager.installer import AppInstaller
 from cartoview.app_manager.models import App, AppInstance, AppStore, AppType
@@ -28,17 +28,15 @@ class AppTypeViewSet(viewsets.ModelViewSet):
     serializer_class = AppTypeSerializer
     permission_classes = (permissions.IsAdminUser,)
 
-    def perform_create(self, serializer):
-        serializer.save(installed_by=self.request.user)
-
 
 class AppInstanceViewSet(viewsets.ModelViewSet):
     queryset = AppInstance.objects.all().prefetch_related("app_map")
     serializer_class = AppInstanceSerializer
     filterset_class = AppInstanceFilter
+    permission_classes = (IsOwnerOrReadOnly,)
 
     def perform_create(self, serializer):
-        serializer.save(installed_by=self.request.user)
+        serializer.save(owner=self.request.user)
 
 
 class AppViewSet(viewsets.ModelViewSet):
