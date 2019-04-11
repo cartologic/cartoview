@@ -1,32 +1,40 @@
 {% extends 'cartoview/base.html' %}
-{% load crispy_forms_tags i18n socialaccount %}
-{% block content %}
-<div class="row justify-content-md-center align-items-center no-gutters inherit-height">
-  <div class="col-md-4 col-sm-8 center">
-    <div class="row">
-      <div class="col">
-        <h3 class="text-center">{% trans "Login" %}</h3>
-        <form method="post">
-          {% csrf_token %}
-          {{ form|crispy }}
-          <button class="btn btn-block btn-primary" type="submit">{% trans "Login" %}</button>
-        </form>
-      </div>
-    </div>
-    <hr>
-    <div class="row">
-      <div class="col">
-        <h6 class="text-center">{% trans "Login With" %}</h6>
-        <div class="text-center">
-          <a href='{% provider_login_url "geonodeprovider" %}' class="btn btn-primary btn-sm">{% trans "Geonode" %}</a>
+{% load crispy_forms_tags i18n socialaccount static %}
+{% block hero_area %}
+    <div class="page-header header-filter"
+         style='background-image: url("{% static 'material-kit/assets/img/bg7.jpg' %}"); background-size: cover; background-position: top center;'>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 col-md-6 ml-auto mr-auto">
+                    <div class="card card-login">
+                        <form class="form" method="" action="">
+                            <div class="card-header card-header-info text-center">
+                                <div class="row">
+                                    <div class="col-3">
+                                        <a href="/" class="btn btn-info"><i class="material-icons">home</i></a>
+                                    </div>
+                                    <div class="col-6">
+                                        <h4 class="card-title">Login</h4>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <form method="post">
+                                    {% csrf_token %}
+                                    {{ form|crispy }}
+                                    <button class="btn btn-block btn-info"
+                                            type="submit">{% trans "Get Started" %}</button>
+                                </form>
+                                <h6 class="text-center">{% trans "Or Login With" %}</h6>
+                                <div class="text-center">
+                                    <a href='{% provider_login_url "geonodeprovider" %}'
+                                       class="btn btn-info btn-sm disabled">{% trans "Geonode" %}</a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-    <div class="row">
-      <div class="col text-center">
-        <a href='{% url "account_signup" %}' class="">{% trans "Signup" %}</a>
-      </div>
-    </div>
-  </div>
-</div>
 {% endblock %}
