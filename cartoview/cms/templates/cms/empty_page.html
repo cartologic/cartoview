@@ -1,60 +1,14 @@
-{% extends 'cartoview/base.html' %}
 {% load static %}
 
-{% block navbar %}
-    <nav class="navbar navbar-transparent navbar-color-on-scroll fixed-top navbar-expand-lg" color-on-scroll="100"
-         id="sectionsNav">
-        <div class="container">
-            <div class="navbar-translate">
-                <a class="navbar-brand" href="/"></a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" aria-expanded="false"
-                        aria-label="Toggle navigation">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="navbar-toggler-icon"></span>
-                    <span class="navbar-toggler-icon"></span>
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-            </div>
-            <div class="collapse navbar-collapse">
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" rel="tooltip" title="" data-placement="bottom" href="#" target="_blank"
-                           data-original-title="Follow us on Twitter">
-                            <i class="fa fa-twitter"></i>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" rel="tooltip" title="" data-placement="bottom" href="#" target="_blank"
-                           data-original-title="Like us on Facebook">
-                            <i class="fa fa-facebook-square"></i>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" rel="tooltip" title="" data-placement="bottom" href="#" target="_blank"
-                           data-original-title="Follow us on Instagram">
-                            <i class="fa fa-instagram"></i>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-{% endblock navbar %}
 {% block hero_area %}
-
     <div class="page-header header-filter" data-parallax="true"
-         style='background-image: url("{% static 'material-kit/assets/img/profile_city.jpg' %}")'>
+         style='background-image: url("{% static 'material-kit/assets/img/bg6.jpg' %}")'>
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
                     <h1 class="title">No Content Yet!</h1>
-                    <h4>
-                        It looks like you haven't created any content yet.
-                        Start by customizing your homepage
-                    </h4>
-                    <br>
                     <a href="http://localhost:8000/admin/" class="btn btn-warning btn-raised btn-lg">
-                        <i class="fa fa-map-marker"></i>&nbsp; Add Content
+                        <i class="fa fa-map-marker"></i>&nbsp; Start Adding Content
                     </a>
                 </div>
                 <div class="col-md-12">
@@ -62,13 +16,12 @@
                     <h4>Cartoview is a GIS Web Mapping Application Market.
                         Create, share, and visualize GIS Web Mapping Applications very easily and very quickly from the
                         browser without programming.</h4>
-                    <br>
                     <a href="http://demo.cartoview.net" target="_blank" class="btn btn-info btn-raised btn-lg">
-                        <i class="fa fa-play"></i>&nbsp; Demo
+                        <i class="fa fa-play"></i>&nbsp; Try
                     </a>
                     <a href="https://www.youtube.com/watch?v=jabrF9tQViM" target="_blank"
                        class="btn btn-danger btn-raised btn-lg">
-                        <i class="fa fa-video-camera"></i>&nbsp; Watch it
+                        <i class="fa fa-video-camera"></i>&nbsp; Demo
                     </a>
                 </div>
             </div>
@@ -77,13 +30,19 @@
                     made with <i class="material-icons">favorite</i> by <b>Cartologic</b> for a better web
                 </div>
             </div>
+            <div class="row" style="margin-top: 20px;">
+                <div class="col-12">
+                    <a href="https://www.linkedin.com/company/cartologic/" target="_blank" class="btn btn-info btn-fab btn-round">
+                        <i class="fa fa-linkedin"></i>
+                    </a>
+                    <a href="https://www.facebook.com/Cartologic" target="_blank" class="btn btn-info btn-fab btn-round">
+                        <i class="fa fa-facebook"></i>
+                    </a>
+                    <a href="https://github.com/cartologic" target="_blank" class="btn btn-info btn-fab btn-round">
+                        <i class="fa fa-github"></i>
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
 {% endblock hero_area %}
-
-
-{% block extra_js %}
-<!--   Core JS Files   -->
-<script src="{% static 'material-kit/assets/js/material-kit.js' %}" type="text/javascript"></script>
-
-{% endblock extra_js %}

@@ -5,24 +5,6 @@ from wagtail.images.blocks import ImageChooserBlock
 from .IconChoiceBlock import IconChoiceBlock
 
 
-class NavigationBarBlock(blocks.StructBlock):
-    logo = ImageChooserBlock(
-        label='Logo',
-        required=False,
-    )
-    logo_text = blocks.CharBlock(
-        label='Logo Text',
-        default='Logo',
-        help_text='Visible if no Logo',
-        required=False,
-        max_length=120,
-    )
-
-    class Meta:
-        template = 'cms/blocks/navigation_bar.html'
-        icon = "fa-server"
-
-
 class ThemeChoiceBlock(blocks.ChoiceBlock):
     choices = (
         ('primary', 'Primary'),
