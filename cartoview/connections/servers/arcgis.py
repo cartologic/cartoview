@@ -23,7 +23,7 @@ class ArcGISLayer(BaseServer):
     def get_projection(self, data):
         projection_number = None
         try:
-            srs = data["extent"]["spatialReference"]
+            srs = data["fullExtent"]["spatialReference"]
             if "latestWkid" in srs:
                 projection_number = srs["latestWkid"]
             elif srs["wkid"] == 102100:
@@ -34,12 +34,12 @@ class ArcGISLayer(BaseServer):
         return "EPSG:{}".format(projection_number)
 
     def get_extent(self, data):
-        extent = data["extent"]
+        extent = data["fullExtent"]
         return list(extent.values())[:4]
 
     def layer_dict(self, layer_json):
         extra = layer_json
-        title = name = extra.pop('name')
+        title = name = extra.pop('mapName')
         abstract = extra.pop('description')
         data = {"extra": extra,
                 "description": abstract,
@@ -74,4 +74,4 @@ class ArcGISLayer(BaseServer):
 
     @property
     def operations(self):
-        return list()
+        return dict()
