@@ -47,10 +47,14 @@ class AppInstanceSerializer(serializers.ModelSerializer):
     bookmarks = BookmarkSerializer(many=True)
 
     def create(self, validated_data):
+        user = None
+        request = self.context.get("request")
+        if request and hasattr(request, "user"):
+            user = request.user
         bookmarks_data = validated_data.pop('bookmarks')
         appinstance = AppInstance.objects.create(**validated_data)
         for bookmark_data in bookmarks_data:
-            bookmark = Bookmark.objects.create(**bookmark_data)
+            bookmark = Bookmark.objects.create(owner=user, **bookmark_data)
             appinstance.bookmarks.add(bookmark)
         return appinstance
 
