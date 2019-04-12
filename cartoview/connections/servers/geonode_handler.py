@@ -10,6 +10,7 @@ class GeoNode(BaseServer):
     def get_layers_model(self, layer):
         filtered = {}
         filtered['title'] = layer.pop('title', None)
+        print(filtered['title'])
         filtered['description'] = layer.pop('abstract', None)
         filtered['name'] = layer.pop('name', None)
         filtered['projection'] = layer.pop('srid', None)
@@ -23,6 +24,25 @@ class GeoNode(BaseServer):
     def crewl_layer_details(self, obj, clearedurl):
         response = self.session.get(clearedurl + '/' + str(obj['id']))
         return self.get_layers_model(response.json())
+
+    # def fetch_layers(self, url, filteredobjects):
+    #     parsedurl = urlparse(self.url)
+    #     clearedurl = parsedurl.scheme + '://' + parsedurl.netloc + parsedurl.path
+    #     response = self.session.get(url)
+    #     if response.status_code == requests.codes['ok']:
+    #         layers = response.json()
+    #         objects = layers.get('objects', [])
+    #         for obj in objects:
+    #             filteredobjects.append(self.crewl_layer_details(obj, clearedurl))
+    #         meta = layers.get('meta', None)
+    #         if meta.get('next', None):
+    #             url = parsedurl.scheme + '://' + parsedurl.netloc + meta['next']
+    #             print(url)
+    #             self.fetch_layers(url, filteredobjects)
+    #         else:
+    #             print(type(filteredobjects))
+    #             print(len(filteredobjects))
+    #     return filteredobjects
 
     def get_layers(self, url, filteredobjects):
         parsedurl = urlparse(self.url)
