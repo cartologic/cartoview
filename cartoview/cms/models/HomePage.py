@@ -1,7 +1,6 @@
 from django.utils.safestring import mark_safe
 from wagtail.admin.edit_handlers import StreamFieldPanel
 from wagtail.core import blocks
-from wagtail.core.blocks import StreamBlock
 from wagtail.core.fields import StreamField
 from wagtail.core.models import Page
 from wagtail_blocks.blocks import HeaderBlock, ImageTextOverlayBlock, CroppedImagesWithTextBlock, \
@@ -13,7 +12,7 @@ from .Blocks import HeroAreaBlock
 class HomePage(Page):
     hero = StreamField([
         ('hero_area', HeroAreaBlock()),
-        ], blank=True, null=True, help_text=mark_safe("You should add nly <b>1 Hero</b>"))
+        ], blank=True, null=True, help_text=mark_safe("You should add only <b>1 Hero</b>"))
     body = StreamField([
         ('grid', GridBlock()),
         ('header', HeaderBlock()),

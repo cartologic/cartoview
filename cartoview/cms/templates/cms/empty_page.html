@@ -1,8 +1,10 @@
 {% load static %}
+{% load cms_utils %}
+{% get_empty_image as empty_image %}
 
 {% block hero_area %}
     <div class="page-header header-filter" data-parallax="true"
-         style='background-image: url("{% static 'material-kit/assets/img/bg6.jpg' %}")'>
+         style='background-image: url("{% static empty_image %}")'>
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
