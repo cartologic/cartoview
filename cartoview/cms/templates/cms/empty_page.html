@@ -1,0 +1,50 @@
+{% load static %}
+{% load cms_utils %}
+{% get_empty_image as empty_image %}
+
+{% block hero_area %}
+    <div class="page-header header-filter" data-parallax="true"
+         style='background-image: url("{% static empty_image %}")'>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <h1 class="title">No Content Yet!</h1>
+                    <a href="http://localhost:8000/admin/" class="btn btn-warning btn-raised btn-lg">
+                        <i class="fa fa-map-marker"></i>&nbsp; Start Adding Content
+                    </a>
+                </div>
+                <div class="col-md-12">
+                    <h1 class="title">Cartoview</h1>
+                    <h4>Cartoview is a GIS Web Mapping Application Market.
+                        Create, share, and visualize GIS Web Mapping Applications very easily and very quickly from the
+                        browser without programming.</h4>
+                    <a href="http://demo.cartoview.net" target="_blank" class="btn btn-info btn-raised btn-lg">
+                        <i class="fa fa-play"></i>&nbsp; Try
+                    </a>
+                    <a href="https://www.youtube.com/watch?v=jabrF9tQViM" target="_blank"
+                       class="btn btn-danger btn-raised btn-lg">
+                        <i class="fa fa-video-camera"></i>&nbsp; Demo
+                    </a>
+                </div>
+            </div>
+            <div class="row" style="margin-top: 20px;">
+                <div class="col-12">
+                    made with <i class="material-icons">favorite</i> by <b>Cartologic</b> for a better web
+                </div>
+            </div>
+            <div class="row" style="margin-top: 20px;">
+                <div class="col-12">
+                    <a href="https://www.linkedin.com/company/cartologic/" target="_blank" class="btn btn-info btn-fab btn-round">
+                        <i class="fa fa-linkedin"></i>
+                    </a>
+                    <a href="https://www.facebook.com/Cartologic" target="_blank" class="btn btn-info btn-fab btn-round">
+                        <i class="fa fa-facebook"></i>
+                    </a>
+                    <a href="https://github.com/cartologic" target="_blank" class="btn btn-info btn-fab btn-round">
+                        <i class="fa fa-github"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock hero_area %}

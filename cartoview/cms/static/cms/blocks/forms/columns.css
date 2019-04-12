@@ -1,0 +1,76 @@
+/* Patch nested streamfields */
+.sequence-member:hover,
+.sequence-container:hover {
+  /* From this */
+  /* To this */
+}
+.sequence-member:hover .sequence-controls,
+.sequence-member:hover .stream-menu-closed,
+.sequence-container:hover .sequence-controls,
+.sequence-container:hover .stream-menu-closed {
+  opacity: 0;
+  visibility: hidden;
+}
+.sequence-member:hover > .sequence-controls,
+.sequence-member:hover > .stream-menu-closed,
+.sequence-container:hover > .sequence-controls,
+.sequence-container:hover > .stream-menu-closed {
+  opacity: 1;
+  visibility: visible;
+}
+
+li.sequence-member .columns-block.struct-block {
+  padding-top: 1em;
+  margin-left: -50px;
+  margin-right: -50px;
+}
+li.sequence-member .columns-block.struct-block > .fields {
+  display: flex;
+  flex-wrap: wrap;
+  float: none;
+  width: 100%;
+}
+li.sequence-member .columns-block.struct-block > .fields > li {
+  width: 100%;
+  min-width: 400px;
+  flex: 1;
+}
+li.sequence-member .columns-block.struct-block > .fields > li > label {
+  display: none;
+  color: #43b1b0;
+  font-weight: 400;
+  text-transform: uppercase;
+  width: 100%;
+  padding: 5px;
+  position: absolute;
+  top: -22px;
+}
+li.sequence-member .columns-block.struct-block > .fields > li:hover > label {
+  display: block;
+}
+li.sequence-member .columns-block.struct-block > .fields > li > .sequence-container {
+  width: 100%;
+  height: 100%;
+  min-height: 50px;
+}
+li.sequence-member .columns-block.struct-block > .fields > li > .sequence-container .sequence-member {
+  border-top: 1px solid transparent;
+  border-bottom: 1px solid transparent;
+}
+li.sequence-member .columns-block.struct-block > .fields > li > .sequence-container .sequence-member > .sequence-member-inner {
+  padding-left: 50px;
+  padding-right: 50px;
+}
+li.sequence-member .columns-block.struct-block > .fields > li > .sequence-container .sequence-member .stream-menu-inner {
+  margin-left: 1em;
+  margin-right: 1em;
+}
+li.sequence-member .columns-block.struct-block > .fields > li > .sequence-container .sequence-member:hover {
+  border-color: #ccf1f1;
+}
+li.sequence-member .columns-block.struct-block > .fields > li > .sequence-container .richtext {
+  border: 0;
+  padding: 0;
+  background-color: transparent;
+  max-width: 1024px;
+}

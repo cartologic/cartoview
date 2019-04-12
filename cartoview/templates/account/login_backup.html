@@ -1,0 +1,32 @@
+{% extends 'cartoview/base.html' %}
+{% load crispy_forms_tags i18n socialaccount %}
+{% block content %}
+<div class="row justify-content-md-center align-items-center no-gutters inherit-height">
+  <div class="col-md-4 col-sm-8 center">
+    <div class="row">
+      <div class="col">
+        <h3 class="text-center">{% trans "Login" %}</h3>
+        <form method="post">
+          {% csrf_token %}
+          {{ form|crispy }}
+          <button class="btn btn-block btn-primary" type="submit">{% trans "Login" %}</button>
+        </form>
+      </div>
+    </div>
+    <hr>
+    <div class="row">
+      <div class="col">
+        <h6 class="text-center">{% trans "Login With" %}</h6>
+        <div class="text-center">
+          <a href='{% provider_login_url "geonodeprovider" %}' class="btn btn-primary btn-sm">{% trans "Geonode" %}</a>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col text-center">
+        <a href='{% url "account_signup" %}' class="">{% trans "Signup" %}</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,8 @@
+include requirements.txt
+include README.md LICENSE
+recursive-include cartoview *.py *.html *.js *.css *.scss *.png *.jpg
+recursive-include cartoview/app_manager/fixtures *
+recursive-include cartoview/static *
+recursive-include cartoview/templates *
+recursive-include cartoview/app_manager/static *
+recursive-include cartoview/app_manager/templates *

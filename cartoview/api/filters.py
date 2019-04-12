@@ -28,6 +28,8 @@ class MapFilter(BaseFilter):
 
 
 class LayerFilter(BaseFilter):
+    server = django_filters.CharFilter(
+        lookup_expr='exact', field_name='server__id')
 
     class Meta:
         model = Layer

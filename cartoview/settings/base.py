@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 import os
 import sys
 from cartoview.log_handler import get_logger
+from distutils.util import strtobool
 
 logger = get_logger(__name__)
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -23,10 +24,11 @@ BASE_DIR = os.path.dirname(SETTINGS_DIR)
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv("SECRET_KEY", "<secret_key>")
+SECRET_KEY = os.getenv(
+    "SECRET_KEY", "c8(50gzg=^s6&m73&801%+@$24+&8duk$^^4ormfkbj!*q86fo")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = bool(os.getenv("DEBUG", "True"))
+DEBUG = strtobool(os.getenv("DEBUG", "True"))
 
 ALLOWED_HOSTS = eval(os.getenv("ALLOWED_HOSTS", '["*"]'))
 
@@ -64,12 +66,14 @@ INSTALLED_APPS = [
     "wagtail.search",
     "wagtail.admin",
     "wagtail.core",
-    "wagtailgridder",
     "wagtail.contrib.modeladmin",
     "wagtailmenus",
     "wagtail.contrib.styleguide",
+    "wagtail.contrib.settings",
     "modelcluster",
     "taggit",
+    'wagtailfontawesome',
+    'wagtail_blocks',
 
     # django guardian
     "guardian",
@@ -82,6 +86,7 @@ INSTALLED_APPS = [
     "cartoview.connections",
     "cartoview.layers",
     "cartoview.maps",
+    "cartoview.cms",
 ]
 
 # channels settings
@@ -194,8 +199,8 @@ AUTHENTICATION_BACKENDS = (
 ACCOUNT_EMAIL_VERIFICATION = os.getenv("ACCOUNT_EMAIL_VERIFICATION", "none")
 ANONYMOUS_USER_NAME = os.getenv("ANONYMOUS_USER_NAME", "AnonymousUser")
 GUARDIAN_RAISE_403 = True
-OAUTH_SERVER_BASEURL = os.get("OAUTH_SERVER_BASEURL", "<BASE_SERVER_URL>")
-LOGIN_REDIRECT_URL = os.get("LOGIN_REDIRECT_URL", "/accounts/profile")
+OAUTH_SERVER_BASEURL = os.getenv("OAUTH_SERVER_BASEURL", "<BASE_SERVER_URL>")
+LOGIN_REDIRECT_URL = os.getenv("LOGIN_REDIRECT_URL", "/accounts/profile")
 ANONYMOUS_GROUP_NAME = os.getenv("ANONYMOUS_GROUP_NAME", "public")
 
 WAGTAIL_SITE_NAME = os.getenv("WAGTAIL_SITE_NAME", "Cartoview")
@@ -246,8 +251,8 @@ CARTOVIEW_CONNECTION_HANDLERS = {
     "NoAuth": "cartoview.connections.auth.base.NoAuthClass"
 }
 CARTOVIEW_SERVER_HANDLERS = {
-    "ARCGIS_MSL": "cartoview.connections.servers.ogc.OGCServer",
-    "ARCGIS_FSL": "cartoview.connections.servers.ogc.OGCServer",
+    "ARCGIS_MSL": "cartoview.connections.servers.arcgis.ArcGISLayer",
+    "ARCGIS_FSL": "cartoview.connections.servers.arcgis.ArcGISLayer",
     "OGC-WMS": "cartoview.connections.servers.ogc.OGCServer",
     "OGC-WFS": "cartoview.connections.servers.ogc.OGCServer",
     "GEOJSON": "cartoview.connections.servers.ogr_handler.GeoJSON",
@@ -266,7 +271,7 @@ CARTOVIEW_CONNECTIONS = {
 }
 
 # cache settings
-CACHE_ENABLED = bool(os.getenv("CACHE_ENABLED", "True"))
+CACHE_ENABLED = strtobool(os.getenv("CACHE_ENABLED", "True"))
 if CACHE_ENABLED:
     CACHES = {
         "default": {
@@ -275,21 +280,16 @@ if CACHE_ENABLED:
         }
     }
 
-
-try:
-    from .local_settings import *  # noqa
-except BaseException as e:
-    logger.error(str(e))
-
-
-STAND_ALONE = bool(os.getenv("STAND_ALONE", "True"))
+# apps settings
+APPS_DIR = os.path.join(BASE_DIR, os.pardir, "cartoview_apps")
+STAND_ALONE = strtobool(os.getenv("STAND_ALONE", "False"))
 if STAND_ALONE:
-    # apps settings
-    APPS_DIR = os.path.join(BASE_DIR, os.pardir, "cartoview_apps")
+
     # NOTE: load cartoview apps
     if APPS_DIR not in sys.path:
         sys.path.append(APPS_DIR)
     from cartoview.app_manager.config import CartoviewApp  # noqa
+
     CartoviewApp.load(apps_dir=APPS_DIR)
     for app in CartoviewApp.objects.get_active_apps().values():
         try:
@@ -300,10 +300,17 @@ if STAND_ALONE:
             libs_dir = os.path.join(app_dir, "libs")
             if os.path.exists(app_settings_file):
                 app_settings_file = os.path.realpath(app_settings_file)
-                exec(open(app_settings_file).read())
+                exec (open(app_settings_file).read())
             if os.path.exists(libs_dir) and libs_dir not in sys.path:
                 sys.path.append(libs_dir)
             if app.name not in INSTALLED_APPS:
-                INSTALLED_APPS += (app.name.__str__(), )
+                INSTALLED_APPS += (app.name.__str__(),)
         except Exception as e:
             logger.error(str(e))
+# file uploads settings
+DATA_UPLOAD_MAX_MEMORY_SIZE = 1073741824
+FILE_UPLOAD_MAX_MEMORY_SIZE = 1073741824  # maximum file upload 1GB
+try:
+    from .local_settings import *  # noqa
+except BaseException as e:
+    logger.error(str(e))

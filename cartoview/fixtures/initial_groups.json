@@ -1,8 +1,0 @@
-[{
-    "model": "auth.group",
-    "pk": 999,
-    "fields": {
-        "name": "public",
-        "permissions": []
-    }
-}]
