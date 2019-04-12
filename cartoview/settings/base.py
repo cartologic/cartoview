@@ -260,6 +260,7 @@ CARTOVIEW_SERVER_HANDLERS = {
     "OGC-WFS": "cartoview.connections.servers.ogc.OGCServer",
     "GEOJSON": "cartoview.connections.servers.ogr_handler.GeoJSON",
     "KML": "cartoview.connections.servers.ogr_handler.KML",
+    "GEONODE": "cartoview.connections.servers.geonode_handler.GeoNode"
 }
 CARTOVIEW_CONNECTIONS = {
     "connection_handlers": CARTOVIEW_CONNECTION_HANDLERS,
