@@ -7,7 +7,7 @@ ESRI_FSL = ServerType("ARCGIS_FEATURE_SERVER_LAYER", "ARCGIS_FSL",
                       "ArcGIS Feature Server Layer", "arcgis_fsl")
 MAPSERVER = ServerType("OGC-WMS", "OGC-WMS", "OGC Web Map Service", "wms")
 GEOSERVER = ServerType("OGC-WFS", "OGC-WFS", "OGC Web Feature Service", "wfs")
-GEONODE = ServerType("GEONODE", "G", "Geonode", "geonode")
+GEONODE = ServerType("GEONODE", "GEONODE", "Geonode", "geonode")
 GEOJSON = ServerType("GEOJSON", "GEOJSON", "GeoJSON", "geojson")
 KML = ServerType("KML", "KML", "KML", "kml")
 SUPPORTED_SERVERS = (

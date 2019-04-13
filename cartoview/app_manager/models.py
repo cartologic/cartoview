@@ -2,7 +2,7 @@
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
-from django.contrib.postgres.fields import JSONField
+from django.contrib.postgres.fields import ArrayField, JSONField
 from django.core.cache import cache
 from django.db import models
 from django.db.models import Max
@@ -14,6 +14,7 @@ from guardian.shortcuts import assign_perm
 from taggit.managers import TaggableManager
 
 from cartoview.base_resource.models import BaseModel
+from cartoview.layers.validators import validate_projection
 from cartoview.maps.models import Map
 
 APPS_PERMISSIONS = (
@@ -104,6 +105,20 @@ class App(models.Model):
         return self.title
 
 
+class Bookmark(BaseModel):
+    name = models.CharField(max_length=255, default=_("No Name Provided"))
+    extent = ArrayField(models.CharField(max_length=255,
+                                         blank=True, null=True),
+                        size=4, null=False, blank=False)
+    projection = models.CharField(max_length=30, blank=False, null=False,
+                                  validators=[validate_projection, ])
+    owner = models.ForeignKey(
+        get_user_model(), null=True, blank=True, on_delete=models.SET_NULL)
+
+    def __str__(self):
+        return self.name
+
+
 class AppInstance(BaseModel):
     app_map = models.ForeignKey(
         Map, related_name="app_instances", on_delete=models.CASCADE)
@@ -111,6 +126,9 @@ class AppInstance(BaseModel):
         App, related_name="instances", on_delete=models.CASCADE)
 
     config = JSONField(default=None, null=True, blank=True)
+    owner = models.ForeignKey(
+        get_user_model(), null=True, blank=True, on_delete=models.SET_NULL)
+    bookmarks = models.ManyToManyField(Bookmark)
 
     def __str__(self):
         return self.title
@@ -161,5 +179,5 @@ def invalidate_appinstance_cache(sender, instance, **kwargs):
 def add_default_user_group(sender, instance, **kwargs):
     created = kwargs.get("created")
     if created:
-        public_group = Group.objects.get(name="public")
+        public_group, _ = Group.objects.get_or_create(name="public")
         instance.groups.add(public_group)

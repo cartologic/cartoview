@@ -67,8 +67,7 @@ class Server(BaseConnectionModel):
     @cached_property
     def handler(self):
         handler = None
-        Handler = get_handler_class_handler(
-            self.server_handler_key, server=True)
+        Handler = get_handler_class_handler(self.server_type, server=True)
         handler = Handler(self.url, self.id)
         return handler
 

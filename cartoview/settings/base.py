@@ -24,7 +24,8 @@ BASE_DIR = os.path.dirname(SETTINGS_DIR)
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv("SECRET_KEY", "<secret_key>")
+SECRET_KEY = os.getenv(
+    "SECRET_KEY", "c8(50gzg=^s6&m73&801%+@$24+&8duk$^^4ormfkbj!*q86fo")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = strtobool(os.getenv("DEBUG", "True"))
@@ -250,8 +251,8 @@ CARTOVIEW_CONNECTION_HANDLERS = {
     "NoAuth": "cartoview.connections.auth.base.NoAuthClass"
 }
 CARTOVIEW_SERVER_HANDLERS = {
-    "ARCGIS_MSL": "cartoview.connections.servers.ogc.OGCServer",
-    "ARCGIS_FSL": "cartoview.connections.servers.ogc.OGCServer",
+    "ARCGIS_MSL": "cartoview.connections.servers.arcgis.ArcGISLayer",
+    "ARCGIS_FSL": "cartoview.connections.servers.arcgis.ArcGISLayer",
     "OGC-WMS": "cartoview.connections.servers.ogc.OGCServer",
     "OGC-WFS": "cartoview.connections.servers.ogc.OGCServer",
     "GEOJSON": "cartoview.connections.servers.ogr_handler.GeoJSON",
@@ -306,6 +307,9 @@ if STAND_ALONE:
                 INSTALLED_APPS += (app.name.__str__(),)
         except Exception as e:
             logger.error(str(e))
+# file uploads settings
+DATA_UPLOAD_MAX_MEMORY_SIZE = 1073741824
+FILE_UPLOAD_MAX_MEMORY_SIZE = 1073741824  # maximum file upload 1GB
 try:
     from .local_settings import *  # noqa
 except BaseException as e:
