@@ -3,4 +3,4 @@
 	url = https://github.com/cartologic/app-installer-frontend.git
 [submodule "cartoview/static/basic_viewer"]
 	path = cartoview/static/basic_viewer
-	url = git@github.com:cartologic/map-viewer.git
+	url = https://github.com/cartologic/map-viewer.git
