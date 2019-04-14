@@ -1,0 +1,15 @@
+.map-catalog-image {
+    position: relative;
+    width: 100%;
+    display: block;
+}
+
+.map-catalog-image img {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+}
+
+.no-top-margin {
+    margin-top: 0;
+}
