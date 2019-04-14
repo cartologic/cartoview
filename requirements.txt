@@ -10,6 +10,7 @@ autopep8==1.4.2
 backcall==0.1.0
 beautifulsoup4==4.6.0
 black==18.9b0
+-e git+git@github.com:hishamkaram/cartoview_2.git@a0e458052b416dca3227d57cf336e36c7abc552f#egg=cartoview_2
 certifi==2018.10.15
 cffi==1.12.2
 channels==2.1.7
@@ -57,7 +58,7 @@ ipython-genutils==0.2.0
 isort==4.3.4
 itypes==1.1.0
 jedi==0.13.2
-Jinja2==2.10
+Jinja2==2.10.1
 Markdown==3.0.1
 MarkupSafe==1.1.0
 mccabe==0.6.1
@@ -101,9 +102,11 @@ Unidecode==1.0.23
 uritemplate==3.0.0
 urllib3==1.24.1
 uvicorn==0.6.1
+uvloop==0.12.2
 wagtail==2.4
 wagtail-blocks==0.6.6
 wagtailfontawesome==1.1.4
+wagtailgridder==0.9.30
 wagtailmenus==2.12
 wcwidth==0.1.7
 webencodings==0.5.1
