@@ -25,6 +25,8 @@ from cartoview.geonode_oauth import views as geonode_oauth_views
 from .views import IndexView
 
 urlpatterns = [
+    path("django-admin/", admin.site.urls),	
+    re_path(r"^admin/", include('wagtail.admin.urls'), name='wagtail_admin'),
     re_path(r"^accounts/", include("allauth.urls")),
     re_path(r"^accounts/profile$", geonode_oauth_views.ProfileView.as_view()),
     re_path(r"^documents/", include('wagtail.documents.urls')),
