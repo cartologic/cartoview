@@ -1,0 +1,156 @@
+{% extends 'cms/base_cms.html' %}
+{% load static from staticfiles %}
+{% load wagtailcore_tags %}
+
+{% block body_class %}profile-page sidebar-collapse{% endblock %}
+
+{% block content %}
+    {% if page.hero_image %}
+        <div class="page-header header-filter" data-parallax="true"
+             style="background-image: url('{{ page.hero_image.file.url }}');"></div>
+    {% else %}
+        <div class="page-header header-filter" data-parallax="true"
+             style='background-image: url("{% static 'material-kit/assets/img/bg3.jpg' %}");'></div>
+    {% endif %}
+    <div class="main main-raised">
+        <div class="profile-content">
+            <div class="container" style="padding-bottom: 20px;">
+                <div class="row">
+                    <div class="col-md-12 ml-auto">
+                        <div class="title">
+                            <h1>{{ self.title }}</h1>
+                        </div>
+                        <form action="" autocomplete="off" class="form-horizontal" method="post" accept-charset="utf-8">
+                            <div class="input-group">
+                                <input name="searchtext" placeholder="Search for Maps" value="" class="form-control"
+                                       type="text">
+                                <span class="input-group-btn">
+               <button class="btn btn-white btn-raised btn-fab btn-round" type="submit" id="mapSearch">
+                   <i class="material-icons">search</i>
+               </button>
+            </span>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2 ml-auto"><p style="text-align: left">Popular Tags:</p></div>
+                    <div class="col-md-10 ml-auto" style="text-align: right">
+                        <a href="#"><span class="badge badge-pill badge-secondary">Secondary</span></a>
+                        <a href="#"><span class="badge badge-pill badge-primary">Primary</span></a>
+                        <a href="#"><span class="badge badge-pill badge-info">Info</span></a>
+                        <a href="#"><span class="badge badge-pill badge-danger">Danger</span></a>
+                        <a href="#"><span class="badge badge-pill badge-dark">Dark</span></a>
+                        <a href="#"><span class="badge badge-pill badge-default">Default</span></a>
+                        <a href="#"><span class="badge badge-pill badge-warning">Warning</span></a>
+                        <a href="#"><span class="badge badge-pill badge-rose">Rose</span></a>
+                        <a href="#"><span class="badge badge-pill badge-success">Success</span></a>
+                    </div>
+                </div>
+
+                <div class="row" style="margin-top: 20px;">
+                    <div class="col-2">
+                        <img src="../static/material-kit/assets/img/default-map-image.jpg" alt="Rounded Image"
+                             class="rounded img-fluid">
+                    </div>
+                    <div class="col-10">
+                        <h2 style="margin-top: 0;">Map Title Here</h2>
+                        <p>
+                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has
+                            been the industry's standard dummy text ever since the 1500s, when an unknown printer took a
+                            galley of type and scrambled it to make a type specimen book. It has survived not only five
+                            centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
+                            It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum
+                            passages, and more recently with desktop publishing software like Aldus PageMaker including
+                            versions of Lorem Ipsum.
+                        </p>
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 20px;">
+                    <div class="col-2">
+                        <img src="../static/material-kit/assets/img/default-map-image.jpg" alt="Rounded Image"
+                             class="rounded img-fluid">
+                    </div>
+                    <div class="col-10">
+                        <h2 style="margin-top: 0;">Map Title Here</h2>
+                        <p>
+                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has
+                            been the industry's standard dummy text ever since the 1500s, when an unknown printer took a
+                            galley of type and scrambled it to make a type specimen book. It has survived not only five
+                            centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
+                            It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum
+                            passages, and more recently with desktop publishing software like Aldus PageMaker including
+                            versions of Lorem Ipsum.
+                        </p>
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 20px;">
+                    <div class="col-2">
+                        <img src="../static/material-kit/assets/img/default-map-image.jpg" alt="Rounded Image"
+                             class="rounded img-fluid">
+                    </div>
+                    <div class="col-10">
+                        <h2 style="margin-top: 0;">Map Title Here</h2>
+                        <p>
+                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has
+                            been the industry's standard dummy text ever since the 1500s, when an unknown printer took a
+                            galley of type and scrambled it to make a type specimen book. It has survived not only five
+                            centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
+                            It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum
+                            passages, and more recently with desktop publishing software like Aldus PageMaker including
+                            versions of Lorem Ipsum.
+                        </p>
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 20px;">
+                    <div class="col-2">
+                        <img src="../static/material-kit/assets/img/default-map-image.jpg" alt="Rounded Image"
+                             class="rounded img-fluid">
+                    </div>
+                    <div class="col-10">
+                        <h2 style="margin-top: 0;">Map Title Here</h2>
+                        <p>
+                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has
+                            been the industry's standard dummy text ever since the 1500s, when an unknown printer took a
+                            galley of type and scrambled it to make a type specimen book. It has survived not only five
+                            centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
+                            It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum
+                            passages, and more recently with desktop publishing software like Aldus PageMaker including
+                            versions of Lorem Ipsum.
+                        </p>
+                    </div>
+                </div>
+
+
+                <div class="row" style="margin-top: 20px;">
+                    <div class="col">
+                        <ul class="pagination pagination-info">
+                            <li class="page-item">
+                                <a href="javascript:void(0);" class="page-link"> prev</a>
+                            </li>
+                            <li class="page-item">
+                                <a href="javascript:void(0);" class="page-link">1</a>
+                            </li>
+                            <li class="page-item">
+                                <a href="javascript:void(0);" class="page-link">2</a>
+                            </li>
+                            <li class="active page-item">
+                                <a href="javascript:void(0);" class="page-link">3</a>
+                            </li>
+                            <li class="page-item">
+                                <a href="javascript:void(0);" class="page-link">4</a>
+                            </li>
+                            <li class="page-item">
+                                <a href="javascript:void(0);" class="page-link">5</a>
+                            </li>
+                            <li class="page-item">
+                                <a href="javascript:void(0);" class="page-link">next </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+{% endblock content %}
