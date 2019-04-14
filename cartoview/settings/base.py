@@ -43,17 +43,17 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django.contrib.sites",
     # third-party apps
+    "guardian",
     "channels",
     "crispy_forms",
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
     "rest_framework",
-    "generic_relations",
     "rest_framework_swagger",
     "rest_framework.authtoken",
     "django_filters",
-
+    "generic_relations",
     # wagtail apps
     "wagtail.contrib.forms",
     "wagtail.contrib.redirects",
@@ -75,8 +75,6 @@ INSTALLED_APPS = [
     'wagtailfontawesome',
     'wagtail_blocks',
 
-    # django guardian
-    "guardian",
     # cartoview apps
     "cartoview",
     "cartoview.base_resource",
@@ -300,7 +298,7 @@ if STAND_ALONE:
             libs_dir = os.path.join(app_dir, "libs")
             if os.path.exists(app_settings_file):
                 app_settings_file = os.path.realpath(app_settings_file)
-                exec (open(app_settings_file).read())
+                exec(open(app_settings_file).read())
             if os.path.exists(libs_dir) and libs_dir not in sys.path:
                 sys.path.append(libs_dir)
             if app.name not in INSTALLED_APPS:
