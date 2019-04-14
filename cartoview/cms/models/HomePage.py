@@ -6,9 +6,9 @@ from wagtail.core import blocks
 from wagtail.core.fields import StreamField
 from wagtail.core.models import Page
 from wagtail_blocks.blocks import HeaderBlock, ImageTextOverlayBlock, CroppedImagesWithTextBlock, \
-    ListWithImagesBlock, ThumbnailGalleryBlock
+    ListWithImagesBlock, ThumbnailGalleryBlock, ImageSliderBlock
 from .grid.GridBlock import GridBlock
-from .Blocks import HeroAreaBlock
+from .Blocks import HeroAreaBlock, MapCatalogBlock
 
 
 class HomePage(Page):
@@ -16,6 +16,7 @@ class HomePage(Page):
         ('hero_area', HeroAreaBlock()),
     ], blank=True, null=True, help_text=mark_safe("You should add only <b>1 Hero</b>"))
     body = StreamField([
+        ('map_catalog', MapCatalogBlock()),
         ('grid', GridBlock()),
         ('header', HeaderBlock()),
         ('paragraph', blocks.RichTextBlock()),
@@ -23,6 +24,7 @@ class HomePage(Page):
         ('cropped_images_with_text', CroppedImagesWithTextBlock()),
         ('list_with_images', ListWithImagesBlock()),
         ('thumbnail_gallery', ThumbnailGalleryBlock()),
+        ('image_slider', ImageSliderBlock()),
     ], blank=True, null=True)
     selected_template = models.CharField(max_length=255, choices=(
         ('cms/home_page_default.html', 'Default Template'),

@@ -58,23 +58,12 @@ class HeroAreaBlock(blocks.StructBlock):
         icon = "fa-wpexplorer"
 
 
-class FooterBlock(blocks.StructBlock):
-    left_section = RawHTMLBlock(
-        label='Left Section',
-        required=False,
-        default='<ul>' +
-                '<li><a href="https://cartoview.net" target="_blank">Cartoview</a></li>' +
-                '<li><a href="http://www.twitter.com" target="_blank" class="btn btn-link btn-just-icon"><i class="fa fa-twitter"></i></a></li>' +
-                '<li><a href="http://www.instagram.com" target="_blank" class="btn btn-link btn-just-icon"><i class="fa fa-instagram"></i></a></li>' +
-                '<li><a href="http://www.facebook.com" target="_blank" class="btn btn-link btn-just-icon"><i class="fa fa-facebook-square"></i></a></li>' +
-                '</ul>',
-    )
-    right_section = RawHTMLBlock(
-        label='Right Section',
-        required=False,
-        default='&copy;<script>document.write(new Date().getFullYear())</script>, made with <i class="material-icons">favorite</i> by <a href="http://cartologic.com" target="_blank">Cartologic</a> for a better web.'
+class MapCatalogBlock(blocks.StructBlock):
+    title = blocks.CharBlock(
+        label='Title',
+        max_length=240,
     )
 
     class Meta:
-        template = 'cms/blocks/footer.html'
-        icon = "fa-window-minimize"
+        template = 'cms/blocks/map_catalog.html'
+        icon = "fa-map"
