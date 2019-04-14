@@ -34,7 +34,7 @@ class Map(BaseModel):
         MaxValueValidator(28),
         MinValueValidator(1)
     ])
-    zoom = models.IntegerField(default=6, validators=[
+    zoom = models.FloatField(default=6, validators=[
         MaxValueValidator(28),
         MinValueValidator(1)
     ])
