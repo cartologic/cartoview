@@ -12,6 +12,7 @@ class SiteSettings(BaseSetting):
         'wagtailimages.Image', on_delete=models.CASCADE, related_name='+',
         blank=True, null=True
     )
+    logo_text = models.CharField(max_length=120, blank=True, null=True)
     footer = RawHTMLBlock()
     footer = StreamField(
         StreamBlock([
@@ -55,6 +56,7 @@ class SiteSettings(BaseSetting):
     ]
     general_panel = [
         ImageChooserPanel('logo'),
+        FieldPanel('logo_text'),
         StreamFieldPanel("footer", classname="Full"),
     ]
 
