@@ -26,7 +26,7 @@ class ServerViewSet(viewsets.ModelViewSet):
 
 
 class ServerProxy(APIView):
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    permission_classes = (permissions.AllowAny,)
 
     def get_proxy_settings(self):
         key = "proxy"
