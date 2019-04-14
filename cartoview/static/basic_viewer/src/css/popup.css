@@ -1,0 +1,133 @@
+.ol-popup-cartoview {
+    position: absolute;
+    z-index: 1000;
+    display: none;
+    background-color: #F7F7F7;
+    -webkit-filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.2));
+    filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.2));
+    padding: 0px;
+    bottom: 12px;
+    left: -50px;
+    width: 300px;
+}
+.title-text{
+    padding: 3px
+}
+.ol-popup-cartoview .title-panel {
+    display: flex;
+    border-bottom: 1px solid #121310;
+}
+
+.ol-popup-cartoview:after,
+.ol-popup-cartoview:before {
+    top: 100%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+}
+
+.ol-popup-cartoview:after {
+    border-top-color: #F7F7F7;
+    border-width: 10px;
+    left: 48px;
+    margin-left: -10px;
+}
+
+.ol-popup-cartoview:before {
+    border-top-color: #F7F7F7;
+    border-width: 11px;
+    left: 48px;
+    margin-left: -11px;
+}
+
+.ol-popup-cartoview-closer {
+    text-decoration: none;
+    position: absolute;
+    top: 2px;
+    right: 8px;
+}
+
+.ol-popup-cartoview-closer:after {
+    content: "✖";
+}
+.center{
+    display: block;
+    text-align: center
+}
+.ol-popup-cartoview .cartoview-popup-content {
+    max-height: 250px;
+    overflow-y: scroll;
+    padding: 5px;
+    border-color: 0 solid #121310;
+}
+.cartoview-popup-content ul{
+    list-style-type: none; 
+    padding: 0px;
+}
+.ol-popup-cartoview .cartoview-popup-actions {
+    padding: 0px;
+    border: 1px solid #d8d8d8
+}
+
+.title-panel .fa {
+    padding: 3px
+}
+
+.ol-popup-cartoview ul {
+    width: 100%;
+    position: relative;
+}
+
+.ol-popup-cartoview ul:before,
+ul:after {
+    text-align: center;
+    display: block;
+    border-bottom: 0;
+    width: 40%;
+}
+
+.ol-popup-cartoview ul:before {
+    border-right: 0;
+}
+
+.visible {
+    display: block !important;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.popup-layer-title {
+    flex: .5;
+    padding: 3px;
+}
+
+.popup-buttons {
+    padding: 3px !important;
+}
+
+.ol-popup-cartoview ul:after {
+    position: absolute;
+    top: 0;
+    left: 48%;
+    margin-left: 1px;
+}
+
+/* .ol-popup-cartoview li {
+    text-align: left;
+    padding: 3px;
+    width: 40%;
+    float: left;
+    font-size: small;
+    word-wrap: break-word;
+    margin-bottom: -1px;
+    white-space: pre-line
+} */
+
+li:nth-child(even) {
+    margin-left: -1px;
+}

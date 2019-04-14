@@ -29,6 +29,7 @@ urlpatterns = [
     re_path(r"^accounts/profile$", geonode_oauth_views.ProfileView.as_view()),
     re_path(r"^documents/", include('wagtail.documents.urls')),
     re_path(r"^apps/", include('cartoview.app_manager.urls')),
+    re_path(r"^maps/", include('cartoview.maps.urls')),
     re_path(r"^api/", include('cartoview.api.urls')),
     re_path(r'^api-auth/', include('rest_framework.urls',
                                    namespace="rest_framework")),
