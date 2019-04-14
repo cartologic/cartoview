@@ -102,9 +102,8 @@ uritemplate==3.0.0
 urllib3==1.24.1
 uvicorn==0.6.1
 wagtail==2.4
-wagtail-blocks==0.6.6
+wagtail-blocks>=0.6.6
 wagtailfontawesome==1.1.4
-wagtailgridder==0.9.30
 wagtailmenus==2.12
 wcwidth==0.1.7
 webencodings==0.5.1
