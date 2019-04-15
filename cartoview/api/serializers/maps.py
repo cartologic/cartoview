@@ -1,6 +1,10 @@
-from rest_framework import serializers
-from cartoview.maps.models import Map
 import json
+
+from rest_framework import serializers
+
+from cartoview.maps.models import Map
+
+from .base_resource import BaseModelSerializer
 
 
 class CenterField(serializers.CharField):
@@ -16,7 +20,7 @@ class CenterField(serializers.CharField):
         return data
 
 
-class MapSerializer(serializers.ModelSerializer):
+class MapSerializer(BaseModelSerializer):
     center = CenterField()
     owner = serializers.StringRelatedField(
         read_only=True, default=serializers.CurrentUserDefault())

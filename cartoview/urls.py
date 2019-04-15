@@ -22,10 +22,8 @@ from rest_framework.authtoken.views import obtain_auth_token
 
 from cartoview.geonode_oauth import views as geonode_oauth_views
 
-from .views import IndexView
-
 urlpatterns = [
-    path("django-admin/", admin.site.urls),	
+    path("django-admin/", admin.site.urls),
     re_path(r"^admin/", include('wagtail.admin.urls'), name='wagtail_admin'),
     re_path(r"^accounts/", include("allauth.urls")),
     re_path(r"^accounts/profile$", geonode_oauth_views.ProfileView.as_view()),
@@ -35,7 +33,7 @@ urlpatterns = [
     re_path(r"^api/", include('cartoview.api.urls')),
     re_path(r'^api-auth/', include('rest_framework.urls',
                                    namespace="rest_framework")),
-    path('api-token-auth/', obtain_auth_token, name='api_token_auth'),
+    re_path(r'^api-token-auth/', obtain_auth_token, name='api_token_auth'),
     re_path(r"^", include('wagtail.core.urls'), name='sites'),
 ]
 # urlpatterns = i18n_patterns(
