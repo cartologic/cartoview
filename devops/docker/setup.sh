@@ -27,7 +27,7 @@ apt-get update -y && apt-get install -y \
 pip install --upgrade pip
 
 # install python gdal stable
-pip install GDAL==2.3.2
+pip install GDAL==2.4.0
 
 # create required dirs
 mkdir -p ${APP_DIR}
