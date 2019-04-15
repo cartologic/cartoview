@@ -24,6 +24,7 @@
     <div class="row">
         <div class="col-md-2"><p style="text-align: left">Popular Tags:</p></div>
         <div class="col-md-10" style="text-align: right">
+            {{ tags }}
             <a href="#"><span class="badge badge-pill badge-secondary">Secondary</span></a>
             <a href="#"><span class="badge badge-pill badge-primary">Primary</span></a>
             <a href="#"><span class="badge badge-pill badge-info">Info</span></a>
@@ -42,17 +43,22 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="map-catalog-image">
-                        {% if featured_map.featured_image %}
-                            <img src="{{ featured_map.featured_image.url }}" alt="Map">
-                        {% elif featured_map.thumbnail %}
-                            <img src="{{ featured_map.thumbnail.url }}" alt="Map">
-                        {% else %}
-                            <img src="{% static 'cartoview/img/default-map-image.jpg' %}" alt="Map">
-                        {% endif %}
+                        <a target="_blank" href="{% url 'maps:map_view' map_id=featured_map.id %}">
+                            {% if featured_map.featured_image %}
+                                <img src="{{ featured_map.featured_image.url }}" alt="Map">
+                            {% elif featured_map.thumbnail %}
+                                <img src="{{ featured_map.thumbnail.url }}" alt="Map">
+                            {% else %}
+                                <img src="{% static 'cartoview/img/default-map-image.jpg' %}" alt="Map">
+                            {% endif %}
+                        </a>
                     </div>
                 </div>
                 <div class="col-md-5 col-md-offset-1">
-                    <h3 class="title no-top-margin">{{ featured_map.title }}</h3>
+                    <h3 class="title no-top-margin">
+                        <a target="_blank"
+                           href="{% url 'maps:map_view' map_id=featured_map.id %}">{{ featured_map.title }}</a>
+                    </h3>
                     <p>
                         {{ featured_map.description }}
                     </p>
@@ -61,20 +67,25 @@
         {% else %}
             <div class="row">
                 <div class="col-md-6 col-md-offset-1">
-                    <h3 class="title no-top-margin">{{ featured_map.title }}</h3>
+                    <h3 class="title no-top-margin">
+                        <a target="_blank"
+                           href="{% url 'maps:map_view' map_id=featured_map.id %}">{{ featured_map.title }}</a>
+                    </h3>
                     <p>
                         {{ featured_map.description }}
                     </p>
                 </div>
                 <div class="col-md-6 col-md-offset-1">
                     <div class="map-catalog-image">
-                        {% if featured_map.featured_image %}
-                            <img src="{{ featured_map.featured_image.url }}" alt="Map">
-                        {% elif featured_map.thumbnail %}
-                            <img src="{{ featured_map.thumbnail.url }}" alt="Map">
-                        {% else %}
-                            <img src="{% static 'cartoview/img/default-map-image.jpg' %}" alt="Map">
-                        {% endif %}
+                        <a target="_blank" href="{% url 'maps:map_view' map_id=featured_map.id %}">
+                            {% if featured_map.featured_image %}
+                                <img src="{{ featured_map.featured_image.url }}" alt="Map">
+                            {% elif featured_map.thumbnail %}
+                                <img src="{{ featured_map.thumbnail.url }}" alt="Map">
+                            {% else %}
+                                <img src="{% static 'cartoview/img/default-map-image.jpg' %}" alt="Map">
+                            {% endif %}
+                        </a>
                     </div>
                 </div>
             </div>
