@@ -15,9 +15,9 @@
     <div id="basicviewer-app"></div>
     <script>
         {% if mapId %}
-        window.mapId={{mapId}}
+            window.mapId={{mapId}}
         {% else %}
-        window.mapId=undefined
+            window.mapId=undefined
         {% endif %}
     </script>
     <script src="{% static 'basic_viewer/dist/polyfill.js' %}"></script>
