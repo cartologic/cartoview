@@ -273,7 +273,7 @@ CARTOVIEW_CONNECTIONS = {
 }
 
 # cache settings
-CACHE_ENABLED = strtobool(os.getenv("CACHE_ENABLED", "True"))
+CACHE_ENABLED = strtobool(os.getenv("CACHE_ENABLED", "False"))
 if CACHE_ENABLED:
     CACHES = {
         "default": {
@@ -310,8 +310,10 @@ if STAND_ALONE:
         except Exception as e:
             logger.error(str(e))
 # file uploads settings
-DATA_UPLOAD_MAX_MEMORY_SIZE = 1073741824
-FILE_UPLOAD_MAX_MEMORY_SIZE = 1073741824  # maximum file upload 1GB
+DATA_UPLOAD_MAX_MEMORY_SIZE = int(os.getenv(
+    'DATA_UPLOAD_MAX_MEMORY_SIZE˝', "1073741824"))
+FILE_UPLOAD_MAX_MEMORY_SIZE = int(os.getenv(
+    'FILE_UPLOAD_MAX_MEMORY_SIZE', "1073741824"))  # maximum file upload 1GB
 
 # Celery application definition
 ASYNC_ENABLED = strtobool(os.getenv('ASYNC_ENABLED', 'False'))
@@ -350,5 +352,5 @@ CELERY_MAX_CACHED_RESULTS = 32768
 
 try:
     from .local_settings import *  # noqa
-except BaseException as e:
-    logger.error(str(e))
+except ImportError:
+    pass
