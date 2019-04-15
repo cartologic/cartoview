@@ -1,7 +1,10 @@
+from django import forms
+from django.db.models import Count
+from taggit.models import Tag
 from wagtail.core import blocks
-from wagtail.core.blocks import RawHTMLBlock
 from wagtail.images.blocks import ImageChooserBlock
 
+from cartoview.maps.models import Map
 from .IconChoiceBlock import IconChoiceBlock
 
 
@@ -58,11 +61,35 @@ class HeroAreaBlock(blocks.StructBlock):
         icon = "fa-wpexplorer"
 
 
+class FeaturedMapChooser(blocks.ChooserBlock):
+    target_model = Map
+    widget = forms.Select
+
+    class Meta:
+        icon = "icon"
+
+    def value_for_form(self, value):
+        if isinstance(value, self.target_model):
+            return value.pk
+        else:
+            return value
+
+
 class MapCatalogBlock(blocks.StructBlock):
     title = blocks.CharBlock(
         label='Title',
         max_length=240,
     )
+    featured_maps = blocks.ListBlock(
+        FeaturedMapChooser(),
+        label='Featured Maps',
+    )
+
+    def get_context(self, value, parent_context=None):
+        context = super().get_context(value, parent_context=parent_context)
+        tags = Tag.objects.all()
+        context['tags'] = tags
+        return context
 
     class Meta:
         template = 'cms/blocks/map_catalog.html'

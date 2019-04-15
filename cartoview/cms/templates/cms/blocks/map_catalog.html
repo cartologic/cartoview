@@ -24,6 +24,7 @@
     <div class="row">
         <div class="col-md-2"><p style="text-align: left">Popular Tags:</p></div>
         <div class="col-md-10" style="text-align: right">
+            {{ tags }}
             <a href="#"><span class="badge badge-pill badge-secondary">Secondary</span></a>
             <a href="#"><span class="badge badge-pill badge-primary">Primary</span></a>
             <a href="#"><span class="badge badge-pill badge-info">Info</span></a>
@@ -36,76 +37,60 @@
         </div>
     </div>
 
-    <div class="row" style="margin-top: 40px;">
-        <div class="col-md-6">
-            <div class="map-catalog-image">
-                <img src="https://www.publichealthnetwork.cymru/files/4314/5017/0805/Poverty_Supermarket.jpg" alt="">
+    {% for featured_map in self.featured_maps %}
+        <hr/>
+        {% if not forloop.counter|divisibleby:2 %}
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="map-catalog-image">
+                        <a target="_blank" href="{% url 'maps:map_view' map_id=featured_map.id %}">
+                            {% if featured_map.featured_image %}
+                                <img src="{{ featured_map.featured_image.url }}" alt="Map">
+                            {% elif featured_map.thumbnail %}
+                                <img src="{{ featured_map.thumbnail.url }}" alt="Map">
+                            {% else %}
+                                <img src="{% static 'cartoview/img/default-map-image.jpg' %}" alt="Map">
+                            {% endif %}
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-5 col-md-offset-1">
+                    <h3 class="title no-top-margin">
+                        <a target="_blank"
+                           href="{% url 'maps:map_view' map_id=featured_map.id %}">{{ featured_map.title }}</a>
+                    </h3>
+                    <p>
+                        {{ featured_map.description }}
+                    </p>
+                </div>
             </div>
-        </div>
-        <div class="col-md-5 col-md-offset-1">
-            <h3 class="title no-top-margin">Food Poverty</h3>
-            <p>
-                Food poverty means that an individual or household isn’t able to obtain healthy, nutritious food, or
-                can’t access the food they would like to eat. Despite increasing choice and affordability of food in the
-                UK, many people eat what they can afford, not what they want.
-            </p>
-            <p>
-                There is the basic concept of having enough money to afford to buy enough food, but even if families
-                have enough, just enough money to prevent hunger, this most basic of objectives is made that much more
-                difficult if a family has only a very limited range of food on offer, little or no ability to prepare
-                and cook food, or if there are other fundamental crises. It also often means that food poverty can
-                result in eating more of low quality foods if these are the more available and affordable option.
-            </p>
-        </div>
-    </div>
-    <hr/>
+        {% else %}
+            <div class="row">
+                <div class="col-md-6 col-md-offset-1">
+                    <h3 class="title no-top-margin">
+                        <a target="_blank"
+                           href="{% url 'maps:map_view' map_id=featured_map.id %}">{{ featured_map.title }}</a>
+                    </h3>
+                    <p>
+                        {{ featured_map.description }}
+                    </p>
+                </div>
+                <div class="col-md-6 col-md-offset-1">
+                    <div class="map-catalog-image">
+                        <a target="_blank" href="{% url 'maps:map_view' map_id=featured_map.id %}">
+                            {% if featured_map.featured_image %}
+                                <img src="{{ featured_map.featured_image.url }}" alt="Map">
+                            {% elif featured_map.thumbnail %}
+                                <img src="{{ featured_map.thumbnail.url }}" alt="Map">
+                            {% else %}
+                                <img src="{% static 'cartoview/img/default-map-image.jpg' %}" alt="Map">
+                            {% endif %}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    {% endfor %}
 
-    <div class="row">
-        <div class="col-md-6 col-md-offset-1">
-            <h3 class="title no-top-margin">Water Pollution</h3>
-            <p>
-                Water pollution can be defined as the contamination of a stream, river, lake, ocean or any other stretch
-                of water, depleting water quality and making it toxic for the environment and humans.
-            </p>
-            <p>
-            <li>Organic pollution due to microorganisms - bacteria and viruses - present in the water, generated by
-                excrement, animal and vegetable waste
-            </li>
-            <li>Chemical pollution generated by the nitrates and phosphates of pesticides, human and animal drugs,
-                household products, heavy metals, acids and hydrocarbons used in industries
-            </li>
-            </p>
-        </div>
-        <div class="col-md-6 col-md-offset-1">
-            <div class="map-catalog-image">
-                <img src="https://solarimpulse.com/img/thematicpage/water-pollution-header.jpg" alt="">
-            </div>
-        </div>
-    </div>
-    <hr/>
-
-    <div class="row" style="margin-top: 40px;">
-        <div class="col-md-6">
-            <div class="map-catalog-image">
-                <img src="https://www.publichealthnetwork.cymru/files/4314/5017/0805/Poverty_Supermarket.jpg" alt="">
-            </div>
-        </div>
-        <div class="col-md-5 col-md-offset-1">
-            <h3 class="title no-top-margin">Food Poverty</h3>
-            <p>
-                Food poverty means that an individual or household isn’t able to obtain healthy, nutritious food, or
-                can’t access the food they would like to eat. Despite increasing choice and affordability of food in the
-                UK, many people eat what they can afford, not what they want.
-            </p>
-            <p>
-                There is the basic concept of having enough money to afford to buy enough food, but even if families
-                have enough, just enough money to prevent hunger, this most basic of objectives is made that much more
-                difficult if a family has only a very limited range of food on offer, little or no ability to prepare
-                and cook food, or if there are other fundamental crises. It also often means that food poverty can
-                result in eating more of low quality foods if these are the more available and affordable option.
-            </p>
-        </div>
-    </div>
-    <hr/>
 
 </div>

@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <link rel="shortcut icon" type="image/png" href="{% static 'cms/images/favicon.ico' %}"/>
+    <link rel="shortcut icon" type="image/png" href="{% static 'cartoview/img/favicon.ico' %}"/>
 
     <title>
         {% block title %}
@@ -46,11 +46,14 @@
                         {% if settings.cms.SiteSettings.logo.file.url %}
                             <img src="{{ settings.cms.SiteSettings.logo.file.url }}"
                                  style="height: 46px;overflow: hidden;margin-top: -6px;" class="img-fluid" alt="Logo">
+                            {% if settings.cms.SiteSettings.logo_text %}
+                                {{ settings.cms.SiteSettings.logo_text }}
+                            {% endif %}
                         {% else %}
                             <img src="{% static 'cartoview/img/logo.png' %}"
                                  style="height: 46px;overflow: hidden;margin-top: -6px;" class="img-fluid" alt="Logo">
+                            Cartoview
                         {% endif %}
-                        {{ settings.cms.SiteSettings.logo_text }}
                     </div>
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" aria-expanded="false"
@@ -86,6 +89,9 @@
                                         {% endif %}
                                     </form>
                                 </div>
+                                <a href="/admin" class="dropdown-item">
+                                    <i class="material-icons">view_quilt</i> {% trans "Admin Area" %}
+                                </a>
                                 <a href="#" class="dropdown-item"
                                    onclick="document.getElementById('logoutform').submit()">
                                     <i class="material-icons">exit_to_app</i> {% trans "Logout" %}
