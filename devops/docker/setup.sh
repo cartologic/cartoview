@@ -32,12 +32,12 @@ pip install GDAL==2.3.2
 # create required dirs
 mkdir -p ${APP_DIR}
 
+# install cartoview
+cd /cartoview && pip install . && rm -rf /cartoview
+
 django-admin.py startproject \
 	--template=https://github.com/cartologic/Cartoview-project-template/archive/cartoview2.zip \
 	--name wsgi.py,settings.py.local_settings.py cartoview_project ${APP_DIR}
-
-# install cartoview
-cd /cartoview && pip install . && rm -rf /cartoview
 
 # cleanup image
 rm -rf ~/.cache/pip
