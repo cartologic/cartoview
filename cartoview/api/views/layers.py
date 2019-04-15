@@ -12,3 +12,6 @@ class LayerViewSet(viewsets.ModelViewSet):
     serializer_class = LayerSerializer
     filterset_class = LayerFilter
     permission_classes = (BaseObjectPermissions,)
+
+    def perform_create(self, serializer):
+        return serializer.save(owner=self.request.user)
