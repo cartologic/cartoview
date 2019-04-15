@@ -3,6 +3,7 @@ from django.contrib import admin
 from .models import Server, SimpleAuthConnection, TokenAuthConnection
 from .forms import SimpleAuthConnectionForm
 from guardian import admin as guardian_admin
+from .tasks import harvest_task
 
 
 @admin.register(Server)
@@ -12,7 +13,7 @@ class ServerAdmin(admin.ModelAdmin):
 
     def harvest_resources(self, request, queryset):
         for server in queryset:
-            server.handler.harvest()
+            harvest_task.delay(server_id=server.id)
         self.message_user(
             request, "server resources successfully harvested.")
     harvest_resources.short_description = "Harvest Resources"
