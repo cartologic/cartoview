@@ -128,7 +128,7 @@ class AppInstance(BaseModel):
     config = JSONField(default=None, null=True, blank=True)
     owner = models.ForeignKey(
         get_user_model(), null=True, blank=True, on_delete=models.SET_NULL)
-    bookmarks = models.ManyToManyField(Bookmark)
+    bookmarks = models.ManyToManyField(Bookmark, blank=True)
 
     def __str__(self):
         return self.title
