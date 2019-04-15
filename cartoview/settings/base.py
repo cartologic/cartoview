@@ -14,6 +14,7 @@ import os
 import sys
 from distutils.util import strtobool
 
+from celery.schedules import crontab
 from tzlocal import get_localzone
 
 from cartoview.log_handler import get_logger
@@ -336,6 +337,12 @@ CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_ENABLE_UTC = True
 CELERY_TIMEZONE = TIME_ZONE
+CELERY_BEAT_SCHEDULE = {
+    'validate-resources-task': {
+        'task': 'cartoview.connections.tasks.validate_servers',
+        'schedule': crontab(minute=59, hour=23),
+    },
+}
 CELERY_TASK_RESULT_EXPIRES = 43200
 CELERY_MESSAGE_COMPRESSION = 'gzip'
 CELERY_MAX_CACHED_RESULTS = 32768
