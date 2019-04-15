@@ -127,6 +127,7 @@ TEMPLATES = [
                 "django.contrib.messages.context_processors.messages",
                 "wagtail.contrib.settings.context_processors.settings",
                 "wagtailmenus.context_processors.wagtailmenus",
+                "cartoview.context_processors.version",
             ]
         },
     }
