@@ -1,3 +1,4 @@
+amqp==2.4.2
 appdirs==1.4.3
 appnope==0.1.0
 asgiref==2.3.2
@@ -9,7 +10,9 @@ Automat==0.7.0
 autopep8==1.4.2
 backcall==0.1.0
 beautifulsoup4==4.6.0
+billiard==3.6.0.0
 black==18.9b0
+celery==4.3.0
 certifi==2018.10.15
 cffi==1.12.2
 channels==2.1.7
@@ -45,6 +48,7 @@ djangorestframework-yaml==1.0.3
 draftjs-exporter==2.1.5
 flake8==3.6.0
 future==0.17.1
+greenlet==0.4.15
 gunicorn==19.9.0
 h11==0.8.1
 html5lib==1.0.1
@@ -58,9 +62,11 @@ isort==4.3.4
 itypes==1.1.0
 jedi==0.13.2
 Jinja2==2.10.1
+kombu==4.5.0
 Markdown==3.0.1
 MarkupSafe==1.1.0
 mccabe==0.6.1
+meinheld==0.6.1
 oauthlib==2.1.0
 openapi-codec==1.3.2
 OWSLib==0.17.1
@@ -97,12 +103,14 @@ traitlets==4.3.2
 travis-encrypt==1.2.3
 Twisted==18.9.0
 txaio==18.8.1
+tzlocal==1.5.1
 Unidecode==1.0.23
 uritemplate==3.0.0
 urllib3==1.24.1
 uvicorn==0.6.1
+vine==1.3.0
 wagtail==2.4
-wagtail-blocks>=0.6.6
+wagtail-blocks==0.6.8
 wagtailfontawesome==1.1.4
 wagtailmenus==2.12
 wcwidth==0.1.7

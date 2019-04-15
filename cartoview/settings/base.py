@@ -12,8 +12,11 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 
 import os
 import sys
-from cartoview.log_handler import get_logger
 from distutils.util import strtobool
+
+from tzlocal import get_localzone
+
+from cartoview.log_handler import get_logger
 
 logger = get_logger(__name__)
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -158,7 +161,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = os.getenv("TIME_ZONE", "UTC")
+TIME_ZONE = os.getenv("TIME_ZONE", get_localzone().zone)
 
 USE_I18N = True
 
@@ -308,6 +311,36 @@ if STAND_ALONE:
 # file uploads settings
 DATA_UPLOAD_MAX_MEMORY_SIZE = 1073741824
 FILE_UPLOAD_MAX_MEMORY_SIZE = 1073741824  # maximum file upload 1GB
+
+# Celery application definition
+ASYNC_ENABLED = strtobool(os.getenv('ASYNC_ENABLED', 'False'))
+RABBITMQ_SIGNALS_BROKER_URL = os.getenv(
+    'RABBITMQ_SIGNALS_BROKER_URL', 'amqp://localhost:5672')
+REDIS_SIGNALS_BROKER_URL = os.getenv(
+    'REDIS_SIGNALS_BROKER_URL', 'redis://localhost:6379/0')
+LOCAL_SIGNALS_BROKER_URL = 'memory://'
+CELERY_BROKER_URL = os.getenv(
+    'CELERY_BROKER_URL', REDIS_SIGNALS_BROKER_URL if ASYNC_ENABLED else LOCAL_SIGNALS_BROKER_URL)
+if ASYNC_ENABLED:
+    CELERY_RESULT_BACKEND = CELERY_BROKER_URL
+CELERY_RESULT_PERSISTENT = False
+
+# Allow to recover from any unknown crash.
+CELERY_ACKS_LATE = True
+
+# Set this to False in order to run async
+CELERY_TASK_ALWAYS_EAGER = False if ASYNC_ENABLED else True
+CELERY_TASK_IGNORE_RESULT = True
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_ENABLE_UTC = True
+CELERY_TIMEZONE = TIME_ZONE
+CELERY_TASK_RESULT_EXPIRES = 43200
+CELERY_MESSAGE_COMPRESSION = 'gzip'
+CELERY_MAX_CACHED_RESULTS = 32768
+
+
 try:
     from .local_settings import *  # noqa
 except BaseException as e:
