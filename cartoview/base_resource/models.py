@@ -22,7 +22,7 @@ class BaseModel(models.Model):
         null=True, blank=True, default=_("No Description Provided"))
     abstract = models.TextField(
         null=True, blank=True, default=_("No Abstract Provided"))
-    feature_image = models.ImageField(
+    featured_image = models.ImageField(
         upload_to=thumbnail_path, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
