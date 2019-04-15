@@ -1,6 +1,7 @@
 from django import forms
+from django.db.models import Count
+from taggit.models import Tag
 from wagtail.core import blocks
-from wagtail.core.blocks import RawHTMLBlock
 from wagtail.images.blocks import ImageChooserBlock
 
 from cartoview.maps.models import Map
@@ -83,6 +84,12 @@ class MapCatalogBlock(blocks.StructBlock):
         FeaturedMapChooser(),
         label='Featured Maps',
     )
+
+    def get_context(self, value, parent_context=None):
+        context = super().get_context(value, parent_context=parent_context)
+        tags = Tag.objects.all()
+        context['tags'] = tags
+        return context
 
     class Meta:
         template = 'cms/blocks/map_catalog.html'

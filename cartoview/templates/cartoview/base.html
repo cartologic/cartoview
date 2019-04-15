@@ -46,12 +46,13 @@
                         {% if settings.cms.SiteSettings.logo.file.url %}
                             <img src="{{ settings.cms.SiteSettings.logo.file.url }}"
                                  style="height: 46px;overflow: hidden;margin-top: -6px;" class="img-fluid" alt="Logo">
+                            {% if settings.cms.SiteSettings.logo_text %}
+                                {{ settings.cms.SiteSettings.logo_text }}
+                            {% endif %}
                         {% else %}
                             <img src="{% static 'cartoview/img/logo.png' %}"
                                  style="height: 46px;overflow: hidden;margin-top: -6px;" class="img-fluid" alt="Logo">
-                        {% endif %}
-                        {% if settings.cms.SiteSettings.logo_text %}
-                            {{ settings.cms.SiteSettings.logo_text }}
+                            Cartoview
                         {% endif %}
                     </div>
                 </a>
