@@ -8,10 +8,11 @@ from wagtail.core.models import Page
 from wagtail_blocks.blocks import HeaderBlock, ImageTextOverlayBlock, CroppedImagesWithTextBlock, \
     ListWithImagesBlock, ThumbnailGalleryBlock, ImageSliderBlock
 from .grid.GridBlock import GridBlock
-from .Blocks import HeroAreaBlock, MapCatalogBlock
+from .blocks.Blocks import HeroAreaBlock, MapCatalogBlock
 
 
 class HomePage(Page):
+    parent_page_types = ['wagtailcore.Page']
     hero = StreamField([
         ('hero_area', HeroAreaBlock()),
     ], blank=True, null=True, help_text=mark_safe("You should add only <b>1 Hero</b>"))
@@ -49,3 +50,6 @@ class HomePage(Page):
         ObjectList(Page.promote_panels, heading='Promote'),
         ObjectList(Page.settings_panels, heading='Settings', classname="settings"),
     ])
+
+    class Meta:
+        verbose_name = "Site Homepage"
