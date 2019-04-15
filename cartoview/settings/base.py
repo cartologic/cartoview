@@ -14,6 +14,7 @@ import os
 import sys
 from distutils.util import strtobool
 
+import dj_database_url
 from celery.schedules import crontab
 from tzlocal import get_localzone
 
@@ -126,6 +127,7 @@ TEMPLATES = [
                 "django.contrib.messages.context_processors.messages",
                 "wagtail.contrib.settings.context_processors.settings",
                 "wagtailmenus.context_processors.wagtailmenus",
+                "cartoview.context_processors.version",
             ]
         },
     }
@@ -135,7 +137,7 @@ WSGI_APPLICATION = os.getenv("WSGI_APPLICATION", "cartoview.wsgi.application")
 
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
-
+DATABASE_URL = os.getenv('DATABASE_URL', None)
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -146,6 +148,9 @@ DATABASES = {
         'PORT': '5432',
     },
 }
+if DATABASE_URL:
+    DATABASES['default'] = dj_database_url.parse(
+        DATABASE_URL, conn_max_age=0)
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
@@ -160,7 +165,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
 
-LANGUAGE_CODE = "en-us"
+LANGUAGE_CODE = os.getenv("LANGUAGE_CODE", "en-us")
 
 TIME_ZONE = os.getenv("TIME_ZONE", get_localzone().zone)
 
@@ -273,7 +278,7 @@ CARTOVIEW_CONNECTIONS = {
 }
 
 # cache settings
-CACHE_ENABLED = strtobool(os.getenv("CACHE_ENABLED", "True"))
+CACHE_ENABLED = strtobool(os.getenv("CACHE_ENABLED", "False"))
 if CACHE_ENABLED:
     CACHES = {
         "default": {
@@ -310,8 +315,10 @@ if STAND_ALONE:
         except Exception as e:
             logger.error(str(e))
 # file uploads settings
-DATA_UPLOAD_MAX_MEMORY_SIZE = 1073741824
-FILE_UPLOAD_MAX_MEMORY_SIZE = 1073741824  # maximum file upload 1GB
+DATA_UPLOAD_MAX_MEMORY_SIZE = int(os.getenv(
+    'DATA_UPLOAD_MAX_MEMORY_SIZE˝', "1073741824"))
+FILE_UPLOAD_MAX_MEMORY_SIZE = int(os.getenv(
+    'FILE_UPLOAD_MAX_MEMORY_SIZE', "1073741824"))  # maximum file upload 1GB
 
 # Celery application definition
 ASYNC_ENABLED = strtobool(os.getenv('ASYNC_ENABLED', 'False'))
@@ -350,5 +357,5 @@ CELERY_MAX_CACHED_RESULTS = 32768
 
 try:
     from .local_settings import *  # noqa
-except BaseException as e:
-    logger.error(str(e))
+except ImportError:
+    pass

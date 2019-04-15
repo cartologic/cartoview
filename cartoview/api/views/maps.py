@@ -32,3 +32,6 @@ class MapViewSet(viewsets.ModelViewSet):
         data = serializer.data
         data.update({'layers': layers})
         return Response(data, status=200)
+
+    def perform_create(self, serializer):
+        return serializer.save(owner=self.request.user)

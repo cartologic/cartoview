@@ -9,10 +9,21 @@ def thumbnail_path(instance, filename):
     return '/'.join(['thumbnails', str(instance.id), date_as_path, filename])
 
 
+def featured_image(instance, filename):
+    today = datetime.now()
+    date_as_path = today.strftime("%Y/%m/%d")
+    return '/'.join(['featured_images', str(instance.id), date_as_path,
+                     filename])
+
+
 class BaseModel(models.Model):
     title = models.CharField(max_length=255, default=_("No title Provided"))
     description = models.TextField(
         null=True, blank=True, default=_("No Description Provided"))
+    abstract = models.TextField(
+        null=True, blank=True, default=_("No Abstract Provided"))
+    feature_image = models.ImageField(
+        upload_to=thumbnail_path, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     thumbnail = models.ImageField(
