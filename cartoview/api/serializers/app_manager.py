@@ -5,7 +5,7 @@ from cartoview.app_manager.models import (App, AppInstance, AppStore, AppType,
                                           Bookmark)
 from cartoview.maps.models import Map
 
-from ..fields import TagsListField
+from .base_resource import BaseModelSerializer
 
 
 class AppTypeSerializer(serializers.ModelSerializer):
@@ -42,12 +42,11 @@ class BookmarkSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class AppInstanceSerializer(serializers.ModelSerializer):
+class AppInstanceSerializer(BaseModelSerializer):
     map_url = serializers.CharField(read_only=True)
     app_map = serializers.PrimaryKeyRelatedField(queryset=Map.objects.all())
     owner = serializers.StringRelatedField(many=False, read_only=False)
     bookmarks = BookmarkSerializer(many=True)
-    keywords = TagsListField()
 
     def create(self, validated_data):
         user = None
@@ -56,15 +55,12 @@ class AppInstanceSerializer(serializers.ModelSerializer):
             user = request.user
         bookmarks_data = validated_data.pop('bookmarks', [])
         created_bookmarks = []
-        keywords = validated_data.pop('keywords', None)
         appinstance = super(AppInstanceSerializer, self).create(validated_data)
         for bookmark_data in bookmarks_data:
             bookmark = Bookmark.objects.create(owner=user, **bookmark_data)
             created_bookmarks.append(bookmark)
         if len(created_bookmarks) > 0:
             appinstance.bookmarks.set(created_bookmarks)
-        if keywords:
-            appinstance.keywords.set(*keywords)
         return appinstance
 
     def update(self, instance, validated_data):
@@ -74,7 +70,6 @@ class AppInstanceSerializer(serializers.ModelSerializer):
             user = request.user
         bookmarks_data = validated_data.pop('bookmarks', [])
         created_bookmarks = []
-        keywords = validated_data.pop('keywords', None)
         appinstance = super(AppInstanceSerializer, self).update(
             instance, validated_data)
         for bookmark_data in bookmarks_data:
@@ -82,8 +77,6 @@ class AppInstanceSerializer(serializers.ModelSerializer):
             created_bookmarks.append(bookmark)
         if len(created_bookmarks) > 0:
             appinstance.bookmarks.set(created_bookmarks)
-        if keywords:
-            appinstance.keywords.set(*keywords)
         return appinstance
 
     class Meta:

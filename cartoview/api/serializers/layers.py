@@ -1,9 +1,10 @@
 from rest_framework import serializers
 from cartoview.layers.models import Layer
 from cartoview.connections.utils import get_server_by_value
+from .base_resource import BaseModelSerializer
 
 
-class LayerSerializer(serializers.ModelSerializer):
+class LayerSerializer(BaseModelSerializer):
     server = serializers.HyperlinkedRelatedField(
         many=False,
         read_only=True,
