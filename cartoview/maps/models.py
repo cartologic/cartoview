@@ -39,7 +39,7 @@ class Map(BaseModel):
         MinValueValidator(1)
     ])
     rotation = models.IntegerField(null=False, blank=False, default=0)
-    layers = models.ManyToManyField(Layer)
+    layers = models.ManyToManyField(Layer, blank=True)
     render_options = JSONField(default=dict, null=False, blank=True)
     owner = models.ForeignKey(
         get_user_model(), on_delete=models.CASCADE, related_name="maps",

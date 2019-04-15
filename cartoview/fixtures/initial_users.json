@@ -12,9 +12,6 @@
         "is_staff": true,
         "is_active": true,
         "date_joined": "2019-03-20T08:24:36Z",
-        "groups": [
-            999
-        ],
         "user_permissions": []
     }
 }]
