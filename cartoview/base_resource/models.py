@@ -1,6 +1,14 @@
+from datetime import datetime
+
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from datetime import datetime
+from taggit.managers import TaggableManager
+from taggit.models import TaggedItemBase
+
+
+class TaggedResource(TaggedItemBase):
+    content_object = models.ForeignKey(
+        'BaseModel', on_delete=models.SET_NULL, null=True)
 
 
 def thumbnail_path(instance, filename):
@@ -28,6 +36,7 @@ class BaseModel(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     thumbnail = models.ImageField(
         upload_to=thumbnail_path, null=True, blank=True)
+    keywords = TaggableManager(through=TaggedResource, blank=True)
 
     class Meta:
         ordering = ('title', '-created_at', '-updated_at')
