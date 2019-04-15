@@ -43,7 +43,7 @@ django-rest-swagger==2.2.0
 django-six==1.0.4
 django-taggit==0.23.0
 django-treebeard==4.3
-djangorestframework==3.9.1
+djangorestframework==3.9.2
 djangorestframework-xml==1.4.0
 djangorestframework-yaml==1.0.3
 draftjs-exporter==2.1.5
