@@ -70,7 +70,7 @@ class MapModelAdmin(ModelAdmin):
     add_to_settings_menu = False
     exclude_from_explorer = False
     list_display = ('title', 'projection', 'created_at',
-                    'owner', 'wagtail_edit_link')
+                    'owner')
     list_filter = ('title', 'projection', 'created_at', 'owner__username')
     # search_fields = ('title',)
     button_helper_class = MapButtonHelper
