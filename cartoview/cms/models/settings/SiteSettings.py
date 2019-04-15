@@ -35,25 +35,6 @@ class SiteSettings(BaseSetting):
             )),
         ], min_num=0, max_num=1), blank=True, null=True
     )
-    facebook = models.URLField(
-        help_text='Your Facebook page URL',
-        blank=True, null=True,
-        default='https://www.facebook.com/Cartologic'
-    )
-    instagram = models.CharField(
-        max_length=255, help_text='Your Instagram username, without the @',
-        blank=True, null=True
-    )
-    youtube = models.URLField(
-        help_text='Your YouTube channel or user account URL',
-        blank=True, null=True
-    )
-
-    social_media_panel = [
-        FieldPanel('facebook'),
-        FieldPanel('instagram'),
-        FieldPanel('youtube'),
-    ]
     general_panel = [
         ImageChooserPanel('logo'),
         FieldPanel('logo_text'),
@@ -62,7 +43,6 @@ class SiteSettings(BaseSetting):
 
     edit_handler = TabbedInterface([
         ObjectList(general_panel, heading='General'),
-        ObjectList(social_media_panel, heading='Social Media'),
     ])
 
     class Meta:

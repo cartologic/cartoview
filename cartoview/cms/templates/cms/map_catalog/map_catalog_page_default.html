@@ -20,15 +20,15 @@
                         <div class="title">
                             <h1>{{ self.title }}</h1>
                         </div>
-                        <form action="{% slugurl 'search' %}" autocomplete="off" class="form-horizontal" method="GET"
-                              accept-charset="utf-8">
+                        <form action="{{ page.search_url }}" autocomplete="off" class="form-horizontal"
+                              method="GET" accept-charset="utf-8">
                             <div class="input-group">
                                 <input name="q" placeholder="Search for Maps" value="" class="form-control" type="text">
                                 <span class="input-group-btn">
-               <button class="btn btn-white btn-raised btn-fab btn-round" type="submit" id="mapSearch">
-                   <i class="material-icons">search</i>
-               </button>
-            </span>
+                                <button class="btn btn-white btn-raised btn-fab btn-round" type="submit" id="mapSearch">
+                                <i class="material-icons">search</i>
+                                </button>
+                                </span>
                             </div>
                         </form>
                     </div>
@@ -37,7 +37,7 @@
                     <div class="col-md-2"><p style="text-align: left">Popular keywords:</p></div>
                     <div class="col-md-10" style="text-align: right">
                         {% for keyword in keywords %}
-                            <a href="{% slugurl 'keywords' %}?keyword={{ keyword }}"
+                            <a href="{{ page.keywords_url }}?keyword={{ keyword }}"
                                class="btn btn-sm btn-info btn-round"
                                style="color: white;" target="_blank">
                                 {{ keyword }} &nbsp; | &nbsp; {{ keyword.keywords_count }}
@@ -61,7 +61,10 @@
                             </a>
                         </div>
                         <div class="col-8">
-                            <h3 style="margin-top: 0;">{{ map.title }}</h3>
+                            <h3 style="margin-top: 0;">
+                                <a target="_blank" href="{% url 'maps:map_view' map_id=map.id %}">
+                                    {{ map.title }}
+                                </a></h3>
                             <p>
                                 {{ map.description }}
                             </p>

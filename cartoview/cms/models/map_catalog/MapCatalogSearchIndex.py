@@ -1,32 +1,31 @@
 from django import forms
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db import models
-from django.db.models import Count
 from wagtail.admin.edit_handlers import FieldPanel, TabbedInterface, ObjectList
 from wagtail.core.models import Page
-from wagtail.images.edit_handlers import ImageChooserPanel
-
+from django.db.models import Q
 from cartoview.maps.models import Map
 
 
-class MapCatalogPage(Page):
+class MapCatalogSearchIndex(Page):
+    parent_page_types = ['MapCatalogPage']
     selected_template = models.CharField(max_length=255, choices=(
-        ('cms/map_catalog_page_default.html', 'Default Template'),
-    ), default='cms/map_catalog_page_default.html')
-    hero_image = models.ForeignKey(
-        'wagtailimages.Image', on_delete=models.PROTECT, related_name='+', blank=True, null=True
-    )
+        ('cms/map_catalog/map_catalog_search_index_default.html', 'Default Template'),
+    ), default='cms/map_catalog/map_catalog_search_index_default.html')
 
     @property
     def template(self):
         return self.selected_template
 
     def get_context(self, request):
+        q = request.GET.get('q', None)
+        if q:
+            maps = Map.objects.filter(Q(title__icontains=q) | Q(description__icontains=q) | Q(abstract__icontains=q))
+        else:
+            maps = []
+
+        # Update template context
         context = super().get_context(request)
-        keywords = Map.keywords.all()
-        keywords = keywords.annotate(keywords_count=Count(Map.keywords.through.tag_relname()))
-        context['keywords'] = keywords
-        maps = Map.objects.all()
         paginator = Paginator(maps, 6)  # Show 6 resources per page
         page = request.GET.get('page')
         try:
@@ -41,7 +40,6 @@ class MapCatalogPage(Page):
 
     content_panels = [
         FieldPanel('title', classname="full title"),
-        ImageChooserPanel('hero_image'),
     ]
 
     theme_panels = [
@@ -54,3 +52,12 @@ class MapCatalogPage(Page):
         ObjectList(Page.promote_panels, heading='Promote'),
         ObjectList(Page.settings_panels, heading='Settings', classname="settings"),
     ])
+
+    class Meta:
+        verbose_name = "Map Search"
+
+    @classmethod
+    def can_create_at(cls, parent):
+        # You can only create one of these!
+        return super(MapCatalogSearchIndex, cls).can_create_at(parent) \
+               and parent.get_children().type(MapCatalogSearchIndex).count() == 0
