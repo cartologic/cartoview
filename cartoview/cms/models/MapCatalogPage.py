@@ -1,8 +1,12 @@
 from django import forms
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db import models
+from django.db.models import Count
 from wagtail.admin.edit_handlers import FieldPanel, TabbedInterface, ObjectList
 from wagtail.core.models import Page
 from wagtail.images.edit_handlers import ImageChooserPanel
+
+from cartoview.maps.models import Map
 
 
 class MapCatalogPage(Page):
@@ -18,11 +22,21 @@ class MapCatalogPage(Page):
         return self.selected_template
 
     def get_context(self, request):
-        # Filter by tag
-        tag = request.GET.get('tag')
-
-        # Update template context
         context = super().get_context(request)
+        keywords = Map.keywords.all()
+        keywords = keywords.annotate(keywords_count=Count(Map.keywords.through.tag_relname()))
+        context['keywords'] = keywords
+        maps = Map.objects.all()
+        paginator = Paginator(maps, 6)  # Show 6 resources per page
+        page = request.GET.get('page')
+        try:
+            maps = paginator.page(page)
+        except PageNotAnInteger:
+            maps = paginator.page(1)  # If page is not an integer, deliver first page.
+        except EmptyPage:
+            maps = paginator.page(
+                paginator.num_pages)  # If page is out of range (e.g. 9999), deliver last page of results.
+        context['maps'] = maps
         return context
 
     content_panels = [

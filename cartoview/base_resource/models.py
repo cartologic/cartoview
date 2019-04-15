@@ -8,7 +8,7 @@ from taggit.models import TaggedItemBase
 
 class TaggedResource(TaggedItemBase):
     content_object = models.ForeignKey(
-        'BaseModel', on_delete=models.SET_NULL, null=True)
+        'BaseModel', on_delete=models.SET_NULL, null=True, related_name='tagged_items')
 
 
 def thumbnail_path(instance, filename):
