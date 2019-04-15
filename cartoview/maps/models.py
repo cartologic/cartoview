@@ -2,8 +2,6 @@ from django.contrib.auth import get_user_model
 from django.contrib.postgres.fields import ArrayField, JSONField
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
-from django.urls import reverse
-from django.utils.html import format_html
 
 from cartoview.base_resource.models import BaseModel
 from cartoview.layers.models import Layer
@@ -46,12 +44,6 @@ class Map(BaseModel):
     owner = models.ForeignKey(
         get_user_model(), on_delete=models.CASCADE, related_name="maps",
         blank=True, null=True)
-
-    def wagtail_edit_link(self):
-        return format_html(
-            '<a href="{}">Edit Map</a>',
-            reverse('wagtail_edit_map', kwargs={'map_id': self.id})
-        )
 
     def __str__(self):
         return self.title
