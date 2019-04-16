@@ -33,7 +33,7 @@ pip install GDAL==2.4.0
 mkdir -p ${APP_DIR}
 
 # install cartoview
-cd /cartoview && pip install -r requirements.txt && pip install . && rm -rf /cartoview
+cd /cartoview && pip install . && rm -rf /cartoview
 
 django-admin.py startproject \
 	--template=https://github.com/cartologic/Cartoview-project-template/archive/cartoview2.zip \
