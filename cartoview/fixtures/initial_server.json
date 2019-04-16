@@ -1,0 +1,628 @@
+[
+{
+    "model": "connections.server",
+    "pk": 4,
+    "fields": {
+        "created_at": "2019-03-23T22:51:02.591Z",
+        "updated_at": "2019-04-15T03:06:36.827Z",
+        "owner": [
+            "admin"
+        ],
+        "server_type": "OGC-WMS",
+        "title": "MapServer2",
+        "url": "http://demo.deegree.org/utah-workspace/services/wms",
+        "content_type": null,
+        "object_id": null,
+        "operations": {
+            "GetMap": {
+                "formats": [
+                    "image/png",
+                    "image/png; subtype=8bit",
+                    "image/png; mode=8bit",
+                    "image/gif",
+                    "image/jpeg",
+                    "image/tiff",
+                    "image/x-ms-bmp"
+                ],
+                "methods": [
+                    {
+                        "url": "http://demo.deegree.org/utah-workspace/services/wms?",
+                        "type": "Get"
+                    }
+                ]
+            },
+            "GetFeatureInfo": {
+                "formats": [
+                    "application/vnd.ogc.gml",
+                    "text/xml",
+                    "text/plain",
+                    "text/html",
+                    "application/gml+xml; version=2.1",
+                    "application/gml+xml; version=3.0",
+                    "application/gml+xml; version=3.1",
+                    "application/gml+xml; version=3.2",
+                    "text/xml; subtype=gml/2.1.2",
+                    "text/xml; subtype=gml/3.0.1",
+                    "text/xml; subtype=gml/3.1.1",
+                    "text/xml; subtype=gml/3.2.1"
+                ],
+                "methods": [
+                    {
+                        "url": "http://demo.deegree.org/utah-workspace/services/wms?",
+                        "type": "Get"
+                    }
+                ]
+            },
+            "GetCapabilities": {
+                "formats": [
+                    "application/vnd.ogc.wms_xml"
+                ],
+                "methods": [
+                    {
+                        "url": "http://demo.deegree.org/utah-workspace/services/wms?",
+                        "type": "Get"
+                    }
+                ]
+            },
+            "GetLegendGraphic": {
+                "formats": [
+                    "image/png",
+                    "image/png; subtype=8bit",
+                    "image/png; mode=8bit",
+                    "image/gif",
+                    "image/jpeg",
+                    "image/tiff",
+                    "image/x-ms-bmp"
+                ],
+                "methods": [
+                    {
+                        "url": "http://demo.deegree.org/utah-workspace/services/wms?",
+                        "type": "Get"
+                    }
+                ]
+            }
+        }
+    }
+},
+{
+    "model": "connections.server",
+    "pk": 9,
+    "fields": {
+        "created_at": "2019-03-24T21:08:53.528Z",
+        "updated_at": "2019-04-15T03:06:49.512Z",
+        "owner": [
+            "admin"
+        ],
+        "server_type": "GEOJSON",
+        "title": "GeoJSON",
+        "url": "https://raw.githubusercontent.com/Esri/geojson-layer-js/master/data/canada.json",
+        "content_type": null,
+        "object_id": null,
+        "operations": {}
+    }
+},
+{
+    "model": "connections.server",
+    "pk": 10,
+    "fields": {
+        "created_at": "2019-03-24T21:46:16.671Z",
+        "updated_at": "2019-03-26T11:46:21.883Z",
+        "owner": [
+            "admin"
+        ],
+        "server_type": "OGC-WMS",
+        "title": "Local WMS",
+        "url": "http://localhost/geoserver/wms",
+        "content_type": null,
+        "object_id": null,
+        "operations": {
+            "GetFeature": {
+                "formats": [
+                    "text/xml"
+                ],
+                "methods": [
+                    {
+                        "url": "http://localhost:8080/geoserver/wfs",
+                        "type": "Get",
+                        "constraints": []
+                    },
+                    {
+                        "url": "http://localhost:8080/geoserver/wfs",
+                        "type": "Post",
+                        "constraints": []
+                    }
+                ]
+            },
+            "LockFeature": {
+                "formats": [
+                    "text/xml"
+                ],
+                "methods": [
+                    {
+                        "url": "http://localhost:8080/geoserver/wfs",
+                        "type": "Get",
+                        "constraints": []
+                    },
+                    {
+                        "url": "http://localhost:8080/geoserver/wfs",
+                        "type": "Post",
+                        "constraints": []
+                    }
+                ]
+            },
+            "Transaction": {
+                "formats": [
+                    "text/xml"
+                ],
+                "methods": [
+                    {
+                        "url": "http://localhost:8080/geoserver/wfs",
+                        "type": "Get",
+                        "constraints": []
+                    },
+                    {
+                        "url": "http://localhost:8080/geoserver/wfs",
+                        "type": "Post",
+                        "constraints": []
+                    }
+                ]
+            },
+            "GetGmlObject": {
+                "formats": [
+                    "text/xml"
+                ],
+                "methods": [
+                    {
+                        "url": "http://localhost:8080/geoserver/wfs",
+                        "type": "Get",
+                        "constraints": []
+                    },
+                    {
+                        "url": "http://localhost:8080/geoserver/wfs",
+                        "type": "Post",
+                        "constraints": []
+                    }
+                ]
+            },
+            "GetCapabilities": {
+                "formats": [
+                    "text/xml"
+                ],
+                "methods": [
+                    {
+                        "url": "http://localhost:8080/geoserver/wfs",
+                        "type": "Get",
+                        "constraints": []
+                    },
+                    {
+                        "url": "http://localhost:8080/geoserver/wfs",
+                        "type": "Post",
+                        "constraints": []
+                    }
+                ]
+            },
+            "GetFeatureWithLock": {
+                "formats": [
+                    "text/xml"
+                ],
+                "methods": [
+                    {
+                        "url": "http://localhost:8080/geoserver/wfs",
+                        "type": "Get",
+                        "constraints": []
+                    },
+                    {
+                        "url": "http://localhost:8080/geoserver/wfs",
+                        "type": "Post",
+                        "constraints": []
+                    }
+                ]
+            },
+            "DescribeFeatureType": {
+                "formats": [
+                    "text/xml"
+                ],
+                "methods": [
+                    {
+                        "url": "http://localhost:8080/geoserver/wfs",
+                        "type": "Get",
+                        "constraints": []
+                    },
+                    {
+                        "url": "http://localhost:8080/geoserver/wfs",
+                        "type": "Post",
+                        "constraints": []
+                    }
+                ]
+            }
+        }
+    }
+},
+{
+    "model": "connections.server",
+    "pk": 11,
+    "fields": {
+        "created_at": "2019-03-24T21:58:10.832Z",
+        "updated_at": "2019-03-26T11:46:09.470Z",
+        "owner": [
+            "admin"
+        ],
+        "server_type": "OGC-WMS",
+        "title": "Local Geonode Geoserver",
+        "url": "http://localhost/geoserver14-geonode/wms",
+        "content_type": null,
+        "object_id": null,
+        "operations": {
+            "GetMap": {
+                "formats": [
+                    "image/png",
+                    "application/atom xml",
+                    "application/atom+xml",
+                    "application/json;type=utfgrid",
+                    "application/openlayers",
+                    "application/openlayers2",
+                    "application/openlayers3",
+                    "application/pdf",
+                    "application/rss xml",
+                    "application/rss+xml",
+                    "application/vnd.google-earth.kml",
+                    "application/vnd.google-earth.kml xml",
+                    "application/vnd.google-earth.kml+xml",
+                    "application/vnd.google-earth.kml+xml;mode=networklink",
+                    "application/vnd.google-earth.kmz",
+                    "application/vnd.google-earth.kmz xml",
+                    "application/vnd.google-earth.kmz+xml",
+                    "application/vnd.google-earth.kmz;mode=networklink",
+                    "atom",
+                    "image/geotiff",
+                    "image/geotiff8",
+                    "image/gif",
+                    "image/gif;subtype=animated",
+                    "image/jpeg",
+                    "image/png8",
+                    "image/png; mode=8bit",
+                    "image/svg",
+                    "image/svg xml",
+                    "image/svg+xml",
+                    "image/tiff",
+                    "image/tiff8",
+                    "image/vnd.jpeg-png",
+                    "kml",
+                    "kmz",
+                    "openlayers",
+                    "rss",
+                    "text/html; subtype=openlayers",
+                    "text/html; subtype=openlayers2",
+                    "text/html; subtype=openlayers3",
+                    "utfgrid"
+                ],
+                "methods": [
+                    {
+                        "url": "http://localhost:8080/geoserver14-geonode/wms?SERVICE=WMS&",
+                        "type": "Get"
+                    }
+                ]
+            },
+            "GetStyles": {
+                "formats": [
+                    "application/vnd.ogc.sld+xml"
+                ],
+                "methods": [
+                    {
+                        "url": "http://localhost:8080/geoserver14-geonode/wms?SERVICE=WMS&",
+                        "type": "Get"
+                    }
+                ]
+            },
+            "DescribeLayer": {
+                "formats": [
+                    "application/vnd.ogc.wms_xml"
+                ],
+                "methods": [
+                    {
+                        "url": "http://localhost:8080/geoserver14-geonode/wms?SERVICE=WMS&",
+                        "type": "Get"
+                    }
+                ]
+            },
+            "GetFeatureInfo": {
+                "formats": [
+                    "text/plain",
+                    "application/vnd.ogc.gml",
+                    "text/xml",
+                    "application/vnd.ogc.gml/3.1.1",
+                    "text/xml; subtype=gml/3.1.1",
+                    "text/html",
+                    "application/json"
+                ],
+                "methods": [
+                    {
+                        "url": "http://localhost:8080/geoserver14-geonode/wms?SERVICE=WMS&",
+                        "type": "Get"
+                    },
+                    {
+                        "url": "http://localhost:8080/geoserver14-geonode/wms?SERVICE=WMS&",
+                        "type": "Post"
+                    }
+                ]
+            },
+            "GetCapabilities": {
+                "formats": [
+                    "application/vnd.ogc.wms_xml",
+                    "text/xml"
+                ],
+                "methods": [
+                    {
+                        "url": "http://localhost:8080/geoserver14-geonode/wms?SERVICE=WMS&",
+                        "type": "Get"
+                    },
+                    {
+                        "url": "http://localhost:8080/geoserver14-geonode/wms?SERVICE=WMS&",
+                        "type": "Post"
+                    }
+                ]
+            },
+            "GetLegendGraphic": {
+                "formats": [
+                    "image/png",
+                    "image/jpeg",
+                    "image/gif"
+                ],
+                "methods": [
+                    {
+                        "url": "http://localhost:8080/geoserver14-geonode/wms?SERVICE=WMS&",
+                        "type": "Get"
+                    }
+                ]
+            }
+        }
+    }
+},
+{
+    "model": "connections.server",
+    "pk": 12,
+    "fields": {
+        "created_at": "2019-03-25T11:33:46.563Z",
+        "updated_at": "2019-04-15T03:06:50.205Z",
+        "owner": [
+            "admin"
+        ],
+        "server_type": "KML",
+        "title": "KML Server",
+        "url": "https://openlayers.org/en/latest/examples/data/kml/2012-02-10.kml",
+        "content_type": null,
+        "object_id": null,
+        "operations": {}
+    }
+},
+{
+    "model": "connections.server",
+    "pk": 16,
+    "fields": {
+        "created_at": "2019-04-11T20:04:33.633Z",
+        "updated_at": "2019-04-15T03:07:02.912Z",
+        "owner": [
+            "admin"
+        ],
+        "server_type": "ARCGIS_MSL",
+        "title": "ArcGIS Map Layer",
+        "url": "https://sampleserver1.arcgisonline.com/ArcGIS/rest/services/Specialty/ESRI_StateCityHighway_USA/MapServer/",
+        "content_type": null,
+        "object_id": null,
+        "operations": {}
+    }
+},
+{
+    "model": "connections.server",
+    "pk": 17,
+    "fields": {
+        "created_at": "2019-04-14T07:07:15.511Z",
+        "updated_at": "2019-04-15T03:07:02.169Z",
+        "owner": [
+            "admin"
+        ],
+        "server_type": "ARCGIS_MSL",
+        "title": "ArcGIS2",
+        "url": "https://sampleserver6.arcgisonline.com/arcgis/rest/services/LocalGovernment/CatchbasinInspections/MapServer",
+        "content_type": null,
+        "object_id": null,
+        "operations": {}
+    }
+},
+{
+    "model": "connections.server",
+    "pk": 18,
+    "fields": {
+        "created_at": "2019-04-14T07:08:50.509Z",
+        "updated_at": "2019-04-15T03:07:02.173Z",
+        "owner": [
+            "admin"
+        ],
+        "server_type": "ARCGIS_MSL",
+        "title": "ArcGIS3",
+        "url": "https://sampleserver6.arcgisonline.com/arcgis/rest/services/NetworkAnalysis/SanDiego/MapServer",
+        "content_type": null,
+        "object_id": null,
+        "operations": {}
+    }
+},
+{
+    "model": "connections.server",
+    "pk": 19,
+    "fields": {
+        "created_at": "2019-04-14T07:11:29.339Z",
+        "updated_at": "2019-04-15T03:07:02.166Z",
+        "owner": [
+            "admin"
+        ],
+        "server_type": "ARCGIS_MSL",
+        "title": "ArcGIS4",
+        "url": "https://sampleserver6.arcgisonline.com/arcgis/rest/services/Energy/Geology/MapServer",
+        "content_type": null,
+        "object_id": null,
+        "operations": {}
+    }
+},
+{
+    "model": "connections.server",
+    "pk": 20,
+    "fields": {
+        "created_at": "2019-04-14T07:14:50.470Z",
+        "updated_at": "2019-04-15T03:07:02.177Z",
+        "owner": [
+            "admin"
+        ],
+        "server_type": "ARCGIS_MSL",
+        "title": "ArcGIS5",
+        "url": "https://sampleserver6.arcgisonline.com/arcgis/rest/services/MontgomeryQuarters/MapServer",
+        "content_type": null,
+        "object_id": null,
+        "operations": {}
+    }
+},
+{
+    "model": "connections.server",
+    "pk": 21,
+    "fields": {
+        "created_at": "2019-04-15T03:05:19.848Z",
+        "updated_at": "2019-04-15T03:06:28.704Z",
+        "owner": [
+            "admin"
+        ],
+        "server_type": "OGC-WMS",
+        "title": "Try WMS",
+        "url": "http://try.cartoview.net/geoserver/wms",
+        "content_type": null,
+        "object_id": null,
+        "operations": {
+            "GetMap": {
+                "formats": [
+                    "image/png",
+                    "application/atom xml",
+                    "application/atom+xml",
+                    "application/json;type=geojson",
+                    "application/json;type=topojson",
+                    "application/json;type=utfgrid",
+                    "application/openlayers",
+                    "application/pdf",
+                    "application/rss xml",
+                    "application/rss+xml",
+                    "application/vnd.google-earth.kml",
+                    "application/vnd.google-earth.kml xml",
+                    "application/vnd.google-earth.kml+xml",
+                    "application/vnd.google-earth.kml+xml;mode=networklink",
+                    "application/vnd.google-earth.kmz",
+                    "application/vnd.google-earth.kmz xml",
+                    "application/vnd.google-earth.kmz+xml",
+                    "application/vnd.google-earth.kmz;mode=networklink",
+                    "application/x-protobuf;type=mapbox-vector",
+                    "application/x-sqlite3",
+                    "atom",
+                    "geojson",
+                    "image/geotiff",
+                    "image/geotiff8",
+                    "image/gif",
+                    "image/gif;subtype=animated",
+                    "image/jpeg",
+                    "image/png8",
+                    "image/png; mode=8bit",
+                    "image/svg",
+                    "image/svg xml",
+                    "image/svg+xml",
+                    "image/tiff",
+                    "image/tiff8",
+                    "image/vnd.jpeg-png",
+                    "kml",
+                    "kmz",
+                    "mbtiles",
+                    "openlayers",
+                    "pbf",
+                    "rss",
+                    "text/html; subtype=openlayers",
+                    "topojson",
+                    "utfgrid"
+                ],
+                "methods": [
+                    {
+                        "url": "http://try.cartoview.net/geoserver/wms?SERVICE=WMS&",
+                        "type": "Get"
+                    }
+                ]
+            },
+            "GetStyles": {
+                "formats": [
+                    "application/vnd.ogc.sld+xml"
+                ],
+                "methods": [
+                    {
+                        "url": "http://try.cartoview.net/geoserver/wms?SERVICE=WMS&",
+                        "type": "Get"
+                    }
+                ]
+            },
+            "DescribeLayer": {
+                "formats": [
+                    "application/vnd.ogc.wms_xml"
+                ],
+                "methods": [
+                    {
+                        "url": "http://try.cartoview.net/geoserver/wms?SERVICE=WMS&",
+                        "type": "Get"
+                    }
+                ]
+            },
+            "GetFeatureInfo": {
+                "formats": [
+                    "text/plain",
+                    "application/vnd.ogc.gml",
+                    "text/xml",
+                    "application/vnd.ogc.gml/3.1.1",
+                    "text/xml; subtype=gml/3.1.1",
+                    "text/html",
+                    "text/javascript",
+                    "application/json"
+                ],
+                "methods": [
+                    {
+                        "url": "http://try.cartoview.net/geoserver/wms?SERVICE=WMS&",
+                        "type": "Get"
+                    },
+                    {
+                        "url": "http://try.cartoview.net/geoserver/wms?SERVICE=WMS&",
+                        "type": "Post"
+                    }
+                ]
+            },
+            "GetCapabilities": {
+                "formats": [
+                    "application/vnd.ogc.wms_xml",
+                    "text/xml"
+                ],
+                "methods": [
+                    {
+                        "url": "http://try.cartoview.net/geoserver/wms?SERVICE=WMS&",
+                        "type": "Get"
+                    },
+                    {
+                        "url": "http://try.cartoview.net/geoserver/wms?SERVICE=WMS&",
+                        "type": "Post"
+                    }
+                ]
+            },
+            "GetLegendGraphic": {
+                "formats": [
+                    "image/png",
+                    "image/jpeg",
+                    "image/gif"
+                ],
+                "methods": [
+                    {
+                        "url": "http://try.cartoview.net/geoserver/wms?SERVICE=WMS&",
+                        "type": "Get"
+                    }
+                ]
+            }
+        }
+    }
+}
+]
