@@ -13,7 +13,6 @@ class SiteSettings(BaseSetting):
         blank=True, null=True
     )
     logo_text = models.CharField(max_length=120, blank=True, null=True)
-    footer = RawHTMLBlock()
     footer = StreamField(
         StreamBlock([
             ('footer', RawHTMLBlock(
