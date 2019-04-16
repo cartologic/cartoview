@@ -39,7 +39,7 @@
                         {% for keyword in keywords %}
                             <a href="{{ page.keywords_url }}?keyword={{ keyword }}"
                                class="btn btn-sm btn-info btn-round"
-                               style="color: white;" target="_blank">
+                               style="color: white;">
                                 {{ keyword }} &nbsp; | &nbsp; {{ keyword.keywords_count }}
                             </a>
                         {% endfor %}
@@ -48,7 +48,7 @@
 
                 {% for map in maps %}
                     <div class="row" style="margin-top: 20px;">
-                        <div class="col-4">
+                        <div class="col-lg-4 col-md-12 col-sm-12">
                             <a target="_blank" href="{% url 'maps:map_view' map_id=map.id %}">
                                 {% if map.featured_image %}
                                     <img class="rounded img-fluid" src="{{ map.featured_image.url }}" alt="Map">
@@ -60,7 +60,7 @@
                                 {% endif %}
                             </a>
                         </div>
-                        <div class="col-8">
+                        <div class="col-lg-8 col-md-12 col-sm-12">
                             <h3 style="margin-top: 0;">
                                 <a target="_blank" href="{% url 'maps:map_view' map_id=map.id %}">
                                     {{ map.title }}
@@ -70,8 +70,8 @@
                             </p>
                         </div>
                     </div>
+                    <hr width="50%">
                 {% endfor %}
-
 
                 <div class="row" style="margin-top: 20px;">
                     <div class="col">

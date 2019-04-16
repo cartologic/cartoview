@@ -4,6 +4,8 @@ from django.db import models
 from wagtail.admin.edit_handlers import FieldPanel, TabbedInterface, ObjectList
 from wagtail.core.models import Page
 from django.db.models import Q
+from wagtail.images.edit_handlers import ImageChooserPanel
+
 from cartoview.maps.models import Map
 
 
@@ -12,6 +14,9 @@ class MapCatalogSearchIndex(Page):
     selected_template = models.CharField(max_length=255, choices=(
         ('cms/map_catalog/map_catalog_search_index_default.html', 'Default Template'),
     ), default='cms/map_catalog/map_catalog_search_index_default.html')
+    hero_image = models.ForeignKey(
+        'wagtailimages.Image', on_delete=models.PROTECT, related_name='+', blank=True, null=True
+    )
 
     @property
     def template(self):
@@ -40,6 +45,7 @@ class MapCatalogSearchIndex(Page):
 
     content_panels = [
         FieldPanel('title', classname="full title"),
+        ImageChooserPanel('hero_image'),
     ]
 
     theme_panels = [
