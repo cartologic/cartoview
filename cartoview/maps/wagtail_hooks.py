@@ -14,17 +14,6 @@ class MapButtonHelper(ButtonHelper):
     # Define classes for our button, here we can set an icon for example
     view_button_classnames = ['button-small', 'icon', 'icon-site']
 
-    def view_button(self, obj):
-        # Define a label for our button
-        text = _('Edit Map')
-        return {
-            # decide where the button links to
-            'url': reverse('wagtail_edit_map', kwargs={"map_id": obj.id}),
-            'label': text,
-            'classname': self.finalise_classname(self.view_button_classnames),
-            'title': text,
-        }
-
     def add_button(self, classnames_add=None, classnames_exclude=None):
         if classnames_add is None:
             classnames_add = []
@@ -39,18 +28,19 @@ class MapButtonHelper(ButtonHelper):
             'title': _('Create a New %s') % self.verbose_name,
         }
 
-    def get_buttons_for_obj(self, obj, exclude=None, classnames_add=None, classnames_exclude=None):
-        """
-        This function is used to gather all available buttons.
-        We append our custom button to the btns list.
-        """
-        btns = super().get_buttons_for_obj(
-            obj, exclude, classnames_add, classnames_exclude)
-        if 'view' not in (exclude or []):
-            btns.append(
-                self.view_button(obj)
-            )
-        return btns
+    def edit_button(self, pk, classnames_add=None, classnames_exclude=None):
+        if classnames_add is None:
+            classnames_add = []
+        if classnames_exclude is None:
+            classnames_exclude = []
+        classnames = self.edit_button_classnames + classnames_add
+        cn = self.finalise_classname(classnames, classnames_exclude)
+        return {
+            'url': reverse('wagtail_edit_map', kwargs={"map_id": pk}),
+            'label': _('Edit'),
+            'classname': cn,
+            'title': _('Edit this %s') % self.verbose_name,
+        }
 
 
 @hooks.register('register_admin_urls')
