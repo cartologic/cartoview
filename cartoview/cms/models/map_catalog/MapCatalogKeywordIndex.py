@@ -14,7 +14,7 @@ class MapCatalogKeywordIndex(Page):
         ('cms/map_catalog/map_catalog_keyword_index_default.html', 'Default Template'),
     ), default='cms/map_catalog/map_catalog_keyword_index_default.html')
     hero_image = models.ForeignKey(
-        'wagtailimages.Image', on_delete=models.PROTECT, related_name='+', blank=True, null=True
+        'wagtailimages.Image', on_delete=models.PROTECT, related_name='MapCatalogKeywordIndex_hero_image', blank=True, null=True
     )
 
     @property
