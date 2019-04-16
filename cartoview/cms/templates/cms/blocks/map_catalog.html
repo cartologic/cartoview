@@ -9,9 +9,9 @@
             <div class="title">
                 <h1>{{ self.title }}</h1>
             </div>
-            <form action="" autocomplete="off" class="form-horizontal" method="post" accept-charset="utf-8">
+            <form action="{% slugurl 'search' %}" autocomplete="off" class="form-horizontal" method="GET" accept-charset="utf-8">
                 <div class="input-group">
-                    <input name="searchtext" placeholder="Search for Maps" value="" class="form-control" type="text">
+                    <input name="q" placeholder="Search for Maps" value="" class="form-control" type="text">
                     <span class="input-group-btn">
                <button class="btn btn-white btn-raised btn-fab btn-round" type="submit" id="mapSearch">
                    <i class="material-icons">search</i>
@@ -21,24 +21,19 @@
             </form>
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-2"><p style="text-align: left">Popular Tags:</p></div>
+    <div class="row" style="margin-bottom: 40px;">
+        <div class="col-md-2"><p style="text-align: left">Popular keywords:</p></div>
         <div class="col-md-10" style="text-align: right">
-            {{ tags }}
-            <a href="#"><span class="badge badge-pill badge-secondary">Secondary</span></a>
-            <a href="#"><span class="badge badge-pill badge-primary">Primary</span></a>
-            <a href="#"><span class="badge badge-pill badge-info">Info</span></a>
-            <a href="#"><span class="badge badge-pill badge-danger">Danger</span></a>
-            <a href="#"><span class="badge badge-pill badge-dark">Dark</span></a>
-            <a href="#"><span class="badge badge-pill badge-default">Default</span></a>
-            <a href="#"><span class="badge badge-pill badge-warning">Warning</span></a>
-            <a href="#"><span class="badge badge-pill badge-rose">Rose</span></a>
-            <a href="#"><span class="badge badge-pill badge-success">Success</span></a>
+            {% for keyword in keywords %}
+                <a href="{% slugurl 'keywords' %}?keyword={{ keyword }}" class="btn btn-sm btn-info btn-round"
+                   style="color: white;">
+                    {{ keyword }} &nbsp; | &nbsp; {{ keyword.keywords_count }}
+                </a>
+            {% endfor %}
         </div>
     </div>
 
     {% for featured_map in self.featured_maps %}
-        <hr/>
         {% if not forloop.counter|divisibleby:2 %}
             <div class="row">
                 <div class="col-md-6">
@@ -90,7 +85,6 @@
                 </div>
             </div>
         {% endif %}
+        <hr/>
     {% endfor %}
-
-
 </div>

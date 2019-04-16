@@ -1,6 +1,5 @@
 from django import forms
 from django.db.models import Count
-from taggit.models import Tag
 from wagtail.core import blocks
 from wagtail.images.blocks import ImageChooserBlock
 
@@ -87,8 +86,9 @@ class MapCatalogBlock(blocks.StructBlock):
 
     def get_context(self, value, parent_context=None):
         context = super().get_context(value, parent_context=parent_context)
-        tags = Tag.objects.all()
-        context['tags'] = tags
+        keywords = Map.keywords.all()
+        keywords = keywords.annotate(keywords_count=Count(Map.keywords.through.tag_relname()))
+        context['keywords'] = keywords
         return context
 
     class Meta:
