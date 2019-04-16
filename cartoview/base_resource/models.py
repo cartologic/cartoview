@@ -1,6 +1,8 @@
 from datetime import datetime
-
+import os
 from django.db import models
+from django.db.models.signals import post_delete
+from django.dispatch import receiver
 from django.utils.translation import gettext_lazy as _
 from taggit.managers import TaggableManager
 from taggit.models import TaggedItemBase
@@ -40,3 +42,15 @@ class BaseModel(models.Model):
 
     class Meta:
         ordering = ('title', '-created_at', '-updated_at')
+
+
+@receiver(post_delete, sender=BaseModel)
+def photo_post_delete_handler(sender, **kwargs):
+    instance = kwargs['instance']
+    file_objs = [instance.featured_image, instance.thumbnail]
+    for file_obj in file_objs:
+        if not file_obj:
+            continue
+        storage, path = getattr(file_obj, 'storage'), getattr(file_obj, 'path')
+        if path and os.path.exists(path):
+            storage.delete(path)
