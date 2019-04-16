@@ -1,5 +1,6 @@
-from datetime import datetime
 import os
+from datetime import datetime
+
 from django.db import models
 from django.db.models.signals import post_delete
 from django.dispatch import receiver
@@ -10,7 +11,8 @@ from taggit.models import TaggedItemBase
 
 class TaggedResource(TaggedItemBase):
     content_object = models.ForeignKey(
-        'BaseModel', on_delete=models.SET_NULL, null=True, related_name='tagged_items')
+        'BaseModel', on_delete=models.SET_NULL, null=True,
+        related_name='tagged_items')
 
 
 def thumbnail_path(instance, filename):
