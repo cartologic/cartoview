@@ -6,9 +6,10 @@ from wagtail.core import blocks
 from wagtail.core.fields import StreamField
 from wagtail.core.models import Page
 from wagtail_blocks.blocks import HeaderBlock, ImageTextOverlayBlock, CroppedImagesWithTextBlock, \
-    ListWithImagesBlock, ThumbnailGalleryBlock, ImageSliderBlock
+    ListWithImagesBlock, ImageSliderBlock
 from .grid.GridBlock import GridBlock
 from .blocks.Blocks import HeroAreaBlock, MapCatalogBlock
+from .blocks.ThumbnailGalleryBlock import ThumbnailGalleryBlock
 
 
 class HomePage(Page):
