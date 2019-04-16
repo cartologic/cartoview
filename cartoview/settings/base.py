@@ -316,7 +316,7 @@ if STAND_ALONE:
             logger.error(str(e))
 # file uploads settings
 DATA_UPLOAD_MAX_MEMORY_SIZE = int(os.getenv(
-    'DATA_UPLOAD_MAX_MEMORY_SIZE˝', "1073741824"))
+    'DATA_UPLOAD_MAX_MEMORY_SIZE', "1073741824"))
 FILE_UPLOAD_MAX_MEMORY_SIZE = int(os.getenv(
     'FILE_UPLOAD_MAX_MEMORY_SIZE', "1073741824"))  # maximum file upload 1GB
 
