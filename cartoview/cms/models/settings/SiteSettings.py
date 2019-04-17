@@ -20,7 +20,7 @@ class SiteSettings(BaseSetting):
                         '<div class="container">' +
                         '<nav class="float-left">' +
                         '<ul>' +
-                        '<li><a href="https://cartoview.net" target="_blank">Cartoview</a></li>' +
+                        '<li><a href="https://cartoview.net" target="_blank">Cartoview <script>document.write(cartoview_version)</script></a></li>' +
                         '<li><a href="http://www.twitter.com" target="_blank" class="btn btn-link btn-just-icon"><i class="fa fa-twitter"></i></a></li>' +
                         '<li><a href="http://www.instagram.com" target="_blank" class="btn btn-link btn-just-icon"><i class="fa fa-instagram"></i></a></li>' +
                         '<li><a href="http://www.facebook.com" target="_blank" class="btn btn-link btn-just-icon"><i class="fa fa-facebook-square"></i></a></li>' +
