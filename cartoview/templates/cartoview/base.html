@@ -1,4 +1,6 @@
 {% load static i18n menu_tags cartoview_core %}
+{% get_current_language as LANGUAGE_CODE %}
+<!-- Current language: {{ LANGUAGE_CODE }} -->
 
 <!DOCTYPE html>
 <html lang="en">
@@ -6,8 +8,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
+    <meta name="description" content="Cartoview-2 a GIS Web Mapping Application Market">
+    <meta name="author" content="Cartologic">
 
     <link rel="shortcut icon" type="image/png" href="{% static 'cartoview/img/favicon.ico' %}"/>
 
@@ -32,6 +34,8 @@
     <link href="{% static 'css/custom.css' %}" rel="stylesheet"/>
     <script>
         const cartoview_version = '{% cartoview_version %}'
+        const arabic_lang = "/ar{{ request.get_full_path|slice:'3:' }}"
+        const english_lang = "/en{{ request.get_full_path|slice:'3:'}}"
     </script>
     {% block extra_head %}
     {% endblock extra_head %}
@@ -102,6 +106,17 @@
                             </div>
                         </li>
                     {% endif %}
+                    {% ifequal LANGUAGE_CODE "en" %}
+                        <li class="nav-item">
+                        <a class="nav-link" href="/ar{{ request.get_full_path|slice:'3:' }}">
+                            <i class="material-icons">language</i> Ar </a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                        <a class="nav-link" href="/en{{ request.get_full_path|slice:'3:' }}">
+                            <i class="material-icons">language</i>En</a>
+                        </li>
+                    {% endifequal %}
                 </ul>
             </div>
         </div>
