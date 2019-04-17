@@ -1,0 +1,36 @@
+.imagebox {
+  background: black;
+  padding: 0px;
+  position: relative;
+  text-align: center;
+  width: fit-content;
+  margin-top: 20px;
+}
+
+.imagebox img {
+  opacity: 1;
+  transition: 0.5s opacity;
+  object-fit: cover;
+  width: 100%;
+}
+
+.imagebox .imagebox-desc {
+  background-color: rgba(0, 0, 0, 0.6);
+  bottom: 0px;
+  color: white;
+  font-size: 1.2em;
+  left: 0px;
+  padding: 10px 15px;
+  position: absolute;
+  transition: 0.5s padding;
+  text-align: center;
+  width: 100%;
+}
+
+.imagebox:hover img {
+  opacity: 0.7;
+}
+
+.imagebox:hover .imagebox-desc {
+  padding-bottom: 10%;
+}

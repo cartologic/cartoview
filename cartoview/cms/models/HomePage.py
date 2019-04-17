@@ -5,11 +5,10 @@ from wagtail.admin.edit_handlers import StreamFieldPanel, FieldPanel, TabbedInte
 from wagtail.core import blocks
 from wagtail.core.fields import StreamField
 from wagtail.core.models import Page
-from wagtail_blocks.blocks import HeaderBlock, ImageTextOverlayBlock, CroppedImagesWithTextBlock, \
-    ListWithImagesBlock, ImageSliderBlock
 from .grid.GridBlock import GridBlock
 from .blocks.Blocks import HeroAreaBlock, MapCatalogBlock
 from .blocks.ThumbnailGalleryBlock import ThumbnailGalleryBlock
+from .blocks.ImageTextOverlayBlock import ImageTextOverlayBlock
 
 
 class HomePage(Page):
@@ -20,13 +19,9 @@ class HomePage(Page):
     body = StreamField([
         ('map_catalog', MapCatalogBlock()),
         ('grid', GridBlock()),
-        ('header', HeaderBlock()),
         ('paragraph', blocks.RichTextBlock()),
         ('image_text_overlay', ImageTextOverlayBlock()),
-        ('cropped_images_with_text', CroppedImagesWithTextBlock()),
-        ('list_with_images', ListWithImagesBlock()),
         ('thumbnail_gallery', ThumbnailGalleryBlock()),
-        ('image_slider', ImageSliderBlock()),
     ], blank=True, null=True)
     selected_template = models.CharField(max_length=255, choices=(
         ('cms/home_page_default.html', 'Default Template'),

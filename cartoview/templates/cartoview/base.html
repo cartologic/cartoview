@@ -1,4 +1,4 @@
-{% load static i18n menu_tags %}
+{% load static i18n menu_tags cartoview_core %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -30,6 +30,9 @@
     <link href="{% static 'material-kit/assets/css/material-kit.css' %}" rel="stylesheet"/>
     <!-- Additonal Custom CSS -->
     <link href="{% static 'css/custom.css' %}" rel="stylesheet"/>
+    <script>
+        const cartoview_version = '{% cartoview_version %}'
+    </script>
     {% block extra_head %}
     {% endblock extra_head %}
 
