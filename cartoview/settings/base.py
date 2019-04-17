@@ -78,7 +78,6 @@ INSTALLED_APPS = [
     "modelcluster",
     "taggit",
     'wagtailfontawesome',
-    'wagtail_blocks',
 
     # cartoview apps
     "cartoview",

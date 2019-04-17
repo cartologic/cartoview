@@ -1,2 +1,2 @@
-__version__ = "0.2a11"
+__version__ = "0.2a12"
 default_app_config = 'cartoview.apps.CartoviewAppConfig'
