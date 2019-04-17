@@ -13,7 +13,7 @@
                                     <a href="/" class="btn btn-info"><i class="material-icons">home</i></a>
                                 </div>
                                 <div class="col-6">
-                                    <h4 class="card-title">Login</h4>
+                                    <h4 class="card-title">{% trans "Login" %}</h4>
                                 </div>
                             </div>
                         </div>
@@ -21,7 +21,7 @@
                             <form method="post">
                                 {% csrf_token %}
                                 {{ form|crispy }}
-                                <button class="btn btn-block btn-primary" type="submit">{% trans "Login" %}</button>
+                                <button class="btn btn-block btn-info" type="submit">{% trans "Login" %}</button>
                             </form>
                             <h6 class="text-center">{% trans "Or Login With" %}</h6>
                             <div class="text-center">
