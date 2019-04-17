@@ -6,6 +6,7 @@ from django.db import models
 from cartoview.base_resource.models import BaseModel
 from cartoview.layers.models import Layer
 from cartoview.layers.validators import validate_projection
+from cartoview.fields import ListField
 
 
 class Map(BaseModel):
@@ -18,8 +19,7 @@ class Map(BaseModel):
         max_length=30,
         blank=False,
         null=False, validators=[validate_projection, ], default="EPSG:3857")
-    center = models.CharField(
-        max_length=150, null=False, blank=False, default="[0,0]")
+    center = ListField(null=False, blank=False, default=[0, 0])
     constrain_rotation = models.BooleanField(default=True)
     enable_rotation = models.BooleanField(default=True)
     max_zoom = models.IntegerField(default=28, validators=[
