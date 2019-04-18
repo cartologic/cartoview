@@ -207,6 +207,7 @@ ANONYMOUS_USER_NAME = os.getenv("ANONYMOUS_USER_NAME", "AnonymousUser")
 GUARDIAN_RAISE_403 = True
 OAUTH_SERVER_BASEURL = os.getenv("OAUTH_SERVER_BASEURL", "<BASE_SERVER_URL>")
 LOGIN_REDIRECT_URL = os.getenv("LOGIN_REDIRECT_URL", "/")
+ACCOUNT_ADAPTER = "cartoview.base_resource.allauth_account_adapter.AccountAdapter"
 ANONYMOUS_GROUP_NAME = os.getenv("ANONYMOUS_GROUP_NAME", "public")
 
 WAGTAIL_SITE_NAME = os.getenv("WAGTAIL_SITE_NAME", "Cartoview")
