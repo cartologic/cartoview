@@ -1,27 +1,37 @@
 {% extends 'cartoview/base.html' %}
-{% load crispy_forms_tags i18n socialaccount %}
+{% load crispy_forms_tags i18n socialaccount static %}
 {% block content %}
-<div class="row justify-content-md-center no-gutters inherit-height "  >
-  <div class="col-md-4 col-sm-8 center" >
-    <div class="row">
-      <div class="col" >
-        <h3 class="text-center">{% trans "Signup" %}</h3>
-        <form method="post">
-          {% csrf_token %}
-          {{ form|crispy }}
-          <button class="btn btn-block btn-primary" type="submit">{% trans "Signup" %}</button>
-        </form>
-      </div>
-    </div>
-    <hr>
-    <div class="row">
-      <div class="col">
-        <h6 class="text-center">{% trans "Already have an account? Then please" %}</h6>
-        <div class="text-center">
-          <a href='{{ login_url }}' class="btn btn-primary btn-sm">{% trans "sign in" %}</a>
+    <div class="page-header header-filter"
+         style='background-image: url("{% static 'material-kit/assets/img/bg7.jpg' %}"); background-size: cover; background-position: top center;'>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 col-md-6 ml-auto mr-auto">
+                    <div class="card card-login">
+                        <div class="card-header card-header-info text-center">
+                            <div class="row">
+                                <div class="col-3">
+                                    <a href="/" class="btn btn-info"><i class="material-icons">home</i></a>
+                                </div>
+                                <div class="col-6">
+                                    <h4 class="card-title">{% trans "Signup" %}</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <form method="post">
+                                {% csrf_token %}
+                                {{ form|crispy }}
+                                <button class="btn btn-block btn-info" type="submit">{% trans "Signup" %}</button>
+                            </form>
+                            <h6 class="text-center">{% trans "Already have an account? Then please" %}</h6>
+                            <div class="text-center">
+                                <a href='{{ login_url }}'
+                                   class="btn btn-info btn-sm">{% trans "Sign In" %}</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
-</div>
-{% endblock %}
+{% endblock content %}
