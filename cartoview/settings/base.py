@@ -192,7 +192,7 @@ USE_L10N = True
 STATIC_URL = "/static/"
 STATIC_ROOT = os.path.join(BASE_DIR, os.pardir, "static_root")
 MEDIA_URL = "/media/"
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+MEDIA_ROOT = os.path.join(BASE_DIR, os.pardir, "media")
 STATICFILES_DIRS = []
 # auth settings
 AUTHENTICATION_BACKENDS = (
