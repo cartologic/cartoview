@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
-from django.contrib.postgres.fields import ArrayField, JSONField
+from django.contrib.postgres.fields import JSONField
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -11,16 +11,17 @@ from guardian.shortcuts import assign_perm
 from cartoview.base_resource.models import BaseModel
 from cartoview.connections.models import Server
 from cartoview.connections.utils import get_server_by_value
+from cartoview.fields import ListField
+from cartoview.validators import ListValidator
 
 from .validators import validate_projection
 
 
 class BaseLayer(BaseModel):
     name = models.CharField(max_length=255)
-    bounding_box = ArrayField(models.DecimalField(max_digits=30,
-                                                  decimal_places=15,
-                                                  blank=True, null=True),
-                              size=4, null=False, blank=False)
+    bounding_box = ListField(null=False, blank=False, default=[0, 0, 0, 0],
+                             validators=[ListValidator(min_length=4,
+                                                       max_length=4), ])
     projection = models.CharField(max_length=30, blank=False, null=False,
                                   validators=[validate_projection, ])
     server = models.ForeignKey(Server, on_delete=models.CASCADE,
