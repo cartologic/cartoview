@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-18 11:07+0200\n"
+"POT-Creation-Date: 2019-04-18 12:34+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -71,6 +71,42 @@ msgstr "بلا توصيف"
 #| msgid "No title Provided"
 msgid "No Abstract Provided"
 msgstr "بلا عنوان"
+
+#: .\cartoview\cms\templates\cms\empty_page.html:10
+msgid "No Content Yet!"
+msgstr "لا يوجد محتوى بعد!"
+
+#: .\cartoview\cms\templates\cms\empty_page.html:12
+msgid "Start Adding Content"
+msgstr "قم باضافة محتوى"
+
+#: .\cartoview\cms\templates\cms\empty_page.html:16
+msgid "Cartoview"
+msgstr ""
+
+#: .\cartoview\cms\templates\cms\empty_page.html:21
+msgid "Try"
+msgstr "تجربة"
+
+#: .\cartoview\cms\templates\cms\empty_page.html:25
+msgid "Demo"
+msgstr "فيديو"
+
+#: .\cartoview\cms\templates\cms\empty_page.html:31
+msgid "made with"
+msgstr "تم صنعه"
+
+#: .\cartoview\cms\templates\cms\empty_page.html:31
+msgid "by"
+msgstr "بواسطة"
+
+#: .\cartoview\cms\templates\cms\empty_page.html:31
+msgid "Cartologic"
+msgstr ""
+
+#: .\cartoview\cms\templates\cms\empty_page.html:32
+msgid "for a better web"
+msgstr "من أجل أنظمة أفضل"
 
 #: .\cartoview\connections\apps.py:8
 msgid "Connections"

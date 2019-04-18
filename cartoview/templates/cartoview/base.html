@@ -3,7 +3,7 @@
 <!-- Current language: {{ LANGUAGE_CODE }} -->
 
 <!DOCTYPE html>
-<html lang="en">
+<html {% ifequal LANGUAGE_CODE "ar" %} lang="ar" dir="rtl" {% else %} lang="en" dir="ltr" {% endifequal %}>
 
 <head>
     <meta charset="utf-8">
@@ -34,8 +34,6 @@
     <link href="{% static 'css/custom.css' %}" rel="stylesheet"/>
     <script>
         const cartoview_version = '{% cartoview_version %}'
-        const arabic_lang = "/ar{{ request.get_full_path|slice:'3:' }}"
-        const english_lang = "/en{{ request.get_full_path|slice:'3:'}}"
     </script>
     {% block extra_head %}
     {% endblock extra_head %}
@@ -44,11 +42,11 @@
 
 <body class="{% block body_class %}{% endblock %}">
 {% block navbar %}
-    <nav class="navbar navbar-transparent navbar-color-on-scroll fixed-top navbar-expand-lg" color-on-scroll="100"
+    <nav dir="ltr" class="navbar navbar-transparent navbar-color-on-scroll fixed-top navbar-expand-lg" color-on-scroll="100"
          id="sectionsNav">
         <div class="container">
             <div class="navbar-translate">
-                <a class="navbar-brand" href="/">
+                <a class="navbar-brand" href="/{{ LANGUAGE_CODE }}">
                     <div class="logo-image">
                         {% if settings.cms.SiteSettings.logo.file.url %}
                             <img src="{{ settings.cms.SiteSettings.logo.file.url }}"
@@ -96,7 +94,7 @@
                                         {% endif %}
                                     </form>
                                 </div>
-                                <a href="/admin" class="dropdown-item">
+                                <a href="/{{ LANGUAGE_CODE }}/admin" class="dropdown-item">
                                     <i class="material-icons">view_quilt</i> {% trans "Admin Area" %}
                                 </a>
                                 <a href="#" class="dropdown-item"

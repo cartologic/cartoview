@@ -1,5 +1,4 @@
-{% load static %}
-{% load cms_utils %}
+{% load cms_utils static i18n %}
 {% get_empty_image as empty_image %}
 
 {% block hero_area %}
@@ -8,28 +7,29 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                    <h1 class="title">No Content Yet!</h1>
+                    <h1 class="title">{% trans "No Content Yet!" %}</h1>
                     <a href="/admin" class="btn btn-warning btn-raised btn-lg">
-                        <i class="fa fa-map-marker"></i>&nbsp; Start Adding Content
+                        <i class="fa fa-map-marker"></i>&nbsp; {% trans "Start Adding Content" %}
                     </a>
                 </div>
-                <div class="col-md-12">
-                    <h1 class="title">Cartoview</h1>
-                    <h4>Cartoview is a GIS Web Mapping Application Market.
-                        Create, share, and visualize GIS Web Mapping Applications very easily and very quickly from the
-                        browser without programming.</h4>
+                <div dir="ltr" class="col-md-12">
+                    <h1 class="title">{% trans "Cartoview" %}</h1>
+                    <h4>Cartoview is a GIS Web Mapping Application Market
+                        Create, share, and visualize GIS Web Mapping Applications very easily and very quickly
+                        from the browser without programming.</h4>
                     <a href="http://demo.cartoview.net" target="_blank" class="btn btn-info btn-raised btn-lg">
-                        <i class="fa fa-play"></i>&nbsp; Try
+                        <i class="fa fa-play"></i>&nbsp; {% trans "Try" %}
                     </a>
                     <a href="https://www.youtube.com/watch?v=jabrF9tQViM" target="_blank"
                        class="btn btn-danger btn-raised btn-lg">
-                        <i class="fa fa-video-camera"></i>&nbsp; Demo
+                        <i class="fa fa-video-camera"></i>&nbsp; {% trans "Demo" %}
                     </a>
                 </div>
             </div>
             <div class="row" style="margin-top: 20px;">
                 <div class="col-12">
-                    made with <i class="material-icons">favorite</i> by <b>Cartologic</b> for a better web
+                    {% trans "made with" %} <i class="material-icons">favorite</i> {% trans "by" %} <b>{% trans "Cartologic"%}</b>
+                    {% trans "for a better web" %}
                 </div>
             </div>
             <div class="row" style="margin-top: 20px;">
