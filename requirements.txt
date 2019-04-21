@@ -106,10 +106,11 @@ txaio==18.8.1
 tzlocal==1.5.1
 Unidecode==1.0.23
 uritemplate==3.0.0
-urllib3==1.24.1
+urllib3==1.24.2
 uvicorn==0.6.1
 vine==1.3.0
 wagtail==2.4
+wagtail-blocks==0.6.8
 wagtailfontawesome==1.1.4
 wagtailmenus==2.12
 wcwidth==0.1.7
