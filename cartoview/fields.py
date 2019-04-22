@@ -25,9 +25,7 @@ class ListField(models.TextField):
         return parse_from_db(value)
 
     def to_python(self, value):
-        if value is None:
-            return value
-        if isinstance(value, list):
+        if value is None or isinstance(value, list):
             return value
         return parse_from_db(value)
 
