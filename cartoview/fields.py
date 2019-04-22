@@ -54,3 +54,38 @@ class ListSerializerField(serializers.Field):
         if not isinstance(data, list):
             raise RestValidationError(_("List Type Is Required"))
         return data
+
+
+class DictField(models.TextField):
+    description = _("Dict Field")
+
+    def _eval_data(self, data):
+        return ast.literal_eval(data)
+
+    def _parse_from_db(self, value):
+        if not isinstance(value, str):
+            raise ValidationError(_("Invalid data for Dict Field"))
+        return json.loads(value)
+
+    def from_db_value(self, value, expression, connection):
+        if value is None:
+            return value
+        return self._parse_from_db(value)
+
+    def to_python(self, value):
+        try:
+            value = self._eval_data(value)
+        except BaseException:
+            raise ValidationError(_("Invalid data for Dict Field"))
+        if value is None or isinstance(value, dict):
+            return value
+        return self._parse_from_db(value)
+
+    def get_prep_value(self, value):
+        if not isinstance(value, str):
+            return json.dumps(value)
+        return value
+
+    def value_to_string(self, obj):
+        value = self.value_from_object(obj)
+        return self.to_python(value)
