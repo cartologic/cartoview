@@ -8,26 +8,25 @@ from rest_framework import serializers
 from rest_framework.validators import ValidationError as RestValidationError
 
 
-def parse_from_db(value):
-    if isinstance(value, str):
-        value = ast.literal_eval(value)
-    if not isinstance(value, list):
-        raise ValidationError(_("Invalid data for a List"))
-    return value
-
-
 class ListField(models.TextField):
     description = _("List Field")
+
+    def _parse_from_db(self, value):
+        if isinstance(value, str):
+            value = ast.literal_eval(value)
+        if not isinstance(value, list):
+            raise ValidationError(_("Invalid data for a List"))
+        return value
 
     def from_db_value(self, value, expression, connection):
         if value is None:
             return value
-        return parse_from_db(value)
+        return self._parse_from_db(value)
 
     def to_python(self, value):
         if value is None or isinstance(value, list):
             return value
-        return parse_from_db(value)
+        return self._parse_from_db(value)
 
     def get_prep_value(self, value):
         if not isinstance(value, list):
