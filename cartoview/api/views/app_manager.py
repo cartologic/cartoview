@@ -23,13 +23,13 @@ logger = get_logger(__name__)
 class AppStoreViewSet(viewsets.ModelViewSet):
     queryset = AppStore.objects.all()
     serializer_class = AppStoreSerializer
-    permission_classes = (permissions.IsAdminUser,)
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
 
 class AppTypeViewSet(viewsets.ModelViewSet):
     queryset = AppType.objects.all()
     serializer_class = AppTypeSerializer
-    permission_classes = (permissions.IsAdminUser,)
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
 
 class AppInstanceViewSet(viewsets.ModelViewSet):
