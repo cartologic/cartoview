@@ -7,7 +7,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.urls import reverse_lazy
 from guardian.shortcuts import assign_perm
-
+from django.core.exceptions import ObjectDoesNotExist
 from cartoview.base_resource.models import BaseModel
 from cartoview.connections.models import Server
 from cartoview.connections.utils import get_server_by_value
@@ -94,3 +94,9 @@ def layer_post_save(sender, instance, created, **kwargs):
             assign_perm("view_layer", user, instance)
             assign_perm("change_layer", user, instance)
             assign_perm("delete_layer", user, instance)
+        try:
+            public_group = Group.objects.get(
+                name=settings.ANONYMOUS_GROUP_NAME)
+            assign_perm("view_layer", public_group, instance)
+        except ObjectDoesNotExist:
+            pass
