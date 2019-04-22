@@ -92,6 +92,7 @@ PyHamcrest==1.9.0
 pyperclip==1.7.0
 pyproj==1.9.6
 pytest==4.4.1
+pytest-django==3.4.8
 pytest-forked==1.0.2
 pytest-xdist==1.28.0
 python-dateutil==2.8.0
