@@ -3,9 +3,11 @@ from django.urls import include, re_path
 from rest_framework import routers
 from rest_framework_swagger.views import get_swagger_view
 
+                                TokenAuthConnectionViewSet)
+                                SimpleAuthConnectionViewSet,
+from .views.connections import (ServerProxy, ServerViewSet,
 from .views.app_manager import (AppInstanceViewSet, AppStoreViewSet,
                                 AppTypeViewSet, AppViewSet, BookmarkViewSet)
-from .views.connections import ServerProxy, ServerViewSet
 from .views.layers import LayerViewSet
 from .views.maps import MapViewSet
 from .views.users import UserViewSet
@@ -22,6 +24,8 @@ router.register(r'layers', LayerViewSet, 'layers')
 router.register(r'maps', MapViewSet, 'maps')
 router.register(r'bookmarks', BookmarkViewSet, 'bookmarks')
 router.register(r'appinstance', AppInstanceViewSet, 'appinstance')
+router.register(r'simpleauth', SimpleAuthConnectionViewSet, 'simpleauth')
+router.register(r'tokenauth', TokenAuthConnectionViewSet, 'tokenauth')
 urlpatterns = [
     re_path(r'^swagger$', schema_view),
     re_path(r'^', include(router.urls)),
