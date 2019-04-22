@@ -29,8 +29,11 @@ class ListField(models.TextField):
         return self._parse_from_db(value)
 
     def get_prep_value(self, value):
+        if isinstance(value, tuple):
+            value = list(value)
         if not isinstance(value, list):
-            raise ValidationError(_("%s is not a an instance list"))
+            raise ValidationError(
+                _("{} is not a an instance list".format(value)))
         return json.dumps(value)
 
     def value_to_string(self, obj):
