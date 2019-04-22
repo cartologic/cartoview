@@ -23,7 +23,6 @@ from rest_framework.authtoken.views import obtain_auth_token
 from cartoview.geonode_oauth import views as geonode_oauth_views
 
 urlpatterns = [
-    path("django-admin/", admin.site.urls),
     re_path(r"^accounts/profile$", geonode_oauth_views.ProfileView.as_view()),
     re_path(r"^documents/", include('wagtail.documents.urls')),
     re_path(r"^apps/", include('cartoview.app_manager.urls')),
@@ -34,14 +33,11 @@ urlpatterns = [
     re_path(r'^api-token-auth/', obtain_auth_token, name='api_token_auth'),
 ]
 urlpatterns += i18n_patterns(
+    path("django-admin/", admin.site.urls),
     re_path(r"^admin/", include('wagtail.admin.urls'), name='wagtail_admin'),
     re_path(r"^accounts/", include("allauth.urls")),
-    re_path(r"^", include('wagtail.core.urls'), name='sites'),
+    path("", include('wagtail.core.urls')),
 )
-# urlpatterns = i18n_patterns(
-#     path("django-admin/", admin.site.urls),
-#     re_path(r"^admin/", include('wagtail.admin.urls')),
-# )
 # django static serve static production
 # from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 # urlpatterns += staticfiles_urlpatterns()
