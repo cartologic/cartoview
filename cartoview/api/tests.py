@@ -26,7 +26,8 @@ class UserCreateTests(APITestCase):
     def test_create_user_invalid_mail(self):
         count = get_user_model().objects.count()
         self.client.post(reverse(
-            'api:users-list'), {'username': 'apitester', 'email': 'apiappp.com',
+            'api:users-list'), {'username': 'apitester',
+                                'email': 'apiappp.com',
                                 'password': 'api@1234'})
         self.assertNotEqual(count+1, get_user_model().objects.count())
 
