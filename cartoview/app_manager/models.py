@@ -2,7 +2,7 @@
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
-from django.contrib.postgres.fields import ArrayField, JSONField
+from django.contrib.postgres.fields import JSONField
 from django.core.cache import cache
 from django.db import models
 from django.db.models import Max
@@ -14,8 +14,10 @@ from guardian.shortcuts import assign_perm
 from taggit.managers import TaggableManager
 
 from cartoview.base_resource.models import BaseModel
+from cartoview.fields import ListField
 from cartoview.layers.validators import validate_projection
 from cartoview.maps.models import Map
+from cartoview.validators import ListValidator
 
 APPS_PERMISSIONS = (
     ("install_app", _("Install App")),
@@ -107,9 +109,9 @@ class App(models.Model):
 
 class Bookmark(BaseModel):
     name = models.CharField(max_length=255, default=_("No Name Provided"))
-    extent = ArrayField(models.CharField(max_length=255,
-                                         blank=True, null=True),
-                        size=4, null=False, blank=False)
+    extent = ListField(null=False, blank=False, default=[0, 0, 0, 0],
+                       validators=[ListValidator(min_length=4,
+                                                 max_length=4), ])
     projection = models.CharField(max_length=30, blank=False, null=False,
                                   validators=[validate_projection, ])
     owner = models.ForeignKey(
@@ -128,7 +130,7 @@ class AppInstance(BaseModel):
     config = JSONField(default=None, null=True, blank=True)
     owner = models.ForeignKey(
         get_user_model(), null=True, blank=True, on_delete=models.SET_NULL)
-    bookmarks = models.ManyToManyField(Bookmark)
+    bookmarks = models.ManyToManyField(Bookmark, blank=True)
 
     def __str__(self):
         return self.title

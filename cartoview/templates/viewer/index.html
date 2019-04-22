@@ -1,0 +1,31 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>{{ instance.title }}</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0, maximum-scale=1, user-scalable=no" />
+    <!-- <link rel="shortcut icon" type="image/png" href="{{ STATIC_URL }}cartoview/img/icon.png" /> -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
+    <link rel="stylesheet" type="text/css" href="{% static 'basic_viewer/dist/basicViewer.css' %}" />
+</head>
+
+<body>
+    <div id="basicviewer-app"></div>
+    <script>
+        {% if mapId %}
+            window.mapId={{mapId}}
+        {% else %}
+            window.mapId=undefined
+        {% endif %}
+    </script>
+    <script src="{% static 'basic_viewer/dist/polyfill.js' %}"></script>
+    <script src="{% static 'basic_viewer/dist/react.js' %}"></script>
+    <script src="{% static 'basic_viewer/dist/extVendors.js' %}"></script>
+    <script src="{% static 'basic_viewer/dist/lodashLib.js' %}"></script>
+    <script src="{% static 'basic_viewer/dist/materialUI.js' %}"></script>
+    <script src="{% static 'basic_viewer/dist/basicViewer.js' %}"></script>
+</body>
+
+</html>

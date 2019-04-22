@@ -1,0 +1,90 @@
+{% load wagtailcore_tags wagtailimages_tags i18n %}
+{% load static from staticfiles %}
+
+<link href="{% static 'cms/blocks/map_catalog.css' %}" rel="stylesheet"/>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12 ml-auto">
+            <div class="title">
+                <h1>{{ self.title }}</h1>
+            </div>
+            <form action="{% slugurl 'search' %}" autocomplete="off" class="form-horizontal" method="GET" accept-charset="utf-8">
+                <div class="input-group">
+                    <input name="q" placeholder="Search for Maps" value="" class="form-control" type="text">
+                    <span class="input-group-btn">
+               <button class="btn btn-white btn-raised btn-fab btn-round" type="submit" id="mapSearch">
+                   <i class="material-icons">search</i>
+               </button>
+            </span>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="row" style="margin-bottom: 40px;">
+        <div class="col-md-2"><p style="text-align: left">Popular keywords:</p></div>
+        <div class="col-md-10" style="text-align: right">
+            {% for keyword in keywords %}
+                <a href="{% slugurl 'keywords' %}?keyword={{ keyword }}" class="btn btn-sm btn-info btn-round"
+                   style="color: white;">
+                    {{ keyword }} &nbsp; | &nbsp; {{ keyword.keywords_count }}
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+
+    {% for featured_map in self.featured_maps %}
+        {% if not forloop.counter|divisibleby:2 %}
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="map-catalog-image">
+                        <a target="_blank" href="{% url 'maps:map_view' map_id=featured_map.id %}">
+                            {% if featured_map.featured_image %}
+                                <img src="{{ featured_map.featured_image.url }}" alt="Map">
+                            {% elif featured_map.thumbnail %}
+                                <img src="{{ featured_map.thumbnail.url }}" alt="Map">
+                            {% else %}
+                                <img src="{% static 'cartoview/img/default-map-image.jpg' %}" alt="Map">
+                            {% endif %}
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-5 col-md-offset-1">
+                    <h3 class="title no-top-margin">
+                        <a target="_blank"
+                           href="{% url 'maps:map_view' map_id=featured_map.id %}">{{ featured_map.title }}</a>
+                    </h3>
+                    <p>
+                        {{ featured_map.description }}
+                    </p>
+                </div>
+            </div>
+        {% else %}
+            <div class="row">
+                <div class="col-md-6 col-md-offset-1">
+                    <h3 class="title no-top-margin">
+                        <a target="_blank"
+                           href="{% url 'maps:map_view' map_id=featured_map.id %}">{{ featured_map.title }}</a>
+                    </h3>
+                    <p>
+                        {{ featured_map.description }}
+                    </p>
+                </div>
+                <div class="col-md-6 col-md-offset-1">
+                    <div class="map-catalog-image">
+                        <a target="_blank" href="{% url 'maps:map_view' map_id=featured_map.id %}">
+                            {% if featured_map.featured_image %}
+                                <img src="{{ featured_map.featured_image.url }}" alt="Map">
+                            {% elif featured_map.thumbnail %}
+                                <img src="{{ featured_map.thumbnail.url }}" alt="Map">
+                            {% else %}
+                                <img src="{% static 'cartoview/img/default-map-image.jpg' %}" alt="Map">
+                            {% endif %}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+        <hr/>
+    {% endfor %}
+</div>

@@ -1,6 +1,6 @@
 from wagtail.core import blocks
 from .ColumnsBlock import ColumnsBlock
-from ..CommonBlocks import CommonBlocks
+from ..blocks.CommonBlocks import CommonBlocks
 
 
 class GridBlock(blocks.StreamBlock):

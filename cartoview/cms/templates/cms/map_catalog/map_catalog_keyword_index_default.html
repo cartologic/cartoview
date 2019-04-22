@@ -1,0 +1,89 @@
+{% extends 'cms/base_cms.html' %}
+{% load static from staticfiles %}
+{% load wagtailcore_tags %}
+
+
+
+{% block body_class %}profile-page sidebar-collapse{% endblock %}
+
+{% block content %}
+    <link href="{% static 'cms/blocks/map_catalog.css' %}" rel="stylesheet"/>
+    {% if page.hero_image %}
+        <div class="page-header header-filter" data-parallax="true"
+             style="background-image: url('{{ page.hero_image.file.url }}');"></div>
+    {% else %}
+        <div class="page-header header-filter" data-parallax="true"
+             style='background-image: url("{% static 'material-kit/assets/img/bg3.jpg' %}");'></div>
+    {% endif %}
+    <div class="main main-raised">
+        <div class="profile-content">
+            <div class="container" style="padding-bottom: 20px;">
+                <div class="row">
+                    <div class="col-md-12 ml-auto">
+                        <div class="title">
+                            {% if request.GET.keyword|length %}
+                                <h1>Showing maps with keyword '{{ request.GET.keyword }}'</h1>
+                            {% else %}
+                                <h1>No maps found with keyword {{ request.GET.keyword }} !</h1>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    {% for map in maps %}
+                        <div class="col-lg-6 col-md-12 col-sm-12" style="margin-bottom: 20px;">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="map-catalog-image">
+                                        <a target="_blank" href="{% url 'maps:map_view' map_id=map.id %}">
+                                            {% if map.featured_image %}
+                                                <img src="{{ map.featured_image.url }}" alt="Map">
+                                            {% elif map.thumbnail %}
+                                                <img src="{{ map.thumbnail.url }}" alt="Map">
+                                            {% else %}
+                                                <img src="{% static 'cartoview/img/default-map-image.jpg' %}" alt="Map">
+                                            {% endif %}
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="col-md-5 col-md-offset-1">
+                                    <h3 style="margin-bottom: 0;" class="title no-top-margin">
+                                        <a target="_blank"
+                                           href="{% url 'maps:map_view' map_id=map.id %}">{{ map.title }}</a>
+                                    </h3>
+                                    <p>
+                                        {{ map.abstract }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <div class="row" style="margin-top: 20px;">
+                    <div class="col">
+                        <ul class="pagination pagination-info">
+                            {% if maps.has_previous %}
+                                <li class="page-item">
+                                    <a href="?page={{ maps.previous_page_number }}&keyword={{ request.GET.keyword }}" class="page-link"> prev</a>
+                                </li>
+                            {% endif %}
+
+                            {% for page_num in maps.paginator.page_range %}
+                                <li class="page-item {% if page_num == maps.number %} active{% endif %}">
+                                    <a href="?page={{ page_num }}&keyword={{ request.GET.keyword }}" class="page-link">{{ page_num }}</a>
+                                </li>
+                            {% endfor %}
+
+                            {% if maps.has_next %}
+                                <li class="page-item">
+                                    <a href="?page={{ maps.next_page_number }}&keyword={{ request.GET.keyword }}" class="page-link">next </a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

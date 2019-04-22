@@ -24,9 +24,12 @@ class ServerViewSet(viewsets.ModelViewSet):
     permission_classes = (
         permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly)
 
+    def perform_create(self, serializer):
+        return serializer.save(owner=self.request.user)
+
 
 class ServerProxy(APIView):
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    permission_classes = (permissions.AllowAny,)
 
     def get_proxy_settings(self):
         key = "proxy"

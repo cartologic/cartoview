@@ -31,6 +31,8 @@ class ArcGISLayer(BaseServer):
             projection_number = srs["wkid"]
         except BaseException:
             projection_number = 4326
+        if projection_number == 102100:
+            projection_number = 3857
         return "EPSG:{}".format(projection_number)
 
     def get_extent(self, data):
