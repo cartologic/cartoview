@@ -1,13 +1,14 @@
+import jsonfield
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
-from cartoview.fields import DictField
+from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.urls import reverse_lazy
 from guardian.shortcuts import assign_perm
-from django.core.exceptions import ObjectDoesNotExist
+
 from cartoview.base_resource.models import BaseModel
 from cartoview.connections.models import Server
 from cartoview.connections.utils import get_server_by_value
@@ -75,7 +76,7 @@ class BaseLayer(BaseModel):
 
 
 class Layer(BaseLayer):
-    extra = DictField()
+    extra = jsonfield.JSONField()
 
     def __str__(self):
         return "{}({},{})<{}>".format(self.name, self.layer_type,
