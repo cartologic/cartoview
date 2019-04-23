@@ -39,6 +39,7 @@ django-excel-response2==2.0.8
 django-fernet-fields==0.5
 django-filter==2.1.0
 django-guardian==1.5.0
+django-jsonfield==1.1.0
 django-modelcluster==4.3
 django-redis==4.10.0
 django-rest-swagger==2.2.0
