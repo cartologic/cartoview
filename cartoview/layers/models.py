@@ -1,7 +1,8 @@
+import jsonfield
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
-from cartoview.fields import DictField
+from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -75,7 +76,7 @@ class BaseLayer(BaseModel):
 
 
 class Layer(BaseLayer):
-    extra = DictField()
+    extra = jsonfield.JSONField()
 
     def __str__(self):
         return "{}({},{})<{}>".format(self.name, self.layer_type,
@@ -94,3 +95,9 @@ def layer_post_save(sender, instance, created, **kwargs):
             assign_perm("view_layer", user, instance)
             assign_perm("change_layer", user, instance)
             assign_perm("delete_layer", user, instance)
+        try:
+            public_group = Group.objects.get(
+                name=settings.ANONYMOUS_GROUP_NAME)
+            assign_perm("view_layer", public_group, instance)
+        except ObjectDoesNotExist:
+            pass

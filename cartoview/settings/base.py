@@ -139,13 +139,9 @@ WSGI_APPLICATION = os.getenv("WSGI_APPLICATION", "cartoview.wsgi.application")
 DATABASE_URL = os.getenv('DATABASE_URL', None)
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': '<database_name>',
-        'USER': '<user>',
-        'PASSWORD': '<pass>',
-        'HOST': 'localhost',
-        'PORT': '5432',
-    },
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }
 }
 if DATABASE_URL:
     DATABASES['default'] = dj_database_url.parse(
