@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.fields import (GenericForeignKey,
                                                 GenericRelation)
 from django.contrib.contenttypes.models import ContentType
-from django.contrib.postgres.fields import JSONField
+from cartoview.fields import DictField
 from django.core.cache import cache
 from django.db import models
 from django.db.models.signals import post_delete, post_save
@@ -52,7 +52,7 @@ class Server(BaseConnectionModel):
         ContentType, null=True, blank=True, on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField(null=True, blank=True)
     connection = GenericForeignKey('content_type', 'object_id')
-    operations = JSONField(default=dict, blank=True)
+    operations = DictField(default=dict, blank=True)
 
     @cached_property
     def server_handler_key(self):
