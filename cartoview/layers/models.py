@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
-from django.contrib.postgres.fields import JSONField
+from cartoview.fields import DictField
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -75,7 +75,7 @@ class BaseLayer(BaseModel):
 
 
 class Layer(BaseLayer):
-    extra = JSONField()
+    extra = DictField()
 
     def __str__(self):
         return "{}({},{})<{}>".format(self.name, self.layer_type,
