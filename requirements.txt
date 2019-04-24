@@ -51,6 +51,7 @@ djangorestframework-xml==1.4.0
 djangorestframework-yaml==1.0.3
 draftjs-exporter==2.1.5
 execnet==1.6.0
+Faker==1.0.5
 flake8==3.6.0
 future==0.17.1
 greenlet==0.4.15
@@ -109,6 +110,7 @@ screen==1.0.1
 simplejson==3.16.0
 six==1.12.0
 sqlparse==0.3.0
+text-unidecode==1.2
 toml==0.10.0
 traitlets==4.3.2
 travis-encrypt==1.2.3
