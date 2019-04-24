@@ -2,11 +2,12 @@
 from django.urls import include, re_path
 from rest_framework import routers
 from rest_framework_swagger.views import get_swagger_view
+
+from .views.app_manager import (AppInstanceViewSet, AppStoreViewSet,
+                                AppTypeViewSet, AppViewSet, BookmarkViewSet)
 from .views.connections import (ServerProxy, ServerViewSet,
                                 SimpleAuthConnectionViewSet,
                                 TokenAuthConnectionViewSet)
-from .views.app_manager import (AppInstanceViewSet, AppStoreViewSet,
-                                AppTypeViewSet, AppViewSet, BookmarkViewSet)
 from .views.layers import LayerViewSet
 from .views.maps import MapViewSet
 from .views.users import UserViewSet

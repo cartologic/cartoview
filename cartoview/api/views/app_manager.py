@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.core.exceptions import ObjectDoesNotExist
 from pkg_resources import parse_version
-from rest_framework import permissions, viewsets
+from rest_framework import permissions, viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
@@ -87,22 +87,26 @@ class AppViewSet(viewsets.ModelViewSet):
         except BaseException as e:
             if isinstance(e, AppAlreadyInstalledException):
                 logger.warn(e)
-            return Response({"details": str(e)}, status=500)
+            return Response({"details": str(e)},
+                            status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         serializer = AppSerializer(App.objects.get(name=app_name))
-        return Response(serializer.data, status=200)
+        return Response(serializer.data,
+                        status=status.HTTP_202_ACCEPTED)
 
     @action(detail=True, methods=["delete"],
             permission_classes=[AppPermission])
     def uninstall(self, request, pk=None):
         try:
             app = App.objects.get(pk=pk)
-        except ObjectDoesNotExist:
-            return Response("App Not Found to uninstall", status=404)
+        except ObjectDoesNotExist as e:
+            return Response({"details": str(e)},
+                            status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         try:
             installer = AppInstaller(
                 app.name, app.store.id, app.version, user=request.user)
             installer.uninstall()
         except BaseException as e:
-            return Response({"details": str(e)}, status=500)
+            return Response({"details": str(e)},
+                            status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         serializer = AppSerializer(app)
-        return Response(serializer.data, status=200)
+        return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
