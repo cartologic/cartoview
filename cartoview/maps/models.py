@@ -1,5 +1,5 @@
+import jsonfield
 from django.contrib.auth import get_user_model
-from django.contrib.postgres.fields import JSONField
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
@@ -40,7 +40,7 @@ class Map(BaseModel):
     ])
     rotation = models.IntegerField(null=False, blank=False, default=0)
     layers = models.ManyToManyField(Layer, blank=True)
-    render_options = JSONField(default=dict, null=False, blank=True)
+    render_options = jsonfield.JSONField(default=dict, null=False, blank=True)
     owner = models.ForeignKey(
         get_user_model(), on_delete=models.CASCADE, related_name="maps",
         blank=True, null=True)

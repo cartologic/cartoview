@@ -1,6 +1,6 @@
-from rest_framework.test import APITestCase
-from django.shortcuts import reverse
 from django.contrib.auth import get_user_model
+from django.shortcuts import reverse
+from rest_framework.test import APITestCase
 
 # Create your tests here.
 

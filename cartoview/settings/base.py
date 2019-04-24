@@ -139,13 +139,9 @@ WSGI_APPLICATION = os.getenv("WSGI_APPLICATION", "cartoview.wsgi.application")
 DATABASE_URL = os.getenv('DATABASE_URL', None)
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': '<database_name>',
-        'USER': '<user>',
-        'PASSWORD': '<pass>',
-        'HOST': 'localhost',
-        'PORT': '5432',
-    },
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }
 }
 if DATABASE_URL:
     DATABASES['default'] = dj_database_url.parse(
@@ -264,7 +260,6 @@ CARTOVIEW_SERVER_HANDLERS = {
     "OGC-WFS": "cartoview.connections.servers.ogc.OGCServer",
     "GEOJSON": "cartoview.connections.servers.ogr_handler.GeoJSON",
     "KML": "cartoview.connections.servers.ogr_handler.KML",
-    "GEONODE": "cartoview.connections.servers.geonode_handler.GeoNode"
 }
 CARTOVIEW_CONNECTIONS = {
     "connection_handlers": CARTOVIEW_CONNECTION_HANDLERS,
