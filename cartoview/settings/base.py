@@ -346,6 +346,10 @@ CELERY_BEAT_SCHEDULE = {
         'task': 'cartoview.connections.tasks.validate_servers',
         'schedule': crontab(minute=59, hour=23),
     },
+    'delete-invalid-resources-task': {
+        'task': 'cartoview.connections.tasks.delete_invalid_resources',
+        'schedule': crontab(minute=0, hour=0, day_of_week='friday'),
+    },
 }
 CELERY_TASK_RESULT_EXPIRES = 43200
 CELERY_MESSAGE_COMPRESSION = 'gzip'
