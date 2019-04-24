@@ -1,24 +1,6 @@
 [
 {
     "model": "auth.user",
-    "pk": 1,
-    "fields": {
-        "password": "!wJOKlPNfHA01oZBbFDHxNCtDwSU0SKzxE0YhFIw1",
-        "last_login": null,
-        "is_superuser": false,
-        "username": "AnonymousUser",
-        "first_name": "",
-        "last_name": "",
-        "email": "",
-        "is_staff": false,
-        "is_active": true,
-        "date_joined": "2019-03-14T21:31:41.960Z",
-        "groups": [],
-        "user_permissions": []
-    }
-},
-{
-    "model": "auth.user",
     "pk": 3,
     "fields": {
         "password": "pbkdf2_sha256$120000$LeqnSEEUhREQ$LcunQFj5HYAGZu538Y+/FMU1THKxVIppVdsKnPBIp1c=",
