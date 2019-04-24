@@ -1,7 +1,10 @@
 
-import requests
-from cartoview.layers.models import Layer
 from urllib.parse import urlparse
+
+import requests
+
+from cartoview.layers.models import Layer
+
 from .base import BaseServer
 
 
@@ -15,8 +18,10 @@ class GeoNode(BaseServer):
         filtered['projection'] = layer.pop('srid', None)
         filtered['owner'] = self.user
         filtered['server'] = self.server
-        filtered['bounding_box'] = [layer.pop('bbox_x0', None), layer.pop('bbox_y0', None),
-                                    layer.pop('bbox_x1', None), layer.pop('bbox_y1', None)]
+        filtered['bounding_box'] = [layer.pop('bbox_x0', None),
+                                    layer.pop('bbox_y0', None),
+                                    layer.pop('bbox_x1', None),
+                                    layer.pop('bbox_y1', None)]
         filtered['extra'] = layer
         return filtered
 
@@ -32,10 +37,12 @@ class GeoNode(BaseServer):
             layers = response.json()
             objects = layers.get('objects', [])
             for obj in objects:
-                filteredobjects.append(self.crewl_layer_details(obj, clearedurl))
+                filteredobjects.append(
+                    self.crewl_layer_details(obj, clearedurl))
             meta = layers.get('meta', None)
             if meta.get('next', None):
-                url = parsedurl.scheme + '://' + parsedurl.netloc + meta['next']
+                url = parsedurl.scheme + '://' + \
+                    parsedurl.netloc + meta['next']
                 self.get_layers(url, filteredobjects)
         return filteredobjects
 
