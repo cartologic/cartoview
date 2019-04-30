@@ -4,18 +4,51 @@ from urllib.parse import unquote
 from django.conf import settings
 from django.http import HttpResponse
 from rest_framework import permissions, status, viewsets
+from ..permissions import AuthPermission
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from cartoview.connections import DEFAULT_PROXY_SETTINGS
-from cartoview.connections.models import Server
+from cartoview.connections.models import (Server,
+                                          SimpleAuthConnection,
+                                          TokenAuthConnection)
 from cartoview.connections.utils import URL, get_handler_class_handler
 from cartoview.log_handler import get_logger
 
 from ..permissions import IsOwnerOrReadOnly
-from ..serializers.connections import ServerSerializer
+from ..serializers.connections import (ServerSerializer,
+                                       SimpleAuthConnectionSerializer,
+                                       TokenAuthConnectionSerializer)
 
 logger = get_logger(__name__)
+
+
+class AuthConnectionViewSet(viewsets.ModelViewSet):
+    permission_classes = (permissions.IsAuthenticated, AuthPermission,)
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        queryset = queryset.filter(owner=request.user)
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
+
+
+class SimpleAuthConnectionViewSet(AuthConnectionViewSet):
+    queryset = SimpleAuthConnection.objects.all()
+    serializer_class = SimpleAuthConnectionSerializer
+
+
+class TokenAuthConnectionViewSet(AuthConnectionViewSet):
+    queryset = TokenAuthConnection.objects.all()
+    serializer_class = TokenAuthConnectionSerializer
 
 
 class ServerViewSet(viewsets.ModelViewSet):
