@@ -9,6 +9,7 @@ from .views.connections import ServerProxy, ServerViewSet
 from .views.layers import LayerViewSet
 from .views.maps import MapViewSet
 from .views.users import UserViewSet
+from .views.data_table import DataTableViewSet
 
 schema_view = get_swagger_view(title='Cartoview API')
 app_name = 'api'
@@ -20,6 +21,7 @@ router.register(r'stores', AppStoreViewSet, 'stores')
 router.register(r'servers', ServerViewSet, 'servers')
 router.register(r'layers', LayerViewSet, 'layers')
 router.register(r'maps', MapViewSet, 'maps')
+router.register(r'datatables', DataTableViewSet, 'datatables')
 router.register(r'bookmarks', BookmarkViewSet, 'bookmarks')
 router.register(r'appinstance', AppInstanceViewSet, 'appinstance')
 urlpatterns = [
