@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
+import jsonfield
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
-from django.contrib.postgres.fields import JSONField
 from django.core.cache import cache
 from django.db import models
 from django.db.models import Max
@@ -95,7 +95,7 @@ class App(models.Model):
     store = models.ForeignKey(
         AppStore, null=True, blank=True, on_delete=models.SET_NULL)
     order = models.IntegerField(default=0, unique=True)
-    default_config = JSONField(default=dict, null=True, blank=True)
+    default_config = jsonfield.JSONField(default=dict, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -127,7 +127,7 @@ class AppInstance(BaseModel):
     app = models.ForeignKey(
         App, related_name="instances", on_delete=models.CASCADE)
 
-    config = JSONField(default=None, null=True, blank=True)
+    config = jsonfield.JSONField(default=dict, null=True, blank=True)
     owner = models.ForeignKey(
         get_user_model(), null=True, blank=True, on_delete=models.SET_NULL)
     bookmarks = models.ManyToManyField(Bookmark, blank=True)
@@ -181,5 +181,6 @@ def invalidate_appinstance_cache(sender, instance, **kwargs):
 def add_default_user_group(sender, instance, **kwargs):
     created = kwargs.get("created")
     if created:
-        public_group, _ = Group.objects.get_or_create(name="public")
+        public_group, _ = Group.objects.get_or_create(
+            name=settings.ANONYMOUS_GROUP_NAME)
         instance.groups.add(public_group)

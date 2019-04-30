@@ -1,8 +1,18 @@
+sudo: required
+dist: xenial
 language: python
+cache:
+  directories:
+    - "$HOME/.cache/pip"
+before_cache:
+  - rm -f $HOME/.cache/pip/log/debug.log
 python:
   - "3.6"
 # command to install dependencies
 install:
+  - sudo add-apt-repository ppa:jonathonf/backports -y
+  - sudo apt-get -qq -y update
+  - sudo apt-get install -y sqlite3 gdal-bin
   - pip install -r requirements.txt
 # command to run tests
 script:
