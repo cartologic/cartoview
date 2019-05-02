@@ -8,7 +8,7 @@ class ModelSchemaAdmin(ModelAdmin):
     menu_icon = 'fa-superpowers'  # change as required
     list_display = ('name',)
     list_filter = ('name',)
-    search_fields = ('name',)
+    search_fields = ('name', 'description', 'additional_info')
 
 
 # Now you just need to register your customised ModelAdmin class with Wagtail
