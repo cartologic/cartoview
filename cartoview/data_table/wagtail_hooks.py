@@ -5,7 +5,7 @@ from .models import DataTable
 
 class ModelSchemaAdmin(ModelAdmin):
     model = DataTable
-    menu_icon = 'fa-superpowers'  # change as required
+    menu_icon = 'fa-superpowers'
     list_display = ('name',)
     list_filter = ('name',)
     search_fields = ('name', 'description', 'additional_info')
