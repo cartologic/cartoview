@@ -1,7 +1,6 @@
 import csv
 
 from django.db import models
-from django.db.models import Model
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
 from wagtail.admin.edit_handlers import FieldPanel, TabbedInterface, ObjectList, StreamFieldPanel, MultiFieldPanel
@@ -17,7 +16,7 @@ class TableBlock(StreamBlock):
         icon = 'cogs'
 
 
-class DataTable(Model):
+class DataTable(models.Model):
     name = models.CharField(max_length=120, unique=True)
     description = models.TextField(null=True, blank=True)
     additional_info = models.TextField(null=True, blank=True)
