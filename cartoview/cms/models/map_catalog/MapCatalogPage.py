@@ -49,10 +49,11 @@ class MapCatalogPage(Page):
         try:
             maps = paginator.page(page)
         except PageNotAnInteger:
-            maps = paginator.page(1)  # If page is not an integer, deliver first page.
+            # If page is not an integer, deliver first page.
+            maps = paginator.page(1)
         except EmptyPage:
-            maps = paginator.page(
-                paginator.num_pages)  # If page is out of range (e.g. 9999), deliver last page of results.
+            # If page is out of range (e.g. 9999), deliver last page of results.
+            maps = paginator.page(paginator.num_pages)
         context['maps'] = maps
         return context
 

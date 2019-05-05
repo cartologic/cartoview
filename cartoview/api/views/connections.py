@@ -2,20 +2,24 @@
 from urllib.parse import unquote
 
 from django.conf import settings
+from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse
+from django.utils.translation import gettext_lazy as _
 from rest_framework import permissions, status, viewsets
-from ..permissions import AuthPermission
+from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from cartoview.connections import DEFAULT_PROXY_SETTINGS
-from cartoview.connections.models import (Server,
-                                          SimpleAuthConnection,
+from cartoview.connections.models import (Server, SimpleAuthConnection,
                                           TokenAuthConnection)
+from cartoview.connections.tasks import (delete_invalid_resources,
+                                         harvest_task, update_server_resources,
+                                         validate_server_resources)
 from cartoview.connections.utils import URL, get_handler_class_handler
 from cartoview.log_handler import get_logger
 
-from ..permissions import IsOwnerOrReadOnly
+from ..permissions import AuthPermission, IsOwnerOrReadOnly
 from ..serializers.connections import (ServerSerializer,
                                        SimpleAuthConnectionSerializer,
                                        TokenAuthConnectionSerializer)
@@ -60,6 +64,58 @@ class ServerViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         return serializer.save(owner=self.request.user)
 
+    @action(detail=True, methods=["post"],
+            permission_classes=[IsOwnerOrReadOnly, ])
+    def harvest(self, request, pk=None):
+        try:
+            server = Server.objects.get(pk=pk)
+        except ObjectDoesNotExist as e:
+            return Response({"details": str(e)},
+                            status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        harvest_task.delay(server.id)
+        return Response({"message":
+                         _("Server Resources Will Be Harvest")},
+                        status=status.HTTP_202_ACCEPTED)
+
+    @action(detail=True, methods=["post"],
+            permission_classes=[IsOwnerOrReadOnly, ])
+    def update_server_resources(self, request, pk=None):
+        try:
+            server = Server.objects.get(pk=pk)
+        except ObjectDoesNotExist as e:
+            return Response({"details": str(e)},
+                            status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        update_server_resources.delay(server.id)
+        return Response({"message":
+                         _("Server Resources Will Be Updated")},
+                        status=status.HTTP_202_ACCEPTED)
+
+    @action(detail=True, methods=["post"],
+            permission_classes=[IsOwnerOrReadOnly, ])
+    def delete_invalid_resources(self, request, pk=None):
+        try:
+            server = Server.objects.get(pk=pk)
+        except ObjectDoesNotExist as e:
+            return Response({"details": str(e)},
+                            status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        delete_invalid_resources.delay(server.id)
+        return Response({"message":
+                         _("Invalid Server Resources Will Be Deleted")},
+                        status=status.HTTP_202_ACCEPTED)
+
+    @action(detail=True, methods=["post"],
+            permission_classes=[IsOwnerOrReadOnly, ])
+    def validate_server_resources(self, request, pk=None):
+        try:
+            server = Server.objects.get(pk=pk)
+        except ObjectDoesNotExist as e:
+            return Response({"details": str(e)},
+                            status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        validate_server_resources.delay(server.id)
+        return Response({"message":
+                         _("Server Resources Will Be Validated")},
+                        status=status.HTTP_202_ACCEPTED)
+
 
 class ServerProxy(APIView):
     permission_classes = (permissions.AllowAny,)
@@ -92,11 +148,10 @@ class ServerProxy(APIView):
         return headers
 
     def allowed_to_serve(self, server_url, target_url):
-        # NOTE:this method check if target url targeting the server
+        # NOTE: this method check if target url targeting the server
         return URL.compare_netloc(server_url, target_url)
 
     def serve(self, request, pk, *args, **kwargs):
-        # TODO:handle different types of http methods
         server = Server.objects.get(pk=pk)
         conn = server.connection
         user = request.user
