@@ -1,9 +1,9 @@
-from .HomePage import HomePage
-from .map_catalog.MapCatalogPage import MapCatalogPage
-from .map_catalog.MapCatalogKeywordIndex import MapCatalogKeywordIndex
-from .map_catalog.MapCatalogSearchIndex import MapCatalogSearchIndex
+from .HomePage import HomePage  # noqa
+from .map_catalog.MapCatalogPage import MapCatalogPage  # noqa
+from .map_catalog.MapCatalogKeywordIndex import MapCatalogKeywordIndex  # noqa
+from .map_catalog.MapCatalogSearchIndex import MapCatalogSearchIndex  # noqa
 
-from .menu.MenuItem import MenuItem
-from .menu.MenuLink import MenuLink
+from .menu.MenuItem import MenuItem  # noqa
+from .menu.MenuLink import MenuLink  # noqa
 
-from .settings.SiteSettings import SiteSettings
+from .settings.SiteSettings import SiteSettings  # noqa
