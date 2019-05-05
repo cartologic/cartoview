@@ -60,9 +60,6 @@ class AppsDict(Mapping):
     def __iter__(self):
         return iter(self._app_data)
 
-    def __unicode__(self):
-        return unicode(repr(self._app_data))
-
     def __sort_apps(self):
         self._app_data = dict(
             sorted(self._app_data.items(), key=lambda item: item[1].order))
