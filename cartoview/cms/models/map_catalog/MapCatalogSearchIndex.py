@@ -12,7 +12,7 @@ from cartoview.maps.models import Map
 class MapCatalogSearchIndex(Page):
     parent_page_types = ['MapCatalogPage']
     selected_template = models.CharField(max_length=255,
-    choices=(('cms/map_catalog/map_catalog_search_index_default.html', 'Default Template')),
+    choices=(('cms/map_catalog/map_catalog_search_index_default.html', 'Default Template'),),
     default='cms/map_catalog/map_catalog_search_index_default.html')  # noqa: E501
     hero_image = models.ForeignKey('wagtailimages.Image', on_delete=models.PROTECT,
                                    related_name='MapCatalogSearchIndex_hero_image', blank=True, null=True)  # noqa: E501
