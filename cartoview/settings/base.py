@@ -260,6 +260,7 @@ CARTOVIEW_SERVER_HANDLERS = {
     "OGC-WFS": "cartoview.connections.servers.ogc.OGCServer",
     "GEOJSON": "cartoview.connections.servers.ogr_handler.GeoJSON",
     "KML": "cartoview.connections.servers.ogr_handler.KML",
+    "GEONODE": "cartoview.connections.servers.geonode_handler.GeoNode"
 }
 CARTOVIEW_CONNECTIONS = {
     "connection_handlers": CARTOVIEW_CONNECTION_HANDLERS,
@@ -344,6 +345,10 @@ CELERY_BEAT_SCHEDULE = {
     'validate-resources-task': {
         'task': 'cartoview.connections.tasks.validate_servers',
         'schedule': crontab(minute=59, hour=23),
+    },
+    'delete-invalid-resources-task': {
+        'task': 'cartoview.connections.tasks.delete_invalid_resources',
+        'schedule': crontab(minute=0, hour=0, day_of_week='friday'),
     },
 }
 CELERY_TASK_RESULT_EXPIRES = 43200

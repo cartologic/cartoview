@@ -1,5 +1,6 @@
 from django.db import models
-from wagtail.admin.edit_handlers import FieldPanel, TabbedInterface, ObjectList, StreamFieldPanel
+from wagtail.admin.edit_handlers import (FieldPanel, ObjectList,
+                                         StreamFieldPanel, TabbedInterface)
 from wagtail.contrib.settings.models import BaseSetting, register_setting
 from wagtail.core.blocks import RawHTMLBlock, StreamBlock
 from wagtail.core.fields import StreamField
@@ -13,21 +14,21 @@ class SiteSettings(BaseSetting):
         blank=True, null=True
     )
     logo_text = models.CharField(max_length=120, blank=True, null=True)
-    footer = StreamField(
+    footer = StreamField(  # noqa: E501
         StreamBlock([
             ('footer', RawHTMLBlock(
                 default='<footer class="footer footer-default">' +
                         '<div class="container">' +
                         '<nav class="float-left">' +
                         '<ul>' +
-                        '<li><a href="https://cartoview.net" target="_blank">Cartoview <script>document.write(cartoview_version)</script></a></li>' +
-                        '<li><a href="http://www.twitter.com" target="_blank" class="btn btn-link btn-just-icon"><i class="fa fa-twitter"></i></a></li>' +
-                        '<li><a href="http://www.instagram.com" target="_blank" class="btn btn-link btn-just-icon"><i class="fa fa-instagram"></i></a></li>' +
-                        '<li><a href="http://www.facebook.com" target="_blank" class="btn btn-link btn-just-icon"><i class="fa fa-facebook-square"></i></a></li>' +
+                        '<li><a href="https://cartoview.net" target="_blank">Cartoview <script>document.write(cartoview_version)</script></a></li>' +  # noqa: E501
+                        '<li><a href="http://www.twitter.com" target="_blank" class="btn btn-link btn-just-icon"><i class="fa fa-twitter"></i></a></li>' +  # noqa: E501
+                        '<li><a href="http://www.instagram.com" target="_blank" class="btn btn-link btn-just-icon"><i class="fa fa-instagram"></i></a></li>' +  # noqa: E501
+                        '<li><a href="http://www.facebook.com" target="_blank" class="btn btn-link btn-just-icon"><i class="fa fa-facebook-square"></i></a></li>' +  # noqa: E501
                         '</ul>' +
                         '</nav>' +
                         '<div class="copyright float-right">' +
-                        '&copy;<script>document.write(new Date().getFullYear())</script>, made with <i class="material-icons">favorite</i> by <a href="http://cartologic.com" target="_blank">Cartologic</a> for a better web.'
+                        '&copy;<script>document.write(new Date().getFullYear())</script>, made with <i class="material-icons">favorite</i> by <a href="http://cartologic.com" target="_blank">Cartologic</a> for a better web.'  # noqa: E501
                         '</div>' +
                         '</div>' +
                         '</footer>'

@@ -7,7 +7,7 @@ import tempfile
 import threading
 import zipfile
 from io import BytesIO
-from sys import executable, exit
+from sys import executable
 
 import pkg_resources
 import requests
