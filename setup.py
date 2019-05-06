@@ -30,7 +30,7 @@ testing_extras = []
 documentation_extras = []
 
 setup(
-    name='cartoview_2',
+    name='cartoview',
     version=__import__('cartoview').__version__,
     packages=find_packages(),
     include_package_data=True,
@@ -38,7 +38,7 @@ setup(
     description='A GIS Web Mapping Application Market. Create, share, and visualize GIS Web Mapping Applications',
     long_description=README,
     long_description_content_type='text/markdown',
-    url='https://github.com/cartologic/cartoview_2/',
+    url='https://github.com/cartologic/cartoview/',
     author='cartologic',
     author_email='cartoview@cartologic.com',
     keywords=['cartoview', 'gis', 'django', 'web mapping',
