@@ -130,3 +130,4 @@ cartoview_apps
 .DS_Store
 conncurent_test.py
 \.idea/
+celerybeat-schedule.db
