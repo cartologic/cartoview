@@ -126,7 +126,7 @@ isort==4.3.4
 itypes==1.1.0
 jaraco.functools==1.20
 jdcal==1.3
-Jinja2==2.10
+Jinja2>=2.10.1
 jwcrypto==0.6.0
 kombu==4.2.1
 livereload==2.5.2
@@ -183,12 +183,12 @@ pytest-bdd==2.20.0
 pytest-django==3.1.2
 pytest-splinter==1.8.5
 python-dateutil==2.6.1
-python-gnupg==0.4.1
+python-gnupg>=0.4.4
 python-memcached==1.59
 python-mimeparse==1.6.0
 python-openid==2.2.5
 pytz==2018.3
-PyYAML==3.12
+pyyaml>=4.2b1
 regex==2016.7.21
 requests==2.20.1
 requests-oauthlib==1.0.0
@@ -200,7 +200,7 @@ simplejson==3.13.2
 singledispatch==3.4.0.3
 six==1.10.0
 splinter==0.7.7
-SQLAlchemy==1.2.13
+SQLAlchemy>=1.3.0
 tablib==0.12.1
 tempora==1.14
 timeout-decorator==0.4.0
@@ -214,7 +214,7 @@ ua-parser==0.8.0
 unicodecsv==0.14.1
 Unidecode==0.4.19
 uritemplate==3.0.0
-urllib3==1.22
+urllib3>=1.24.2
 user-agents==1.1.0
 uWSGI==2.0.17
 vine==1.1.4
