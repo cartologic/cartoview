@@ -20,13 +20,13 @@ script:
   - pytest
 deploy:
   provider: pypi
+  user: cartologic
+  password:
+    secure: I55fbMkUDNnPVRejHETev9viO7nY9bD+wXzPk0MoLKhx5KceyAPYXnznVYMid7FVzBZzP6pLT9k8lZTC+Xv6ZET8GK/cgwPd+i3n8upk2PKAzjUCxutXrxTPHCKyd9HHz051Wt/0vJvhKsw37E/WPFach007gGjF2J/diGdEFtvrKYE+ixYd6wu6VevKGtCce4Wt2HY7fZ7rfhHbEdX/k2hOzrBiD5fwHp+GJdcczGpzKdtdKvdhkUEDsBs6y1hUgGbCF9i3TiagEA3/Md/bG4mU4P+B1oAkdXue9TVLOEMXD1rpdR/EMm0FwMsnZWtaYTTkvEmPrYBhLcN7NlM0/VaSJ6ejbD9nk+37uE2h7S/xKsmCezzYEDeDAXmMa3WDQQrSYLuypN8DgxFhYiac+qYIBSMUOyI+EJXSpJ9iHaseofvF+32DAm6U6P2kEpda619HuEEF++JxthVJ01hAaQDoezEisirXT0pWKEQcSbTeI5hTP0kCxxlpqgg1CNmSvSXQbTMs9FyOTIJBHkhj4rLnTI+UPv99ig0CFzQO2HbBa+4kiWl4LpGZrNd9ei1wlxpSScJsQbu3bYUfpRqY7AiPkYkaIb1jCCWwxS/AgBX7YbT4os/E+zBQGvldQncCXhtVYA6+cpGzZM29lKUHy4KMNsiB744a48AGGUv04cg=
   on:
     tags: true
-    all_branches: true
-    condition: $TRAVIS_TAG =~ ^v([0-9]+\.?){2,3}(b[0-9]+|rc[0-9]+|a[0-9]+){0,1}
-  user: "cartologic"
-  password:
-    secure: v5ORRy9NsvQtQWQ9/rXJts1XgxeGCO5F3YjnZkzVB4mUS/zvud4Wy4hJq3bSQnfsoNwnIXUJ5nw9mRKKyEcAn7ULneOgmhYtrSkoq0cvFCG6LVhXDZ25m+TiP7ODpi5hIYfGgMrUsQF/3/lv36lxSHAAFuTM5/ZMoUW7vMdOa/6TDyyoWOfZgsB1ID3yZ3CyJEnPvw+ZbHr3GzZ8KKeVOSvIILppHL8ARdaQoln3dE7UMPcS1nHbxtvNnxtDcQmjCG0QfHuevOHaCOY6pC3rDqH1m9QsoV8NMdMwn4corb3nhPtC3hNIa2TYWpBYlDKSClYlfkhANtAwNVOfchM+ZT3x13+Amc+P6Mdb/e3Q4pKU4icQi2hemOn4mTLJoRMtjPLPPB3Gpv+rN34NUr0q4VT7MmiU7r8oKApVjH5q9O6eN5hQQnAVpfmqRWm1QQU0yLZoK6Jjn6HyFiOGOP7jCMu/2M7vUmi1S0tSZzk5vasbHO3zT4FB4qw84u7Q3b2aqSo1Go9Nv/jIIbtn1kB6brB03rVm92qo3cWkn4HHXQk2Fbi6zsP1edMXA6iWx4dbfx3aDIlWb3XHRKcWREsxnvWTGsdnscIuGLoG90gys2MzGgb8wuU2zhFGLUKmVnlTYaBRD0s4ymKyJR4pm+c/tCPlqUke42R0BmW+4TvhcAw=
+    branch: : cartoview2
+    condition: $TRAVIS_TAG =~ ^v([0-9]+\.?){2,3}(b[0-9]+|rc[0-9]+|a[0-9]+){0,1}∏
 notifications:
   email:
     - hisham.karam@cartologic.com
