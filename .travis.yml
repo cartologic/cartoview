@@ -15,13 +15,14 @@ install:
   - sudo apt-get -qq -y update
   - sudo apt-get install -y sqlite3 gdal-bin
   - pip install -r requirements.txt
+  - pip install pytest-cov
   - pip install coveralls
 # command to run tests
 script:
   - flake8 cartoview
-  - pytest
+  - pytest --cov-config=.coveragerc --cov=cartoview --cov-report term
 after_success:
-- coveralls
+  - coveralls
 deploy:
   provider: pypi
   user: cartologic
@@ -29,7 +30,7 @@ deploy:
     secure: I55fbMkUDNnPVRejHETev9viO7nY9bD+wXzPk0MoLKhx5KceyAPYXnznVYMid7FVzBZzP6pLT9k8lZTC+Xv6ZET8GK/cgwPd+i3n8upk2PKAzjUCxutXrxTPHCKyd9HHz051Wt/0vJvhKsw37E/WPFach007gGjF2J/diGdEFtvrKYE+ixYd6wu6VevKGtCce4Wt2HY7fZ7rfhHbEdX/k2hOzrBiD5fwHp+GJdcczGpzKdtdKvdhkUEDsBs6y1hUgGbCF9i3TiagEA3/Md/bG4mU4P+B1oAkdXue9TVLOEMXD1rpdR/EMm0FwMsnZWtaYTTkvEmPrYBhLcN7NlM0/VaSJ6ejbD9nk+37uE2h7S/xKsmCezzYEDeDAXmMa3WDQQrSYLuypN8DgxFhYiac+qYIBSMUOyI+EJXSpJ9iHaseofvF+32DAm6U6P2kEpda619HuEEF++JxthVJ01hAaQDoezEisirXT0pWKEQcSbTeI5hTP0kCxxlpqgg1CNmSvSXQbTMs9FyOTIJBHkhj4rLnTI+UPv99ig0CFzQO2HbBa+4kiWl4LpGZrNd9ei1wlxpSScJsQbu3bYUfpRqY7AiPkYkaIb1jCCWwxS/AgBX7YbT4os/E+zBQGvldQncCXhtVYA6+cpGzZM29lKUHy4KMNsiB744a48AGGUv04cg=
   on:
     tags: true
-    branch: : cartoview2
+    branch: cartoview2
     condition: $TRAVIS_TAG =~ ^v([0-9]+\.?){2,3}(b[0-9]+|rc[0-9]+|a[0-9]+){0,1}∏
 notifications:
   email:

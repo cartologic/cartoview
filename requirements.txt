@@ -24,6 +24,7 @@ colorama==0.4.1
 constantly==15.1.0
 coreapi==2.3.3
 coreschema==0.0.4
+coverage==4.5.3
 cryptography==2.6.1
 daphne==2.2.5
 decorator==4.3.2
@@ -95,6 +96,7 @@ PyHamcrest==1.9.0
 pyperclip==1.7.0
 pyproj==1.9.6
 pytest==4.4.1
+pytest-cov==2.7.1
 pytest-django==3.4.8
 pytest-forked==1.0.2
 pytest-xdist==1.28.0
