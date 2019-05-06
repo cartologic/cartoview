@@ -7,7 +7,7 @@
                 <div class="col-xs-4 item-thumb">
                     <a href="{{ item.launch_app_url }}">
                         <img ng-src="{{ item.thumbnail_url || item.map.thumbnail_url }}"
-                             fallback-src="/static/{{ item.app.name }}/logo.png" loading-src
+                             fallback-src="/static/{{ !item.app ?  item.app__name:item.app.name }}/logo.png" loading-src
                              style="max-height: 205px"/>
                     </a>
                 </div>
@@ -20,20 +20,20 @@
                     <h4><a href="{{ item.launch_app_url }}">{{ item.title }}</a></h4>
                     <p class="abstract">{{ item.abstract | limitTo: 300 }}{{ item.abstract.length > 300 ? '...' :
                         ''}}</p>
-                    <p class="appName"><span class="badge">{{ item.app.title }}</span>
+                    <p class="appName"><span class="badge">{{ !item.app ?  item.app__title:item.app.title }}</span>
                     </p>
                     <div class="row">
                         <div class="col-xs-12 item-items">
                             <ul class="list-inline">
                                 <li><a href="/people/profile/{{ item.owner }}"><i class="fa fa-user"></i>{{ item.owner
                                     }}</a></li>
-                                <li><a href="{{ item.launch_app_url }}#info"><i class="fa fa-calendar-o"></i>{{
+                                <li><a href="{{item.detail_url}}#info"><i class="fa fa-calendar-o"></i>{{
                                     item.date|date:'d MMM y' }}</a></li>
                                 <li><a href="{{ item.launch_app_url }}"><i class="fa fa-eye"></i>{{ item.popular_count
                                     }}</a></li>
-                                <li><a href="{{ item.launch_app_url }}#share"><i class="fa fa-share"></i>{{
+                                <li><a href="{{item.detail_url}}#share"><i class="fa fa-share"></i>{{
                                     item.share_count }}</a></li>
-                                <li><a href="{{ item.launch_app_url }}#rate"><i class="fa fa-star"></i>{{ item.rating }}</a>
+                                <li><a href="{{item.detail_url}}#rate"><i class="fa fa-star"></i>{{ item.rating }}</a>
                                 </li>
                                 <li><a ng-if="item.detail_url.indexOf('/layers/') > -1"
                                        href="{% endverbatim %}{% url "new_map" %}?layer={% verbatim %}{{ item.detail_url.substring(8) }}">

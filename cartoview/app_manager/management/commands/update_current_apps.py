@@ -1,3 +1,4 @@
+from __future__ import print_function
 import requests
 from cartoview.app_manager.installer import AppJson, remove_unwanted
 from cartoview.app_manager.models import App

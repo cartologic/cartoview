@@ -1,8 +1,16 @@
-from django.conf import settings
+# -*- coding: utf-8 -*-
+from __future__ import (absolute_import, division, print_function,
+                        unicode_literals)
+
 import os
+
+from django.conf import settings
+from future import standard_library
 
 from cartoview.app_manager.helpers import (change_path_permission,
                                            create_direcotry)
+
+standard_library.install_aliases()
 
 
 def create_apps_dir(apps_dir=getattr(settings, 'APPS_DIR', None)):

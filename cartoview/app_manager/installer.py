@@ -10,7 +10,6 @@ import tempfile
 import threading
 import zipfile
 from io import BytesIO
-from os import R_OK, access
 from sys import executable, exit
 from threading import Timer
 
@@ -21,13 +20,16 @@ from django.db import transaction
 from django.db.models import Max
 from future import standard_library
 
-from cartoview.apps_handler.handlers import CartoApps, apps_orm
+from cartoview.apps_handler.config import CartoviewApp
 from cartoview.log_handler import get_logger
 from cartoview.store_api.api import StoreAppResource, StoreAppVersion
 
+from ..apps_handler.req_installer import (ReqFileException,
+                                          ReqFilePermissionException,
+                                          ReqInstaller)
 from .decorators import restart_enabled, rollback_on_failure
+from .exceptions import AppAlreadyInstalledException
 from .models import App, AppStore, AppType
-from .req_installer import ReqInstaller
 
 logger = get_logger(__name__)
 install_app_batch = getattr(settings, 'INSTALL_APP_BAT', None)
@@ -118,10 +120,6 @@ class AppJson(object):
         return getattr(self, p, None)
 
 
-class AppAlreadyInstalledException(BaseException):
-    message = "Application is already installed."
-
-
 class AppInstaller(object):
     def __init__(self, name, store_id=None, version=None, user=None):
         self.user = user
@@ -179,14 +177,20 @@ class AppInstaller(object):
     @rollback_on_failure
     def extract_move_app(self, zipped_app):
         extract_to = tempfile.mkdtemp()
+        libs_dir = None
         zipped_app.extractall(extract_to)
         if self.upgrade and os.path.exists(self.app_dir):
             # move old version to temporary dir so that we can restore in
             # case of failure
             old_version_temp_dir = tempfile.mkdtemp()
             shutil.move(self.app_dir, old_version_temp_dir)
-        self.old_app_temp_dir = os.path.join(extract_to, self.name)
-        shutil.move(self.old_app_temp_dir, settings.APPS_DIR)
+            old_lib_dir = os.path.join(old_version_temp_dir, 'libs')
+            if os.path.isdir(old_lib_dir) and os.path.exists(old_lib_dir):
+                libs_dir = old_lib_dir
+        self.new_app_dir = os.path.join(extract_to, self.name)
+        shutil.move(self.new_app_dir, settings.APPS_DIR)
+        if libs_dir:
+            shutil.copy(libs_dir, self.app_dir)
         # delete temp extract dir
         shutil.rmtree(extract_to)
 
@@ -210,21 +214,19 @@ class AppInstaller(object):
 
     @rollback_on_failure
     def add_carto_app(self):
-        with apps_orm.session() as session:
-            if not CartoApps.app_exists(self.name):
-                carto_app = CartoApps(
-                    name=self.name,
-                    active=True,
-                    order=self.get_app_order(),
-                    pending=True)
-                session.add(carto_app)
-                session.commit()
-            else:
-                carto_app = session.query(CartoApps).filter(
-                    CartoApps.name == self.name).update({
-                        "pending": True
-                    })
-                session.commit()
+        if not CartoviewApp.objects.app_exists(self.name):
+            CartoviewApp({
+                'name': self.name,
+                'active': True,
+                'order': self.get_app_order(),
+                'pending': True
+            })
+            CartoviewApp.save()
+        else:
+            carto_app = CartoviewApp.objects.get(self.name)
+            carto_app.pending = True
+            carto_app.commit()
+            CartoviewApp.save()
 
     @rollback_on_failure
     def add_app(self):
@@ -242,10 +244,11 @@ class AppInstaller(object):
         return app
 
     def _rollback(self):
-        CartoApps.delete_app(self.name)
+        app = CartoviewApp.objects.pop(self.name, None)
+        if app:
+            CartoviewApp.save()
         self.delete_app_dir()
 
-    @rollback_on_failure
     def install(self, restart=True):
         with lock:
             self.upgrade = False
@@ -277,12 +280,14 @@ class AppInstaller(object):
 
     @rollback_on_failure
     def _install_requirements(self):
-        # TODO:add requirement file name as settings var
-        req_file = os.path.join(self.app_dir, "req.txt")
-        libs_dir = os.path.join(self.app_dir, "libs")
-        if os.path.exists(req_file) and access(req_file, R_OK):
-            req_installer = ReqInstaller(req_file, target=libs_dir)
+        try:
+            libs_dir = os.path.join(self.app_dir, 'libs')
+            req_installer = ReqInstaller(self.app_dir, target=libs_dir)
             req_installer.install_all()
+        except BaseException as e:
+            if not (isinstance(e, ReqFileException)
+                    or isinstance(e, ReqFilePermissionException)):  # noqa
+                raise e
 
     @rollback_on_failure
     def check_then_finlize(self, restart, installed_apps):
@@ -309,6 +314,8 @@ class AppInstaller(object):
         self.delete_app()
         self.delete_app_tables()
         self.delete_app_dir()
+        CartoviewApp.objects.pop(self.name, None)
+        CartoviewApp.save()
 
     def execute_command(self, command):
         project_dir = None
@@ -355,8 +362,11 @@ class AppInstaller(object):
                 if app_installer.version else {}
                 if self.name in dependencies.keys():
                     app_installer.uninstall(restart=False)
-            installer = importlib.import_module('%s.installer' % self.name)
-            installer.uninstall()
+            try:
+                installer = importlib.import_module('%s.installer' % self.name)
+                installer.uninstall()
+            except ImportError as e:
+                logger.error(e.message)
             self.completely_remove()
             uninstalled = True
             if restart:

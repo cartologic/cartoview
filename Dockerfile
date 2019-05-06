@@ -1,40 +1,18 @@
-FROM ubuntu:16.04
+FROM python:2.7-slim
 LABEL "MAINTAINER"="Cartologic Development Team"
-ENV TERM xterm
-RUN apt-get update
-RUN apt-get install locales -y
-RUN locale-gen en_US.UTF-8 && update-locale
-ENV LANG en_US.UTF-8  
-ENV LANGUAGE en_US:en  
-ENV LC_ALL en_US.UTF-8
-RUN apt-get install software-properties-common python-software-properties -y
-RUN add-apt-repository -y ppa:ubuntugis/ubuntugis-unstable
-RUN apt-get update
-RUN apt-get upgrade -y
-RUN apt-get update && apt-get install -y \
-        gcc gettext \
-        python-pip libpq-dev \
-        sqlite3 git gdal-bin lsof psmisc \
-        python-gdal python-psycopg2 \
-        python-imaging python-lxml \
-        python-dev libgdal-dev libgeoip-dev \
-        python-ldap libxml2 libxml2-dev libxslt-dev \
-        libmemcached-dev libsasl2-dev zlib1g-dev \
-        python-pylibmc python-setuptools \
-        curl build-essential build-essential python-dev \
-        --no-install-recommends
-RUN mkdir /code
-WORKDIR /code
-RUN pip install --upgrade pip
-RUN pip install --ignore-installed geoip django-geonode-client \
-        geonode==2.8rc11 django-jsonfield django-jsonfield-compat \
-        cartoview==1.8.3 cherrypy==11.0.0 cheroot==5.8.3 \
-        django-autocomplete-light==2.3.3  --no-cache-dir
-RUN pip install git+https://github.com/GeoNode/django-osgeo-importer.git
-RUN apt autoremove --purge -y && apt autoclean -y
-RUN rm -rf ~/.cache/pip
-RUN rm -rf /var/lib/apt/lists/* && apt-get clean && \
-        rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-RUN echo "Yes, do as I say!" | apt-get remove --force-yes login	\
-        && dpkg --remove --force-depends wget unzip 
+ENV PYTHONUNBUFFERED 1
+ARG GEONODE_DEV=true
+ARG APP_DIR=/usr/src/carto_app
+# include GDAL HEADER Files
+# CPATH specifies a list of directories to be searched as if specified with -I,
+# but after any paths given with -I options on the command line.
+# This environment variable is used regardless of which language is being preprocessed.
+ENV CPATH "$CPATH:/usr/include/gdal:/usr/include"
+COPY scripts/docker/setup.sh ./
+COPY . /cartoview
+RUN chmod +x setup.sh
+RUN ./setup.sh
+# switch to project dir
+VOLUME ${APP_DIR}
+WORKDIR ${APP_DIR}
 CMD ["/bin/bash"]

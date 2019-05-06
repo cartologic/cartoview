@@ -1,6 +1,5 @@
 {% extends "geonode_base.html" %}
 {% load i18n %}
-{% load url from future %}
 
 {% block title %} {{ block.super }} {% endblock %}
 
@@ -16,4 +15,5 @@
 {% block extra_script %}
     <script src="{{STATIC_URL}}compare-versions/index.js"></script>
     {{block.super}}
+    <script src="{{ STATIC_URL }}app_manager/vendor/angular-img-fallback/angular.dcb-img-fallback.min.js"/>
 {% endblock %}

@@ -1,7 +1,14 @@
+# -*- coding: utf-8 -*-
+from __future__ import (absolute_import, division, print_function,
+                        unicode_literals)
+
 from urllib import urlencode
 
 import dj_database_url
 from django.conf import settings
+from future import standard_library
+
+standard_library.install_aliases()
 
 
 class DBParseException(Exception):

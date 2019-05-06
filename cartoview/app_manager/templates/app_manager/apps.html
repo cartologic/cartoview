@@ -72,20 +72,23 @@
                                     <div class="text-center" style="display:flex;flex-wrap:wrap">
                                         {% if app.single_instance %}
                                             <div style="margin-right:auto;margin-left:auto" id="card-buttons">
-                                                    <a href="{% url 'app_manager_base_url' %}{{ app.name }}"
+                                                    <a href="{{app.open_url}}"
                                                     target="_parent" class="btn btn-sm btn-primary">Open</a>
                                             </div>
 
                                         {% else %}
                                         <div id="card-buttons">
-                                            <a href="{% url 'appinstance_browse' %}?app__name__in={{ app.name }}"
+                                            <a href="{% url 'appinstance_browse' %}?app__name__in={{ app.name }}&&app__title={{app.title}}"
                                                target="_parent" class="btn btn-sm btn-primary">Explore <span
                                                     class="badge">{{ app.appinstance_set.all|objects_count:request.user }}</span></a>
                                         </div>
+                                        {% comment %}
+                                        REMOVE THE FOLLOWING CONDITION AFTER FIXING __init__.py OF ALL MULTIPLE INSTANCE APPS
+                                        {% endcomment %}
                                             {% if not user.is_authenticated or not request.user.is_staff  %}
                                             <div id="card-buttons">
                                                 <a class="btn btn-sm btn-primary"
-                                                   href="{% url 'account_login' %}?next={% url ""|add:app.name|add:'.new' %}">
+                                                   href="{% url 'account_login' %}?next={{app.create_new_url}}">
                                                     Create New
                                                 </a>
                                             </div>

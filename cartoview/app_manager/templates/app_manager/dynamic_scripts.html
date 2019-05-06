@@ -13,8 +13,16 @@
         RESTART_SERVER: "{% url 'restart_server'  api_name='api' resource_name='app' %}",
     });
     angular.module('cartoview.userInfo',[]).service("cartoviewUser",function () {
-        this.isAuthenticated = {{ user.is_authenticated | dump_json }};
-        this.isSuperUser = {{ user.is_superuser | dump_json }};
+        {% if user.is_authenticated %}
+            this.isAuthenticated = true
+        {% else %}
+            this.isAuthenticated = false
+        {% endif %}
+        {% if user.is_superuser %}
+            this.isSuperUser = true
+        {% else %}
+            this.isSuperUser = false
+        {% endif %}
         this.loginUrl = "{% url 'account_login' %}?next={{ request.get_full_path }}";
         this.logoutUrl = "{% url 'account_logout' %}";
         this.registerUrl = "{% url 'account_signup' %}";

@@ -9,6 +9,9 @@
   <img src="https://cartologic.github.io/img/cartoview-logo.png"/>
 </p>
 
+| WARNING: be careful this version(1.10.x) of Cartoview is compatibile with geonode 2.10.x only,if you want to install another version please take alook on [this section](https://github.com/cartologic/cartoview/blob/hisham-dev/README.md#previous-versions) |
+| --- |
+
 ---
 ## What is Cartoview?
   - CartoView is a GIS Web Mapping Application Market.
@@ -43,7 +46,7 @@
 
 ## How To Add Cartoview To Existing Geonode:
   - install cartoview with pip:
-      - `pip install cartoview==1.8.5 --no-cache-dir`
+      - `pip install cartoview --no-cache-dir`
       - open geonode `settings.py` and add the following lines at the end of the file:
           ```python
             from cartoview import settings as cartoview_settings
@@ -72,7 +75,7 @@
                 try:
                     execfile(settings_file)
                 except Exception as e:
-                    pass
+                    print(e.message)
           ```
       - **restart your server**
 
@@ -84,3 +87,9 @@
     ```sh
       paver run_test
     ```
+ ___
+# Previous Versions
+| Cartoview Version | Geonode Version | docs Link                                                                       |
+|-------------------|-----------------|---------------------------------------------------------------------------------|
+| 1.8.x             | 2.8.x           | [Here](https://github.com/cartologic/cartoview/blob/1.8.x/README.md)            |
+| 1.6.x             | 2.6.x           | [Here](https://github.com/cartologic/cartoview/blob/2.6.x_compatible/README.md) |

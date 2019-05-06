@@ -1,5 +1,6 @@
-from tastypie.resources import Resource
+# -*- coding: utf-8 -*-
 from tastypie import fields
+from tastypie.resources import Resource
 
 
 class GenericApiResource(object):
