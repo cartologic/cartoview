@@ -1,7 +1,11 @@
-# Cartoview 2
-![Cartoview](https://img.shields.io/badge/Cartoview-2-blue.svg) ![Wagtail](https://img.shields.io/badge/Wagtail_CMS-2.x-green.svg) ![Wagtail](https://img.shields.io/badge/Bootstrap-4-red.svg)
-
-![Start](https://img.shields.io/github/stars/cartologic/cartoview_2.svg?style=social) ![Forks](https://img.shields.io/github/forks/cartologic/cartoview_2.svg?style=social) ![Watchers](https://img.shields.io/github/watchers/cartologic/cartoview_2.svg?style=social)
+# Cartoview
+[![GitHub stars](https://img.shields.io/github/stars/cartologic/cartoview.svg)](https://github.com/cartologic/cartoview/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/cartologic/cartoview.svg)](https://github.com/cartologic/cartoview/network)
+[![Coverage Status](https://coveralls.io/repos/github/cartologic/cartoview/badge.svg?branch=master&service=github)](https://coveralls.io/github/cartologic/cartoview?branch=master&service=github)
+[![Build Status](https://travis-ci.org/cartologic/cartoview.svg?branch=master)](https://travis-ci.org/cartologic/cartoview)
+[![GitHub license](https://img.shields.io/github/license/cartologic/cartoview.svg)](https://github.com/cartologic/cartoview/blob/master/LICENSE)
+[![GitHub issues](https://img.shields.io/github/issues/cartologic/cartoview.svg)](https://github.com/cartologic/cartoview/issues)
+[![Twitter](https://img.shields.io/twitter/url/https/github.com/cartologic/cartoview.svg?style=social)](https://twitter.com/intent/tweet?text=Wow:&url=https%3A%2F%2Fgithub.com%2Fcartologic%2Fcartoview)
 ## Quick Start
 ```
 git clone -b cartoview2 --single-branch https://github.com/cartologic/cartoview.git
