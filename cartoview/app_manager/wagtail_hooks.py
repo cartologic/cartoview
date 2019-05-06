@@ -15,4 +15,4 @@ def register_admin_urls():
 @hooks.register('register_admin_menu_item')
 def register_frank_menu_item():
     return MenuItem(_('Plugins'), reverse('app_installer:index'),
-                    classnames='icon icon-folder-inverse', order=300)
+                    classnames='icon icon-folder-inverse', order=250)
