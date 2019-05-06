@@ -1,0 +1,10 @@
+cartoview/static/* linguist-vendored=true
+cartoview/static/app_installer linguist-vendored=true
+cartoview/templates/**/*.html linguist-vendored=true
+cartoview/static/material-kit/**/*.js linguist-vendored=true
+cartoview/static/material-kit/**/*.css linguist-vendored=true
+cartoview/static/basic_viewer linguist-vendored=true
+cartoview/static/vendor linguist-vendored=true
+cartoview/static/**/*.js linguist-vendored=true
+cartoview/static/**/*.css linguist-vendored=true
+cartoview/static/*.js linguist-vendored=true
