@@ -8,7 +8,7 @@
 [![Twitter](https://img.shields.io/twitter/url/https/github.com/cartologic/cartoview.svg?style=social)](https://twitter.com/intent/tweet?text=Wow:&url=https%3A%2F%2Fgithub.com%2Fcartologic%2Fcartoview)
 ## Quick Start
 ```
-git clone -b cartoview2 --single-branch https://github.com/cartologic/cartoview.git
+git clone -b 'cartoview2 --single-branch https://github.com/cartologic/cartoview.git
 cd cartoview
 virtualenv venv
 .\venv\Scripts\activate
@@ -25,10 +25,3 @@ python manage.py loaddata initial_users.json
 > run server
 ```python
 python manage.py runserver
-```
-
----
-## Additonal Info
-![Contrib](https://img.shields.io/github/contributors/cartologic/cartoview_2.svg)
-![Languages](https://img.shields.io/github/languages/top/cartologic/cartoview_2.svg)
-![License](https://img.shields.io/github/license/cartologic/cartoview_2.svg)
