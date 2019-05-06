@@ -8,16 +8,20 @@ before_cache:
   - rm -f $HOME/.cache/pip/log/debug.log
 python:
   - "3.6"
+  - "3.7"
 # command to install dependencies
 install:
   - sudo add-apt-repository ppa:jonathonf/backports -y
   - sudo apt-get -qq -y update
   - sudo apt-get install -y sqlite3 gdal-bin
   - pip install -r requirements.txt
+  - pip install coveralls
 # command to run tests
 script:
   - flake8 cartoview
   - pytest
+after_success:
+- coveralls
 deploy:
   provider: pypi
   user: cartologic
