@@ -1,0 +1,8 @@
+<div class="row">
+  {% for column, width in columns %}
+    {# width is relative to a column grid width, e.g. 12 #}
+    <div class="column col-{{ width }}">
+        {{ column }}
+    </div>
+  {% endfor %}
+</div>

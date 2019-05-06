@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
+import jsonfield
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
-from django.contrib.postgres.fields import JSONField
 from django.core.cache import cache
 from django.db import models
 from django.db.models import Max
@@ -14,7 +14,10 @@ from guardian.shortcuts import assign_perm
 from taggit.managers import TaggableManager
 
 from cartoview.base_resource.models import BaseModel
+from cartoview.fields import ListField
+from cartoview.layers.validators import validate_projection
 from cartoview.maps.models import Map
+from cartoview.validators import ListValidator
 
 APPS_PERMISSIONS = (
     ("install_app", _("Install App")),
@@ -92,7 +95,7 @@ class App(models.Model):
     store = models.ForeignKey(
         AppStore, null=True, blank=True, on_delete=models.SET_NULL)
     order = models.IntegerField(default=0, unique=True)
-    default_config = JSONField(default=dict, null=True, blank=True)
+    default_config = jsonfield.JSONField(default=dict, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -104,13 +107,30 @@ class App(models.Model):
         return self.title
 
 
+class Bookmark(BaseModel):
+    name = models.CharField(max_length=255, default=_("No Name Provided"))
+    extent = ListField(null=False, blank=False, default=[0, 0, 0, 0],
+                       validators=[ListValidator(min_length=4,
+                                                 max_length=4), ])
+    projection = models.CharField(max_length=30, blank=False, null=False,
+                                  validators=[validate_projection, ])
+    owner = models.ForeignKey(
+        get_user_model(), null=True, blank=True, on_delete=models.SET_NULL)
+
+    def __str__(self):
+        return self.name
+
+
 class AppInstance(BaseModel):
     app_map = models.ForeignKey(
         Map, related_name="app_instances", on_delete=models.CASCADE)
     app = models.ForeignKey(
         App, related_name="instances", on_delete=models.CASCADE)
 
-    config = JSONField(default=None, null=True, blank=True)
+    config = jsonfield.JSONField(default=dict, null=True, blank=True)
+    owner = models.ForeignKey(
+        get_user_model(), null=True, blank=True, on_delete=models.SET_NULL)
+    bookmarks = models.ManyToManyField(Bookmark, blank=True)
 
     def __str__(self):
         return self.title
@@ -161,5 +181,6 @@ def invalidate_appinstance_cache(sender, instance, **kwargs):
 def add_default_user_group(sender, instance, **kwargs):
     created = kwargs.get("created")
     if created:
-        public_group = Group.objects.get(name="public")
+        public_group, _ = Group.objects.get_or_create(
+            name=settings.ANONYMOUS_GROUP_NAME)
         instance.groups.add(public_group)

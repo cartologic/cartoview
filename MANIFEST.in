@@ -1,0 +1,8 @@
+include requirements.txt
+include README.md LICENSE
+recursive-include cartoview *.css *.eot *.gif *.html *.ico *.ini *.jpg *.js *.json *.less *.md *.mo *.po *.otf *.png *.rst *.sample *.svg *.swf *.ttf *.txt *.woff *.woff2 *.xml *.xsl README
+prune cartoview/static/basic_viewer/node_modules/
+prune cartoview/app_manager/static/app_installer/node_modules/
+global-exclude *.py[co]
+global-exclude *.so
+global-exclude __pycache__

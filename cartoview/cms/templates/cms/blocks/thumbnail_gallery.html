@@ -1,0 +1,9 @@
+{% load wagtailcore_tags %}
+
+<div class="row">
+    {% for image_item in value.image_items %}
+        <div class="col-xs-6 col-sm-6 col-md-4 col-lg-4" style="margin-bottom: 20px;">
+            <img class="{{ value.style }} img-fluid" src="{{ image_item.image.file.url }}" alt="Image">
+        </div>
+    {% endfor %}
+</div>

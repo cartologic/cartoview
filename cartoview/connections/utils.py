@@ -63,7 +63,7 @@ def get_handler_class_handler(handler_key, server=False):
             _("CARTOVIEW_CONNECTIONS Improperly Configured"))
     if handler_key not in handlers_dict.keys():
         raise ConnectionTypeException(
-            "Can\'t Find Proper Connection Handler")
+            "Can\'t Find Proper Connection Handler {}".format(handler_key))
     try:
 
         handler_module, handler_name = get_module_class(

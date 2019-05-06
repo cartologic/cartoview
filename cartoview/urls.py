@@ -22,24 +22,22 @@ from rest_framework.authtoken.views import obtain_auth_token
 
 from cartoview.geonode_oauth import views as geonode_oauth_views
 
-from .views import IndexView
-
-urlpatterns = i18n_patterns(
-    path("django-admin/", admin.site.urls),
-    re_path(r"^admin/", include('wagtail.admin.urls')),
-)
-urlpatterns += [
-    re_path(r"^$", IndexView.as_view(), name='index'),
-    re_path(r"^accounts/", include("allauth.urls")),
+urlpatterns = [
     re_path(r"^accounts/profile$", geonode_oauth_views.ProfileView.as_view()),
     re_path(r"^documents/", include('wagtail.documents.urls')),
     re_path(r"^apps/", include('cartoview.app_manager.urls')),
+    re_path(r"^maps/", include('cartoview.maps.urls')),
     re_path(r"^api/", include('cartoview.api.urls')),
     re_path(r'^api-auth/', include('rest_framework.urls',
                                    namespace="rest_framework")),
-    path('api-token-auth/', obtain_auth_token, name='api_token_auth'),
-    re_path(r"^sites", include('wagtail.core.urls'), name='sites')
+    re_path(r'^api-token-auth/', obtain_auth_token, name='api_token_auth'),
 ]
+urlpatterns += i18n_patterns(
+    path("django-admin/", admin.site.urls),
+    re_path(r"^admin/", include('wagtail.admin.urls'), name='wagtail_admin'),
+    re_path(r"^accounts/", include("allauth.urls")),
+    path("", include('wagtail.core.urls')),
+)
 # django static serve static production
 # from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 # urlpatterns += staticfiles_urlpatterns()

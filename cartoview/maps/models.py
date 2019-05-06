@@ -1,25 +1,25 @@
+import jsonfield
 from django.contrib.auth import get_user_model
-from django.contrib.postgres.fields import ArrayField, JSONField
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
 from cartoview.base_resource.models import BaseModel
+from cartoview.fields import ListField
 from cartoview.layers.models import Layer
 from cartoview.layers.validators import validate_projection
+from cartoview.validators import ListValidator
 
 
 class Map(BaseModel):
-    bounding_box = ArrayField(models.DecimalField(
-        max_digits=30,
-        decimal_places=15,
-        blank=True,
-        null=True), size=4, null=True, blank=True)
+    bounding_box = ListField(null=True, blank=True, default=[0, 0, 0, 0],
+                             validators=[ListValidator(min_length=4,
+                                                       max_length=4), ])
     projection = models.CharField(
         max_length=30,
         blank=False,
         null=False, validators=[validate_projection, ], default="EPSG:3857")
-    center = models.CharField(
-        max_length=150, null=False, blank=False, default="[0,0]")
+    center = ListField(null=False, blank=False, default=[0, 0], validators=[
+                       ListValidator(min_length=2, max_length=2), ])
     constrain_rotation = models.BooleanField(default=True)
     enable_rotation = models.BooleanField(default=True)
     max_zoom = models.IntegerField(default=28, validators=[
@@ -34,13 +34,13 @@ class Map(BaseModel):
         MaxValueValidator(28),
         MinValueValidator(1)
     ])
-    zoom = models.IntegerField(default=6, validators=[
+    zoom = models.FloatField(default=6, validators=[
         MaxValueValidator(28),
         MinValueValidator(1)
     ])
     rotation = models.IntegerField(null=False, blank=False, default=0)
-    layers = models.ManyToManyField(Layer)
-    render_options = JSONField(default=dict, null=False, blank=True)
+    layers = models.ManyToManyField(Layer, blank=True)
+    render_options = jsonfield.JSONField(default=dict, null=False, blank=True)
     owner = models.ForeignKey(
         get_user_model(), on_delete=models.CASCADE, related_name="maps",
         blank=True, null=True)

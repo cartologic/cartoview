@@ -10,13 +10,13 @@ __pycache__/
 .Python
 build/
 develop-eggs/
-dist/
 downloads/
 eggs/
 .eggs/
 lib/
 lib64/
 parts/
+dist/
 sdist/
 var/
 wheels/
@@ -130,3 +130,4 @@ cartoview_apps
 .DS_Store
 conncurent_test.py
 \.idea/
+celerybeat-schedule.db

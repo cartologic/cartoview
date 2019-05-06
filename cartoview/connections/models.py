@@ -1,15 +1,14 @@
+import jsonfield
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.fields import (GenericForeignKey,
                                                 GenericRelation)
 from django.contrib.contenttypes.models import ContentType
-from django.contrib.postgres.fields import JSONField
 from django.core.cache import cache
 from django.db import models
 from django.db.models.signals import post_delete, post_save
 from django.dispatch import receiver
 from django.forms.models import model_to_dict
-from django.utils import timezone
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 from fernet_fields import EncryptedTextField
@@ -53,8 +52,7 @@ class Server(BaseConnectionModel):
         ContentType, null=True, blank=True, on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField(null=True, blank=True)
     connection = GenericForeignKey('content_type', 'object_id')
-    refresh_interval = models.DurationField(default=timezone.timedelta(days=7))
-    operations = JSONField(default=dict, blank=True)
+    operations = jsonfield.JSONField(default=dict, blank=True)
 
     @cached_property
     def server_handler_key(self):
@@ -67,8 +65,7 @@ class Server(BaseConnectionModel):
     @cached_property
     def handler(self):
         handler = None
-        Handler = get_handler_class_handler(
-            self.server_handler_key, server=True)
+        Handler = get_handler_class_handler(self.server_type, server=True)
         handler = Handler(self.url, self.id)
         return handler
 

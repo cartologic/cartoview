@@ -1,0 +1,22 @@
+{% extends 'cms/base_cms.html' %}
+{% load wagtailcore_tags %}
+
+{% block hero_area %}
+    {{ page.hero }}
+{% endblock hero_area %}
+
+{% block content %}
+    {% if not page.body and not page.hero %}
+        {% include 'cms/empty_page.html' %}
+    {% else %}
+        <div class="main main-raised">
+            <div class="container">
+                {% for body_block in page.body %}
+                    <div class="section text-center">
+                        {% include_block body_block with block_id=body_block.id %}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+{% endblock content %}

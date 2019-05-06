@@ -1,18 +1,18 @@
 from rest_framework import permissions, viewsets
-
+from django_filters.rest_framework import DjangoFilterBackend
 from cartoview.layers.models import Layer
-
-from ..permissions import BaseObjectPermissions
+from rest_framework.filters import SearchFilter, OrderingFilter
+from ..filters import DjangoObjectPermissionsFilter, LayerFilter
 from ..serializers.layers import LayerSerializer
-from ..filters import LayerFilter
 
 
 class LayerViewSet(viewsets.ModelViewSet):
     queryset = Layer.objects.all()
     serializer_class = LayerSerializer
-    # filterset_fields = ('name', 'title', 'description',
-    #                     'server__server_type', 'server__id',
-    #                     'server__owner__username')
     filterset_class = LayerFilter
-    permission_classes = (
-        permissions.IsAuthenticatedOrReadOnly, BaseObjectPermissions)
+    permission_classes = (permissions.DjangoModelPermissionsOrAnonReadOnly,)
+    filter_backends = (DjangoObjectPermissionsFilter,
+                       DjangoFilterBackend, OrderingFilter, SearchFilter)
+
+    def perform_create(self, serializer):
+        return serializer.save(owner=self.request.user)

@@ -1,0 +1,103 @@
+{% extends 'cms/base_cms.html' %}
+{% load static from staticfiles %}
+{% load wagtailcore_tags %}
+
+{% block body_class %}profile-page sidebar-collapse{% endblock %}
+
+{% block content %}
+    {% if page.hero_image %}
+        <div class="page-header header-filter" data-parallax="true"
+             style="background-image: url('{{ page.hero_image.file.url }}');"></div>
+    {% else %}
+        <div class="page-header header-filter" data-parallax="true"
+             style='background-image: url("{% static 'material-kit/assets/img/bg3.jpg' %}");'></div>
+    {% endif %}
+    <div class="main main-raised">
+        <div class="profile-content">
+            <div class="container" style="padding-bottom: 20px;">
+                <div class="row">
+                    <div class="col-md-12 ml-auto">
+                        <div class="title">
+                            <h1>{{ self.title }}</h1>
+                        </div>
+                        <form action="{{ page.search_url }}" autocomplete="off" class="form-horizontal"
+                              method="GET" accept-charset="utf-8">
+                            <div class="input-group">
+                                <input name="q" placeholder="Search for Maps" value="" class="form-control" type="text">
+                                <span class="input-group-btn">
+                                <button class="btn btn-white btn-raised btn-fab btn-round" type="submit" id="mapSearch">
+                                <i class="material-icons">search</i>
+                                </button>
+                                </span>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="row" style="margin-bottom: 40px;">
+                    <div class="col-md-2"><p style="text-align: left">Popular keywords:</p></div>
+                    <div class="col-md-10" style="text-align: right">
+                        {% for keyword in keywords %}
+                            <a href="{{ page.keywords_url }}?keyword={{ keyword }}"
+                               class="btn btn-sm btn-info btn-round"
+                               style="color: white;">
+                                {{ keyword }} &nbsp; | &nbsp; {{ keyword.keywords_count }}
+                            </a>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                {% for map in maps %}
+                    <div class="row" style="margin-top: 20px;">
+                        <div class="col-lg-4 col-md-12 col-sm-12">
+                            <a target="_blank" href="{% url 'maps:map_view' map_id=map.id %}">
+                                {% if map.featured_image %}
+                                    <img class="rounded img-fluid" src="{{ map.featured_image.url }}" alt="Map">
+                                {% elif map.thumbnail %}
+                                    <img class="rounded img-fluid" src="{{ map.thumbnail.url }}" alt="Map">
+                                {% else %}
+                                    <img class="rounded img-fluid"
+                                         src="{% static 'cartoview/img/default-map-image.jpg' %}" alt="Map">
+                                {% endif %}
+                            </a>
+                        </div>
+                        <div class="col-lg-8 col-md-12 col-sm-12">
+                            <h3 style="margin-top: 0;">
+                                <a target="_blank" href="{% url 'maps:map_view' map_id=map.id %}">
+                                    {{ map.title }}
+                                </a></h3>
+                            <p>
+                                {{ map.description }}
+                            </p>
+                        </div>
+                    </div>
+                    <hr width="50%">
+                {% endfor %}
+
+                <div class="row" style="margin-top: 20px;">
+                    <div class="col">
+                        <ul class="pagination pagination-info">
+                            {% if maps.has_previous %}
+                                <li class="page-item">
+                                    <a href="?page={{ maps.previous_page_number }}" class="page-link"> prev</a>
+                                </li>
+                            {% endif %}
+
+                            {% for page_num in maps.paginator.page_range %}
+                                <li class="page-item {% if page_num == maps.number %} active{% endif %}">
+                                    <a href="?page={{ page_num }}" class="page-link">{{ page_num }}</a>
+                                </li>
+                            {% endfor %}
+
+                            {% if maps.has_next %}
+                                <li class="page-item">
+                                    <a href="?page={{ maps.next_page_number }}" class="page-link">next </a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+{% endblock content %}
