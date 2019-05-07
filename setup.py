@@ -62,7 +62,6 @@ setup(
         'Topic :: Software Development',
     ],
     install_requires=reqs,
-    exclude_package_data={'': ['node_modules', ]},
     extras_require={
         'testing': testing_extras,
         'docs': documentation_extras
