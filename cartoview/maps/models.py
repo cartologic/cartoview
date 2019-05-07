@@ -1,5 +1,6 @@
 import jsonfield
 from django.contrib.auth import get_user_model
+from django.contrib.sites.models import Site
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
@@ -11,6 +12,8 @@ from cartoview.validators import ListValidator
 
 
 class Map(BaseModel):
+    site = models.ForeignKey(Site, related_name='site_maps',
+                             on_delete=models.CASCADE, null=True, blank=True)
     bounding_box = ListField(null=True, blank=True, default=[0, 0, 0, 0],
                              validators=[ListValidator(min_length=4,
                                                        max_length=4), ])

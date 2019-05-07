@@ -6,10 +6,10 @@ from rest_framework.response import Response
 
 from cartoview.maps.models import Map
 
+from ..filters import MapFilter
 from ..permissions import IsOwnerOrReadOnly
 from ..serializers.layers import LayerSerializer
 from ..serializers.maps import MapSerializer
-from ..filters import MapFilter
 
 
 class MapViewSet(viewsets.ModelViewSet):
