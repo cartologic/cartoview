@@ -14,6 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.conf import settings
+from django.conf.urls.i18n import i18n_patterns
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path, re_path
@@ -31,12 +32,12 @@ urlpatterns = [
                                    namespace="rest_framework")),
     re_path(r'^api-token-auth/', obtain_auth_token, name='api_token_auth'),
 ]
-urlpatterns += [
+urlpatterns += i18n_patterns(
     path("django-admin/", admin.site.urls),
     re_path(r"^admin/", include('wagtail.admin.urls'), name='wagtail_admin'),
     re_path(r"^accounts/", include("allauth.urls")),
     path("", include('wagtail.core.urls')),
-]
+)
 # django static serve static production
 # from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 # urlpatterns += staticfiles_urlpatterns()
