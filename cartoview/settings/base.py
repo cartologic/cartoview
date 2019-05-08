@@ -75,6 +75,7 @@ INSTALLED_APPS = [
     "wagtailmenus",
     "wagtail.contrib.styleguide",
     "wagtail.contrib.settings",
+    "wagtail.contrib.table_block",
     "modelcluster",
     "taggit",
     'wagtailfontawesome',
@@ -89,6 +90,7 @@ INSTALLED_APPS = [
     "cartoview.layers",
     "cartoview.maps",
     "cartoview.cms",
+    "cartoview.data_table",
 ]
 
 # channels settings
