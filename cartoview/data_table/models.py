@@ -1,8 +1,6 @@
 import csv
 
 from django.db import models
-from django.db.models.signals import pre_save
-from django.dispatch import receiver
 from wagtail.admin.edit_handlers import FieldPanel, TabbedInterface, ObjectList, \
     StreamFieldPanel, MultiFieldPanel
 from wagtail.core.blocks import StreamBlock
@@ -46,17 +44,24 @@ class DataTable(models.Model):
     def __str__(self):
         return "Table (" + self.name + ")"
 
+    def clean(self):
+        if self.upload_file:
+            decoded_file = self.upload_file.file.read().decode('utf-8').splitlines()
+            csv_reader = csv.reader(decoded_file)
+            if not self.values.stream_data[0][1]:
+                initial_data = {
+                    'data': [],
+                    'first_row_is_table_header': False,
+                    'first_col_is_table_header': False
+                }
+                temp_stream_data = [['table', initial_data, self.values.stream_data[0][2]]]
+                self.values.stream_data = temp_stream_data
+            else:
+                self.values.stream_data[0][1]['data'] = []
+            for row in csv_reader:
+                self.values.stream_data[0][1]['data'].append(row)
+                self.upload_file = None
+
     class Meta:
         verbose_name = 'Data Table'
         verbose_name_plural = 'Data Tables'
-
-
-@receiver(pre_save, sender=DataTable)
-def update_values_from_file(sender, instance, **kwargs):
-    if instance.upload_file:
-        file_reader = open(instance.upload_file.path, "r")
-        csv_reader = csv.reader(file_reader)
-        instance.values.stream_data[0][1]['data'] = []
-        for row in csv_reader:
-            instance.values.stream_data[0][1]['data'].append(row)
-        instance.upload_file = None
