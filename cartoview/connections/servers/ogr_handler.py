@@ -60,6 +60,7 @@ class ORGHandler(BaseServer):
     @lru_cache(maxsize=256)
     def get_layers(self):
         layers = []
+        print(self.url)
         if self.is_alive():
             with self.open_source(self.url) as datasource:
                 count = datasource.GetLayerCount()

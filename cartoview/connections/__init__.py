@@ -10,6 +10,7 @@ GEOSERVER = ServerType("OGC-WFS", "OGC-WFS", "OGC Web Feature Service", "wfs")
 GEONODE = ServerType("GEONODE", "GEONODE", "Geonode", "geonode")
 GEOJSON = ServerType("GEOJSON", "GEOJSON", "GeoJSON", "geojson")
 KML = ServerType("KML", "KML", "KML", "kml")
+POSTGIS = ServerType("POSTGIS", "POSTGIS", "PostGIS", "postgis")
 SUPPORTED_SERVERS = (
     ESRI_MSL,
     ESRI_FSL,
@@ -17,7 +18,8 @@ SUPPORTED_SERVERS = (
     GEOSERVER,
     GEONODE,
     GEOJSON,
-    KML
+    KML,
+    POSTGIS
 )
 DEFAULT_PROXY_SETTINGS = {
     "default_headers": {

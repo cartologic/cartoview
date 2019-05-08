@@ -1,10 +1,12 @@
 import jsonfield
+from cartoview.log_handler import get_logger
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.fields import (GenericForeignKey,
                                                 GenericRelation)
 from django.contrib.contenttypes.models import ContentType
 from django.core.cache import cache
+from django.core.validators import URLValidator
 from django.db import models
 from django.db.models.signals import post_delete, post_save
 from django.dispatch import receiver
@@ -13,8 +15,6 @@ from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 from fernet_fields import EncryptedTextField
 from guardian.shortcuts import assign_perm
-
-from cartoview.log_handler import get_logger
 
 from . import SUPPORTED_SERVERS
 from .utils import get_handler_class_handler
@@ -46,8 +46,9 @@ class Server(BaseConnectionModel):
         max_length=15, choices=SERVER_TYPES, help_text=_("Server Type"))
     title = models.CharField(max_length=150, null=False,
                              blank=False, help_text=_("Server Title"))
-    url = models.URLField(blank=False, null=False,
-                          help_text=_("Base Server URL"))
+    url = models.TextField(blank=False, null=False,
+                           help_text=_("Base Server URL"), validators=[URLValidator(
+                               schemes=['http', 'https', 'ftp', 'ftps', 'postgis'])])
     content_type = models.ForeignKey(
         ContentType, null=True, blank=True, on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField(null=True, blank=True)
