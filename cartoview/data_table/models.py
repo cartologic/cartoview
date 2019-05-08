@@ -3,7 +3,8 @@ import csv
 from django.db import models
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
-from wagtail.admin.edit_handlers import FieldPanel, TabbedInterface, ObjectList, StreamFieldPanel, MultiFieldPanel
+from wagtail.admin.edit_handlers import FieldPanel, TabbedInterface, ObjectList, \
+    StreamFieldPanel, MultiFieldPanel
 from wagtail.core.blocks import StreamBlock
 from wagtail.core.fields import StreamField
 from wagtail.contrib.table_block.blocks import TableBlock
@@ -21,7 +22,9 @@ class DataTable(models.Model):
     description = models.TextField(null=True, blank=True)
     additional_info = models.TextField(null=True, blank=True)
     upload_file = models.FileField(blank=True, null=True)
-    values = StreamField(TableBlock(max_num=1, min_num=0, block_counts={'table': {'max_num': 1, 'min_num': 0}}))
+    values = StreamField(TableBlock(max_num=1, min_num=0,
+                                    block_counts={'table': {'max_num': 1, 'min_num': 0}}
+                                    ))
 
     general_panel = [
         MultiFieldPanel(
@@ -33,7 +36,7 @@ class DataTable(models.Model):
             heading="Info",
         ),
         StreamFieldPanel('values'),
-        FieldPanel('upload_file', help_text="Upload a CSV file instead of entering the data manually!"),
+        FieldPanel('upload_file', help_text="Upload a CSV file instead!"),
     ]
 
     edit_handler = TabbedInterface([
