@@ -3,7 +3,7 @@ from wagtail.contrib.modeladmin.options import (
 from .models import DataTable
 
 
-class ModelSchemaAdmin(ModelAdmin):
+class DataTablesAdmin(ModelAdmin):
     model = DataTable
     menu_icon = 'fa-superpowers'
     list_display = ('name',)
@@ -11,5 +11,4 @@ class ModelSchemaAdmin(ModelAdmin):
     search_fields = ('name', 'description', 'additional_info')
 
 
-# Now you just need to register your customised ModelAdmin class with Wagtail
-modeladmin_register(ModelSchemaAdmin)
+modeladmin_register(DataTablesAdmin)
