@@ -90,6 +90,7 @@ INSTALLED_APPS = [
     "cartoview.layers",
     "cartoview.maps",
     "cartoview.cms",
+    "cartoview.dynamic_models",
     "cartoview.data_table",
 ]
 
