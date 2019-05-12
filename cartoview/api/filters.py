@@ -24,6 +24,8 @@ class BaseFilter(django_filters.FilterSet):
 
 
 class MapFilter(BaseFilter):
+    layers_type = django_filters.CharFilter(
+        lookup_expr='iexact', field_name='layers__server__server_type')
 
     class Meta:
         model = Map
@@ -33,6 +35,8 @@ class MapFilter(BaseFilter):
 class LayerFilter(BaseFilter):
     server = django_filters.CharFilter(
         lookup_expr='exact', field_name='server__id')
+    layer_type = django_filters.CharFilter(
+        lookup_expr='iexact', field_name='server__server_type')
 
     class Meta:
         model = Layer
