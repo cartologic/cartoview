@@ -1,28 +1,41 @@
 import csv
 
-from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from wagtail.admin.edit_handlers import FieldPanel, TabbedInterface, ObjectList, \
     StreamFieldPanel, MultiFieldPanel
-from wagtail.core.blocks import StreamBlock
+from wagtail.core.blocks import StreamBlock, CharBlock, StructBlock, ChoiceBlock
 from wagtail.core.fields import StreamField
-from wagtail.contrib.table_block.blocks import TableBlock
+from django.db import models
+from .factory import DynamicModel
+
+field_mapping = {
+    'text': models.TextField(null=True, blank=True),
+    'number': models.FloatField(null=True, blank=True)
+}
 
 
-class TableBlock(StreamBlock):
-    table = TableBlock()
+class FieldTypeChoiceBlock(ChoiceBlock):
+    choices = (
+        ('text', 'Text'),
+        ('number', 'Number'),
+    )
 
-    class Meta:
-        icon = 'cogs'
+
+class FieldsListBlock(StructBlock):
+    name = CharBlock()
+    type = FieldTypeChoiceBlock()
 
 
 class DataTable(models.Model):
     name = models.CharField(max_length=120, unique=True)
     description = models.TextField(null=True, blank=True)
     additional_info = models.TextField(null=True, blank=True)
+    fields = StreamField(
+        StreamBlock([
+            ('field', FieldsListBlock()),
+        ]), blank=True, null=True)
     upload_file = models.FileField(blank=True, null=True)
-    values = StreamField(TableBlock(max_num=1, min_num=0,
-                                    block_counts={'table': {'max_num': 1, 'min_num': 0}}
-                                    ))
 
     general_panel = [
         MultiFieldPanel(
@@ -33,12 +46,15 @@ class DataTable(models.Model):
             ],
             heading="Info",
         ),
-        StreamFieldPanel('values'),
-        FieldPanel('upload_file', help_text="Upload a CSV file instead!"),
+        StreamFieldPanel('fields'),
+    ]
+    data_upload_panel = [
+        FieldPanel('upload_file', help_text="Upload a CSV file!"),
     ]
 
     edit_handler = TabbedInterface([
         ObjectList(general_panel, heading='General'),
+        ObjectList(data_upload_panel, heading='Data Upload'),
     ])
 
     def __str__(self):
@@ -65,3 +81,15 @@ class DataTable(models.Model):
     class Meta:
         verbose_name = 'Data Table'
         verbose_name_plural = 'Data Tables'
+
+
+@receiver(post_save, sender=DataTable)
+def create_model_table(sender, instance, **kwargs):
+    created = kwargs.get('created')
+    if created:
+        pre_fields = [d[1] for d in instance.fields.stream_data]
+        module_name = 'fake_project.{}.no_models'.format(instance.name.lower())
+        model = DynamicModel.create_model(instance.name.capitalize(), instance.name, app_label='fake_app',
+                                          module=module_name,
+                                          fields={f['name']: field_mapping[f['type']] for f in pre_fields})
+        DynamicModel.create_model_table(model)
