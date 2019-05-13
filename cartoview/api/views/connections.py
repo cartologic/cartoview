@@ -46,17 +46,17 @@ class AuthConnectionViewSet(viewsets.ModelViewSet):
 
 
 class SimpleAuthConnectionViewSet(AuthConnectionViewSet):
-    queryset = SimpleAuthConnection.objects.all()
+    queryset = SimpleAuthConnection.objects.all().distinct()
     serializer_class = SimpleAuthConnectionSerializer
 
 
 class TokenAuthConnectionViewSet(AuthConnectionViewSet):
-    queryset = TokenAuthConnection.objects.all()
+    queryset = TokenAuthConnection.objects.all().distinct()
     serializer_class = TokenAuthConnectionSerializer
 
 
 class ServerViewSet(viewsets.ModelViewSet):
-    queryset = Server.objects.all()
+    queryset = Server.objects.all().distinct()
     serializer_class = ServerSerializer
     permission_classes = (
         permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly)
