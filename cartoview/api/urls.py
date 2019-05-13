@@ -9,6 +9,7 @@ from .views.connections import (ServerProxy, ServerViewSet,
                                 SimpleAuthConnectionViewSet,
                                 TokenAuthConnectionViewSet)
 from .views.layers import LayerViewSet
+from .views.keywords import KeywordListView
 from .views.maps import MapViewSet
 from .views.users import UserViewSet
 from .views.data_table import DataTableViewSet
@@ -31,6 +32,7 @@ router.register(r'token_auth', TokenAuthConnectionViewSet, 'token_auth')
 urlpatterns = [
     re_path(r'^swagger$', schema_view),
     re_path(r'^', include(router.urls)),
+    re_path(r'^keywords', KeywordListView.as_view(), name="keywords-list"),
     re_path(r'^proxy/(?P<pk>[\d]+)/$',
             ServerProxy.as_view(), name='server_proxy'),
 ]
