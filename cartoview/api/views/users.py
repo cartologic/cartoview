@@ -9,7 +9,7 @@ from rest_framework.response import Response
 
 
 class UserViewSet(viewsets.ModelViewSet):
-    queryset = get_user_model().objects.all()
+    queryset = get_user_model().objects.all().distinct()
     serializer_class = UserSerializer
     permission_classes = (UserPermission,)
 
