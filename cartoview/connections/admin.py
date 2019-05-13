@@ -1,11 +1,17 @@
 # -*- coding: utf-8 -*-
+from cartoview.connections.tasks import (delete_invalid_resources,
+                                         harvest_task, update_server_resources,
+                                         validate_server_resources)
 from django.contrib import admin
-from .models import Server, SimpleAuthConnection, TokenAuthConnection
-from .forms import SimpleAuthConnectionForm
+from django.contrib.contenttypes.admin import GenericTabularInline
 from guardian import admin as guardian_admin
-from cartoview.connections.tasks import (harvest_task, update_server_resources,
-                                         validate_server_resources,
-                                         delete_invalid_resources)
+
+from .forms import SimpleAuthConnectionForm
+from .models import Server, SimpleAuthConnection, TokenAuthConnection
+
+
+class ServerAdminInline(GenericTabularInline):
+    model = Server
 
 
 @admin.register(Server)
@@ -47,8 +53,10 @@ class ServerAdmin(admin.ModelAdmin):
 class SimpleAuthConnectionAdmin(guardian_admin.GuardedModelAdmin):
     list_display = ('username', 'auth_type')
     form = SimpleAuthConnectionForm
+    inlines = [ServerAdminInline, ]
 
 
 @admin.register(TokenAuthConnection)
 class TokenAuthConnectionAdmin(guardian_admin.GuardedModelAdmin):
     list_display = ('prefix', 'token')
+    inlines = [ServerAdminInline, ]
