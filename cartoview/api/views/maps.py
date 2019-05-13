@@ -13,7 +13,7 @@ from ..serializers.maps import MapSerializer
 
 
 class MapViewSet(viewsets.ModelViewSet):
-    queryset = Map.objects.all().prefetch_related('layers')
+    queryset = Map.objects.all().prefetch_related('layers').distinct()
     serializer_class = MapSerializer
     permission_classes = [
         permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]

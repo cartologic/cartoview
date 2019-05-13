@@ -24,7 +24,7 @@ def build_describe_feature_type(layer):
 
 
 class LayerViewSet(viewsets.ModelViewSet):
-    queryset = Layer.objects.all()
+    queryset = Layer.objects.all().distinct()
     serializer_class = LayerSerializer
     filterset_class = LayerFilter
     permission_classes = (permissions.DjangoModelPermissionsOrAnonReadOnly,)
