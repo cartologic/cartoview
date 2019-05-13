@@ -56,7 +56,7 @@ class MapModelAdmin(ModelAdmin):
     model = Map
     menu_label = 'Maps'
     menu_icon = 'site'
-    menu_order = 200
+    menu_order = 203
     add_to_settings_menu = False
     exclude_from_explorer = False
     list_display = ('title', 'projection', 'created_at',

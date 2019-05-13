@@ -1,7 +1,8 @@
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from wagtail.contrib.modeladmin.helpers import ButtonHelper
-from wagtail.contrib.modeladmin.options import ModelAdmin, modeladmin_register
+from wagtail.contrib.modeladmin.options import (ModelAdmin, ModelAdminGroup,
+                                                modeladmin_register)
 from wagtail.core import hooks
 
 from .models import Server, SimpleAuthConnection, TokenAuthConnection
@@ -42,7 +43,7 @@ def register_admin_urls():
 class ServerModelAdmin(ModelAdmin):
     model = Server
     menu_label = 'GIS Servers'
-    menu_icon = 'plus-inverse'
+    menu_icon = 'fa-server'
     menu_order = 201
     add_to_settings_menu = False
     exclude_from_explorer = False
@@ -55,10 +56,11 @@ class ServerModelAdmin(ModelAdmin):
 class SimpleAuthConnectionAdmin(ModelAdmin):
     model = SimpleAuthConnection
     menu_label = 'Simple Auth'
+    menu_icon = "fa-key"
     menu_order = 203
     add_to_settings_menu = False
     exclude_from_explorer = False
-    list_display = ('username', 'server')
+    list_display = ('username', 'owner')
     list_filter = ('username',)
 
     def get_queryset(self, request):
@@ -69,6 +71,7 @@ class SimpleAuthConnectionAdmin(ModelAdmin):
 class TokenAuthConnectionAdmin(ModelAdmin):
     model = TokenAuthConnection
     menu_label = 'Token Auth'
+    menu_icon = "fa-lock"
     menu_order = 204
     add_to_settings_menu = False
     exclude_from_explorer = False
@@ -80,6 +83,11 @@ class TokenAuthConnectionAdmin(ModelAdmin):
         return qs.filter(owner=request.user)
 
 
-modeladmin_register(ServerModelAdmin)
-modeladmin_register(SimpleAuthConnectionAdmin)
-modeladmin_register(TokenAuthConnectionAdmin)
+class ServerGroup(ModelAdminGroup):
+    menu_label = 'Servers'
+    menu_icon = 'folder-open-inverse'
+    menu_order = 202
+    items = (ServerModelAdmin, SimpleAuthConnectionAdmin, TokenAuthConnectionAdmin)
+
+
+modeladmin_register(ServerGroup)
