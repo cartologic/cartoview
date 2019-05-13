@@ -86,7 +86,7 @@ class TokenAuthConnectionAdmin(ModelAdmin):
 class ServerGroup(ModelAdminGroup):
     menu_label = 'Servers'
     menu_icon = 'folder-open-inverse'
-    menu_order = 200
+    menu_order = 202
     items = (ServerModelAdmin, SimpleAuthConnectionAdmin, TokenAuthConnectionAdmin)
 
 
