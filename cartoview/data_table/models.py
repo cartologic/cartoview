@@ -89,7 +89,9 @@ def create_model_table(sender, instance, **kwargs):
     if created:
         pre_fields = [d[1] for d in instance.fields.stream_data]
         module_name = 'fake_project.{}.no_models'.format(instance.name.lower())
-        model = DynamicModel.create_model(instance.name.capitalize(), instance.name, app_label='fake_app',
+        temp_fields = {f['name']: field_mapping[f['type']] for f in pre_fields}
+        model = DynamicModel.create_model(instance.name.capitalize(), instance.name,
+                                          app_label='fake_app',
                                           module=module_name,
-                                          fields={f['name']: field_mapping[f['type']] for f in pre_fields})
+                                          fields=temp_fields)
         DynamicModel.create_model_table(model)
