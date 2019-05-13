@@ -21,19 +21,19 @@ logger = get_logger(__name__)
 
 
 class AppStoreViewSet(viewsets.ModelViewSet):
-    queryset = AppStore.objects.all()
+    queryset = AppStore.objects.all().distinct()
     serializer_class = AppStoreSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
 
 class AppTypeViewSet(viewsets.ModelViewSet):
-    queryset = AppType.objects.all()
+    queryset = AppType.objects.all().distinct()
     serializer_class = AppTypeSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
 
 class AppInstanceViewSet(viewsets.ModelViewSet):
-    queryset = AppInstance.objects.all().prefetch_related("app_map")
+    queryset = AppInstance.objects.all().prefetch_related("app_map").distinct()
     serializer_class = AppInstanceSerializer
     filterset_class = AppInstanceFilter
     permission_classes = (IsOwnerOrReadOnly,)
@@ -43,7 +43,7 @@ class AppInstanceViewSet(viewsets.ModelViewSet):
 
 
 class BookmarkViewSet(viewsets.ModelViewSet):
-    queryset = Bookmark.objects.all()
+    queryset = Bookmark.objects.all().distinct()
     serializer_class = BookmarkSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
@@ -52,7 +52,7 @@ class BookmarkViewSet(viewsets.ModelViewSet):
 
 
 class AppViewSet(viewsets.ModelViewSet):
-    queryset = App.objects.all()
+    queryset = App.objects.all().distinct()
     serializer_class = AppSerializer
     permission_classes = (AppPermission,)
     filterset_class = AppFilter
