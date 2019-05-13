@@ -291,7 +291,7 @@ if CACHE_ENABLED:
 
 # apps settings
 APPS_DIR = os.path.join(BASE_DIR, os.pardir, "cartoview_apps")
-STAND_ALONE = strtobool(os.getenv("STAND_ALONE", "False"))
+STAND_ALONE = strtobool(os.getenv("STAND_ALONE", "True"))
 if STAND_ALONE:
 
     # NOTE: load cartoview apps
