@@ -12,9 +12,7 @@ urlpatterns = [
 
 def app_url(app_name):
     app = str(app_name)
-    return re_path(
-        r'^{app_name}/'.format(app_name=app),
-        include('%s.urls' % app), name='%s_base_url' % app)
+    return re_path(r'^{app_name}/'.format(app_name=app), include('%s.urls' % app))
 
 
 def load_apps_urls():

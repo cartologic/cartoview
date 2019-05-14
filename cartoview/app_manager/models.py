@@ -12,7 +12,7 @@ from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 from guardian.shortcuts import assign_perm
 from taggit.managers import TaggableManager
-
+from cartoview.log_handler import get_logger
 from cartoview.base_resource.models import BaseModel
 from cartoview.fields import ListField
 from cartoview.layers.validators import validate_projection
@@ -24,6 +24,8 @@ APPS_PERMISSIONS = (
     ("uninstall_app", _("Uninstall App")),
     ("change_state", _("Change App State (active, suspend)")),
 )
+
+logger = get_logger(__name__)
 
 
 class AppTypeManager(models.Manager):
@@ -105,6 +107,72 @@ class App(models.Model):
 
     def __str__(self):
         return self.title
+
+    @property
+    def settings_url(self):
+        try:
+            return reverse_lazy("app_manager:%s_settings" % self.name)
+        except BaseException as e:
+            logger.error(e.message)
+            return None
+
+    @property
+    def urls(self):
+        admin_urls = logged_in_urls = anonymous_urls = None
+        try:
+            app_module = __import__(self.name)
+            if hasattr(app_module, 'urls_dict'):
+                urls_dict = getattr(app_module, 'urls_dict')
+                if 'admin' in list(urls_dict.keys()):
+                    admin_urls = urls_dict['admin']
+                else:
+                    admin_urls = None
+                if 'logged_in' in list(urls_dict.keys()):
+                    logged_in_urls = urls_dict['logged_in']
+                else:
+                    logged_in_urls = None
+                if 'anonymous' in list(urls_dict.keys()):
+                    anonymous_urls = urls_dict['anonymous']
+                else:
+                    anonymous_urls = None
+        except ImportError as e:
+            logger.error(e.message)
+        return (admin_urls, logged_in_urls, anonymous_urls)
+
+    @property
+    def open_url(self):
+        open_url = "/apps/{}".format(self.name)
+        try:
+            app_module = __import__(self.name)
+            if hasattr(app_module, 'OPEN_URL_NAME'):
+                open_url = reverse_lazy(getattr(app_module, 'OPEN_URL_NAME'))
+        except ImportError as e:
+            logger.error(e.message)
+        return open_url
+
+    @property
+    def create_new_url(self):
+        create_new_url = reverse_lazy('app_manager:{}.new'.format(self.name))
+        try:
+            app_module = __import__(self.name)
+            if hasattr(app_module, 'CREATE_NEW_URL_NAME'):
+                create_new_url = reverse_lazy(
+                    getattr(app_module, 'CREATE_NEW_URL_NAME'))
+        except ImportError as e:
+            logger.error(e.message)
+        return create_new_url
+
+    @property
+    def admin_urls(self):
+        return self.urls[0]
+
+    @property
+    def logged_in_urls(self):
+        return self.urls[1]
+
+    @property
+    def anonymous_urls(self):
+        return self.urls[2]
 
 
 class Bookmark(BaseModel):
