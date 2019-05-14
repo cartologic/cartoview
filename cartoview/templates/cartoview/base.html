@@ -42,7 +42,7 @@
 
 <body class="{% block body_class %}{% endblock %}">
 {% block navbar %}
-    <nav dir="ltr" class="navbar navbar-transparent navbar-color-on-scroll fixed-top navbar-expand-lg" color-on-scroll="100"
+    <nav dir="ltr" class="{% block navbar_classes %}navbar navbar-transparent navbar-color-on-scroll fixed-top navbar-expand-lg{% endblock %}" color-on-scroll="100"
          id="sectionsNav">
         <div class="container">
             <div class="navbar-translate">
@@ -121,7 +121,8 @@
     </nav>
 {% endblock navbar %}
 {% block hero_area %}{% endblock hero_area %}
-{% block content %}{% endblock content %}
+{% block content %}
+{% endblock content %}
 {% block footer %}
     {{ settings.cms.SiteSettings.footer }}
 {% endblock footer %}
