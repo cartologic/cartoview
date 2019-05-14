@@ -46,6 +46,8 @@
 				{% endif %}
 			</div>
 		</div>
+		{% empty %}
+		<h5>{% trans "No Installed Apps" %}</h5>
 		{% endfor %}
 	</div>
 </div>
