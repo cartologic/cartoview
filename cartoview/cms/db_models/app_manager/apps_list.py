@@ -38,5 +38,4 @@ class AppsPage(Page):
 
     def get_context(self, request):
         context = super().get_context(request)
-        print(context)
         return context
