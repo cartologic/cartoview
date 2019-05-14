@@ -1,0 +1,28 @@
+.apps-heading {
+  margin-top: 10px;
+}
+body {
+  padding-top: 65px;
+}
+.app-card {
+  width: 31%;
+  margin: 8px;
+}
+.apps-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  margin: 10px 0px;
+}
+
+@media (max-width: 418px) {
+  .app-card {
+    width: 100%;
+  }
+}
+@media (max-width: 1024px) and (min-width: 420px) {
+  .app-card {
+    width: 45%;
+  }
+}

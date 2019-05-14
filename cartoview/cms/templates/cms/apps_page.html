@@ -1,0 +1,52 @@
+{% extends 'cms/base_cms.html' %}
+{% load static i18n wagtailcore_tags %}
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'cms/app_manager/index.css' %}">
+{% endblock extra_head %}
+{% block body_class %}{% endblock %}
+{% block navbar_classes %}navbar  fixed-top navbar-expand-lg
+{% endblock %}
+{% block content %}
+<div class="container">
+	<h2 class="apps-heading">{{page.heading}}</h2>
+	<p>{{page.abstract}}</p>
+	<div class="apps-container">
+		{% for app in page.apps_list %}
+		<div class="card app-card">
+			<img src="{% static app.name|add:'/logo.png' %}" class="card-img-top" alt="...">
+			<div class="card-body">
+				<h5 class="card-title">{{app.title}}</h5>
+				{% if app.description %}
+					<p class="card-text">{{app.description}}</p>
+				{% endif %}
+				{% if app.single_instance %}
+					<a href="{{app.open_url}}" class="card-link">{% trans "Open" %}</a>
+				{% else %}
+					<a href="{{app.open_url}}" class="card-link">{% trans "Explore" %} 
+						<span class="badge">{{ app.appinstance_set.all.count }}</span></a>
+					<a href="{{app.create_new_url}}" class="card-link">{% trans "Create New" %} 
+						<span class="badge">{{ app.appinstance_set.all.count }}</span></a>
+					{% if app.anonymous_urls %}
+						{% for key, values in app.anonymous_urls.iteritems %}
+							{% url key as the_url %}
+							{% if the_url %}
+								<a href="{{the_url}}" class="card-link">{{ values }}</a>
+							{% endif %}
+						{% endfor %}
+					{% endif %}
+					{% if user.is_staff and  app.admin_urls %}
+						{% for key, values in app.admin_urls.iteritems %}
+							{% url key as the_url %}
+							{% if the_url %}
+								<a href="{{ the_url }}" target="_parent"
+								class="card-link"> {{ values }}</a>
+							{% endif %}
+						{% endfor %}
+					{% endif %}
+				{% endif %}
+			</div>
+		</div>
+		{% endfor %}
+	</div>
+</div>
+{% endblock %}
