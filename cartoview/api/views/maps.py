@@ -10,6 +10,8 @@ from ..filters import MapFilter
 from ..permissions import IsOwnerOrReadOnly
 from ..serializers.layers import LayerSerializer
 from ..serializers.maps import MapSerializer
+from cartoview.log_handler import get_logger
+logger = get_logger(__name__)
 
 
 class MapViewSet(viewsets.ModelViewSet):
@@ -28,9 +30,21 @@ class MapViewSet(viewsets.ModelViewSet):
         layers = [LayerSerializer(lyr,
                                   context={'request': request}).data
                   for lyr in map_obj.layers.all()]
+        sorted_layers = {}
+        for l in layers:
+            layer_id = l['id']
+            render_options = map_obj.render_options
+            try:
+                ordering = render_options['ordering']
+                index = ordering[str(layer_id)]
+                sorted_layers[index] = l
+            except KeyError as e:
+                logger.error(e)
+                sorted_layers[layer_id] = l
+        sorted_layers = [sorted_layers[i] for i in sorted(sorted_layers.keys())]
         serializer = MapSerializer(map_obj)
         data = serializer.data
-        data.update({'layers': layers})
+        data.update({'layers': sorted_layers})
         return Response(data, status=200)
 
     def perform_create(self, serializer):
