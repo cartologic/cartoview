@@ -1,5 +1,4 @@
 
-import pprint
 from urllib.parse import urlparse
 
 import requests
@@ -65,7 +64,6 @@ class GeoNode(BaseServer):
                 except BaseException as e:
                     logger.error(str(e))
                     continue
-            pprint.pprint(filteredobjects)
             meta = layers.get('meta', None)
             if meta.get('next', None):
                 url = parsedurl.scheme + '://' + \
