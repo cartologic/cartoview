@@ -35,7 +35,7 @@ class GeoNode(BaseServer):
         layer['url'] = link
         layer['title'] = layer_data.pop('title', None)
         layer['description'] = layer_data.pop('abstract', None)
-        layer['name'] = layer_data.pop('name', None)
+        layer['name'] = layer_data.pop('alternate', None)
         layer['projection'] = layer_data.pop('srid', None)
         layer['owner'] = self.user
         layer['server'] = self.server
