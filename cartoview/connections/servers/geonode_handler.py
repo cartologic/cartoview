@@ -6,24 +6,45 @@ import requests
 from cartoview.layers.models import Layer
 
 from .base import BaseServer
+from cartoview.log_handler import get_logger
+logger = get_logger(__name__)
 
 
 class GeoNode(BaseServer):
+    def get_layer_link(self, layer_data, link_type='OGC:WMS'):
+        link = None
+        layer_links = layer_data.get('links', [])
+        for obj in layer_links:
+            url_type = obj.get('link_type', None)
+            if url_type == link_type:
+                link = obj.get('url')
+                break
+        return link
 
-    def get_layers_model(self, layer):
-        filtered = {}
-        filtered['title'] = layer.pop('title', None)
-        filtered['description'] = layer.pop('abstract', None)
-        filtered['name'] = layer.pop('name', None)
-        filtered['projection'] = layer.pop('srid', None)
-        filtered['owner'] = self.user
-        filtered['server'] = self.server
-        filtered['bounding_box'] = [layer.pop('bbox_x0', None),
-                                    layer.pop('bbox_y0', None),
-                                    layer.pop('bbox_x1', None),
-                                    layer.pop('bbox_y1', None)]
-        filtered['extra'] = layer
-        return filtered
+    def get_layers_model(self, layer_data):
+        layer = {}
+        # target_link_types = ['OGC:WMS', 'OGC:WFS']
+        target_link_types = ['OGC:WMS', ]
+        try:
+            links = [self.get_layer_link(layer_data, link_type)
+                     for link_type in target_link_types]
+            link = next(url for url in links if url)
+        except StopIteration:
+            raise Exception("Can't find layer url")
+        layer['url'] = link
+        layer['title'] = layer_data.pop('title', None)
+        layer['description'] = layer_data.pop('abstract', None)
+        layer['name'] = layer_data.pop('alternate', None)
+        layer['projection'] = layer_data.pop('srid', None)
+        layer['owner'] = self.user
+        layer['server'] = self.server
+        bbox = [layer_data.pop('bbox_x0', 0),
+                layer_data.pop('bbox_y0', 0),
+                layer_data.pop('bbox_x1', 0),
+                layer_data.pop('bbox_y1', 0)]
+        layer['bounding_box'] = [float(coord) for coord in bbox]
+        layer['extra'] = layer_data
+        return layer
 
     def crewl_layer_details(self, obj, clearedurl):
         response = self.session.get(clearedurl + '/' + str(obj['id']))
@@ -37,8 +58,12 @@ class GeoNode(BaseServer):
             layers = response.json()
             objects = layers.get('objects', [])
             for obj in objects:
-                filteredobjects.append(
-                    self.crewl_layer_details(obj, clearedurl))
+                try:
+                    layer_data = self.crewl_layer_details(obj, clearedurl)
+                    filteredobjects.append(layer_data)
+                except BaseException as e:
+                    logger.error(str(e))
+                    continue
             meta = layers.get('meta', None)
             if meta.get('next', None):
                 url = parsedurl.scheme + '://' + \

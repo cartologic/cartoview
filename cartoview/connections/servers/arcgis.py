@@ -50,6 +50,7 @@ class ArcGISLayer(BaseServer):
                 "bounding_box": self.get_extent(extra),
                 "projection": self.get_projection(extra),
                 "owner": self.user,
+                "url": self.url,
                 "server": self.server}
         return data
 

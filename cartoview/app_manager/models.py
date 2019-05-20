@@ -206,7 +206,7 @@ class AppInstance(BaseModel):
     @property
     def map_url(self):
         if self.app_map:
-            return reverse_lazy("api:maps-map_json",
+            return reverse_lazy("api:maps-map_config",
                                 kwargs={"pk": self.app_map.pk})
         return None
 

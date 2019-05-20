@@ -1,19 +1,18 @@
 import jsonfield
-from django.conf import settings
-from django.contrib.auth import get_user_model
-from django.contrib.auth.models import Group
-from django.core.exceptions import ObjectDoesNotExist
-from django.db import models
-from django.db.models.signals import post_save
-from django.dispatch import receiver
-from django.urls import reverse_lazy
-from guardian.shortcuts import assign_perm
-
 from cartoview.base_resource.models import BaseModel
 from cartoview.connections.models import Server
 from cartoview.connections.utils import get_server_by_value
 from cartoview.fields import ListField
 from cartoview.validators import ListValidator
+from django.conf import settings
+from django.contrib.auth import get_user_model
+from django.contrib.auth.models import Group
+from django.core.exceptions import ObjectDoesNotExist
+from django.db import models
+from django.db.models.signals import post_save, pre_save
+from django.dispatch import receiver
+from django.urls import reverse_lazy
+from guardian.shortcuts import assign_perm
 
 from .validators import validate_projection
 
@@ -30,7 +29,7 @@ class BaseLayer(BaseModel):
     valid = models.BooleanField(default=True)
     owner = models.ForeignKey(get_user_model(), on_delete=models.CASCADE,
                               related_name="layers", blank=True, null=True)
-
+    url = models.URLField(verbose_name='layer URL', null=True, blank=True)
     @property
     def server_type(self):
         return self.server.server_type
@@ -81,6 +80,12 @@ class Layer(BaseLayer):
     def __str__(self):
         return "{}({},{})<{}>".format(self.name, self.layer_type,
                                       self.server_type, self.server)
+
+
+@receiver(pre_save, sender=Layer)
+def layer_pre_save(sender, instance, **kwargs):
+    if instance.server and not instance.url:
+        instance.url = instance.server.url
 
 
 @receiver(post_save, sender=Layer)

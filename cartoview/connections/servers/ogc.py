@@ -104,6 +104,7 @@ class OGCServer(BaseServer):
                 "bounding_box": bbox,
                 "projection": projection,
                 "owner": self.user,
+                "url": self.url,
                 "server": self.server}
         return data
 
