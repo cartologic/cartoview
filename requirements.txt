@@ -49,6 +49,7 @@ django-six==1.0.4
 django-taggit==0.23.0
 django-treebeard==4.3
 djangorestframework==3.9.2
+djangorestframework-simplejwt==4.3.0
 djangorestframework-xml==1.4.0
 djangorestframework-yaml==1.0.3
 docopt==0.6.2
@@ -95,6 +96,7 @@ pycparser==2.19
 pyflakes==2.1.1
 Pygments==2.3.1
 PyHamcrest==1.9.0
+PyJWT==1.7.1
 pyperclip==1.7.0
 pyproj==1.9.6
 pytest==4.4.1

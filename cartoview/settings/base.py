@@ -15,10 +15,9 @@ import sys
 from distutils.util import strtobool
 
 import dj_database_url
+from cartoview.log_handler import get_logger
 from celery.schedules import crontab
 from tzlocal import get_localzone
-
-from cartoview.log_handler import get_logger
 
 logger = get_logger(__name__)
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -226,6 +225,7 @@ REST_FRAMEWORK = {
         "rest_framework.authentication.BasicAuthentication",
         "rest_framework.authentication.SessionAuthentication",
         "rest_framework.authentication.TokenAuthentication",
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
     "DEFAULT_PARSER_CLASSES": (
         "rest_framework.parsers.JSONParser",
@@ -357,6 +357,7 @@ CELERY_BEAT_SCHEDULE = {
 CELERY_TASK_RESULT_EXPIRES = 43200
 CELERY_MESSAGE_COMPRESSION = 'gzip'
 CELERY_MAX_CACHED_RESULTS = 32768
+CELERY_EAGER_PROPAGATES_EXCEPTIONS = True
 
 
 try:

@@ -13,14 +13,14 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from cartoview.geonode_oauth import views as geonode_oauth_views
 from django.conf import settings
 from django.conf.urls.i18n import i18n_patterns
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path, re_path
 from rest_framework.authtoken.views import obtain_auth_token
-
-from cartoview.geonode_oauth import views as geonode_oauth_views
+from rest_framework_simplejwt import views as jwt_views
 
 urlpatterns = [
     re_path(r"^accounts/profile$", geonode_oauth_views.ProfileView.as_view()),
@@ -31,6 +31,8 @@ urlpatterns = [
     re_path(r'^api-auth/', include('rest_framework.urls',
                                    namespace="rest_framework")),
     re_path(r'^api-token-auth/', obtain_auth_token, name='api_token_auth'),
+    path('api/jwt-token/', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/jwt-token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
 ]
 urlpatterns += i18n_patterns(
     path("django-admin/", admin.site.urls),
