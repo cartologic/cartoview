@@ -17,7 +17,7 @@ from fernet_fields import EncryptedTextField
 from guardian.shortcuts import assign_perm
 
 from . import SUPPORTED_SERVERS
-from .utils import get_handler_class_handler
+from .utils import HandlerManager
 
 logger = get_logger(__name__)
 CONNECTION_PERMISSIONS = (
@@ -65,10 +65,12 @@ class Server(BaseConnectionModel):
 
     @cached_property
     def handler(self):
-        handler = None
-        Handler = get_handler_class_handler(self.server_type, server=True)
-        handler = Handler(self.url, self.id)
-        return handler
+        handler_obj = None
+        handler_manager = HandlerManager(self.server_type, server=True)
+        Handler = handler_manager.get_handler_class_handler()
+        if Handler:
+            handler_obj = Handler(self.url, self.id)
+        return handler_obj
 
     @property
     def is_alive(self):
@@ -97,10 +99,16 @@ class SimpleAuthConnection(BaseConnectionModel):
         max_length=6, choices=AUTH_TYPES, help_text=_("Authentication Type"))
     servers = GenericRelation(Server, related_query_name='connections')
 
-    @property
+    @cached_property
     def session(self):
-        handler = get_handler_class_handler(self.auth_type)
-        return handler.get_session(self)
+        handler_manager = HandlerManager(self.auth_type)
+
+        handler = handler_manager.get_handler_class_handler()
+        if handler:
+            return handler.get_session(self)
+        else:
+            logger.error("anonymous session")
+            return handler_manager.anonymous_session
 
     def __str__(self):
         return self.username
@@ -121,11 +129,15 @@ class TokenAuthConnection(BaseConnectionModel):
     def __str__(self):
         return "<{}:{}>".format(self.prefix, self.token)
 
-    @property
+    @cached_property
     def session(self):
-        handler = get_handler_class_handler(
-            TokenAuthConnection.TOKEN_HANDLER_KEY)
-        return handler.get_session(self)
+        handler_manager = HandlerManager(TokenAuthConnection.TOKEN_HANDLER_KEY)
+        handler = handler_manager.get_handler_class_handler()
+        if handler:
+            return handler.get_session(self)
+        else:
+            logger.error("anonymous session")
+            return handler_manager.anonymous_session
 
     class Meta:
         permissions = CONNECTION_PERMISSIONS

@@ -24,7 +24,7 @@ class ServerAdmin(admin.ModelAdmin):
         for server in queryset:
             harvest_task.delay(server_id=server.id)
         self.message_user(
-            request, "server resources successfully harvested.")
+            request, "server resources will be harvested.")
     harvest_resources.short_description = "Harvest Resources"
 
     def update_resources(self, request, queryset):

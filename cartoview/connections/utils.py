@@ -2,11 +2,10 @@
 from functools import lru_cache
 from urllib.parse import parse_qsl, unquote_plus, urlparse
 
+from cartoview.log_handler import get_logger
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 from django.utils.translation import gettext_lazy as _
-
-from cartoview.log_handler import get_logger
 
 from . import SUPPORTED_SERVERS
 from .exceptions import ConnectionTypeException
@@ -52,24 +51,35 @@ def get_server_by_value(value):
     return server
 
 
-@lru_cache(maxsize=256)
-def get_handler_class_handler(handler_key, server=False):
-    key = "server_handlers" if server else "connection_handlers"
-    connections_settings = getattr(settings, "CARTOVIEW_CONNECTIONS", {})
-    handlers_dict = connections_settings.get(
-        key, None)
-    if not handlers_dict:
-        raise ImproperlyConfigured(
-            _("CARTOVIEW_CONNECTIONS Improperly Configured"))
-    if handler_key not in handlers_dict.keys():
-        raise ConnectionTypeException(
-            "Can\'t Find Proper Connection Handler {}".format(handler_key))
-    try:
+class HandlerManager(object):
+    def __init__(self, handler_key, server=False):
+        self.key = handler_key
+        self.is_server = server
+        self._key = "server_handlers" if self.is_server else "connection_handlers"
 
-        handler_module, handler_name = get_module_class(
-            handlers_dict.get(handler_key))
-        mod = __import__(handler_module, fromlist=[handler_name, ])
-        handler = getattr(mod, handler_name)
-    except ImportError as e:
-        logger.error(e)
-    return handler
+    @lru_cache(maxsize=256)
+    def get_handler_class_handler(self):
+        connections_settings = getattr(settings, "CARTOVIEW_CONNECTIONS", {})
+        handlers_dict = connections_settings.get(self._key, None)
+        if not handlers_dict:
+            raise ImproperlyConfigured(
+                _("CARTOVIEW_CONNECTIONS Improperly Configured"))
+        if self.key not in handlers_dict.keys():
+            raise ConnectionTypeException(
+                "Can\'t Find Proper Connection Handler {}".format(self.key))
+        try:
+            handler = None
+            handler_module, handler_name = get_module_class(
+                handlers_dict.get(self.key))
+            mod = __import__(handler_module, fromlist=[handler_name, ])
+            handler = getattr(mod, handler_name)
+        except ImportError as e:
+            logger.error(e)
+        return handler
+
+    @property
+    @lru_cache(maxsize=256)
+    def anonymous_session(self):
+        handler = self.get_handler_class_handler("NoAuth")
+        session = handler.requests_retry_session()
+        return session

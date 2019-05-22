@@ -1,6 +1,14 @@
 # -*- coding: utf-8 -*-
 from urllib.parse import unquote
 
+from cartoview.connections import DEFAULT_PROXY_SETTINGS
+from cartoview.connections.models import (Server, SimpleAuthConnection,
+                                          TokenAuthConnection)
+from cartoview.connections.tasks import (delete_invalid_resources,
+                                         harvest_task, update_server_resources,
+                                         validate_server_resources)
+from cartoview.connections.utils import URL, HandlerManager
+from cartoview.log_handler import get_logger
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse
@@ -9,15 +17,6 @@ from rest_framework import permissions, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
-from cartoview.connections import DEFAULT_PROXY_SETTINGS
-from cartoview.connections.models import (Server, SimpleAuthConnection,
-                                          TokenAuthConnection)
-from cartoview.connections.tasks import (delete_invalid_resources,
-                                         harvest_task, update_server_resources,
-                                         validate_server_resources)
-from cartoview.connections.utils import URL, get_handler_class_handler
-from cartoview.log_handler import get_logger
 
 from ..permissions import AuthPermission, IsOwnerOrReadOnly
 from ..serializers.connections import (ServerSerializer,
@@ -166,8 +165,8 @@ class ServerProxy(APIView):
             session = server.handler.session
         else:
             logger.info("NOT ALLOWED To USE SESSION")
-            session = get_handler_class_handler(
-                "NoAuth").requests_retry_session()
+            handler_manager = HandlerManager("NoAuth")
+            session = handler_manager.get_handler_class_handler().anonymous_session
         url = request.GET.get("url", None)
         if not url:
             return Response(data={"error": "No URL Provided"},

@@ -1,7 +1,11 @@
 from celery import shared_task
 from django.core.exceptions import ObjectDoesNotExist
-from cartoview.log_handler import get_logger
 from django.db.models import Q
+
+try:
+    from celery.utils.log import get_task_logger as get_logger
+except ImportError:
+    from cartoview.log_handler import get_logger
 logger = get_logger(__name__)
 
 

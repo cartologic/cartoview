@@ -2,11 +2,10 @@
 from abc import ABC, abstractmethod, abstractproperty
 from functools import lru_cache
 
-from django.contrib.auth import get_user_model
-
 from cartoview.connections.models import (Server, SimpleAuthConnection,
                                           TokenAuthConnection)
-from cartoview.connections.utils import get_handler_class_handler
+from cartoview.connections.utils import HandlerManager
+from django.contrib.auth import get_user_model
 
 
 class BaseServer(ABC):
@@ -24,10 +23,11 @@ class BaseServer(ABC):
     @lru_cache(maxsize=256)
     def session(self):
         conn = self.server.connection
+        handler_manager = HandlerManager("NoAuth")
         if conn:
             return conn.session
         else:
-            return get_handler_class_handler("NoAuth").requests_retry_session()
+            return handler_manager.anonymous_session
 
     @property
     def extra_kwargs(self):
