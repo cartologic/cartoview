@@ -29,6 +29,8 @@ class ListField(models.TextField):
         return self._parse_from_db(value)
 
     def get_prep_value(self, value):
+        if value is None:
+            return value
         if isinstance(value, tuple):
             value = list(value)
         if not isinstance(value, list):
