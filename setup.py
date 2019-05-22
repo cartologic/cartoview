@@ -1,7 +1,7 @@
 import os
 
-from setuptools import setup
-from setuptools import find_packages
+from setuptools import find_packages, setup
+
 try:
     from pip._internal.req import parse_requirements
     from pip._internal.download import PipSession

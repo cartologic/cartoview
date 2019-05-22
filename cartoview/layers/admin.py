@@ -1,7 +1,6 @@
+from cartoview.connections.utils import get_server_by_value
 from django.contrib import admin
 from guardian.admin import GuardedModelAdmin
-
-from cartoview.connections.utils import get_server_by_value
 
 from .models import Layer
 

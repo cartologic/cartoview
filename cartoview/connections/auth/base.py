@@ -2,10 +2,9 @@ from abc import ABC, abstractmethod
 from functools import lru_cache
 
 import requests
+from cartoview.connections import DEFAULT_PROXY_SETTINGS
 from django.conf import settings
 from requests.packages.urllib3.util.retry import Retry
-
-from cartoview.connections import DEFAULT_PROXY_SETTINGS
 
 from .adapters import TimeoutSupportAdapter
 

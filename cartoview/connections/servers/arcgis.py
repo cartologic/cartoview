@@ -1,7 +1,6 @@
 from functools import lru_cache
 
 import requests
-
 from cartoview.layers.models import Layer
 
 from .base import BaseServer

@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 import requests
 from allauth.socialaccount.models import SocialToken
+from cartoview.log_handler import get_logger
 from django.conf import settings
 from django.utils import timezone
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
-from cartoview.log_handler import get_logger
+
 logger = get_logger(__name__)
 
 

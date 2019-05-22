@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
 import requests
+from cartoview.layers.models import Layer
+from cartoview.log_handler import get_logger
 from owslib.crs import Crs
 from owslib.wfs import WebFeatureService
 from owslib.wms import WebMapService
-
-from cartoview.layers.models import Layer
-from cartoview.log_handler import get_logger
 
 from ..utils import get_server_by_value
 from .base import BaseServer

@@ -1,6 +1,8 @@
+import re
+
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
-import re
+
 pattern = re.compile(r'^EPSG:[\d]{0,26}')
 
 

@@ -1,9 +1,9 @@
+from cartoview.maps.models import Map
 from django import forms
 from django.db.models import Count
 from wagtail.core import blocks
 from wagtail.images.blocks import ImageChooserBlock
 
-from cartoview.maps.models import Map
 from .IconChoiceBlock import IconChoiceBlock
 
 

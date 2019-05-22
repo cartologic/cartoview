@@ -1,14 +1,13 @@
 import jsonfield
-from django.contrib.auth import get_user_model
-from django.contrib.sites.models import Site
-from django.core.validators import MaxValueValidator, MinValueValidator
-from django.db import models
-
 from cartoview.base_resource.models import BaseModel
 from cartoview.fields import ListField
 from cartoview.layers.models import Layer
 from cartoview.layers.validators import validate_projection
 from cartoview.validators import ListValidator
+from django.contrib.auth import get_user_model
+from django.contrib.sites.models import Site
+from django.core.validators import MaxValueValidator, MinValueValidator
+from django.db import models
 
 
 class Map(BaseModel):

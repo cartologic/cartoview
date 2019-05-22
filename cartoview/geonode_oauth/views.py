@@ -1,12 +1,9 @@
 # -*- coding: utf-8 -*-
 import requests
-from allauth.socialaccount.providers.oauth2.views import (
-    OAuth2Adapter,
-    OAuth2CallbackView,
-    OAuth2LoginView,
-)
+from allauth.socialaccount.providers.oauth2.views import (OAuth2Adapter,
+                                                          OAuth2CallbackView,
+                                                          OAuth2LoginView)
 from django.conf import settings
-
 # Create your views here.
 from django.views.generic.base import TemplateView
 

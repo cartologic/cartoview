@@ -1,7 +1,7 @@
 from wagtail.core import blocks
 
-from .ThumbnailGalleryBlock import ThumbnailGalleryBlock
 from .ImageTextOverlayBlock import ImageTextOverlayBlock
+from .ThumbnailGalleryBlock import ThumbnailGalleryBlock
 
 
 class CommonBlocks(blocks.StreamBlock):

@@ -1,14 +1,16 @@
 from django import forms
 from django.db import models
 from django.utils.safestring import mark_safe
-from wagtail.admin.edit_handlers import StreamFieldPanel, FieldPanel, TabbedInterface, ObjectList
+from wagtail.admin.edit_handlers import (FieldPanel, ObjectList,
+                                         StreamFieldPanel, TabbedInterface)
 from wagtail.core import blocks
 from wagtail.core.fields import StreamField
 from wagtail.core.models import Page
-from .grid.GridBlock import GridBlock
+
 from .blocks.Blocks import HeroAreaBlock, MapCatalogBlock
-from .blocks.ThumbnailGalleryBlock import ThumbnailGalleryBlock
 from .blocks.ImageTextOverlayBlock import ImageTextOverlayBlock
+from .blocks.ThumbnailGalleryBlock import ThumbnailGalleryBlock
+from .grid.GridBlock import GridBlock
 
 
 class HomePage(Page):

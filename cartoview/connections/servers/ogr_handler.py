@@ -5,11 +5,10 @@ from contextlib import contextmanager
 from functools import lru_cache
 from uuid import uuid4
 
-from django.conf import settings
-
 from cartoview.app_manager.os_utils import create_direcotry
 from cartoview.layers.models import Layer
 from cartoview.log_handler import get_logger
+from django.conf import settings
 
 from .base import BaseServer
 

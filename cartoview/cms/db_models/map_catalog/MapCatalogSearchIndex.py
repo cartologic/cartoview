@@ -1,3 +1,4 @@
+from cartoview.maps.models import Map
 from django import forms
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db import models
@@ -5,8 +6,6 @@ from django.db.models import Q
 from wagtail.admin.edit_handlers import FieldPanel, ObjectList, TabbedInterface
 from wagtail.core.models import Page
 from wagtail.images.edit_handlers import ImageChooserPanel
-
-from cartoview.maps.models import Map
 
 
 class MapCatalogSearchIndex(Page):
