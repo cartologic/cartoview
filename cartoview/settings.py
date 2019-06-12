@@ -13,7 +13,7 @@ from kombu import Exchange, Queue
 
 import cartoview
 from geonode.settings import *  # noqa
-
+PROJECT_NAME = "cartoview"
 CARTOVIEW_INSTALLED_APPS = ("cartoview",
                             "cartoview.cartoview_api.apps.CartoviewAPIConfig",
                             "cartoview.store_api.apps.StoreApiConfig",
@@ -147,6 +147,6 @@ if CARTOVIEW_STAND_ALONE or CARTOVIEW_TEST:
             print(e.message)
 
 try:
-    from .local_settings import *  #noqa
+    from .local_settings import *  # noqa
 except Exception as e:
     print(e.message)
