@@ -30,4 +30,6 @@ urlpatterns = [
         name='cartoview.update_extent'),
     url(r'^check-version/$', check_version, name='check_version'),
     url(r'', include(api.urls)),
-    url(r'^apps/', include('cartoview.app_manager.urls')), ] + geonode_urls
+    url(r'^apps/', include('cartoview.app_manager.urls')),
+]
+urlpatterns += geonode_urls

@@ -13,7 +13,7 @@ from kombu import Exchange, Queue
 
 import cartoview
 from geonode.settings import *  # noqa
-
+PROJECT_NAME = "cartoview"
 CARTOVIEW_INSTALLED_APPS = ("cartoview",
                             "cartoview.cartoview_api.apps.CartoviewAPIConfig",
                             "cartoview.store_api.apps.StoreApiConfig",
@@ -54,10 +54,10 @@ DATABASE_URL = os.getenv(
 DATASTORE_DATABASE_URL = os.getenv('DATASTORE_DATABASE_URL', None)
 if DATABASE_URL:
     DATABASES['default'] = dj_database_url.parse(
-        DATABASE_URL, conn_max_age=600)
+        DATABASE_URL, conn_max_age=0)
 if DATASTORE_DATABASE_URL:
     DATABASES['datastore'] = dj_database_url.parse(
-        DATASTORE_DATABASE_URL, conn_max_age=600)
+        DATASTORE_DATABASE_URL, conn_max_age=0)
 try:
     # try to parse python notation, default in dockerized env
     ALLOWED_HOSTS = ast.literal_eval(os.getenv('ALLOWED_HOSTS'))
@@ -147,6 +147,6 @@ if CARTOVIEW_STAND_ALONE or CARTOVIEW_TEST:
             print(e.message)
 
 try:
-    from .local_settings import *  #noqa
+    from .local_settings import *  # noqa
 except Exception as e:
     print(e.message)

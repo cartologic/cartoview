@@ -8,8 +8,10 @@
 <p align="center">
   <img src="https://cartologic.github.io/img/cartoview-logo.png"/>
 </p>
+<h3 align="center">Cartoview <a href="https://github.com/cartologic/cartoview/tree/cartoview2">v2</a> is on it's way!! </h3>
 
-| WARNING: be careful this version(1.10.x) of Cartoview is compatibile with geonode 2.10.x only,if you want to install another version please take alook on [this section](https://github.com/cartologic/cartoview/blob/hisham-dev/README.md#previous-versions) |
+
+| WARNING: be careful this version(1.10.x) of Cartoview is compatibile with geonode 2.10.x only,if you want to install another version please take alook on [this section](https://github.com/cartologic/cartoview/blob/master/README.md#previous-versions) |
 | --- |
 
 ---
@@ -46,7 +48,7 @@
 
 ## How To Add Cartoview To Existing Geonode:
   - install cartoview with pip:
-      - `pip install cartoview --no-cache-dir`
+      - `pip install 'cartoview<2' --no-cache-dir`
       - open geonode `settings.py` and add the following lines at the end of the file:
           ```python
             from cartoview import settings as cartoview_settings
