@@ -27,5 +27,5 @@ setup(
     install_requires=[
         'future', 'geonode>=2.10rc4', 'Faker>=0.8.4', 'cherrypy==11.0.0',
         'cheroot==5.8.3', 'mkdocs==0.17.5', 'mkdocs-material==3.0.5',
-        'portalocker==1.3.0', 'six==1.10.0'
+        'portalocker==1.3.0', 'six==1.10.0', 'django-mapstore-adapter==1.0.0'
     ])
