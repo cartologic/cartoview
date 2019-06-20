@@ -80,6 +80,6 @@ class HandlerManager(object):
     @property
     @lru_cache(maxsize=256)
     def anonymous_session(self):
-        handler = self.get_handler_class_handler("NoAuth")
+        handler = self.get_handler_class_handler()
         session = handler.requests_retry_session()
         return session
