@@ -47,7 +47,9 @@ class GeoNode(BaseServer):
         return layer
 
     def crewl_layer_details(self, obj, clearedurl):
-        response = self.session.get(clearedurl + '/' + str(obj['id']))
+        parsedurl = urlparse(clearedurl)
+        url = parsedurl.scheme + '://' + parsedurl.netloc + obj.get('resource_uri')
+        response = self.session.get(url)
         return self.get_layers_model(response.json())
 
     def get_layers(self, url, filteredobjects):

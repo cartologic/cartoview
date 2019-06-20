@@ -1,4 +1,7 @@
+from cartoview.connections.utils import urljoin
+from cartoview.geonode_oauth.utils import geonode_oauth_utils
 from cartoview.layers.models import Layer
+from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import permissions, viewsets
@@ -53,3 +56,18 @@ class LayerViewSet(viewsets.ModelViewSet):
             except BaseException as e:
                 return Response({'details': str(e)}, status=500)
         return Response({}, status=200)
+
+    @action(detail=False, methods=['get'], url_name='geonode_layers')
+    def geonode_layers(self, request):
+        url = getattr(settings, 'OAUTH_SERVER_BASEURL')
+        url = urljoin(url, 'api', 'layers')
+        u = request.user
+        params = dict(request.GET)
+        params.pop('format', None)
+        session = geonode_oauth_utils.get_requests_session(u)
+        resp = session.get(url, params=params)
+        try:
+            data = resp.json()
+        except BaseException:
+            data = resp.content
+        return Response(data, status=resp.status_code)

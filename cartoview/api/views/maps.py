@@ -1,5 +1,8 @@
+from cartoview.connections.utils import urljoin
+from cartoview.geonode_oauth.utils import geonode_oauth_utils
 from cartoview.log_handler import get_logger
 from cartoview.maps.models import Map
+from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import permissions, viewsets
 from rest_framework.decorators import action
@@ -50,3 +53,18 @@ class MapViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         return serializer.save(owner=self.request.user)
+
+    @action(detail=False, methods=['get'], url_name='geonode_maps')
+    def geonode_maps(self, request):
+        url = getattr(settings, 'OAUTH_SERVER_BASEURL')
+        url = urljoin(url, 'api', 'maps')
+        u = request.user
+        params = dict(request.GET)
+        params.pop('format', None)
+        session = geonode_oauth_utils.get_requests_session(u)
+        resp = session.get(url, params=params)
+        try:
+            data = resp.json()
+        except BaseException:
+            data = resp.content
+        return Response(data, status=resp.status_code)
