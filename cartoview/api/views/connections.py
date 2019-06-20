@@ -155,18 +155,21 @@ class ServerProxy(APIView):
         conn = server.connection
         user = request.user
         allowed = False
-        if server.connection:
+        params = {}
+        if conn:
             if request.method in permissions.SAFE_METHODS:
                 allowed = user.has_perm('use_for_read', conn)
             else:
                 allowed = user.has_perm('use_for_write', conn)
+            if isinstance(conn, TokenAuthConnection):
+                params.update({'access_token': conn.token})
         if allowed:
             logger.info("ALLOWED To USE SESSION")
             session = server.handler.session
         else:
             logger.info("NOT ALLOWED To USE SESSION")
             handler_manager = HandlerManager("NoAuth")
-            session = handler_manager.get_handler_class_handler().anonymous_session
+            session = handler_manager.anonymous_session
         url = request.GET.get("url", None)
         if not url:
             return Response(data={"error": "No URL Provided"},
@@ -177,9 +180,11 @@ class ServerProxy(APIView):
                 "error": "Not Allowed"
             }, status=status.HTTP_401_UNAUTHORIZED)
         logger.info("Recieved.....")
-        logger.error(url)
+        headers = session.headers
+        headers.update(self.get_default_headers(request))
         req = session.request(request.method, url=url,
-                              headers=self.get_default_headers(request),
+                              headers=headers,
+                              params=params,
                               data=self.get_request_data(request))
 
         logger.info("Served.....")
