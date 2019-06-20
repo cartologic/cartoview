@@ -3,6 +3,7 @@ import requests
 from allauth.socialaccount.models import SocialToken
 from cartoview.log_handler import get_logger
 from django.conf import settings
+from django.contrib.auth.models import AnonymousUser
 from django.utils import timezone
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
@@ -75,17 +76,22 @@ class OAuthUtils(object):
         return token
 
     def get_access_token(self, user):
-        access_token = SocialToken.objects.get(
-            account__user=user, account__provider=self.provider)
-        if not self.token_is_valid(access_token):
-            access_token = self.refresh_token(access_token)
-        return access_token.token
+        access_token = None
+        if not isinstance(user, AnonymousUser):
+            access_token = SocialToken.objects.get(
+                account__user=user, account__provider=self.provider)
+            if not self.token_is_valid(access_token):
+                access_token = self.refresh_token(access_token)
+            return access_token.token
+        return access_token
 
     def get_requests_session(self, user):
         token = self.get_access_token(user)
-        session = requests.Session()
-        auth_header = {'Authorization': 'Bearer {}'.format(token)}
-        session.headers.update(auth_header)
+        session = None
+        if token:
+            session = requests.Session()
+            auth_header = {'Authorization': 'Bearer {}'.format(token)}
+            session.headers.update(auth_header)
         return requests_retry_session(session=session)
 
 
