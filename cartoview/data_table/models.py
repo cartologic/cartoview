@@ -1,6 +1,6 @@
 import csv
 
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, pre_delete, post_delete
 from django.dispatch import receiver
 from wagtail.admin.edit_handlers import FieldPanel, TabbedInterface, ObjectList, \
     StreamFieldPanel, MultiFieldPanel
@@ -88,10 +88,25 @@ def create_model_table(sender, instance, **kwargs):
     created = kwargs.get('created')
     if created:
         pre_fields = [d[1] for d in instance.fields.stream_data]
-        module_name = 'fake_project.{}.no_models'.format(instance.name.lower())
+        module_name = 'fake_project.{}.{}'.format(instance.name.lower(), instance.name.lower())
         temp_fields = {f['name']: field_mapping[f['type']] for f in pre_fields}
         model = DynamicModel.create_model(instance.name.capitalize(), instance.name,
                                           app_label='fake_app',
                                           module=module_name,
                                           fields=temp_fields)
         DynamicModel.create_model_table(model)
+
+
+@receiver(post_delete, sender=DataTable)
+def delete_model_table(sender, instance, *args, **kwargs):
+    pre_fields = [d['value'] for d in instance.fields.stream_data]
+    module_name = 'fake_project.{}.{}'.format(instance.name.lower(), instance.name.lower())
+    temp_fields = {f['name']: field_mapping[f['type']] for f in pre_fields}
+    model = DynamicModel.create_model(instance.name.capitalize(), instance.name,
+                                      app_label=instance.name.lower(),
+                                      module=module_name,
+                                      fields=temp_fields)
+    try:
+        DynamicModel.delete_model_table(model)
+    except BaseException:
+        pass
