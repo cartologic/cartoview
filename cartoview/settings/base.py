@@ -88,7 +88,6 @@ INSTALLED_APPS = [
     "cartoview.layers",
     "cartoview.maps",
     "cartoview.cms",
-    "cartoview.data_table",
     "cartoview.api",
 ]
 
