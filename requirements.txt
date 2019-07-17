@@ -107,7 +107,7 @@ pytest-xdist==1.28.0
 python-dateutil==2.8.0
 python-dotenv==0.10.1
 python3-openid==3.1.0
-python-slugify=3.0.2
+python-slugify==3.0.2
 pytz==2018.7
 PyYAML==5.1
 redis==3.2.1

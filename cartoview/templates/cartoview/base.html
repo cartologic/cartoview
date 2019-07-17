@@ -42,7 +42,9 @@
 
 <body class="{% block body_class %}{% endblock %}">
 {% block navbar %}
-    <nav dir="ltr" class="{% block navbar_classes %}navbar navbar-transparent navbar-color-on-scroll fixed-top navbar-expand-lg{% endblock %}" color-on-scroll="100"
+    <nav dir="ltr"
+         class="{% block navbar_classes %}navbar navbar-transparent navbar-color-on-scroll fixed-top navbar-expand-lg{% endblock %}"
+         color-on-scroll="100"
          id="sectionsNav">
         <div class="container">
             <div class="navbar-translate">
@@ -106,13 +108,13 @@
                     {% endif %}
                     {% ifequal LANGUAGE_CODE "en" %}
                         <li class="nav-item">
-                        <a class="nav-link" href="/ar{{ request.get_full_path|slice:'3:' }}">
-                            <i class="material-icons">language</i> Ar </a>
+                            <a class="nav-link" href="/ar{{ request.get_full_path|slice:'3:' }}">
+                                <i class="material-icons">language</i> Ar </a>
                         </li>
                     {% else %}
                         <li class="nav-item">
-                        <a class="nav-link" href="/en{{ request.get_full_path|slice:'3:' }}">
-                            <i class="material-icons">language</i>En</a>
+                            <a class="nav-link" href="/en{{ request.get_full_path|slice:'3:' }}">
+                                <i class="material-icons">language</i>En</a>
                         </li>
                     {% endifequal %}
                 </ul>
@@ -123,6 +125,10 @@
 {% block hero_area %}{% endblock hero_area %}
 {% block content %}
 {% endblock content %}
+
+{% block partners %}
+    {{ settings.cms.SiteSettings.partners_logos }}
+{% endblock partners %}
 {% block footer %}
     {{ settings.cms.SiteSettings.footer }}
 {% endblock footer %}

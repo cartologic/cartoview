@@ -6,6 +6,8 @@ from wagtail.core.blocks import RawHTMLBlock, StreamBlock
 from wagtail.core.fields import StreamField
 from wagtail.images.edit_handlers import ImageChooserPanel
 
+from ..blocks.PartnersLogosBlock import PartnersLogosBlock
+
 
 @register_setting(icon='fa-briefcase')
 class SiteSettings(BaseSetting):
@@ -14,6 +16,8 @@ class SiteSettings(BaseSetting):
         blank=True, null=True
     )
     logo_text = models.CharField(max_length=120, blank=True, null=True)
+    partners_logos = StreamField(
+        StreamBlock([('partners', PartnersLogosBlock())], min_num=0, max_num=1), blank=True, null=True)
     footer = StreamField(  # noqa: E501
         StreamBlock([
             ('footer', RawHTMLBlock(
@@ -38,6 +42,7 @@ class SiteSettings(BaseSetting):
     general_panel = [
         ImageChooserPanel('logo'),
         FieldPanel('logo_text'),
+        StreamFieldPanel('partners_logos', classname="Full"),
         StreamFieldPanel("footer", classname="Full"),
     ]
 
