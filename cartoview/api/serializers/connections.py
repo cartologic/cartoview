@@ -26,10 +26,6 @@ class TokenAuthConnectionSerializer(serializers.ModelSerializer):
 
 class ServerSerializer(serializers.ModelSerializer):
     operations = serializers.DictField(read_only=False)
-    connection = GenericRelatedField({
-        SimpleAuthConnection: SimpleAuthConnectionSerializer(),
-        TokenAuthConnection: TokenAuthConnectionSerializer()
-    })
 
     class Meta:
         model = Server
@@ -39,5 +35,4 @@ class ServerSerializer(serializers.ModelSerializer):
                   "server_type",
                   "title",
                   "url",
-                  "connection",
                   "operations")

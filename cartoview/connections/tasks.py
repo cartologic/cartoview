@@ -10,22 +10,24 @@ logger = get_logger(__name__)
 
 
 @shared_task(bind=True)
-def harvest_task(self, server_id):
+def harvest_task(self, server_id, user_id=None):
     from cartoview.connections.models import Server
     try:
         server = Server.objects.get(id=server_id)
-        server.handler.harvest()
+        handler = server.handler(user_id=user_id)
+        handler.harvest()
     except ObjectDoesNotExist as e:
         logger.error(str(e))
 
 
 @shared_task(bind=True)
-def update_server_resources(self, server_id):
+def update_server_resources(self, server_id, user_id=None):
     from cartoview.connections.models import Server
     from cartoview.layers.models import Layer
     try:
         server = Server.objects.get(id=server_id)
-        ld_list = server.handler.get_layers()
+        handler = server.handler(user_id=user_id)
+        ld_list = handler.get_layers()
         for l in ld_list:
             name = l.get('name')
             layer = Layer.objects.get(server=server, name=name)
@@ -37,11 +39,12 @@ def update_server_resources(self, server_id):
 
 
 @shared_task(bind=True)
-def validate_server_resources(self, server_id):
+def validate_server_resources(self, server_id, user_id=None):
     from cartoview.connections.models import Server
     try:
         server = Server.objects.get(id=server_id)
-        ld_list = server.handler.get_layers()
+        handler = server.handler(user_id=user_id)
+        ld_list = handler.get_layers()
         layer_names = [l.get('name') for l in ld_list]
         layers = server.layers.filter(~Q(name__in=layer_names))
         for layer in layers:

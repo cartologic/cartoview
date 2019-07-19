@@ -14,7 +14,8 @@ def harvest_resources(request, server_id):
         server = Server.objects.get(id=server_id)
     except ObjectDoesNotExist:
         messages.error(request, "Server Not Found")
-    harvest_task.delay(server.id)
+    user = request.user
+    harvest_task.delay(server.id, user_id=user.id or None)
     index_url = "%s_%s_modeladmin_index" % (Server._meta.app_label, Server._meta.model_name)
     messages.success(request, "Server Resources Will Be Collected")
     return redirect(index_url)

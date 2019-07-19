@@ -45,6 +45,9 @@ class BaseModel(models.Model):
     class Meta:
         ordering = ('title', '-created_at', '-updated_at')
 
+    def __str__(self):
+        return self.title
+
 
 @receiver(post_delete, sender=BaseModel)
 def photo_post_delete_handler(sender, **kwargs):

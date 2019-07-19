@@ -71,7 +71,8 @@ class ServerViewSet(viewsets.ModelViewSet):
         except ObjectDoesNotExist as e:
             return Response({"details": str(e)},
                             status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        harvest_task.delay(server.id)
+        user = self.request.user
+        harvest_task.delay(server.id, user.id or None)
         return Response({"message":
                          _("Server Resources Will Be Harvest")},
                         status=status.HTTP_202_ACCEPTED)
@@ -84,7 +85,7 @@ class ServerViewSet(viewsets.ModelViewSet):
         except ObjectDoesNotExist as e:
             return Response({"details": str(e)},
                             status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        update_server_resources.delay(server.id)
+        update_server_resources.delay(server.id, user_id=request.user.id or None)
         return Response({"message":
                          _("Server Resources Will Be Updated")},
                         status=status.HTTP_202_ACCEPTED)
@@ -152,11 +153,13 @@ class ServerProxy(APIView):
 
     def serve(self, request, pk, *args, **kwargs):
         server = Server.objects.get(pk=pk)
-        conn = server.connection
         user = request.user
+        user_id = None if not user else user.id
+        conn = server.get_user_connections(user_id).first()
         allowed = False
         params = {}
         if conn:
+            conn = conn.credentials
             if request.method in permissions.SAFE_METHODS:
                 allowed = user.has_perm('use_for_read', conn)
             else:
@@ -165,7 +168,7 @@ class ServerProxy(APIView):
                 params.update({'access_token': conn.token})
         if allowed:
             logger.info("ALLOWED To USE SESSION")
-            session = server.handler.session
+            session = server.handler(user_id=user_id).session
         else:
             logger.info("NOT ALLOWED To USE SESSION")
             handler_manager = HandlerManager("NoAuth")
