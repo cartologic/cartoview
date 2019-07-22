@@ -16,7 +16,7 @@ apt-get update -y && apt-get install -y \
 	python-dev \
 	gettext sqlite3 \
 	postgresql-client libpq-dev python-psycopg2 \
-	python-imaging \
+	python-pil \
 	python-ldap \
 	libmemcached-dev libsasl2-dev \
 	python-pylibmc \
