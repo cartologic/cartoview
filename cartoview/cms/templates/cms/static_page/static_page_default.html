@@ -1,0 +1,32 @@
+{% extends 'cms/base_cms.html' %}
+{% load static from staticfiles %}
+{% load wagtailcore_tags %}
+
+{% block body_class %}profile-page sidebar-collapse{% endblock %}
+
+{% block content %}
+    {% if page.hero_image %}
+        <div class="page-header header-filter" data-parallax="true"
+             style="background-image: url('{{ page.hero_image.file.url }}');"></div>
+    {% else %}
+        <div class="page-header header-filter" data-parallax="true"
+             style='background-image: url("{% static 'material-kit/assets/img/bg3.jpg' %}");'></div>
+    {% endif %}
+    <div class="main main-raised">
+        <div class="profile-content">
+            <div class="container" style="padding-bottom: 20px;">
+                <div class="row">
+                    <div class="col-md-12 ml-auto">
+                        <div class="title">
+                            <h1>{{ self.title }}</h1>
+                        </div>
+                    </div>
+                </div>
+
+                {{ page.body|richtext }}
+
+            </div>
+
+        </div>
+    </div>
+{% endblock content %}
