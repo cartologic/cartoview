@@ -11,6 +11,7 @@ from django.db import models
 
 
 class Map(BaseModel):
+    geonode_id = models.IntegerField(null=True, blank=True)
     site = models.ForeignKey(Site, related_name='site_maps',
                              on_delete=models.CASCADE, null=True, blank=True)
     bounding_box = ListField(null=True, blank=True, default=[0, 0, 0, 0],

@@ -1,9 +1,9 @@
-
 from urllib.parse import urlparse
 
 import requests
 from cartoview.layers.models import Layer
 from cartoview.log_handler import get_logger
+from cartoview.maps.models import Map
 
 from .base import BaseServer
 
@@ -69,19 +69,37 @@ class GeoNode(BaseServer):
             meta = layers.get('meta', None)
             if meta.get('next', None):
                 url = parsedurl.scheme + '://' + \
-                    parsedurl.netloc + meta['next']
+                      parsedurl.netloc + meta['next']
                 self.get_layers(url, filteredobjects)
+        return filteredobjects
+
+    def get_maps(self, url, filteredobjects):
+        response = self.session.get(self.url + "/api/maps")
+        if response.status_code == requests.codes['ok']:
+            maps = response.json()
+            objects = maps.get('objects', [])
+            for obj in objects:
+                try:
+                    if not Map.objects.filter(geonode_id=obj['id']).exists():
+                        temp_map = Map(title=obj['title'], geonode_id=obj['id'])
+                        temp_map.save()
+                    filteredobjects.append(temp_map)
+                except BaseException as e:
+                    logger.error(str(e))
+                    continue
         return filteredobjects
 
     def harvest(self):
         created_objs = []
-        layers = self.get_layers(self.url, [])
-        for layer in layers:
-            qs = Layer.objects.filter(
-                name=layer['name'], server=layer['server'])
-            if qs.count() == 0:
-                obj = Layer.objects.create(**layer)
-                created_objs.append(obj)
+        maps = self.get_maps(self.url, [])
+        for map_obj in maps:
+            # qs = Map.objects.filter(
+            #     title=map_obj['title'])
+            # if qs.count() == 0:
+            #     obj = Map.objects.create(**map_obj)
+            #     created_objs.append(obj)
+            obj = Map.objects.create(**map_obj)
+            created_objs.append(obj)
         return created_objs
 
     @property
