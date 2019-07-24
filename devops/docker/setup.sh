@@ -17,7 +17,6 @@ apt-get update -y && apt-get install -y \
 	gettext sqlite3 \
 	postgresql-client libpq-dev python-psycopg2 \
 	python-pil \
-	django-cors-headers \
 	python-ldap \
 	libmemcached-dev libsasl2-dev \
 	python-pylibmc \
