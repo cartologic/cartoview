@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     "rest_framework.authtoken",
     "django_filters",
     "generic_relations",
+    'corsheaders',
     # wagtail apps
     "wagtail.contrib.forms",
     "wagtail.contrib.redirects",
@@ -99,6 +100,7 @@ MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.locale.LocaleMiddleware",
+    'corsheaders.middleware.CorsMiddleware',
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -192,6 +194,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, os.pardir, "static_root")
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, os.pardir, "media")
 STATICFILES_DIRS = []
+CORS_ORIGIN_ALLOW_ALL = True
 # auth settings
 AUTHENTICATION_BACKENDS = (
     # Needed to login by username in Django admin, regardless of `allauth`
