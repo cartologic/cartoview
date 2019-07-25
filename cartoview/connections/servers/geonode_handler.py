@@ -74,7 +74,7 @@ class GeoNode(BaseServer):
         return filteredobjects
 
     def get_maps(self, url, filteredobjects):
-        response = self.session.get(self.url + "/api/maps")
+        response = requests.get(self.url + "/api/maps")
         if response.status_code == requests.codes['ok']:
             maps = response.json()
             objects = maps.get('objects', [])
