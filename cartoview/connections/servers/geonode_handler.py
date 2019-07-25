@@ -83,24 +83,15 @@ class GeoNode(BaseServer):
                     if not Map.objects.filter(geonode_id=obj['id']).exists():
                         temp_map = Map(title=obj['title'], geonode_id=obj['id'])
                         temp_map.save()
-                    filteredobjects.append(temp_map)
+                        filteredobjects.append(temp_map)
                 except BaseException as e:
                     logger.error(str(e))
                     continue
         return filteredobjects
 
     def harvest(self):
-        created_objs = []
         maps = self.get_maps(self.url, [])
-        for map_obj in maps:
-            # qs = Map.objects.filter(
-            #     title=map_obj['title'])
-            # if qs.count() == 0:
-            #     obj = Map.objects.create(**map_obj)
-            #     created_objs.append(obj)
-            obj = Map.objects.create(**map_obj)
-            created_objs.append(obj)
-        return created_objs
+        return maps
 
     @property
     def is_alive(self):
