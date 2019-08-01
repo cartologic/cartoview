@@ -1,5 +1,7 @@
 {% extends 'cms/base_cms.html' %}
 {% load static from staticfiles %}
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
 {% load wagtailcore_tags %}
 
 {% block body_class %}profile-page sidebar-collapse{% endblock %}
@@ -49,7 +51,7 @@
                 {% for map in maps %}
                     <div class="row" style="margin-top: 20px;">
                         <div class="col-lg-4 col-md-12 col-sm-12">
-                            <a target="_blank" href="{% url 'ifpri_map_viewer' map_id=map.geonode_id %}">
+                            <a target="_blank" href="{% url 'ifpri_map_viewer' %}?lang={{ LANGUAGE_CODE }}&id={{ map.geonode_id }}">
                                 {% if map.featured_image %}
                                     <img class="rounded img-fluid" src="{{ map.featured_image.url }}" alt="Map">
                                 {% elif map.thumbnail %}
@@ -62,7 +64,7 @@
                         </div>
                         <div class="col-lg-8 col-md-12 col-sm-12">
                             <h3 style="margin-top: 0;">
-                                <a target="_blank" href="{% url 'ifpri_map_viewer' map_id=map.geonode_id %}">
+                                <a target="_blank" href="{% url 'ifpri_map_viewer' %}?lang={{ LANGUAGE_CODE }}&id={{ map.geonode_id }}">
                                     {{ map.title }}
                                 </a></h3>
                             <p>
