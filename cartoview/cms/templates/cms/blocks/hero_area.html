@@ -9,7 +9,7 @@
                 {{ value.body_text|richtext }}
                 <br>
                 {% for single_item in self.links %}
-                    <a href="{{ single_item.link }}" target="_blank" class="btn btn-{{ single_item.theme }} btn-raised btn-lg">
+                    <a href="{{ single_item.link }}" {% if single_item.open_in_new_tab %} target="_blank" {% endif %} class="btn btn-{{ single_item.theme }} btn-raised btn-lg">
                         {% if single_item.icon %}<i class="fa fa-{{ single_item.icon }}"></i>&nbsp;{% endif %} {{ single_item.text }}
                     </a>
                 {% endfor %}

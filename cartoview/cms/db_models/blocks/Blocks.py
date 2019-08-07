@@ -32,6 +32,7 @@ class SingleMainHeaderLink(blocks.StructBlock):
         max_length=120,
     )
     link = blocks.CharBlock(required=False)
+    open_in_new_tab = blocks.BooleanBlock(required=False)
 
     class Meta:
         template = 'cms/blocks/single_main_header_link.html'
