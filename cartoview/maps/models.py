@@ -1,4 +1,5 @@
 import jsonfield
+from django.utils.translation import gettext_lazy as _
 from cartoview.base_resource.models import BaseModel
 from cartoview.fields import ListField
 from cartoview.layers.models import Layer
@@ -12,6 +13,11 @@ from django.db import models
 
 class Map(BaseModel):
     geonode_id = models.IntegerField(null=True, blank=True)
+    title_ar = models.CharField(max_length=255, default="بدون عنوان", help_text="بدون عنوان")
+    description_ar = models.TextField(
+        null=True, blank=True, default="بدون وصف", help_text="بدون وصف")
+    abstract_ar = models.TextField(
+        null=True, blank=True, default="بدون نبذه مختصره", help_text="بدون نبذه مختصره")
     site = models.ForeignKey(Site, related_name='site_maps',
                              on_delete=models.CASCADE, null=True, blank=True)
     bounding_box = ListField(null=True, blank=True, default=[0, 0, 0, 0],

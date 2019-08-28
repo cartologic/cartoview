@@ -1,5 +1,6 @@
 from .db_models.app_manager.apps_list import AppsPage  # noqa
 from .db_models.HomePage import HomePage  # noqa
+from .db_models.LanguageRedirectionPage import LanguageRedirectionPage  # noqa
 from .db_models.static_page.StaticPage import StaticPage  # noqa
 from .db_models.map_catalog.MapCatalogKeywordIndex import MapCatalogKeywordIndex  # noqa
 from .db_models.map_catalog.MapCatalogPage import MapCatalogPage  # noqa

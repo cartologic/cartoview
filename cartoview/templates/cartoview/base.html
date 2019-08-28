@@ -48,14 +48,20 @@
          id="sectionsNav">
         <div class="container">
             <div class="navbar-translate">
-                <a class="navbar-brand" href="/{{ LANGUAGE_CODE }}">
+                <a class="navbar-brand" href="/{{ LANGUAGE_CODE }}/home">
                     <div class="logo-image">
                         {% if settings.cms.SiteSettings.logo.file.url %}
                             <img src="{{ settings.cms.SiteSettings.logo.file.url }}"
                                  style="height: 46px;overflow: hidden;margin-top: -6px;" class="img-fluid" alt="Logo">
-                            {% if settings.cms.SiteSettings.logo_text %}
-                                {{ settings.cms.SiteSettings.logo_text }}
-                            {% endif %}
+                            {% ifequal LANGUAGE_CODE "ar" %}
+                                {% if settings.cms.SiteSettings.logo_text %}
+                                    {{ settings.cms.SiteSettings.logo_text_ar }}
+                                {% endif %}
+                            {% else %}
+                                {% if settings.cms.SiteSettings.logo_text %}
+                                    {{ settings.cms.SiteSettings.logo_text }}
+                                {% endif %}
+                            {% endifequal %}
                         {% else %}
                             <img src="{% static 'cartoview/img/logo.png' %}"
                                  style="height: 46px;overflow: hidden;margin-top: -6px;" class="img-fluid" alt="Logo">

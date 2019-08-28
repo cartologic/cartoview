@@ -108,6 +108,24 @@ msgstr ""
 msgid "for a better web"
 msgstr "من أجل أنظمة أفضل"
 
+msgid "Search for Maps"
+msgstr "ابحث عن خرائط"
+
+msgid "Popular keywords"
+msgstr "الكلمات الدالة"
+
+msgid "Showing maps with keyword"
+msgstr "الخرائط الموجودة بالكلمة الدالة"
+
+msgid "No maps found with keyword"
+msgstr "لا توجد خرائط بالكلمة الدالة"
+
+msgid "Showing maps with search"
+msgstr "الخرائط الموجودة بالبحث"
+
+msgid "No maps found with search"
+msgstr "لا توجد خرائط بالبحث"
+
 #: .\cartoview\connections\apps.py:8
 msgid "Connections"
 msgstr "الاتصالات"

@@ -1,6 +1,6 @@
 {% extends 'cms/base_cms.html' %}
-{% load static from staticfiles %}
 {% load i18n %}
+{% load static from staticfiles %}
 {% get_current_language as LANGUAGE_CODE %}
 {% load wagtailcore_tags %}
 
@@ -14,18 +14,18 @@
         <div class="page-header header-filter" data-parallax="true"
              style='background-image: url("{% static 'material-kit/assets/img/bg3.jpg' %}");'></div>
     {% endif %}
-    <div class="main main-raised">
+    <div class="main main-raised" dir="ltr">
         <div class="profile-content">
             <div class="container" style="padding-bottom: 20px;">
                 <div class="row">
                     <div class="col-md-12 ml-auto">
                         <div class="title">
-                            <h1>{{ self.title }}</h1>
+                            <h1 style="text-align: {% ifequal LANGUAGE_CODE "ar" %} right {% else %} left {% endifequal %}">{{ self.title }}</h1>
                         </div>
                         <form action="{{ page.search_url }}" autocomplete="off" class="form-horizontal"
                               method="GET" accept-charset="utf-8">
                             <div class="input-group">
-                                <input name="q" placeholder="Search for Maps" value="" class="form-control" type="text">
+                                <input name="q" placeholder="{% trans 'Search for Maps' %}" value="" class="form-control" type="text">
                                 <span class="input-group-btn">
                                 <button class="btn btn-white btn-raised btn-fab btn-round" type="submit" id="mapSearch">
                                 <i class="material-icons">search</i>
@@ -36,7 +36,7 @@
                     </div>
                 </div>
                 <div class="row" style="margin-bottom: 40px;">
-                    <div class="col-md-2"><p style="text-align: left">Popular keywords:</p></div>
+                    <div class="col-md-2"><p style="text-align: left">{% trans "Popular keywords" %}</p></div>
                     <div class="col-md-10" style="text-align: right">
                         {% for keyword in keywords %}
                             <a href="{{ page.keywords_url }}?keyword={{ keyword }}"
@@ -51,7 +51,8 @@
                 {% for map in maps %}
                     <div class="row" style="margin-top: 20px;">
                         <div class="col-lg-4 col-md-12 col-sm-12">
-                            <a target="_blank" href="{% url 'ifpri_map_viewer' %}?lang={{ LANGUAGE_CODE }}&id={{ map.geonode_id }}">
+                            <a target="_blank"
+                               href="{% url 'ifpri_map_viewer' %}?lang={{ LANGUAGE_CODE }}&id={{ map.geonode_id }}">
                                 {% if map.featured_image %}
                                     <img class="rounded img-fluid" src="{{ map.featured_image.url }}" alt="Map">
                                 {% elif map.thumbnail %}
@@ -63,12 +64,15 @@
                             </a>
                         </div>
                         <div class="col-lg-8 col-md-12 col-sm-12">
-                            <h3 style="margin-top: 0;">
-                                <a target="_blank" href="{% url 'ifpri_map_viewer' %}?lang={{ LANGUAGE_CODE }}&id={{ map.geonode_id }}">
-                                    {{ map.title }}
+                            <h3 style="margin-top: 0; text-align: {% ifequal LANGUAGE_CODE "ar" %} right {% else %} left {% endifequal %}">
+                                <a target="_blank"
+                                   href="{% url 'ifpri_map_viewer' %}?lang={{ LANGUAGE_CODE }}&id={{ map.geonode_id }}">
+                                    {% ifequal LANGUAGE_CODE "ar" %} {{ map.title_ar }} {% else %}
+                                        {{ map.title }} {% endifequal %}
                                 </a></h3>
-                            <p>
-                                {{ map.description }}
+                            <p style="text-align: {% ifequal LANGUAGE_CODE "ar" %} right {% else %} left {% endifequal %}">
+                                {% ifequal LANGUAGE_CODE "ar" %} {{ map.description_ar }} {% else %}
+                                    {{ map.description }} {% endifequal %}
                             </p>
                         </div>
                     </div>

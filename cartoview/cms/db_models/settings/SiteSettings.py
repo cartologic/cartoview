@@ -15,7 +15,8 @@ class SiteSettings(BaseSetting):
         'wagtailimages.Image', on_delete=models.CASCADE, related_name='+',
         blank=True, null=True
     )
-    logo_text = models.CharField(max_length=120, blank=True, null=True)
+    logo_text = models.CharField(max_length=120, blank=True, null=True, verbose_name="Logo text (EN)")
+    logo_text_ar = models.CharField(max_length=120, blank=True, null=True, verbose_name="Logo text (AR)")
     partners_logos = StreamField(
         StreamBlock([('partners', PartnersLogosBlock())], min_num=0, max_num=1), blank=True, null=True)
     footer = StreamField(  # noqa: E501
@@ -42,6 +43,7 @@ class SiteSettings(BaseSetting):
     general_panel = [
         ImageChooserPanel('logo'),
         FieldPanel('logo_text'),
+        FieldPanel('logo_text_ar'),
         StreamFieldPanel('partners_logos', classname="Full"),
         StreamFieldPanel("footer", classname="Full"),
     ]

@@ -1,6 +1,6 @@
 {% extends 'cms/base_cms.html' %}
-{% load static from staticfiles %}
 {% load i18n %}
+{% load static from staticfiles %}
 {% get_current_language as LANGUAGE_CODE %}
 {% load wagtailcore_tags %}
 
@@ -17,16 +17,20 @@
         <div class="page-header header-filter" data-parallax="true"
              style='background-image: url("{% static 'material-kit/assets/img/bg3.jpg' %}");'></div>
     {% endif %}
-    <div class="main main-raised">
+    <div class="main main-raised" dir="ltr">
         <div class="profile-content">
             <div class="container" style="padding-bottom: 20px;">
                 <div class="row">
                     <div class="col-md-12 ml-auto">
                         <div class="title">
                             {% if maps|length %}
-                                <h1>Showing maps with search '{{ request.GET.q }}'</h1>
+                                <h1 style="text-align: {% ifequal LANGUAGE_CODE "ar" %} right {% else %} left {% endifequal %}">
+                                    {% trans "Showing maps with search" %}  - {{ request.GET.q }}
+                                </h1>
                             {% else %}
-                                <h1>No maps found with search '{{ request.GET.q }}' !</h1>
+                                <h1 style="text-align: {% ifequal LANGUAGE_CODE "ar" %} right {% else %} left {% endifequal %}">
+                                    {% trans "No maps found with search" %} - {{ request.GET.q }}
+                                </h1>
                             {% endif %}
                         </div>
                     </div>
@@ -37,7 +41,8 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="map-catalog-image">
-                                        <a target="_blank" href="{% url 'ifpri_map_viewer' %}?lang={{ LANGUAGE_CODE }}&id={{ map.geonode_id }}">
+                                        <a target="_blank"
+                                           href="{% url 'ifpri_map_viewer' %}?lang={{ LANGUAGE_CODE }}&id={{ map.geonode_id }}">
                                             {% if map.featured_image %}
                                                 <img src="{{ map.featured_image.url }}" alt="Map">
                                             {% elif map.thumbnail %}
@@ -49,12 +54,16 @@
                                     </div>
                                 </div>
                                 <div class="col-md-5 col-md-offset-1">
-                                    <h3 style="margin-bottom: 0;" class="title no-top-margin">
+                                    <h3 style="margin-bottom: 0; text-align: {% ifequal LANGUAGE_CODE "ar" %} right {% else %} left {% endifequal %}" class="title no-top-margin">
                                         <a target="_blank"
-                                           href="{% url 'ifpri_map_viewer' %}?lang={{ LANGUAGE_CODE }}&id={{ map.geonode_id }}">{{ map.title }}</a>
+                                           href="{% url 'ifpri_map_viewer' %}?lang={{ LANGUAGE_CODE }}&id={{ map.geonode_id }}">
+                                            {% ifequal LANGUAGE_CODE "ar" %} {{ map.title_ar }} {% else %}
+                                                {{ map.title }} {% endifequal %}
+                                        </a>
                                     </h3>
-                                    <p>
-                                        {{ map.abstract }}
+                                    <p style="text-align: {% ifequal LANGUAGE_CODE "ar" %} right {% else %} left {% endifequal %}">
+                                        {% ifequal LANGUAGE_CODE "ar" %} {{ map.abstract_ar }} {% else %}
+                                            {{ map.abstract }} {% endifequal %}
                                     </p>
                                 </div>
                             </div>
@@ -67,13 +76,15 @@
                         <ul class="pagination pagination-info">
                             {% if maps.has_previous %}
                                 <li class="page-item">
-                                    <a href="?page={{ maps.previous_page_number }}&q={{ request.GET.q }}" class="page-link"> prev</a>
+                                    <a href="?page={{ maps.previous_page_number }}&q={{ request.GET.q }}"
+                                       class="page-link"> prev</a>
                                 </li>
                             {% endif %}
 
                             {% for page_num in maps.paginator.page_range %}
                                 <li class="page-item {% if page_num == maps.number %} active{% endif %}">
-                                    <a href="?page={{ page_num }}&q={{ request.GET.q }}" class="page-link">{{ page_num }}</a>
+                                    <a href="?page={{ page_num }}&q={{ request.GET.q }}"
+                                       class="page-link">{{ page_num }}</a>
                                 </li>
                             {% endfor %}
 

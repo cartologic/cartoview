@@ -22,7 +22,12 @@ from django.urls import include, path, re_path
 from rest_framework.authtoken.views import obtain_auth_token
 from rest_framework_simplejwt import views as jwt_views
 
-urlpatterns = [
+urlpatterns = i18n_patterns(
+    path("django-admin/", admin.site.urls),
+    re_path(r"^accounts/", include("allauth.urls")),
+    re_path(r"^admin/", include('wagtail.admin.urls'), name='wagtail_admin'),
+)
+urlpatterns += (
     re_path(r"^accounts/profile$", geonode_oauth_views.ProfileView.as_view()),
     re_path(r"^documents/", include('wagtail.documents.urls')),
     re_path(r"^apps/", include('cartoview.app_manager.urls')),
@@ -33,13 +38,9 @@ urlpatterns = [
     re_path(r'^api-token-auth/', obtain_auth_token, name='api_token_auth'),
     path('api/jwt-token/', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/jwt-token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
-]
-urlpatterns += i18n_patterns(
-    path("django-admin/", admin.site.urls),
-    re_path(r"^admin/", include('wagtail.admin.urls'), name='wagtail_admin'),
-    re_path(r"^accounts/", include("allauth.urls")),
     path("", include('wagtail.core.urls')),
 )
+
 # django static serve static production
 # from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 # urlpatterns += staticfiles_urlpatterns()

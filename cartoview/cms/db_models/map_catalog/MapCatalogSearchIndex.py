@@ -23,8 +23,14 @@ class MapCatalogSearchIndex(Page):
     def get_context(self, request):
         q = request.GET.get('q', None)
         if q:
-            maps = Map.objects.filter(Q(title__icontains=q) | Q(
-                description__icontains=q) | Q(abstract__icontains=q))
+            maps = Map.objects.filter(
+                Q(title__icontains=q) |
+                Q(description__icontains=q) |
+                Q(abstract__icontains=q) |
+                Q(title_ar__icontains=q) |
+                Q(description_ar__icontains=q) |
+                Q(abstract_ar__icontains=q)
+            )
         else:
             maps = []
 

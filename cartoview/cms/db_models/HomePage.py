@@ -14,7 +14,7 @@ from .grid.GridBlock import GridBlock
 
 
 class HomePage(Page):
-    parent_page_types = ['wagtailcore.Page']
+    parent_page_types = ['LanguageRedirectionPage']
     hero = StreamField([
         ('hero_area', HeroAreaBlock()),
     ], blank=True, null=True, help_text=mark_safe("You should add only <b>1 Hero</b>"))
