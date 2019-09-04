@@ -23,6 +23,9 @@ apt-get update -y && apt-get install -y \
 	gdal-bin libgdal-dev libgeos-dev \
 	--no-install-recommends
 
+# install npm
+apt-get install -y npm
+
 # update python pip version
 pip install --upgrade pip
 
