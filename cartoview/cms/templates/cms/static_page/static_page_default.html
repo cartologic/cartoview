@@ -12,8 +12,8 @@
         <div class="page-header header-filter" data-parallax="true"
              style='background-image: url("{% static 'material-kit/assets/img/bg3.jpg' %}");'></div>
     {% endif %}
-    <div class="main main-raised">
-        <div class="profile-content">
+    <div class="main main-raised" dir="ltr">
+        <div class="profile-content" style="text-align: {% ifequal LANGUAGE_CODE "ar" %} right {% else %} left {% endifequal %}">
             <div class="container" style="padding-bottom: 20px;">
                 <div class="row">
                     <div class="col-md-12 ml-auto">
