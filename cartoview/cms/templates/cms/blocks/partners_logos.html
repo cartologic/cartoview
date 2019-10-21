@@ -1,10 +1,19 @@
 {% load wagtailcore_tags %}
+<style>
+@media only screen and (max-width: 576px) {
+  .partner_logo {
+      width: 30vw !important;
+  }
+}
+</style>
 
-<div class="container" style="margin-top: 4vh">
+<div class="container-fluid" style="margin-top: 4vh">
     <div class="row">
         {% for image_item in value.image_items %}
             <div class="col-sm-2 ml-0">
-                <a {% if image_item.link %} target="_blank" href="{{ image_item.link }}" {% endif %}><img alt="Rounded Image" class="rounded img-fluid" src="{{ image_item.image.file.url }}"></a>
+                <a {% if image_item.link %} target="_blank" href="{{ image_item.link }}" {% endif %}>
+                    <img style="width: 100%;" alt="Rounded Image" class="partner_logo rounded img-fluid" src="{{ image_item.image.file.url }}">
+                </a>
             </div>
         {% endfor %}
     </div>
