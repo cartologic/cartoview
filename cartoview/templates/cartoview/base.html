@@ -53,20 +53,14 @@
                         {% if settings.cms.SiteSettings.logo.file.url %}
                             <img src="{{ settings.cms.SiteSettings.logo.file.url }}"
                                  style="height: 46px;overflow: hidden;margin-top: -6px;" class="img-fluid" alt="Logo">
-                            {% ifequal LANGUAGE_CODE "ar" %}
-                                {% if settings.cms.SiteSettings.logo_text %}
-                                    {{ settings.cms.SiteSettings.logo_text_ar }}
-                                {% endif %}
-                            {% else %}
-                                {% if settings.cms.SiteSettings.logo_text %}
-                                    {{ settings.cms.SiteSettings.logo_text }}
-                                {% endif %}
-                            {% endifequal %}
-                        {% else %}
-                            <img src="{% static 'cartoview/img/logo.png' %}"
-                                 style="height: 46px;overflow: hidden;margin-top: -6px;" class="img-fluid" alt="Logo">
-                            Cartoview
                         {% endif %}
+                    {% if settings.cms.SiteSettings.logo_text %}
+                        {% ifequal LANGUAGE_CODE "ar" %}
+                                {{ settings.cms.SiteSettings.logo_text_ar }}
+                            {% else %}
+                                {{ settings.cms.SiteSettings.logo_text }}
+                        {% endifequal %}
+                    {% endif %}
                     </div>
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" aria-expanded="false"
