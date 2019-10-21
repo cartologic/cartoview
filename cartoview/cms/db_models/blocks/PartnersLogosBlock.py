@@ -6,6 +6,11 @@ class PartnerLogo(blocks.StructBlock):
     image = ImageChooserBlock(
         label='Image',
     )
+    link = blocks.CharBlock(
+        label='link',
+        max_length=200,
+        required=False
+    )
 
 
 class PartnersLogosBlock(blocks.StructBlock):

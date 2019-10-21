@@ -4,7 +4,7 @@
     <div class="row">
         {% for image_item in value.image_items %}
             <div class="col-sm-2 ml-0">
-                <img alt="Rounded Image" class="rounded img-fluid" src="{{ image_item.image.file.url }}">
+                <a {% if image_item.link %} target="_blank" href="{{ image_item.link }}" {% endif %}><img alt="Rounded Image" class="rounded img-fluid" src="{{ image_item.image.file.url }}"></a>
             </div>
         {% endfor %}
     </div>
