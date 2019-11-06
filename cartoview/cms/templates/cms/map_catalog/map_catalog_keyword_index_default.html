@@ -22,7 +22,8 @@
             <div class="container" style="padding-bottom: 20px;">
                 <div class="row">
                     <div class="col-md-12 ml-auto">
-                        <div class="title" style="text-align: {% ifequal LANGUAGE_CODE "ar" %} right {% else %} left {% endifequal %}">
+                        <div class="title"
+                             style="text-align: {% ifequal LANGUAGE_CODE "ar" %} right {% else %} left {% endifequal %}">
                             {% if request.GET.keyword|length %}
                                 <h1>{% trans "Showing maps with keyword" %} '{{ request.GET.keyword }}'</h1>
                             {% else %}
@@ -47,10 +48,13 @@
                                                 <img src="{% static 'cartoview/img/default-map-image.jpg' %}" alt="Map">
                                             {% endif %}
                                         </a>
+                                        <a href="{{ map.featured_image_copyrights_link }}"
+                                           target="_blank">{{ map.featured_image_copyrights_text }}</a>
                                     </div>
                                 </div>
                                 <div class="col-md-5 col-md-offset-1">
-                                    <h3 style="margin-bottom: 0; text-align: {% ifequal LANGUAGE_CODE "ar" %} right {% else %} left {% endifequal %}" class="title no-top-margin">
+                                    <h3 style="margin-bottom: 0; text-align: {% ifequal LANGUAGE_CODE "ar" %} right {% else %} left {% endifequal %}"
+                                        class="title no-top-margin">
                                         <a target="_blank"
                                            href="{% url 'ifpri_map_viewer' %}?lang={{ LANGUAGE_CODE }}&id={{ map.geonode_id }}">
                                             {% ifequal LANGUAGE_CODE "ar" %} {{ map.title_ar }} {% else %}

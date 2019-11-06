@@ -36,6 +36,8 @@ class BaseModel(models.Model):
         null=True, blank=True, default=_("No Abstract Provided"))
     featured_image = models.ImageField(
         upload_to=thumbnail_path, null=True, blank=True)
+    featured_image_copyrights_text = models.CharField(max_length=255, null=True, blank=True)
+    featured_image_copyrights_link = models.CharField(max_length=255, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     thumbnail = models.ImageField(

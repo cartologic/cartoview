@@ -11,9 +11,11 @@
             <div class="title">
                 <h1>{{ self.title }}</h1>
             </div>
-            <form action="{% slugurl 'search' %}" autocomplete="off" class="form-horizontal" method="GET" accept-charset="utf-8">
+            <form action="{% slugurl 'search' %}" autocomplete="off" class="form-horizontal" method="GET"
+                  accept-charset="utf-8">
                 <div class="input-group">
-                    <input name="q" placeholder="{% trans 'Search for Maps' %}" value="" class="form-control" type="text">
+                    <input name="q" placeholder="{% trans 'Search for Maps' %}" value="" class="form-control"
+                           type="text">
                     <span class="input-group-btn">
                <button class="btn btn-white btn-raised btn-fab btn-round" type="submit" id="mapSearch">
                    <i class="material-icons">search</i>
@@ -40,7 +42,8 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="map-catalog-image">
-                        <a target="_blank" href="{% url 'ifpri_map_viewer' %}?lang={{ LANGUAGE_CODE }}&id={{ featured_map.geonode_id }}">
+                        <a target="_blank"
+                           href="{% url 'ifpri_map_viewer' %}?lang={{ LANGUAGE_CODE }}&id={{ featured_map.geonode_id }}">
                             {% if featured_map.featured_image %}
                                 <img src="{{ featured_map.featured_image.url }}" alt="Map">
                             {% elif featured_map.thumbnail %}
@@ -49,17 +52,20 @@
                                 <img src="{% static 'cartoview/img/default-map-image.jpg' %}" alt="Map">
                             {% endif %}
                         </a>
+                        <a href="{{ featured_map.featured_image_copyrights_link }}" target="_blank">{{ featured_map.featured_image_copyrights_text }}</a>
                     </div>
                 </div>
                 <div class="col-md-5 col-md-offset-1">
                     <h3 class="title no-top-margin">
                         <a target="_blank"
                            href="{% url 'ifpri_map_viewer' %}?lang={{ LANGUAGE_CODE }}&id={{ featured_map.geonode_id }}">
-                            {% ifequal LANGUAGE_CODE "ar" %} {{ featured_map.title_ar }} {% else %} {{ featured_map.title }} {% endifequal %}
+                            {% ifequal LANGUAGE_CODE "ar" %} {{ featured_map.title_ar }} {% else %}
+                                {{ featured_map.title }} {% endifequal %}
                         </a>
                     </h3>
                     <p>
-                        {% ifequal LANGUAGE_CODE "ar" %} {{ featured_map.description_ar }} {% else %} {{ featured_map.description }} {% endifequal %}
+                        {% ifequal LANGUAGE_CODE "ar" %} {{ featured_map.description_ar }} {% else %}
+                            {{ featured_map.description }} {% endifequal %}
                     </p>
                 </div>
             </div>
@@ -69,16 +75,19 @@
                     <h3 class="title no-top-margin">
                         <a target="_blank"
                            href="{% url 'ifpri_map_viewer' %}?lang={{ LANGUAGE_CODE }}&id={{ featured_map.geonode_id }}">
-                            {% ifequal LANGUAGE_CODE "ar" %} {{ featured_map.title_ar }} {% else %} {{ featured_map.title }} {% endifequal %}
+                            {% ifequal LANGUAGE_CODE "ar" %} {{ featured_map.title_ar }} {% else %}
+                                {{ featured_map.title }} {% endifequal %}
                         </a>
                     </h3>
                     <p>
-                        {% ifequal LANGUAGE_CODE "ar" %} {{ featured_map.description_ar }} {% else %} {{ featured_map.description }} {% endifequal %}
+                        {% ifequal LANGUAGE_CODE "ar" %} {{ featured_map.description_ar }} {% else %}
+                            {{ featured_map.description }} {% endifequal %}
                     </p>
                 </div>
                 <div class="col-md-6 col-md-offset-1">
                     <div class="map-catalog-image">
-                        <a target="_blank" href="{% url 'ifpri_map_viewer' %}?lang={{ LANGUAGE_CODE }}&id={{ featured_map.geonode_id }}">
+                        <a target="_blank"
+                           href="{% url 'ifpri_map_viewer' %}?lang={{ LANGUAGE_CODE }}&id={{ featured_map.geonode_id }}">
                             {% if featured_map.featured_image %}
                                 <img src="{{ featured_map.featured_image.url }}" alt="Map">
                             {% elif featured_map.thumbnail %}
@@ -87,6 +96,7 @@
                                 <img src="{% static 'cartoview/img/default-map-image.jpg' %}" alt="Map">
                             {% endif %}
                         </a>
+                        <a href="{{ featured_map.featured_image_copyrights_link }}" target="_blank">{{ featured_map.featured_image_copyrights_text }}</a>
                     </div>
                 </div>
             </div>

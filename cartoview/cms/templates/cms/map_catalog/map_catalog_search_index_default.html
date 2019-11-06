@@ -25,7 +25,7 @@
                         <div class="title">
                             {% if maps|length %}
                                 <h1 style="text-align: {% ifequal LANGUAGE_CODE "ar" %} right {% else %} left {% endifequal %}">
-                                    {% trans "Showing maps with search" %}  - {{ request.GET.q }}
+                                    {% trans "Showing maps with search" %} - {{ request.GET.q }}
                                 </h1>
                             {% else %}
                                 <h1 style="text-align: {% ifequal LANGUAGE_CODE "ar" %} right {% else %} left {% endifequal %}">
@@ -52,9 +52,12 @@
                                             {% endif %}
                                         </a>
                                     </div>
+                                    <a href="{{ map.featured_image_copyrights_link }}"
+                                       target="_blank">{{ map.featured_image_copyrights_text }}</a>
                                 </div>
                                 <div class="col-md-5 col-md-offset-1">
-                                    <h3 style="margin-bottom: 0; text-align: {% ifequal LANGUAGE_CODE "ar" %} right {% else %} left {% endifequal %}" class="title no-top-margin">
+                                    <h3 style="margin-bottom: 0; text-align: {% ifequal LANGUAGE_CODE "ar" %} right {% else %} left {% endifequal %}"
+                                        class="title no-top-margin">
                                         <a target="_blank"
                                            href="{% url 'ifpri_map_viewer' %}?lang={{ LANGUAGE_CODE }}&id={{ map.geonode_id }}">
                                             {% ifequal LANGUAGE_CODE "ar" %} {{ map.title_ar }} {% else %}

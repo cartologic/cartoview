@@ -25,7 +25,8 @@
                         <form action="{{ page.search_url }}" autocomplete="off" class="form-horizontal"
                               method="GET" accept-charset="utf-8">
                             <div class="input-group">
-                                <input name="q" placeholder="{% trans 'Search for Maps' %}" value="" class="form-control" type="text">
+                                <input name="q" placeholder="{% trans 'Search for Maps' %}" value=""
+                                       class="form-control" type="text">
                                 <span class="input-group-btn">
                                 <button class="btn btn-white btn-raised btn-fab btn-round" type="submit" id="mapSearch">
                                 <i class="material-icons">search</i>
@@ -62,6 +63,8 @@
                                          src="{% static 'cartoview/img/default-map-image.jpg' %}" alt="Map">
                                 {% endif %}
                             </a>
+                            <a href="{{ map.featured_image_copyrights_link }}"
+                               target="_blank">{{ map.featured_image_copyrights_text }}</a>
                         </div>
                         <div class="col-lg-8 col-md-12 col-sm-12">
                             <h3 style="margin-top: 0; text-align: {% ifequal LANGUAGE_CODE "ar" %} right {% else %} left {% endifequal %}">
