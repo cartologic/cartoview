@@ -11,6 +11,7 @@ from .blocks.Blocks import HeroAreaBlock, MapCatalogBlock
 from .blocks.ImageTextOverlayBlock import ImageTextOverlayBlock
 from .blocks.ThumbnailGalleryBlock import ThumbnailGalleryBlock
 from .grid.GridBlock import GridBlock
+from .blocks.ImageLinkGalleryBlock import ImageLinkGalleryBlock
 
 
 class HomePage(Page):
@@ -20,6 +21,7 @@ class HomePage(Page):
     ], blank=True, null=True, help_text=mark_safe("You should add only <b>1 Hero</b>"))
     body = StreamField([
         ('map_catalog', MapCatalogBlock()),
+        ('image_link_gallery', ImageLinkGalleryBlock()),
         ('grid', GridBlock()),
         ('paragraph', blocks.RichTextBlock()),
         ('image_text_overlay', ImageTextOverlayBlock()),

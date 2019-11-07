@@ -12,7 +12,7 @@
         <div class="main main-raised">
             <div class="container">
                 {% for body_block in page.body %}
-                    <div class="section text-center">
+                    <div class="section text-center" style="padding-bottom: 0">
                         {% include_block body_block with block_id=body_block.id %}
                     </div>
                 {% endfor %}
