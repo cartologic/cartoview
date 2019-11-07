@@ -17,6 +17,9 @@ class ImageLinkGalleryBlock(blocks.StructBlock):
         ImageLink(),
         label="Image",
     )
+    single_image_width = blocks.IntegerBlock(
+        help_text="in pixels"
+    )
 
     class Meta:
         template = 'cms/blocks/image_link_gallery.html'

@@ -5,7 +5,7 @@
 <div class="row">
     {% for image_item in value.image_items %}
             <a target="_blank" href="{{ image_item.link }}">
-                <img style="width: 64px; {% ifequal LANGUAGE_CODE "en" %} margin-right: 1px; {% else %} margin-left: 1px; {% endifequal %}  margin-bottom: 1px"
+                <img style="width: {{ value.single_image_width }}px; {% ifequal LANGUAGE_CODE "en" %} margin-right: 5px; {% else %} margin-left: 5px; {% endifequal %}  margin-bottom: 5px"
                      class="rounded {% ifequal LANGUAGE_CODE "ar" %} float-right {% else %} float-left {% endifequal %}" src="{{ image_item.image.file.url }}" alt="Image">
             </a>
     {% endfor %}
