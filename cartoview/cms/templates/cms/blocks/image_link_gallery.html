@@ -2,7 +2,7 @@
 {% load i18n %}
 {% get_current_language as LANGUAGE_CODE %}
 
-<div class="row">
+<div class="row" style="padding-bottom: 5vh;">
     {% for image_item in value.image_items %}
             <a target="_blank" href="{{ image_item.link }}">
                 <img style="width: {{ value.single_image_width }}px; {% ifequal LANGUAGE_CODE "en" %} margin-right: 5px; {% else %} margin-left: 5px; {% endifequal %}  margin-bottom: 5px"
