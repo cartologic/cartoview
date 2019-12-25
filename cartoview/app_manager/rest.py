@@ -16,6 +16,7 @@ from future import standard_library
 from guardian.shortcuts import get_objects_for_user
 from taggit.models import Tag
 from tastypie import fields, http
+from tastypie.authorization import Authorization
 from tastypie.constants import ALL, ALL_WITH_RELATIONS
 from tastypie.resources import ModelResource
 from tastypie.utils import trailing_slash
@@ -87,8 +88,10 @@ class GeonodeMapLayerResource(ModelResource):
         queryset = MapLayer.objects.distinct()
 
 
-class AppStoreResource(FileUploadResource):
-    class Meta(FileUploadResource.Meta):
+class AppStoreResource(ModelResource):
+    class Meta:
+        always_return_data = True
+        authorization = Authorization()
         queryset = AppStore.objects.all()
 
 
