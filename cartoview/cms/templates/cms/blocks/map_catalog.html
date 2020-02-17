@@ -1,6 +1,8 @@
 {% load i18n %}
 {% load wagtailcore_tags wagtailimages_tags %}
 {% get_current_language as LANGUAGE_CODE %}
+{% slugurl 'keywords_ar' as keywordsurl_ar %}
+{% slugurl 'keywords_en' as keywordsurl_en %}
 {% load static from staticfiles %}
 
 <link href="{% static 'cms/blocks/map_catalog.css' %}" rel="stylesheet"/>
@@ -29,7 +31,7 @@
         <div class="col-md-2"><p style="text-align: left">{% trans "Popular keywords" %}</p></div>
         <div class="col-md-10" style="text-align: right">
             {% for keyword in keywords %}
-                <a href="{% slugurl 'keywords' %}?keyword={{ keyword }}" class="btn btn-sm btn-info btn-round"
+                <a href="{% spaceless %}{% ifequal LANGUAGE_CODE "ar" %} {{ keywordsurl_ar }} {% else %} {{ keywordsurl_en }} {% endifequal %}{% endspaceless %}?keyword={{ keyword }}" class="btn btn-sm btn-info btn-round"
                    style="color: white;">
                     {{ keyword }} &nbsp; | &nbsp; {{ keyword.keywords_count }}
                 </a>
@@ -55,7 +57,7 @@
                         <a href="{{ featured_map.featured_image_copyrights_link }}" target="_blank">{{ featured_map.featured_image_copyrights_text }}</a>
                     </div>
                 </div>
-                <div class="col-md-5 col-md-offset-1">
+                <div class="col-md-5 col-md-offset-1" {% ifequal LANGUAGE_CODE "ar" %} style="direction: rtl" {% else %} style="direction: ltr" {% endifequal %}>
                     <h3 class="title no-top-margin">
                         <a target="_blank"
                            href="{% url 'ifpri_map_viewer' %}?lang={{ LANGUAGE_CODE }}&id={{ featured_map.geonode_id }}">
@@ -71,7 +73,7 @@
             </div>
         {% else %}
             <div class="row">
-                <div class="col-md-6 col-md-offset-1">
+                <div class="col-md-6 col-md-offset-1" {% ifequal LANGUAGE_CODE "ar" %} style="direction: rtl" {% else %} style="direction: ltr" {% endifequal %}>
                     <h3 class="title no-top-margin">
                         <a target="_blank"
                            href="{% url 'ifpri_map_viewer' %}?lang={{ LANGUAGE_CODE }}&id={{ featured_map.geonode_id }}">
