@@ -1,7 +1,6 @@
 from urllib.parse import urlparse
 
 import requests
-from cartoview.layers.models import Layer
 from cartoview.log_handler import get_logger
 from cartoview.maps.models import Map
 
