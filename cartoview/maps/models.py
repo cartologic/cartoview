@@ -1,5 +1,4 @@
 import jsonfield
-from django.utils.translation import gettext_lazy as _
 from cartoview.base_resource.models import BaseModel
 from cartoview.fields import ListField
 from cartoview.layers.models import Layer

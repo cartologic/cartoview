@@ -15,10 +15,13 @@ class SiteSettings(BaseSetting):
         'wagtailimages.Image', on_delete=models.CASCADE, related_name='+',
         blank=True, null=True
     )
-    logo_text = models.CharField(max_length=120, blank=True, null=True, verbose_name="Logo text (EN)")
-    logo_text_ar = models.CharField(max_length=120, blank=True, null=True, verbose_name="Logo text (AR)")
+    logo_text = models.CharField(max_length=120, blank=True, null=True,
+                                 verbose_name="Logo text (EN)")
+    logo_text_ar = models.CharField(max_length=120, blank=True, null=True,
+                                    verbose_name="Logo text (AR)")
     partners_logos = StreamField(
-        StreamBlock([('partners', PartnersLogosBlock())], min_num=0, max_num=1), blank=True, null=True)
+        StreamBlock([('partners', PartnersLogosBlock())], min_num=0, max_num=1),
+        blank=True, null=True)
     footer = StreamField(  # noqa: E501
         StreamBlock([
             ('footer', RawHTMLBlock(
