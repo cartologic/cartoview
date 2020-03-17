@@ -46,7 +46,7 @@ install:
   - export JAVA_HOME=$(readlink -f /usr/bin/java | sed "s:bin/java::");
   - export PATH=$JAVA_HOME'bin/java':$PATH;
   - pip install celery
-  - pip install pygdal==`gdal-config --version`
+  - pip install pygdal==`gdal-config --version`.*
   - pip install tqdm
   - pip install -e . --upgrade
   - pip install django-autocomplete-light==2.3.3
