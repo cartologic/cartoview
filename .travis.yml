@@ -49,7 +49,6 @@ install:
   - pip install pygdal==`gdal-config --version`.*
   - pip install tqdm
   - pip install -e . --upgrade
-  - pip install django-autocomplete-light==2.3.3
   - pip install timeout-decorator
   - paver setup_geoserver
   - paver start_geoserver
