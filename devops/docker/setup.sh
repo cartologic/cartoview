@@ -40,11 +40,14 @@ mkdir -p ${APP_DIR}
 
 # update files
 apt-get update
-apt-get install -y gcc
+apt-get install -y build-essential gcc
+
+#adjust pip
+pip install pip==9.0.1
 
 # install cartoview
 git clone -b ${GIT_BRANCH} --recursive https://github.com/cartologic/cartoview.git &&
-	cd /cartoview && pip install -r requirements.txt && pip install . && rm -rf /cartoview
+	cd /cartoview && pip install . && rm -rf /cartoview
 
 django-admin.py startproject \
 	--template=https://github.com/cartologic/Cartoview-project-template/archive/cartoview2.zip \
