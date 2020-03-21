@@ -63,3 +63,6 @@ rm -rf /var/lib/apt/lists/* && apt-get clean -y &&
 	rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 echo "Yes, do as I say!" | apt-get remove --force-yes login &&
 	dpkg --remove --force-depends wget
+
+# re-adjust pip
+pip install --upgrade pip
