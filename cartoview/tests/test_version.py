@@ -3,20 +3,21 @@ import os
 import dj_database_url
 import gisdata
 from django.conf import settings
-from django.test.testcases import LiveServerTestCase
 from django.test.utils import override_settings
 from geonode.layers.models import Layer
 from geonode.layers.utils import upload
 from geonode.tests.utils import get_web_page
+from geonode.tests.base import GeoNodeLiveTestSupport
 
 import timeout_decorator
 
 
-class CartoviewTest(LiveServerTestCase):
+class CartoviewTest(GeoNodeLiveTestSupport):
     port = 8000
     fixtures = [
-        'sample_admin.json',
-        'default_oauth_apps.json',
+        'initial_data.json',
+        'group_test_data.json',
+        'default_oauth_apps.json'
     ]
 
     # @classmethod
