@@ -1,4 +1,4 @@
-FROM python:3.8.2
+FROM python:3.7
 LABEL "MAINTAINER"="Cartologic Development Team"
 ENV PYTHONUNBUFFERED 1
 ARG APP_DIR=/usr/src/cartoview_project
