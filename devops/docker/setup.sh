@@ -30,14 +30,21 @@ apt-get install -y npm
 pip install --upgrade pip
 
 # install python gdal stable
+apt-get install -y libgdal-dev
+export CPLUS_INCLUDE_PATH=/usr/include/gdal
+export C_INCLUDE_PATH=/usr/include/gdal
 pip install GDAL==2.4.0
 
 # create required dirs
 mkdir -p ${APP_DIR}
 
+# update files
+apt-get update
+apt-get install -y gcc
+
 # install cartoview
 git clone -b ${GIT_BRANCH} --recursive https://github.com/cartologic/cartoview.git &&
-	cd /cartoview && pip install . && rm -rf /cartoview
+	cd /cartoview && pip install -r requirements.txt && pip install . && rm -rf /cartoview
 
 django-admin.py startproject \
 	--template=https://github.com/cartologic/Cartoview-project-template/archive/cartoview2.zip \
