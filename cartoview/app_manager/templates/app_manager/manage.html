@@ -131,7 +131,18 @@
                                     </ul>
                                 </div>
                                 <div class="desc column-description">
-                                    <p>{{app.description}}</p>
+                                    <div ng-show="app.description">
+                                        <div ng-if="app.description.split(' ').length >= 6">
+                                            <p>{{ app.description.split(" ").splice(0, 6).join(" ") + '...' }}</p>
+                                            <a data-trigger="hover" data-toggle="tooltip" data-placement="buttom"
+                                               title="{{ app.description }}">
+                                            More
+                                            </a>
+                                        </div>
+                                        <div ng-if="!(app.description.split(' ').length >= 6)">
+                                            <p>{{ app.description }}</p>
+                                        </div>
+                                    </div>
                                     <p class="authors"> <cite>By <a href="{{app.author_website}}">{{app.author}}</a></cite></p>
                                 </div>
                             </div>
@@ -195,4 +206,7 @@
     <script src="{{ STATIC_URL }}app_manager/vendor/angular-drag-and-drop-lists/angular-drag-and-drop-lists.min.js"></script>
     <script src="{{ STATIC_URL }}app_manager/js/resources.js"></script>
     <script src="{{ STATIC_URL }}app_manager/js/manager.js"></script>
+    <script>
+        $("[data-toggle=popover]").popover();
+    </script>
 {% endblock %}
