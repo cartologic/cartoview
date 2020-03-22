@@ -48,21 +48,3 @@ pip install pip==9.0.1
 # install cartoview
 git clone -b ${GIT_BRANCH} --recursive https://github.com/cartologic/cartoview.git &&
 	cd /cartoview && pip install . && rm -rf /cartoview
-
-django-admin.py startproject \
-	--template=https://github.com/cartologic/Cartoview-project-template/archive/cartoview2.zip \
-	--name wsgi.py,settings.py.local_settings.py cartoview_project ${APP_DIR}
-
-# cleanup image
-rm -rf ~/.cache/pip
-rm -rf /root/.cache
-apt-get purge --auto-remove -y gcc libgdal-dev libsasl2-dev \
-	zlib1g-dev python-dev build-essential
-apt autoremove --purge -y && apt autoclean -y && apt-get clean -y
-rm -rf /var/lib/apt/lists/* && apt-get clean -y &&
-	rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-echo "Yes, do as I say!" | apt-get remove --force-yes login &&
-	dpkg --remove --force-depends wget
-
-# re-adjust pip
-pip install --upgrade pip
