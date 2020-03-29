@@ -32,7 +32,7 @@ class CartoviewTemplateTagsTest(TestCase):
                 "request": req}
         )
         self.assertEqual(
-            rendered, u'{u&#39;raster&#39;: 0, u&#39;vector&#39;: 0, u&#39;' +
+            rendered, u'{u&#39;raster&#39;: 0, u&#39;vector&#39;: 0, u&#39;' +  # noqa
             'remote&#39;: 0, u&#39;document&#39;: 0, u&#39;map&#39;: 0}')
         self.assertRaises(
             template.TemplateSyntaxError,

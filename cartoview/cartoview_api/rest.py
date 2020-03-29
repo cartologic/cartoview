@@ -192,7 +192,7 @@ class MapLayerResource(ModelResource):
             request, applicable_filters)
         if layer_type:
             filtered = [lyr.id for lyr in filtered
-                        if self.get_layer(lyr.name)and
+                        if self.get_layer(lyr.name) and     # noqa
                         Attribute.objects.filter(
                             attribute_type__contains="gml:",
                             attribute_type__icontains=layer_type.lower(),
