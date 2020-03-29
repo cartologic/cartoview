@@ -111,6 +111,9 @@ msgstr "من أجل أنظمة أفضل"
 msgid "Search for Maps"
 msgstr "ابحث عن خرائط"
 
+msgid "Search in this list"
+msgstr "ابحث في هذه القائمة"
+
 msgid "Popular keywords"
 msgstr "الكلمات الدالة"
 
