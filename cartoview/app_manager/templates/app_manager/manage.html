@@ -132,14 +132,14 @@
                                 </div>
                                 <div class="desc column-description">
                                     <div ng-show="app.description">
-                                        <div ng-if="app.description.split(' ').length >= 6">
+                                        <div ng-if="app.description.length >= 30">
                                             <p>{{ app.description.split(" ").splice(0, 6).join(" ") + '...' }}</p>
                                             <a data-trigger="hover" data-toggle="tooltip" data-placement="buttom"
                                                title="{{ app.description }}">
                                             More
                                             </a>
                                         </div>
-                                        <div ng-if="!(app.description.split(' ').length >= 6)">
+                                        <div ng-if="!(app.description.length >= 30)">
                                             <p>{{ app.description }}</p>
                                         </div>
                                     </div>
