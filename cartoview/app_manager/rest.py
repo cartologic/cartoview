@@ -95,7 +95,7 @@ class AppStoreResource(ModelResource):
         queryset = AppStore.objects.all()
 
 
-class AppResource(FileUploadResource):
+class AppResource(ModelResource):
     store = fields.ForeignKey(AppStoreResource, 'store', full=False, null=True)
     order = fields.IntegerField()
     active = fields.BooleanField()
@@ -127,7 +127,7 @@ class AppResource(FileUploadResource):
     def dehydrate_app_instance_count(self, bundle):
         return bundle.obj.appinstance_set.all().count()
 
-    class Meta(FileUploadResource.Meta):
+    class Meta():
         queryset = App.objects.all().order_by('order')
         filtering = {
             "id": ALL,
