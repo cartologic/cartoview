@@ -48,8 +48,8 @@ def get_perm(fname):
 def make_writeable_recursive(path):
     for root, dirs, files in os.walk(path, topdown=False):
         for dir in [os.path.join(root, d) for d in dirs]:
-            os.chmod(dir, get_perm(dir) | stat.S_IRUSR |
+            os.chmod(dir, get_perm(dir) | stat.S_IRUSR |    # noqa
                      stat.S_IRGRP | stat.S_IROTH)
         for file in [os.path.join(root, f) for f in files]:
-            os.chmod(file, get_perm(file) | stat.S_IRUSR |
+            os.chmod(file, get_perm(file) | stat.S_IRUSR |  # noqa
                      stat.S_IRGRP | stat.S_IROTH)

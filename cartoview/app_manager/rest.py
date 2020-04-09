@@ -331,7 +331,7 @@ class AppInstanceResource(ModelResource):
             instance.id for instance in AppInstance.objects.filter(
                 app__id__in=__inactive_apps)
         ]
-        active_app_instances = super(AppInstanceResource, self)\
+        active_app_instances = super(AppInstanceResource, self) \
             .get_object_list(
             request).exclude(
             id__in=__inactive_apps_instances)
@@ -408,7 +408,7 @@ class AppInstanceResource(ModelResource):
             # results
             if len(filter_set) > 0:
                 sqs = sqs.filter(id__in=filter_set_ids).facet('type').facet(
-                    'owner').facet('keywords').facet('regions')\
+                    'owner').facet('keywords').facet('regions') \
                     .facet('category')
             else:
                 sqs = None
@@ -428,9 +428,8 @@ class AppInstanceResource(ModelResource):
             paginator = Paginator(sqs, request.GET.get('limit'))
 
             try:
-                page = paginator.page(
-                    int(request.GET.get('offset') or 0) /
-                    int(request.GET.get('limit'), 0) + 1)
+                page = paginator.page(int(request.GET.get('offset') or 0)
+                                      / int(request.GET.get('limit'), 0) + 1)   # noqa
             except InvalidPage:
                 raise Http404("Sorry, no results on that page.")
 
@@ -547,21 +546,21 @@ class AppInstanceResource(ModelResource):
             if query.startswith('"') or query.startswith('\''):
                 # Match exact phrase
                 phrase = query.replace('"', '')
-                sqs = (SearchQuerySet() if sqs is None else sqs)\
+                sqs = (SearchQuerySet() if sqs is None else sqs) \
                     .filter(
                     SQ(title__exact=phrase) | SQ(description__exact=phrase)
-                        | SQ(content__exact=phrase)) # noqa
+                    | SQ(content__exact=phrase))  # noqa
             else:
                 words = [
-                    w for w in re.split('\W', query, flags=re.UNICODE) if w
+                    w for w in re.split(r'\W', query, flags=re.UNICODE) if w
                 ]
                 for i, search_word in enumerate(words):
                     if i == 0:
                         sqs = (SearchQuerySet() if sqs is None else sqs) \
                             .filter(
-                            SQ(title=Raw(search_word)) |
-                            SQ(description=Raw(search_word)) |
-                            SQ(content=Raw(search_word))
+                            SQ(title=Raw(search_word))
+                            | SQ(description=Raw(search_word))  # noqa
+                            | SQ(content=Raw(search_word))  # noqa
                         )
                     elif search_word in ["AND", "OR"]:
                         pass

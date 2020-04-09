@@ -9,7 +9,7 @@ addons:
   postgresql: '9.6'
   apt:
     packages:
-      - postgresql-9.6-postgis-2.3
+      - postgresql-9.6-postgis-2.4
       - libevent-dev
 services:
   - postgresql
@@ -40,15 +40,15 @@ install:
     python-setuptools
   - sudo apt-get install -y curl build-essential build-essential python-dev libffi-dev
     libssl-dev
-  - sudo add-apt-repository -y ppa:webupd8team/java
   - sudo apt-get update
-  - sudo apt-get install -y --force-yes oracle-java8-installer ant maven2 --no-install-recommends
-  - sudo update-java-alternatives --set java-8-oracle
+  - sudo apt install -y openjdk-8-jre openjdk-8-jdk ant maven;
+  - sudo update-java-alternatives --set java-1.8.0-openjdk-amd64;
+  - export JAVA_HOME=$(readlink -f /usr/bin/java | sed "s:bin/java::");
+  - export PATH=$JAVA_HOME'bin/java':$PATH;
   - pip install celery
-  - pip install pygdal==`gdal-config --version`
+  - pip install pygdal==`gdal-config --version`.*
   - pip install tqdm
   - pip install -e . --upgrade
-  - pip install django-autocomplete-light==2.3.3
   - pip install timeout-decorator
   - paver setup_geoserver
   - paver start_geoserver
@@ -73,6 +73,5 @@ deploy:
     condition: $TRAVIS_TAG =~ ^v([0-9]+\.?){2,3}(b[0-9]+|rc[0-9]+){0,1}
 notifications:
   email:
-    - hisham.karam@cartologic.com
     - ahmednosman@cartologic.com
     - ahmedNourElDeen@cartologic.com

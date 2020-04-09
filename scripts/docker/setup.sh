@@ -17,7 +17,7 @@ apt-get update -y && apt-get install -y \
 	gettext sqlite3 \
 	python-lxml \
 	postgresql-client libpq-dev python-psycopg2 \
-	python-imaging \
+	python-pil \
 	python-ldap \
 	libmemcached-dev libsasl2-dev \
 	python-pylibmc \
@@ -31,21 +31,21 @@ pip install --upgrade pip
 pip install GDAL==2.3.2
 
 # install geonode from commit hash if dev enabled
-if [ "$GEONODE_DEV" = true ]; then
-	git clone https://github.com/GeoNode/geonode.git &&
-		cd /geonode && pip install . &&
-		rm -rf /geonode
-fi
+#if [ "$GEONODE_DEV" = true ]; then
+#	git clone https://github.com/GeoNode/geonode.git &&
+#		cd ${APP_DIR}/geonode && pip install . &&
+#		rm -rf /geonode
+#fi
 
 # create required dirs
 mkdir -p ${APP_DIR}
 
-django-admin.py startproject \
-	--template=https://github.com/cartologic/Cartoview-project-template/archive/1.10.x.zip \
-	--name django.env,server.py,docker-compose.yml carto_app ${APP_DIR}
+#django-admin.py startproject \
+#	--template=https://github.com/cartologic/Cartoview-project-template/archive/1.10.x.zip \
+#	--name django.env,server.py,docker-compose.yml carto_app ${APP_DIR}
 
 # install cartoview
-cd /cartoview && pip install . && rm -rf /cartoview
+cd ${APP_DIR}/cartoview && pip install -e .  # && rm -rf /cartoview
 
 # cleanup image
 rm -rf ~/.cache/pip
