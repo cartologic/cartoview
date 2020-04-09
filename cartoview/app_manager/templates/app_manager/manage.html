@@ -80,7 +80,7 @@
             </div>
             <div id="the_list">
                     {% verbatim %}
-                        <div class="plugin-card plugin-card-akismet" ng-repeat="app in getSelectedStore().apps.objects | filter:{title:search_term}:strict">
+                    <div class="plugin-card plugin-card-akismet" ng-show="compatible(app.latest_version.cartoview_version)" ng-repeat="app in getSelectedStore().apps.objects | filter:{title:search_term}:strict">                            
                             <div class="plugin-card-top">
                                 <div class="name column-name">
                                     <h3>
