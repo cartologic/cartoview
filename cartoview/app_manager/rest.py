@@ -325,7 +325,7 @@ class AppInstanceResource(ModelResource):
 
     def get_object_list(self, request):
         __inactive_apps = [
-            app.id for app in App.objects.all() if not app.config.active
+            app.id for app in App.objects.all() if app.config and not app.config.active
         ]
         __inactive_apps_instances = [
             instance.id for instance in AppInstance.objects.filter(
