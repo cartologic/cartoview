@@ -80,87 +80,94 @@
             </div>
             <div id="the_list">
                     {% verbatim %}
-                    <div class="plugin-card plugin-card-akismet" ng-show="compatible(app.latest_version.cartoview_version)" ng-repeat="app in getSelectedStore().apps.objects | filter:{title:search_term}:strict">                            
-                            <div class="plugin-card-top">
-                                <div class="name column-name">
-                                    <h3>
-                                        <a href="http://www.blueeconomysuezuniv.com/wp-admin/plugin-install.php?tab=plugin-information&amp;plugin=akismet&amp;TB_iframe=true&amp;width=772&amp;height=480"
-                                            class="thickbox open-plugin-details-modal">
-                                            {{ app.title }} <img src="{{app.latest_version.logo}}" class="plugin-icon" alt="">
-                                        </a>
-                                    </h3>
+                    <div class="col-xs-12 col-sm-6 app-col" ng-show="compatible(app.latest_version.cartoview_version)" ng-repeat="app in getSelectedStore().apps.objects | filter:{title:search_term}:strict">
+                            <div class="card-wrapper">
+                                <div class="title-area">
+                                    <img src="{{app.latest_version.logo}}" alt="" />
+                                    <div class="app-title">
+                                    {{ app.title }}
+                                    </div>
                                 </div>
-                                <div class="action-links">
-                                    <ul class="plugin-action-buttons">
-                                            <li ng-disabled="!compatible(app.latest_version.cartoview_version)"
-                                                ng-if="!app.installedApp" ng-click="install(app)"
-                                                class="btn btn-sm btn-primary" ng-disabled="installing">
-                                                <div ng-if="compatible(app.latest_version.cartoview_version)">
-                                                    <span class="fa fa-circle-o-notch rotating"
+                                <div class="app-description">
+                                    <div ng-if="app.description.length > 150">
+                                        <p>{{ app.description.slice(0, 150) + '...' }} <span><a data-trigger="hover" data-toggle="tooltip" data-placement="buttom"
+                                            title="{{ app.description }}">
+                                         Full Description
+                                         </a></span></p>
+                                    </div>
+                                    <div ng-if="(app.description.length <= 150)">
+                                        <p>{{ app.description }}</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="actions-wrapper">
+                                    <button class="btn btn-default btn-xs" ng-disabled="!compatible(app.latest_version.cartoview_version)" ng-disabled="installing" ng-if="!app.installedApp" ng-click="install(app)">
+                                    <span
+                                        class="glyphicon glyphicon-download-alt"
+                                        aria-hidden="true"
+                                        ng-hide="installing==app"
+                                    ></span>
+                                    <span class="fa fa-circle-o-notch rotating" ng-show="installing==app"></span>
+                                    Install
+                                    </button>
+                                    <button class="btn btn-default btn-xs"  ng-disabled="installing" ng-disabled="!compatible(app.latest_version.cartoview_version)" ng-if="app.installedApp && upgradable(app.installedApp.version,app.latest_version.version)"ng-click="install(app, true)" >
+                                    <span
+                                        class="glyphicon glyphicon-circle-arrow-up"
+                                        aria-hidden="true"
+                                        ng-hide="installing==app"
+                                    ></span>
+                                    <span class="fa fa-circle-o-notch rotating"
                                                         ng-show="installing==app"></span>
-                                                    Install<span ng-show="installing==app">ing</span>
-                                                </div>
-                                                <small
-                                                    ng-show="!compatible(app.latest_version.cartoview_version)">Incompatible</small>
-                                            </li>
-                                            <li ng-disabled="!compatible(app.latest_version.cartoview_version)"
-                                                ng-if="app.installedApp && upgradable(app.installedApp.version,app.latest_version.version)"
-                                                ng-click="install(app, true)" class="btn btn-sm btn-primary"
-                                                ng-disabled="installing">
-                                                <div ng-if="compatible(app.latest_version.cartoview_version)">
-                                                    <span class="fa fa-circle-o-notch rotating"
-                                                        ng-show="installing==app"></span>
-                                                    <span ng-show="installing!=app">Upgrade</span><span
-                                                        ng-show="installing==app">Upgrading</span>
-                                                </div>
-                                                <small
-                                                    ng-show="!compatible(app.latest_version.cartoview_version)">Incompatible</small>
-                                            </li>
-                                            <li ng-if="app.installedApp" ng-click="uninstall(app)"
-                                                class="btn btn-sm btn-danger" ng-disabled="installing">
-                                                <span class="fa fa-circle-o-notch rotating"
+                                    Upgrade
+                                    </button>
+                                    <button ng-disabled="installing" class="btn btn-danger btn-xs" ng-if="app.installedApp" ng-click="uninstall(app)">
+                                        <span class="glyphicon glyphicon-remove" aria-hidden="true" ng-hide="installing==app"></span>
+                                        <span class="fa fa-circle-o-notch rotating"
                                                     ng-show="installing==app"></span>
-                                                UnInstall<span ng-show="installing==app">ing</span>
-                                            </li>
+                                        Uninstall
+                                    </button>
+                                    <button class="btn btn-success btn-xs" ng-disabled="installing" ng-if="app.installedApp" ng-click="toggleActive(app)" ng-show="!app.installedApp.active">
+                                        <span class="glyphicon glyphicon-play" aria-hidden="true"></span
+                                        >Activate
+                                    </button>
+                                    <button class="btn btn-warning btn-xs" ng-disabled="installing" ng-if="app.installedApp" ng-click="toggleActive(app)" ng-show="app.installedApp.active">
+                                        <span class="glyphicon glyphicon-pause" aria-hidden="true"></span
+                                        >Suspend
+                                    </button>
+                                </div>
+                                <div class="info-panel">
+                                    <div class="info-wrapper">
+                                    <div class="info-item">
+                                        <span class="info-item-title">Rating:</span>
+                                        <span class="info-item-content">{{ app.stars }} / 5</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <span class="info-item-title">Installations:</span>
+                                        <span class="info-item-content">{{app.downloads}}</span>
+                                    </div>
+                                    </div>
+                                    <div class="info-wrapper">
+                                    <div class='app-version'>
+                                        <div class="info-item">
+                                            <span class="info-item-title">Latest Version:</span>
+                                            <span class="info-item-content">v{{ app.latest_version.version }}</span>
+                                            </div>
+                                            <div class="info-item">
+                                            <span class="info-item-title">Installed Version:</span>
+                                            <span class="info-item-content">v{{ app.installedApp.version }}</span>
+                                        </div>
+                                    </div>
 
-                                            <li ng-if="app.installedApp" ng-click="toggleActive(app)"
-                                                class="btn btn-sm btn-warning">
-                                                <span ng-show="app.installedApp.active">Suspend</span>
-                                                <span ng-show="!app.installedApp.active">Activate</span>
-                                            </li>
-                                    </ul>
-                                </div>
-                                <div class="desc column-description">
-                                    <div ng-show="app.description">
-                                        <div ng-if="app.description.length >= 30">
-                                            <p>{{ app.description.split(" ").splice(0, 6).join(" ") + '...' }}</p>
-                                            <a data-trigger="hover" data-toggle="tooltip" data-placement="buttom"
-                                               title="{{ app.description }}">
-                                            More
-                                            </a>
-                                        </div>
-                                        <div ng-if="!(app.description.length >= 30)">
-                                            <p>{{ app.description }}</p>
-                                        </div>
+                                    <div class="app-by">
+                                        By
+                                        <span class="app-author">
+                                        <a href="{{app.author_website}}">{{app.author}}</a>
+                                        </span>
                                     </div>
-                                    <p class="authors"> <cite>By <a href="{{app.author_website}}">{{app.author}}</a></cite></p>
-                                </div>
-                            </div>
-                            <div class="plugin-card-bottom">
-                                <div class="vers column-rating">
-                                    <div class="star-rating"><span class="screen-reader-text">{{ app.stars }}/5 rating</span>
                                     </div>
                                 </div>
-                                <div class="column-updated">
-                                    <span><strong>Latest Version</strong> v{{ app.latest_version.version }}</span>
-                                </div>
-                                <div class="column-downloaded">
-                                    {{app.downloads}} Installations </div>
-                                <div class="column-compatibility" ng-show="app.installedApp">
-                                    <span><strong>Installed Version</strong> v{{ app.installedApp.version }}</span>
-                                </div>
-                            </div>
-                        </div>                
+                        </div>
+                    </div>
                     {% endverbatim %}
             </div>
         </div>
