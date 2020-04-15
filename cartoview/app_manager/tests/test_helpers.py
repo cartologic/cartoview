@@ -1,9 +1,11 @@
-from django.test import TestCase
-from cartoview.app_manager.helpers import (
-    get_path_permission, get_perm, make_writeable_recursive, create_direcotry)
-from django.conf import settings
 import os
 import shutil
+
+from django.conf import settings
+from django.test import TestCase
+
+from cartoview.app_manager.helpers import (
+    get_path_permission, get_perm, make_writeable_recursive, create_direcotry)
 
 
 class HelpersTest(TestCase):

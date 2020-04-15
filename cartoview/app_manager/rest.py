@@ -13,6 +13,13 @@ from django.core.urlresolvers import reverse
 from django.db import transaction
 from django.http import Http404
 from future import standard_library
+from geonode.api.api import ProfileResource
+from geonode.api.authorization import GeoNodeAuthorization
+from geonode.api.resourcebase_api import (CommonMetaApi, LayerResource,
+                                          MapResource)
+from geonode.maps.models import MapLayer
+from geonode.people.models import Profile
+from geonode.security.utils import get_visible_resources
 from guardian.shortcuts import get_objects_for_user
 from taggit.models import Tag
 from tastypie import fields, http
@@ -24,16 +31,7 @@ from tastypie.utils import trailing_slash
 from cartoview.app_manager.models import App, AppInstance, AppStore, AppType
 from cartoview.apps_handler.config import CartoviewApp
 from cartoview.log_handler import get_logger
-from geonode.api.api import ProfileResource
-from geonode.api.authorization import GeoNodeAuthorization
-from geonode.api.resourcebase_api import (CommonMetaApi, LayerResource,
-                                          MapResource)
-from geonode.maps.models import MapLayer
-from geonode.people.models import Profile
-from geonode.security.utils import get_visible_resources
-
 from .installer import AppInstaller, RestartHelper
-from .resources import FileUploadResource
 from .utils import populate_apps
 
 logger = get_logger(__name__)
@@ -95,7 +93,7 @@ class AppStoreResource(ModelResource):
         queryset = AppStore.objects.all()
 
 
-class AppResource(FileUploadResource):
+class AppResource(ModelResource):
     store = fields.ForeignKey(AppStoreResource, 'store', full=False, null=True)
     order = fields.IntegerField()
     active = fields.BooleanField()
@@ -127,7 +125,7 @@ class AppResource(FileUploadResource):
     def dehydrate_app_instance_count(self, bundle):
         return bundle.obj.appinstance_set.all().count()
 
-    class Meta(FileUploadResource.Meta):
+    class Meta():
         queryset = App.objects.all().order_by('order')
         filtering = {
             "id": ALL,
@@ -325,7 +323,8 @@ class AppInstanceResource(ModelResource):
 
     def get_object_list(self, request):
         __inactive_apps = [
-            app.id for app in App.objects.all() if not app.config.active
+            app.id for app in App.objects.all()
+            if app.config and not app.config.active
         ]
         __inactive_apps_instances = [
             instance.id for instance in AppInstance.objects.filter(
@@ -429,7 +428,7 @@ class AppInstanceResource(ModelResource):
 
             try:
                 page = paginator.page(int(request.GET.get('offset') or 0)
-                                      / int(request.GET.get('limit'), 0) + 1)   # noqa
+                                      / int(request.GET.get('limit'), 0) + 1)  # noqa
             except InvalidPage:
                 raise Http404("Sorry, no results on that page.")
 

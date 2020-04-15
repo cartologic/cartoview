@@ -2,15 +2,14 @@
 from __future__ import absolute_import
 
 from django.conf.urls import include, url
+from geonode.api.urls import api
+from geonode.urls import urlpatterns as geonode_urls
 
 from cartoview.app_manager.rest import (AppInstanceResource, AppResource,
                                         AppTypeResource,
                                         LayerFilterExtensionResource)
 from cartoview.cartoview_api.views import layer_config_json, update_extent
 from cartoview.views import check_version
-from geonode.api.urls import api
-from geonode.urls import urlpatterns as geonode_urls
-
 from .cartoview_api.rest import (AllResourcesResource, AttributeResource,
                                  ExtendedResourceBaseResource,
                                  MapLayerResource)

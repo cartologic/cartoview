@@ -1,8 +1,9 @@
+from django import template
+from django.http import HttpRequest
 from django.template import Context, Template
 from django.test.testcases import TestCase
-from django import template
+
 from geonode.people.models import Profile
-from django.http import HttpRequest
 
 
 class CartoviewTemplateTagsTest(TestCase):

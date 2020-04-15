@@ -1,5 +1,4 @@
 from builtins import basestring
-
 from django.test import TestCase
 
 from cartoview import get_current_version

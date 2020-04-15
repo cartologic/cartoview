@@ -1,8 +1,9 @@
-from django.test import TestCase
-from tastypie.test import ResourceTestCaseMixin
 from django.core.urlresolvers import reverse
-from cartoview.cartoview_api.rest import ExtendedResourceBaseResource
+from django.test import TestCase
 from geonode.urls import api
+from tastypie.test import ResourceTestCaseMixin
+
+from cartoview.cartoview_api.rest import ExtendedResourceBaseResource
 
 
 class ExtendedResourceBaseResourceTest(ResourceTestCaseMixin, TestCase):

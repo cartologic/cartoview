@@ -55,7 +55,7 @@ services:
       -cartoview-internal:
   cartoview:
     image: cartoview/cartoview:latest
-    command: bash -c "pip install -e . && python manage.py cherry_server"
+    command: bash -c "python manage.py cherry_server"
     restart: unless-stopped
     hostname: cartoview
     depends_on:
@@ -73,7 +73,7 @@ services:
       - "8000"
   celery:
     image: cartoview/cartoview:latest
-    command: bash -c "pip install -e . && celery worker --app=cartoview --broker=amqp://guest:guest@rabbitmq:5672/ -B -E -l debug"
+    command: bash -c "celery worker --app=cartoview --broker=amqp://guest:guest@rabbitmq:5672/ -B -E -l debug"
     restart: unless-stopped
     hostname: celery
     depends_on:

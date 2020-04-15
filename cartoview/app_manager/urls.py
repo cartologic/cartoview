@@ -11,9 +11,10 @@ from future import standard_library
 from cartoview.app_manager.rest import (AppInstanceResource, AppResource,
                                         AppStoreResource,
                                         GeonodeMapLayerResource, TagResource)
+from cartoview.apps_handler.config import CartoviewApp
 from . import views as app_manager_views
 from .api import rest_api
-from cartoview.apps_handler.config import CartoviewApp
+
 standard_library.install_aliases()
 rest_api.register(AppResource())
 rest_api.register(AppStoreResource())

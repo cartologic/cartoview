@@ -30,7 +30,7 @@ uninstall_selected.short_description = "Uninstall Selected Apps"
 
 @admin.register(App)
 class AppAdmin(admin.ModelAdmin):
-    ordering = ('order', )
+    ordering = ('order',)
     actions = [uninstall_selected]
 
 

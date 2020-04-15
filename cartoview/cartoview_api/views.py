@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 import requests
 from django.shortcuts import HttpResponse
-from requests.auth import HTTPBasicAuth
-
-from cartoview.log_handler import get_logger
 from geonode.geoserver.helpers import ogc_server_settings
 from geonode.layers.views import (_PERMISSION_MSG_MODIFY, _resolve_layer,
                                   layer_detail)
+from requests.auth import HTTPBasicAuth
+
+from cartoview.log_handler import get_logger
 
 try:
     import simplejson as json
@@ -55,9 +55,9 @@ def layer_config_json(request, layername):
 
 def get_featureType(workspace, store, lyr_name):
     gs_user, gs_password, gs_url = get_geoserver_credintials()
-    target_url = "{}rest/workspaces/{}/datastores/{}/featuretypes/{}"\
+    target_url = "{}rest/workspaces/{}/datastores/{}/featuretypes/{}" \
         .format(
-            gs_url, workspace, store, lyr_name)
+        gs_url, workspace, store, lyr_name)
     req = requests.get(target_url,
                        headers={'Accept': 'application/json'},
                        auth=HTTPBasicAuth(gs_user, gs_password))
@@ -75,9 +75,9 @@ def update_extent(request, typename):
     lyr_name = lyr.name
     feature_type = get_featureType(workspace, store, lyr_name)
     gs_user, gs_password, gs_url = get_geoserver_credintials()
-    target_url = "{}rest/workspaces/{}/datastores/{}/featuretypes/{}"\
+    target_url = "{}rest/workspaces/{}/datastores/{}/featuretypes/{}" \
         .format(
-            gs_url, workspace, store, lyr_name)
+        gs_url, workspace, store, lyr_name)
     req = requests.put(target_url + "?recalculate=nativebbox,latlonbbox",
                        json=feature_type,
                        headers={'Accept': 'application/json'},

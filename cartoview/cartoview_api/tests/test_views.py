@@ -1,8 +1,9 @@
+from django.conf import settings
 from django.test import TestCase
+from faker import Faker
+
 from cartoview.cartoview_api.views import (
     get_geoserver_credintials, convert_infinty)
-from django.conf import settings
-from faker import Faker
 
 
 class CartoviewApiViewsTest(TestCase):

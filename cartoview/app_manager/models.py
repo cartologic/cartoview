@@ -12,15 +12,15 @@ from django.db.models import signals
 from django.template.defaultfilters import slugify
 from django.utils.encoding import python_2_unicode_compatible
 from future import standard_library
+from geonode.base.models import ResourceBase, resourcebase_post_save
+from geonode.maps.models import Map as GeonodeMap
+from geonode.security.models import remove_object_permissions
 from guardian.shortcuts import assign_perm
 from jsonfield import JSONField
 from taggit.managers import TaggableManager
 
 from cartoview.apps_handler.config import CartoviewApp
 from cartoview.log_handler import get_logger
-from geonode.base.models import ResourceBase, resourcebase_post_save
-from geonode.maps.models import Map as GeonodeMap
-from geonode.security.models import remove_object_permissions
 
 logger = get_logger(__name__)
 
@@ -214,7 +214,7 @@ class AppInstance(ResourceBase):
         upload_to=get_app_logo_path, blank=True, null=True)
 
     def get_absolute_url(self):
-        return reverse('appinstance_detail', args=(self.id, ))
+        return reverse('appinstance_detail', args=(self.id,))
 
     def __str__(self):
         return self.title
