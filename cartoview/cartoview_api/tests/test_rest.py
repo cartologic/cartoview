@@ -23,7 +23,7 @@ class ExtendedResourceBaseResourceTest(ResourceTestCaseMixin, TestCase):
         target_url = reverse(
             "api_dispatch_list",
             kwargs={"resource_name":
-                        ExtendedResourceBaseResource.Meta.resource_name,
+                    ExtendedResourceBaseResource.Meta.resource_name,
                     "api_name": api.api_name})
         self.assertHttpOK(self.api_client.get(
             target_url, format='json'))

@@ -120,7 +120,7 @@ def facets(context):
                 access="private").count()
 
             facets['layer'] = facets['raster'] + \
-                              facets['vector'] + facets['remote']
+            facets['vector'] + facets['remote']
 
     return facets
 
