@@ -6,8 +6,17 @@ repo_name: Github
 site_author: Cartologic
 copyright: Cartologic
 
-pages:
+nav:
   - About: index.md
   - Key Features: key-features.md
   - Demo: demo.md
+  - Installation:
+      - Ubuntu: installation/ubuntu.md
+      - Windows: installation/windows.md
 theme: readthedocs
+
+extra_css:
+    - css/custom.css
+
+markdown_extensions:
+    - admonition

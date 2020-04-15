@@ -1,2 +1,0 @@
-# Welcome
-Cartoview admin
