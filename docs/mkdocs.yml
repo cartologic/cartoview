@@ -1,0 +1,5 @@
+site_name: Cartoview Documentation
+nav:
+  - Home: index.md
+  - About: about.md
+theme: readthedocs
