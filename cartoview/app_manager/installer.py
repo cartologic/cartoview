@@ -23,13 +23,12 @@ from future import standard_library
 from cartoview.apps_handler.config import CartoviewApp
 from cartoview.log_handler import get_logger
 from cartoview.store_api.api import StoreAppResource, StoreAppVersion
-
-from ..apps_handler.req_installer import (ReqFileException,
-                                          ReqFilePermissionException,
-                                          ReqInstaller)
 from .decorators import restart_enabled, rollback_on_failure
 from .exceptions import AppAlreadyInstalledException
 from .models import App, AppStore, AppType
+from ..apps_handler.req_installer import (ReqFileException,
+                                          ReqFilePermissionException,
+                                          ReqInstaller)
 
 logger = get_logger(__name__)
 install_app_batch = getattr(settings, 'INSTALL_APP_BAT', None)
@@ -140,7 +139,7 @@ class AppInstaller(object):
 
     def get_app_version(self):
         if not self.version or self.version == 'latest' or \
-        self.info.latest_version.version == self.version:
+                self.info.latest_version.version == self.version:
             self.version = self.info.latest_version
         else:
             data = self._request_rest_data("appversion/?app__name=", self.name,
@@ -359,7 +358,7 @@ class AppInstaller(object):
                 app_installer = AppInstaller(
                     app.name, self.store.id, app.version, user=self.user)
                 dependencies = app_installer.version.dependencies \
-                if app_installer.version else {}
+                    if app_installer.version else {}
                 if self.name in dependencies.keys():
                     app_installer.uninstall(restart=False)
             try:

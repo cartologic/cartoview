@@ -6,13 +6,14 @@ import copy
 import os
 import re
 import sys
-from distutils.util import strtobool
 
 import dj_database_url
+from distutils.util import strtobool
+from geonode.settings import *  # noqa
 from kombu import Exchange, Queue
 
 import cartoview
-from geonode.settings import *  # noqa
+
 PROJECT_NAME = "cartoview"
 CARTOVIEW_INSTALLED_APPS = ("cartoview",
                             "cartoview.cartoview_api.apps.CartoviewAPIConfig",
@@ -102,8 +103,8 @@ LOGGING = {
     'formatters': {
         'verbose': {
             'format':
-            ('%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d'
-             ' %(message)s'),
+                ('%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d'
+                 ' %(message)s'),
         },
     },
     'handlers': {
@@ -114,8 +115,8 @@ LOGGING = {
         }
     },
     'loggers':
-    {app: copy.deepcopy(installed_apps_conf)
-     for app in INSTALLED_APPS},
+        {app: copy.deepcopy(installed_apps_conf)
+         for app in INSTALLED_APPS},
     'root': {
         'handlers': ['console'],
         'level': DJANGO_LOG_LEVEL
@@ -135,6 +136,7 @@ if CARTOVIEW_STAND_ALONE or CARTOVIEW_TEST:
     TEMPLATES[0]["DIRS"] = CARTOVIEW_TEMPLATE_DIRS + TEMPLATES[0]["DIRS"]
     from cartoview import app_manager
     from past.builtins import execfile
+
     app_manager_settings = os.path.join(
         os.path.dirname(app_manager.__file__), "settings.py")
     execfile(os.path.realpath(app_manager_settings))

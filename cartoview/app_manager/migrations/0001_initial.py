@@ -6,7 +6,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('sites', '0001_initial'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
@@ -54,7 +53,7 @@ class Migration(migrations.Migration):
                 ('order', models.IntegerField(default=0, null=True)),
                 ('installed_by', models.ForeignKey(
                     blank=True, to=settings.AUTH_USER_MODEL, null=True)),
-            ],),
+            ], ),
         migrations.CreateModel(
             name='AppInstance',
             fields=[
@@ -73,7 +72,7 @@ class Migration(migrations.Migration):
             options={
                 'abstract': False,
             },
-            bases=('base.resourcebase',),),
+            bases=('base.resourcebase',), ),
         migrations.CreateModel(
             name='AppStore',
             fields=[
@@ -85,7 +84,7 @@ class Migration(migrations.Migration):
                 ('name', models.CharField(max_length=256)),
                 ('url', models.URLField(verbose_name=b'App Store URL')),
                 ('is_default', models.BooleanField(default=False)),
-            ],),
+            ], ),
         migrations.CreateModel(
             name='AppTag',
             fields=[
@@ -96,7 +95,7 @@ class Migration(migrations.Migration):
                     primary_key=True)),
                 ('name', models.CharField(
                     max_length=200, unique=True, null=True, blank=True)),
-            ],),
+            ], ),
         migrations.CreateModel(
             name='Logo',
             fields=[
@@ -107,14 +106,14 @@ class Migration(migrations.Migration):
                     primary_key=True)),
                 ('logo', models.ImageField(upload_to=b'')),
                 ('site', models.OneToOneField(to='sites.Site')),
-            ],),
+            ], ),
         migrations.AddField(
             model_name='app',
             name='store',
-            field=models.ForeignKey(to='app_manager.AppStore', null=True),),
+            field=models.ForeignKey(to='app_manager.AppStore', null=True), ),
         migrations.AddField(
             model_name='app',
             name='tags',
             field=models.ManyToManyField(to='app_manager.AppTag',
-                                         blank=True),),
+                                         blank=True), ),
     ]

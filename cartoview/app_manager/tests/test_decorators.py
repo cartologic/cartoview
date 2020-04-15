@@ -53,9 +53,9 @@ class DecoratorsTest(TestCase):
             'publish_resourcebase',
         ]
         permessions = {
-                'users': {
-                    '{}'.format(self.user): owner_permissions,
-                }
+            'users': {
+                '{}'.format(self.user): owner_permissions,
+            }
         }
         self.app_instance.set_permissions(permessions)
         try:

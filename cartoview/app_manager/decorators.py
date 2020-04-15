@@ -42,6 +42,7 @@ def restart_enabled(func):
     def wrap(*args, **kwargs):
         if not getattr(settings, "CARTOVIEW_TEST", False):
             return func(*args, **kwargs)
+
     return wrap
 
 
@@ -55,4 +56,5 @@ def rollback_on_failure(func):
                 if hasattr(this, '_rollback'):
                     this._rollback()
                 raise e
+
     return wrap

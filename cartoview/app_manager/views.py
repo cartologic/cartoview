@@ -22,16 +22,15 @@ from django.utils.translation import ugettext as _
 from django.views.decorators.http import require_POST
 from future import standard_library
 from future.utils import with_metaclass
-from guardian.shortcuts import get_perms
-
-from cartoview.app_manager.forms import AppInstanceEditForm
-from cartoview.log_handler import get_logger
 from geonode.base.forms import CategoryForm
 from geonode.base.models import TopicCategory
 from geonode.people.forms import ProfileForm
 from geonode.security.views import _perms_info_json
 from geonode.utils import build_social_links
+from guardian.shortcuts import get_perms
 
+from cartoview.app_manager.forms import AppInstanceEditForm
+from cartoview.log_handler import get_logger
 from .decorators import (PERMISSION_MSG_DELETE, PERMISSION_MSG_METADATA,
                          PERMISSION_MSG_VIEW, can_change_app_instance,
                          can_view_app_instance)
@@ -211,9 +210,9 @@ def appinstance_detail(request, appinstanceid):
 
     except PermissionDenied:
         return render(request, '401.html', context={
-                        'error_message':
-                        _("You are not allowed to view this document.")
-                    }, status=403)
+            'error_message':
+                _("You are not allowed to view this document.")
+        }, status=403)
 
     if appinstance is None:
         return HttpResponse(
@@ -227,14 +226,14 @@ def appinstance_detail(request, appinstanceid):
             link_type='appinstance_thumbnail')
         context_dict = {
             'perms_list':
-            get_perms(request.user, appinstance.get_self_resource()),
+                get_perms(request.user, appinstance.get_self_resource()),
             'permissions_json':
-            _perms_info_json(appinstance),
+                _perms_info_json(appinstance),
             'resource':
-            appinstance,
+                appinstance,
             # 'appinstance_links': appinstance_links,
             'set_thumbnail_link':
-            set_thumbnail_link
+                set_thumbnail_link
             # 'imgtypes': IMGTYPES,
             # 'related': related
         }
@@ -271,7 +270,7 @@ def appinstance_metadata(request,
     except PermissionDenied:
         return render(request, '401.html', context={
             'error_message': _("You are not allowed to edit this instance.")},
-            status=403)
+                      status=403)
 
     if appinstance is None:
         return HttpResponse(
@@ -351,7 +350,7 @@ def appinstance_metadata(request,
                     category=new_category)
 
                 return HttpResponseRedirect(
-                    reverse('appinstance_detail', args=(appinstance.id, )))
+                    reverse('appinstance_detail', args=(appinstance.id,)))
             else:
                 the_appinstance = appinstance_form.save()
                 if new_poc is None:
@@ -363,7 +362,7 @@ def appinstance_metadata(request,
                     category=new_category)
 
                 return HttpResponseRedirect(
-                    reverse('appinstance_detail', args=(appinstance.id, )))
+                    reverse('appinstance_detail', args=(appinstance.id,)))
 
         if poc is not None:
             appinstance_form.fields['poc'].initial = poc.id
@@ -381,12 +380,12 @@ def appinstance_metadata(request,
             author_form = ProfileForm(prefix="author")
             author_form.hidden = True
         return render(request, template, context={
-                    "appinstance": appinstance,
-                    "appinstance_form": appinstance_form,
-                    "poc_form": poc_form,
-                    "author_form": author_form,
-                    "category_form": category_form,
-                })
+            "appinstance": appinstance,
+            "appinstance_form": appinstance_form,
+            "poc_form": poc_form,
+            "author_form": author_form,
+            "category_form": category_form,
+        })
 
 
 def appinstance_remove(request, appinstanceid):

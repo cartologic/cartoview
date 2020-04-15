@@ -1,9 +1,11 @@
 from __future__ import print_function
+
 import requests
+from django.core.management.base import BaseCommand
+
 from cartoview.app_manager.installer import AppJson, remove_unwanted
 from cartoview.app_manager.models import App
 from cartoview.store_api.api import StoreAppResource
-from django.core.management.base import BaseCommand
 
 
 class Command(BaseCommand):

@@ -10,7 +10,6 @@ from tastypie.api import Api as TastypieApi
 from tastypie.utils import trailing_slash
 
 from cartoview.log_handler import get_logger
-
 from .serializers import HTMLSerializer
 
 logger = get_logger(__name__)

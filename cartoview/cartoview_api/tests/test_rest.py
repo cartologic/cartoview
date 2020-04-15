@@ -1,8 +1,9 @@
-from django.test import TestCase
-from tastypie.test import ResourceTestCaseMixin
 from django.core.urlresolvers import reverse
-from cartoview.cartoview_api.rest import ExtendedResourceBaseResource
+from django.test import TestCase
 from geonode.urls import api
+from tastypie.test import ResourceTestCaseMixin
+
+from cartoview.cartoview_api.rest import ExtendedResourceBaseResource
 
 
 class ExtendedResourceBaseResourceTest(ResourceTestCaseMixin, TestCase):
@@ -22,7 +23,7 @@ class ExtendedResourceBaseResourceTest(ResourceTestCaseMixin, TestCase):
         target_url = reverse(
             "api_dispatch_list",
             kwargs={"resource_name":
-                    ExtendedResourceBaseResource.Meta.resource_name,
+                        ExtendedResourceBaseResource.Meta.resource_name,
                     "api_name": api.api_name})
         self.assertHttpOK(self.api_client.get(
             target_url, format='json'))

@@ -1,11 +1,11 @@
 import importlib
 
 from django.core.management.base import BaseCommand
+from geonode.people.models import Profile
 
 from cartoview.app_manager.models import App, AppType
 from cartoview.apps_handler.config import CartoviewApp
 from cartoview.log_handler import get_logger
-from geonode.people.models import Profile
 
 logger = get_logger(with_formatter=True)
 
