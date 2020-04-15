@@ -2,6 +2,7 @@ from django import template
 from django.http import HttpRequest
 from django.template import Context, Template
 from django.test.testcases import TestCase
+
 from geonode.people.models import Profile
 
 
@@ -32,10 +33,8 @@ class CartoviewTemplateTagsTest(TestCase):
                 "request": req}
         )
         self.assertEqual(
-            rendered,
-            u'{u&#39;raster&#39;: 0, u&#39;vector&#39;: 0, u&#39;remote&#39;: 0, \
-            u&#39;document&#39;: 0, u&#39;map&#39;: 0}'
-        )
+            rendered, u'{u&#39;raster&#39;: 0, u&#39;vector&#39;: 0, u&#39;' +  # noqa
+            'remote&#39;: 0, u&#39;document&#39;: 0, u&#39;map&#39;: 0}')
         self.assertRaises(
             template.TemplateSyntaxError,
             self.render_template,
