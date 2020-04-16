@@ -9,3 +9,7 @@
 .wy-plain-list-disc, .rst-content .section ul, .rst-content .toctree-wrapper ul, article ul{
     margin-bottom: 0;
 }
+
+/*hr{*/
+/*    border-top: 3px solid #e1e4e5;*/
+/*}*/
