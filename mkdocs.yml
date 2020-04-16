@@ -13,6 +13,7 @@ nav:
   - Installation:
       - Ubuntu: installation/ubuntu.md
       - Windows: installation/windows.md
+      - Docker: installation/docker.md
 theme: readthedocs
 
 extra_css:
