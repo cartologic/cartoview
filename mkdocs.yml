@@ -18,6 +18,9 @@ nav:
   - Install App: install-app.md
   - For Developers: for-developers.md
   - Upload App to GeoApp Market: upload-app.md
+  - Contribute: contribute.md
+  - Issues: issues.md
+  - Frequently Asked Questions: FAQ.md
 theme: readthedocs
 
 extra_css:
