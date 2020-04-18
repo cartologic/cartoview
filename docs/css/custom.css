@@ -13,3 +13,7 @@
 .admonition{
     margin: 10px 0px;
 }
+
+.wy-breadcrumbs-aside{
+    display: none !important;
+}
