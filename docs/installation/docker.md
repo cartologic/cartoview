@@ -186,7 +186,7 @@ docker-compose logs -f --tail=100
 
 If you open **Docker Dashboard**, you should find the installed containers up and running.
 
-![Cartoview on Docker](../img/installation/Docker/cartoview_docker.png)
+![Cartoview on Docker](../img/installation/Docker/cartoview_docker.PNG)
 
 Also, you can see the logs by just ``double-click`` on ``cartoview``.
 
@@ -299,15 +299,15 @@ password: geoserver
 
 2. At the left-side menu, navigate to **Security** section and click on **Users, Groups, Rules**.
 
-    ![GeoServer Configuration](../img/installation/Docker/geoserver/password/geoserver_pass1.png "GeoServer Configuration")
+    ![GeoServer Configuration](../img/installation/Docker/geoserver_pass1.png "GeoServer Configuration")
 
 3. Click on **Users/Groups** then select **admin**.
 
-    ![GeoServer Configuration](../img/installation/Docker/geoserver/password/geoserver_pass2.png "GeoServer Configuration")
+    ![GeoServer Configuration](../img/installation/Docker/geoserver_pass2.png "GeoServer Configuration")
     
 4. Set the password you wish then scroll to the end of the page and click **Save**.
 
-    ![GeoServer Configuration](../img/installation/Docker/geoserver/password/geoserver_pass3.png "GeoServer Configuration")
+    ![GeoServer Configuration](../img/installation/Docker/geoserver_pass3.png "GeoServer Configuration")
     
 Now, you can logout and login again with the new password you have just entered.
 
@@ -326,17 +326,17 @@ In order for Cartoview to work properly, we need to authenticate GeoServer with 
     
 2. Repeat step 1, but for another file which is **django.env**.
 
-3. At the left-side menu, navigate to **Security** section and click on **Authentication**.
+3. For GeoServer, at the left-side menu, navigate to **Security** section and click on **Authentication**.
 
-    ![GeoServer Configuration](../img/installation/Docker/geoserver/geoserver_conf1.png "GeoServer Configuration")
+    ![GeoServer Configuration](../img/installation/Docker/geoserver_conf1.png "GeoServer Configuration")
     
     At the Authentication Filters, select **geonode-oauth2**.
     
-    ![GeoServer Configuration](../img/installation/Docker/geoserver/geoserver_conf2.png "GeoServer Configuration")
+    ![GeoServer Configuration](../img/installation/Docker/geoserver_conf2.png "GeoServer Configuration")
     
     Change the URLs inside the red square to the values in the image then click **Save**.
     
-    ![GeoServer Configuration](../img/installation/Docker/geoserver/geoserver_conf3.png "GeoServer Configuration")
+    ![GeoServer Configuration](../img/installation/Docker/geoserver_conf3.png "GeoServer Configuration")
     
 4. At the left-side menu, navigate to **Security** section and click on **Users, Groups, Rules**.
 
@@ -344,13 +344,15 @@ In order for Cartoview to work properly, we need to authenticate GeoServer with 
     
     Select **ROLE_ADMIN** for **Administrator role** and **Group administrator role**.
     
-    ![GeoServer Configuration](../img/installation/Docker/geoserver/geoserver_conf4.png "GeoServer Configuration")
+    Edit the **Base Server URL**
+    
+    ![GeoServer Configuration](../img/installation/Docker/geoserver_conf4.png "GeoServer Configuration")
     
 5. At the left-side menu, navigate to **Settings** section and click on **Global**.
 
     Edit the **Proxy Base URL**.
 
-    ![GeoServer Configuration](../img/installation/Docker/geoserver/geoserver_conf5.png "GeoServer Configuration")
+    ![GeoServer Configuration](../img/installation/Docker/geoserver_conf5.png "GeoServer Configuration")
 
 6. Add **GeoServer OAuth2 Redirect URIs** accordingly.
 
@@ -374,6 +376,6 @@ password: admin
 
 Open GeoServer from the **admin dropdown**.
 
-![GeoServer Configuration](../img/installation/Docker/geoserver/geoserver_conf6.png "GeoServer Configuration")
+![GeoServer Configuration](../img/installation/Docker/geoserver_admin.png "GeoServer Configuration")
 
 You should find that GeoServer user is logged in automatically, and the authentication process runs properly.
