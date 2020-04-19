@@ -326,6 +326,9 @@ In order for Cartoview to work properly, we need to authenticate GeoServer with 
     
 2. Repeat step 1, but for another file which is **django.env**.
 
+!!! note
+    For **Docker Toolbox**, use docker IP address ``192.168.99.100`` instead of using ``localhost``.
+
 3. For GeoServer, at the left-side menu, navigate to **Security** section and click on **Authentication**.
 
     ![GeoServer Configuration](../img/installation/Docker/geoserver_conf1.png "GeoServer Configuration")
@@ -379,3 +382,19 @@ Open GeoServer from the **admin dropdown**.
 ![GeoServer Configuration](../img/installation/Docker/geoserver_admin.png "GeoServer Configuration")
 
 You should find that GeoServer user is logged in automatically, and the authentication process runs properly.
+
+
+## Deployment Notes
+
+Once Cartoview is installed it is expected to install all the Apps from the app store automatically, but Cartoview will not be able to restart Docker when new apps are installed. So, after installing any new app or app update, you will need to restart docker manually until this issue is addressed in the future.
+
+**Follow these steps to get the apps working on Nginx:**
+
+!!! note
+    We need to open the terminal inside Cartoview container as we did at **Migrate & load default data** section.
+
+- Collect static files using the command, ``python manage.py collectstatic --noinput``.
+
+- Restart docker to see the change's effect, ``docker-compose restart``.
+
+&nbsp;

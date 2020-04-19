@@ -420,3 +420,19 @@ Now GeoServer is up and running at ``localhost:8080/geoserver``.
 user: admin
 password: geoserver
 ```
+
+## Deployment Notes
+
+Once Cartoview is installed, it's expected to install all apps from the App Store automatically.
+
+At the moment, Cartoview will fully support Apache server only. For Nginx deployments, Cartoview will be able to detect new apps and get the updates, however to apply them, a web server restart will be required to complete the process as Cartoview will not be able to restart Nginx when new apps are installed.
+
+After you install or update apps from the app manager page, you will need to restart Nginx manually until this issue is addressed in the future.
+
+**Follow these steps to get the apps working on Nginx:**
+
+- Collect static files using the command, ``python manage.py collectstatic --noinput``.
+
+- Restart server now as you should after installing any app.
+
+&nbsp;
