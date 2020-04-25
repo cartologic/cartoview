@@ -331,7 +331,7 @@
               res.forEach(function (appResult) {
                 if (appResult.success) {
                   // updateStore(requiredApp.store);
-                  // Just update the store without waiting for the server to restart
+                  // Just update the store without waiting for the server to restart 
                   requiredApp.store.update(undefined, true);
                   $scope.installing = null;
                 } else {
@@ -409,7 +409,7 @@
           AppInstaller.uninstall(app)
             .success(function (res) {
               // updateStore(app.store);
-              // just update the store without waiting for the server to restart
+              // just update the store without waiting for the server to restart 
               app.store.update(undefined, true);
               $scope.installing = null;
             })
