@@ -123,7 +123,7 @@ def uninstall_app(request, store_id, app_name):
     response_data = {"success": False, "errors": []}
     try:
         installer = AppInstaller(app_name, store_id, user=request.user)
-        installer.uninstall()
+        installer.uninstall(restart=False)
         response_data["success"] = True
     except Exception as ex:
         logger.error(ex.message)
