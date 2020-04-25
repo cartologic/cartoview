@@ -331,7 +331,7 @@
               res.forEach(function (appResult) {
                 if (appResult.success) {
                   // updateStore(requiredApp.store);
-                  // Just update the store without waiting for the server to restart 
+                  // Just update the store without waiting for the server to restart
                   requiredApp.store.update(undefined, true);
                   $scope.installing = null;
                 } else {
@@ -409,7 +409,7 @@
           AppInstaller.uninstall(app)
             .success(function (res) {
               // updateStore(app.store);
-              // just update the store without waiting for the server to restart 
+              // just update the store without waiting for the server to restart
               app.store.update(undefined, true);
               $scope.installing = null;
             })
@@ -527,6 +527,14 @@
           $timeout(function () {
             waitForRestart();
           }, 2000);
+        };
+        $scope.showRestartPanel = function () {
+          var installedApps = $scope.getSelectedStore().installedApps.objects;
+          if(installedApps)
+          return installedApps.findIndex(function (app) {
+            return app.pending
+          }) !== -1
+          return false
         };
       },
     };

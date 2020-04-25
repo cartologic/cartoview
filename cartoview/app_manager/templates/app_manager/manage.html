@@ -34,10 +34,22 @@
     </script>
     <script type="text/ng-template" id="app-installer.html">
         <div>
-            <div class="alert alert-danger">
-                <h4><span class="fa fa-exclamation-triangle"></span> Warning!</h4>
-                Please note that the web server will be restarted after installing
-                or uninstalling any application.
+            <div class="alert alert-info" ng-if='!loading' ng-show='showRestartPanel()'>
+                <h4><span class="fa fa-exclamation"></span> Server Restart Required</h4>
+                <p>
+                    Server restart is required in order to have the effect of the recently installed apps.
+                </p>
+                <p>
+                    Please notice:
+                </p>
+                <ol>
+                    <li>This may take several minutes</li>
+                    <li>The server will drop all the connections and tasks during the restart</li>
+                </ol>
+                <a ng-click="restart()" class="btn btn-default manager-actions-btn">
+                    <span class="glyphicon glyphicon-repeat" aria-hidden="true"></span>
+                     Restart Server
+                </a>
             </div>
             <div class="restart-msg" ng-show="restarting">
                 <div class="centered alert alert-danger">
@@ -60,7 +72,6 @@
                 </select>
             </div>
             <div ng-if="!loading && !storeError"  class="row manager-actions">
-                <a ng-click="restart()" class="btn btn-danger manager-actions-btn ">Restart Server</a>
                 <a ng-click="reorder()" class="btn btn-primary manager-actions-btn ">Reorder Installed Apps</a>
             </div>
             <div  class="input-group search-box">
@@ -100,7 +111,7 @@
                                     </div>
                                 </div>
                                 
-                                <div class="actions-wrapper">
+                                <div class="actions-wrapper" ng-hide='app.installedApp.pending'>
                                     <button class="btn btn-default btn-xs" ng-disabled="!compatible(app.latest_version.cartoview_version)" ng-disabled="installing" ng-if="!app.installedApp" ng-click="install(app)">
                                     <span
                                         class="glyphicon glyphicon-download-alt"
@@ -134,6 +145,12 @@
                                         <span class="glyphicon glyphicon-pause" aria-hidden="true"></span
                                         >Suspend
                                     </button>
+                                </div>
+                                <div class="actions-wrapper" ng-show='app.installedApp.pending'>
+                                    <a href='#'>
+                                        <span class="fa fa-exclamation-circle"></span>
+                                        Restarting Server is required
+                                    </a>
                                 </div>
                                 <div class="info-panel">
                                     <div class="info-wrapper">
