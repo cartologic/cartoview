@@ -437,7 +437,6 @@
         };
 
         $scope.uninstall = function (app) {
-          debugger
           var dependents = AppInstaller.getDependents(app, appsHash);
           if (dependents.length > 0) {
             Dialogs.confirm({
@@ -455,12 +454,10 @@
               appsHash: appsHash,
             }).then(function (confirm) {
               if (confirm) {
-                debugger
                 uninstall(app);
               }
             });
           } else {
-            debugger
             uninstall(app);
           }
         };
