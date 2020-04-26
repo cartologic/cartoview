@@ -37,7 +37,7 @@
             <div class="alert alert-info" ng-if='!loading' ng-show='showRestartPanel()'>
                 <h4><span class="fa fa-exclamation"></span> Server Restart Required</h4>
                 <p>
-                    Server restart is required in order to have the effect of the recently installed apps.
+                    In order to have the effect of the recently installed apps please restart the server.
                 </p>
                 <p>
                     Please notice:
@@ -45,6 +45,7 @@
                 <ol>
                     <li>This may take several minutes</li>
                     <li>The server will drop all the connections and tasks during the restart</li>
+                    <li>Ask the administrator to restart GeoNode Service if you still see this message</li>
                 </ol>
                 <a ng-click="restart()" class="btn btn-default manager-actions-btn">
                     <span class="glyphicon glyphicon-repeat" aria-hidden="true"></span>
@@ -112,7 +113,7 @@
                                 </div>
                                 
                                 <div class="actions-wrapper" ng-hide='app.installedApp.pending'>
-                                    <button class="btn btn-default btn-xs" ng-disabled="!compatible(app.latest_version.cartoview_version)" ng-disabled="installing" ng-if="!app.installedApp" ng-click="install(app)">
+                                    <button class="btn btn-default btn-xs" ng-disabled="installing" ng-disabled="!compatible(app.latest_version.cartoview_version)" ng-if="!app.installedApp" ng-click="install(app)">
                                     <span
                                         class="glyphicon glyphicon-download-alt"
                                         aria-hidden="true"
