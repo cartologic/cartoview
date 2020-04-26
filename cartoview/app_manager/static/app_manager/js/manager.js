@@ -506,6 +506,7 @@
               .success(function (res) {
                 restarted = true;
                 $scope.restarting = false;
+                location.reload()
               })
               .error(function (res, status) {
                 if (status == 500) {
@@ -521,12 +522,12 @@
             if (!restarted) {
               $timeout(function () {
                 waitForRestart();
-              }, 3000);
+              }, 10000);
             }
           }
           $timeout(function () {
             waitForRestart();
-          }, 2000);
+          }, 10000);
         };
         $scope.showRestartPanel = function () {
           var installedApps = $scope.getSelectedStore().installedApps.objects;
