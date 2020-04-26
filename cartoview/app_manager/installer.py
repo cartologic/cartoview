@@ -142,7 +142,7 @@ class AppInstaller(object):
 
     def get_app_version(self):
         if not self.version or self.version == 'latest' or \
-                (self.info and self.info.latest_version.version == self.version):
+        (self.info and self.info.latest_version.version == self.version):
             self.version = self.info.latest_version
         else:
             data = self._request_rest_data("appversion/?app__name=", self.name,

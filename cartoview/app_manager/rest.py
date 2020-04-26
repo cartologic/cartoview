@@ -125,7 +125,6 @@ class AppResource(ModelResource):
         cartoview_app = CartoviewApp.objects.get(app.name)
         return cartoview_app.pending
 
-
     def dehydrate_categories(self, bundle):
         return [category.name for category in bundle.obj.category.all()]
 
