@@ -71,7 +71,10 @@ class RestartHelper(object):
     def cherry_restart(cls):
         try:
             import cherrypy
-            cherrypy.engine.restart()
+            # completely stop the cherrypy server instead of reloading
+            # to avoid waiting to stop used threads error
+            cherrypy.engine.stop()
+            cherrypy.engine.start()
         except ImportError:
             exit(0)
 
