@@ -17,6 +17,7 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 #########################################################################
+import json
 import logging
 import os
 import re
@@ -592,3 +593,36 @@ def install_docker_data_dir():
                 f.write(xml)
     except Exception as e:
         print('Error while modifying {} :'.format(security_role_conf), e)
+
+
+@task
+def prepare_docker_oauth_fixture():
+    project_name = os.environ.get('PROJECT_NAME', 'cartoview')
+    fixturefile = path('{}/fixtures/default_oauth_apps_docker.json'.format(project_name))
+    os.remove(fixturefile)
+    siteurl = os.environ.get('SITEURL', 'http://localhost/')
+    default_fixture = [
+        {
+            "model": "oauth2_provider.application",
+            "pk": 1001,
+            "fields": {
+                "skip_authorization": True,
+                "created": "2018-05-31T10:00:31.661Z",
+                "updated": "2018-05-31T11:30:31.245Z",
+                "algorithm": "RS256",
+                "redirect_uris": "{}geoserver/index.html".format(siteurl),
+                "name": "GeoServer",
+                "authorization_grant_type": "authorization-code",
+                "client_type": "confidential",
+                "client_id": "Jrchz2oPY3akmzndmgUTYrs9gczlgoV20YPSvqaV",
+                "client_secret": "\
+rCnp5txobUo83EpQEblM8fVj3QT5zb5qRfxNsuPzCqZaiRyIoxM4jdgMiZKFfePBHYXCLd7B8NlkfDB\
+Y9HKeIQPcy5Cp08KQNpRHQbjpLItDHv12GvkSeXp6OxaUETv3",
+                "user": [
+                    "admin"
+                ]
+            }
+        }
+    ]
+    with open(fixturefile, 'w') as ff:
+        json.dump(default_fixture, ff)
