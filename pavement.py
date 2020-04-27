@@ -174,7 +174,7 @@ def _install_data_dir():
             xml = f.read()
             m = re.search('proxyBaseUrl>([^<]+)', xml)
             xml = xml[:m.start(1)] + \
-                "http://localhost:8080/geoserver" + xml[m.end(1):]
+                  "http://localhost:8080/geoserver" + xml[m.end(1):]
             with open(config, 'w') as f:
                 f.write(xml)
     except Exception as e:
@@ -187,7 +187,7 @@ def _install_data_dir():
             xml = f.read()
             m = re.search('accessTokenUri>([^<]+)', xml)
             xml = xml[:m.start(1)] + \
-                "http://localhost:8000/o/token/" + xml[m.end(1):]
+                  "http://localhost:8000/o/token/" + xml[m.end(1):]
             m = re.search('userAuthorizationUri>([^<]+)', xml)
             xml = xml[:m.start(
                 1)] + "http://localhost:8000/o/authorize/" + xml[m.end(1):]
@@ -242,9 +242,9 @@ def setup_geoserver(options):
     geoserver_dir = path('geoserver')
 
     geoserver_bin = download_dir / \
-        os.path.basename(dev_config['GEOSERVER_URL'])
+                    os.path.basename(dev_config['GEOSERVER_URL'])
     jetty_runner = download_dir / \
-        os.path.basename(dev_config['JETTY_RUNNER_URL'])
+                   os.path.basename(dev_config['JETTY_RUNNER_URL'])
 
     grab(
         options.get('geoserver', dev_config['GEOSERVER_URL']), geoserver_bin,
@@ -292,7 +292,7 @@ def start_geoserver(options):
 
     download_dir = path('downloaded').abspath()
     jetty_runner = download_dir / \
-        os.path.basename(dev_config['JETTY_RUNNER_URL'])
+                   os.path.basename(dev_config['JETTY_RUNNER_URL'])
     data_dir = path('geoserver/data').abspath()
     geofence_dir = path('geoserver/data/geofence').abspath()
     web_app = path('geoserver/geoserver').abspath()
@@ -359,17 +359,17 @@ def start_geoserver(options):
                 javapath = 'START /B "" "' + javapath_opt + '"'
 
             sh((
-                '%(javapath)s -Xms512m -Xmx2048m -server -XX:+UseConcMarkSweepGC -XX:MaxPermSize=512m'
-                ' -DGEOSERVER_DATA_DIR=%(data_dir)s'
-                ' -Dgeofence.dir=%(geofence_dir)s'
-                # ' -Dgeofence-ovr=geofence-datasource-ovr.properties'
-                # workaround for JAI sealed jar issue and jetty classloader
-                # ' -Dorg.eclipse.jetty.server.webapp.parentLoaderPriority=true'
-                ' -jar %(jetty_runner)s'
-                ' --port %(jetty_port)i'
-                ' --log %(log_file)s'
-                ' %(config)s'
-                ' > %(loggernullpath)s &' % locals()))
+                    '%(javapath)s -Xms512m -Xmx2048m -server -XX:+UseConcMarkSweepGC -XX:MaxPermSize=512m'
+                    ' -DGEOSERVER_DATA_DIR=%(data_dir)s'
+                    ' -Dgeofence.dir=%(geofence_dir)s'
+                    # ' -Dgeofence-ovr=geofence-datasource-ovr.properties'
+                    # workaround for JAI sealed jar issue and jetty classloader
+                    # ' -Dorg.eclipse.jetty.server.webapp.parentLoaderPriority=true'
+                    ' -jar %(jetty_runner)s'
+                    ' --port %(jetty_port)i'
+                    ' --log %(log_file)s'
+                    ' %(config)s'
+                    ' > %(loggernullpath)s &' % locals()))
 
         info('Starting GeoServer on %s' % url)
 
@@ -402,8 +402,9 @@ def waitfor(url, timeout=300):
 
 @task
 def run_coverage(options):
-    sh('CARTOVIEW_STAND_ALONE=True coverage run --source=cartoview --omit="*/migrations/*, */apps/*,pavement.py" ./manage.py test'
-       )
+    sh(
+        'CARTOVIEW_STAND_ALONE=True coverage run --source=cartoview --omit="*/migrations/*, */apps/*,pavement.py" ./manage.py test'
+    )
     cleanup()
 
 
@@ -463,7 +464,7 @@ def kill(arg1, arg2):
     if running:
         raise Exception('Could not stop %s: '
                         'Running processes are\n%s' % (arg1, '\n'.join(
-                            [l.strip() for l in lines])))
+            [l.strip() for l in lines])))
 
 
 @task
