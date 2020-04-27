@@ -539,7 +539,6 @@ def justcopy(origin, target):
 @task
 def install_docker_data_dir():
     siteurl = os.environ.get('SITEURL', 'http://localhost/')
-    geoserver_location = os.environ.get('GEOSERVER_LOCATION', "http://geoserver:8080/")
     nginx_location = os.environ.get("NGINX_LOCATION", "http://nginx:80/")
 
     geoserver_data_dir = path('/geoserver_data/data')
@@ -553,7 +552,7 @@ def install_docker_data_dir():
             xml = f.read()
             m = re.search('proxyBaseUrl>([^<]+)', xml)
             xml = xml[:m.start(1)] + \
-                  "{}geoserver".format(geoserver_location) + xml[m.end(1):]
+                  "{}geoserver".format(siteurl) + xml[m.end(1):]
             with open(config, 'w') as f:
                 f.write(xml)
     except Exception as e:
