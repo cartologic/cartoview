@@ -625,6 +625,7 @@ div {
 .actions-wrapper {
   margin-top: 10px;
   padding: 0 10px;
+  min-height: 30px;
 }
 .actions-wrapper button {
   margin-right: 10px;

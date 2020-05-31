@@ -97,6 +97,7 @@ class AppResource(ModelResource):
     store = fields.ForeignKey(AppStoreResource, 'store', full=False, null=True)
     order = fields.IntegerField()
     active = fields.BooleanField()
+    pending = fields.BooleanField()
     categories = fields.ListField()
 
     default_config = fields.DictField(default={})
@@ -118,6 +119,11 @@ class AppResource(ModelResource):
         if bundle.obj.config and not bundle.obj.config.pending:
             active = bundle.obj.config.active
         return active
+
+    def dehydrate_pending(self, bundle):
+        app = bundle.obj
+        cartoview_app = CartoviewApp.objects.get(app.name)
+        return cartoview_app.pending
 
     def dehydrate_categories(self, bundle):
         return [category.name for category in bundle.obj.category.all()]

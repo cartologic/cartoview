@@ -46,7 +46,7 @@
             <div class="apps-wrapper">
 
                 {% for app in Apps %}
-                    {% if app.config.active and app.name != "cartoview_attachment_manager" %}
+                    {% if not app.config.pending and app.config.active and app.name != "cartoview_attachment_manager" %}
                         <div class="flex-item">
                             <div class="thumbnail">
                                 <img src="{{ STATIC_URL }}{{ app.name }}/logo.png" class="app-img">
