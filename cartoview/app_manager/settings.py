@@ -45,17 +45,17 @@ def load_apps(APPS_DIR):
                     # refer to local variables from settings.py without
                     # circular imports.
                     app_settings_file = os.path.realpath(app_settings_file)
-                    APPS_SETTINGS += (app_settings_file, )
+                    APPS_SETTINGS += (app_settings_file,)
                 if os.path.exists(libs_dir) and libs_dir not in sys.path:
                     logger.info(
-                        "Install {} libs folder to the system.\n".format(
+                        "Append {} libs folder to the system path.\n".format(
                             app.name))
                     sys.path.append(libs_dir)
-                logger.info("add {} to INSTALLED_APPS.\n".format(app.name))
+                logger.info("add {} to django INSTALLED_APPS.\n".format(app.name))
                 if app.name not in CARTOVIEW_APPS:
                     # app_config.name.__str__() because Django don't like
                     # unicode_literals
-                    CARTOVIEW_APPS += (app.name.__str__(), )
+                    CARTOVIEW_APPS += (app.name.__str__(),)
             except Exception as e:
                 print(e.message)
                 logger.error(e.message)

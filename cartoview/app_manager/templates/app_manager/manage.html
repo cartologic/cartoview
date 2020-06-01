@@ -34,10 +34,23 @@
     </script>
     <script type="text/ng-template" id="app-installer.html">
         <div>
-            <div class="alert alert-danger">
-                <h4><span class="fa fa-exclamation-triangle"></span> Warning!</h4>
-                Please note that the web server will be restarted after installing
-                or uninstalling any application.
+            <div class="alert alert-info" ng-if='!loading' ng-show='showRestartPanel()'>
+                <h4><span class="fa fa-exclamation"></span> Server Restart Required</h4>
+                <p>
+                    In order to have the effect of the recently installed apps please restart the server.
+                </p>
+                <p>
+                    Please notice:
+                </p>
+                <ol>
+                    <li>This may take several minutes</li>
+                    <li>The server will drop all the connections and tasks during the restart</li>
+                    <li>Ask the administrator to restart GeoNode Service if the app does not appear in the installed apps</li>
+                </ol>
+                <a ng-click="restart()" class="btn btn-default manager-actions-btn">
+                    <span class="glyphicon glyphicon-repeat" aria-hidden="true"></span>
+                     Restart Server
+                </a>
             </div>
             <div class="restart-msg" ng-show="restarting">
                 <div class="centered alert alert-danger">
@@ -60,7 +73,6 @@
                 </select>
             </div>
             <div ng-if="!loading && !storeError"  class="row manager-actions">
-                <a ng-click="restart()" class="btn btn-danger manager-actions-btn ">Restart Server</a>
                 <a ng-click="reorder()" class="btn btn-primary manager-actions-btn ">Reorder Installed Apps</a>
             </div>
             <div  class="input-group search-box">
@@ -80,76 +92,100 @@
             </div>
             <div id="the_list">
                     {% verbatim %}
-                        <div class="plugin-card plugin-card-akismet" ng-repeat="app in getSelectedStore().apps.objects | filter:{title:search_term}:strict">
-                            <div class="plugin-card-top">
-                                <div class="name column-name">
-                                    <h3>
-                                        <a href="http://www.blueeconomysuezuniv.com/wp-admin/plugin-install.php?tab=plugin-information&amp;plugin=akismet&amp;TB_iframe=true&amp;width=772&amp;height=480"
-                                            class="thickbox open-plugin-details-modal">
-                                            {{ app.title }} <img src="{{app.latest_version.logo}}" class="plugin-icon" alt="">
-                                        </a>
-                                    </h3>
-                                </div>
-                                <div class="action-links">
-                                    <ul class="plugin-action-buttons">
-                                            <li ng-disabled="!compatible(app.latest_version.cartoview_version)"
-                                                ng-if="!app.installedApp" ng-click="install(app)"
-                                                class="btn btn-sm btn-primary" ng-disabled="installing">
-                                                <div ng-if="compatible(app.latest_version.cartoview_version)">
-                                                    <span class="fa fa-circle-o-notch rotating"
-                                                        ng-show="installing==app"></span>
-                                                    Install<span ng-show="installing==app">ing</span>
-                                                </div>
-                                                <small
-                                                    ng-show="!compatible(app.latest_version.cartoview_version)">Incompatible</small>
-                                            </li>
-                                            <li ng-disabled="!compatible(app.latest_version.cartoview_version)"
-                                                ng-if="app.installedApp && upgradable(app.installedApp.version,app.latest_version.version)"
-                                                ng-click="install(app, true)" class="btn btn-sm btn-primary"
-                                                ng-disabled="installing">
-                                                <div ng-if="compatible(app.latest_version.cartoview_version)">
-                                                    <span class="fa fa-circle-o-notch rotating"
-                                                        ng-show="installing==app"></span>
-                                                    <span ng-show="installing!=app">Upgrade</span><span
-                                                        ng-show="installing==app">Upgrading</span>
-                                                </div>
-                                                <small
-                                                    ng-show="!compatible(app.latest_version.cartoview_version)">Incompatible</small>
-                                            </li>
-                                            <li ng-if="app.installedApp" ng-click="uninstall(app)"
-                                                class="btn btn-sm btn-danger" ng-disabled="installing">
-                                                <span class="fa fa-circle-o-notch rotating"
-                                                    ng-show="installing==app"></span>
-                                                UnInstall<span ng-show="installing==app">ing</span>
-                                            </li>
-
-                                            <li ng-if="app.installedApp" ng-click="toggleActive(app)"
-                                                class="btn btn-sm btn-warning">
-                                                <span ng-show="app.installedApp.active">Suspend</span>
-                                                <span ng-show="!app.installedApp.active">Activate</span>
-                                            </li>
-                                    </ul>
-                                </div>
-                                <div class="desc column-description">
-                                    <p>{{app.description}}</p>
-                                    <p class="authors"> <cite>By <a href="{{app.author_website}}">{{app.author}}</a></cite></p>
-                                </div>
-                            </div>
-                            <div class="plugin-card-bottom">
-                                <div class="vers column-rating">
-                                    <div class="star-rating"><span class="screen-reader-text">{{ app.stars }}/5 rating</span>
+                    <div class="col-xs-12 col-sm-6 app-col" ng-show="compatible(app.latest_version.cartoview_version)" ng-repeat="app in getSelectedStore().apps.objects | filter:{title:search_term}:strict">
+                            <div class="card-wrapper">
+                                <div class="title-area">
+                                    <img src="{{app.latest_version.logo}}" alt="" />
+                                    <div class="app-title">
+                                    {{ app.title }}
                                     </div>
                                 </div>
-                                <div class="column-updated">
-                                    <span><strong>Latest Version</strong> v{{ app.latest_version.version }}</span>
+                                <div class="app-description">
+                                    <div ng-if="app.description.length > 150">
+                                        <p>{{ app.description.slice(0, 150) + '...' }} <span><a data-trigger="hover" data-toggle="tooltip" data-placement="buttom"
+                                            title="{{ app.description }}">
+                                         Full Description
+                                         </a></span></p>
+                                    </div>
+                                    <div ng-if="(app.description.length <= 150)">
+                                        <p>{{ app.description }}</p>
+                                    </div>
                                 </div>
-                                <div class="column-downloaded">
-                                    {{app.downloads}} Installations </div>
-                                <div class="column-compatibility" ng-show="app.installedApp">
-                                    <span><strong>Installed Version</strong> v{{ app.installedApp.version }}</span>
+                                
+                                <div class="actions-wrapper" ng-hide='app.installedApp.pending'>
+                                    <button class="btn btn-default btn-xs" ng-disabled="installing" ng-disabled="!compatible(app.latest_version.cartoview_version)" ng-if="!app.installedApp" ng-click="install(app)">
+                                    <span
+                                        class="glyphicon glyphicon-download-alt"
+                                        aria-hidden="true"
+                                        ng-hide="installing==app"
+                                    ></span>
+                                    <span class="fa fa-circle-o-notch rotating" ng-show="installing==app"></span>
+                                    Install
+                                    </button>
+                                    <button class="btn btn-default btn-xs"  ng-disabled="installing" ng-disabled="!compatible(app.latest_version.cartoview_version)" ng-if="app.installedApp && upgradable(app.installedApp.version,app.latest_version.version)"ng-click="install(app, true)" >
+                                    <span
+                                        class="glyphicon glyphicon-circle-arrow-up"
+                                        aria-hidden="true"
+                                        ng-hide="installing==app"
+                                    ></span>
+                                    <span class="fa fa-circle-o-notch rotating"
+                                                        ng-show="installing==app"></span>
+                                    Upgrade
+                                    </button>
+                                    <button ng-disabled="installing" class="btn btn-danger btn-xs" ng-if="app.installedApp" ng-click="uninstall(app)">
+                                        <span class="glyphicon glyphicon-remove" aria-hidden="true" ng-hide="installing==app"></span>
+                                        <span class="fa fa-circle-o-notch rotating"
+                                                    ng-show="installing==app"></span>
+                                        Uninstall
+                                    </button>
+                                    <button class="btn btn-success btn-xs" ng-disabled="installing" ng-if="app.installedApp" ng-click="toggleActive(app)" ng-show="!app.installedApp.active">
+                                        <span class="glyphicon glyphicon-play" aria-hidden="true"></span
+                                        >Activate
+                                    </button>
+                                    <button class="btn btn-warning btn-xs" ng-disabled="installing" ng-if="app.installedApp" ng-click="toggleActive(app)" ng-show="app.installedApp.active">
+                                        <span class="glyphicon glyphicon-pause" aria-hidden="true"></span
+                                        >Suspend
+                                    </button>
                                 </div>
-                            </div>
-                        </div>                
+                                <div class="actions-wrapper" ng-show='app.installedApp.pending'>
+                                    <a href='#'>
+                                        <span class="fa fa-exclamation-circle"></span>
+                                        Restarting Server is required
+                                    </a>
+                                </div>
+                                <div class="info-panel">
+                                    <div class="info-wrapper">
+                                    <div class="info-item">
+                                        <span class="info-item-title">Rating:</span>
+                                        <span class="info-item-content">{{ app.stars }} / 5</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <span class="info-item-title">Installations:</span>
+                                        <span class="info-item-content">{{app.downloads}}</span>
+                                    </div>
+                                    </div>
+                                    <div class="info-wrapper">
+                                    <div class='app-version'>
+                                        <div class="info-item">
+                                            <span class="info-item-title">Latest Version:</span>
+                                            <span class="info-item-content">v{{ app.latest_version.version }}</span>
+                                            </div>
+                                            <div class="info-item">
+                                            <span class="info-item-title">Installed Version:</span>
+                                            <span class="info-item-content">v{{ app.installedApp.version }}</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="app-by">
+                                        By
+                                        <span class="app-author">
+                                        <a href="{{app.author_website}}">{{app.author}}</a>
+                                        </span>
+                                    </div>
+                                    </div>
+                                </div>
+                        </div>
+                    </div>
                     {% endverbatim %}
             </div>
         </div>
@@ -195,4 +231,7 @@
     <script src="{{ STATIC_URL }}app_manager/vendor/angular-drag-and-drop-lists/angular-drag-and-drop-lists.min.js"></script>
     <script src="{{ STATIC_URL }}app_manager/js/resources.js"></script>
     <script src="{{ STATIC_URL }}app_manager/js/manager.js"></script>
+    <script>
+        $("[data-toggle=popover]").popover();
+    </script>
 {% endblock %}

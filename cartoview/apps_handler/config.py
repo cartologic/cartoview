@@ -119,7 +119,7 @@ class CartoviewApp(object):
     def cleanup(self):
         for attr in vars(self).keys():
             if attr not in [
-                    'objects', 'app_attrs'
+                'objects', 'app_attrs'
             ] and attr not in CartoviewApp.app_attrs and (
                     not attr.startswith('_') and not attr.startswith('_')):
                 delattr(self, attr)

@@ -17,9 +17,9 @@ standard_library.install_aliases()
 class AppInstallerForm(ModelForm):
     error_messages = {
         'duplicate_app_name':
-        _("An application with the same user has already installed."),
+            _("An application with the same user has already installed."),
         'invalid_package_file':
-        _("The uploaded file is not an application package."),
+            _("The uploaded file is not an application package."),
     }
     package_file = FileField()
 
@@ -29,14 +29,12 @@ class AppInstallerForm(ModelForm):
 
 
 class AppForm(ModelForm):
-
     class Meta(object):
         model = App
         fields = ("title",)
 
 
 class AppInstanceForm(TranslationModelForm):
-
     class Meta(object):
         model = AppInstance
         fields = [
@@ -46,7 +44,6 @@ class AppInstanceForm(TranslationModelForm):
 
 
 class AppInstanceEditForm(ResourceBaseForm):
-
     class Meta(ResourceBaseForm.Meta):
         model = AppInstance
         exclude = ResourceBaseForm.Meta.exclude

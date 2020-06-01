@@ -2,13 +2,6 @@
 import json
 
 from django.core.urlresolvers import reverse
-from tastypie import fields
-from tastypie.authentication import MultiAuthentication, SessionAuthentication
-from tastypie.constants import ALL, ALL_WITH_RELATIONS
-from tastypie.resources import ModelResource
-
-from cartoview.app_manager.models import App, AppInstance
-from cartoview.app_manager.rest import LayerFilterExtensionResource
 from geonode.api.api import OwnersResource
 from geonode.api.authorization import (GeonodeApiKeyAuthentication,
                                        GeoNodeAuthorization)
@@ -16,6 +9,13 @@ from geonode.api.resourcebase_api import MapResource, ResourceBaseResource
 from geonode.base.models import ResourceBase
 from geonode.layers.models import Attribute, Layer
 from geonode.maps.models import MapLayer
+from tastypie import fields
+from tastypie.authentication import MultiAuthentication, SessionAuthentication
+from tastypie.constants import ALL, ALL_WITH_RELATIONS
+from tastypie.resources import ModelResource
+
+from cartoview.app_manager.models import App, AppInstance
+from cartoview.app_manager.rest import LayerFilterExtensionResource
 
 type_filter = {
     'app': 'appinstance',
@@ -27,7 +27,7 @@ type_filter = {
 
 class ExtendedResourceBaseResource(ResourceBaseResource):
     class Meta(ResourceBaseResource.Meta):
-        queryset = ResourceBase.objects.polymorphic_queryset().distinct()\
+        queryset = ResourceBase.objects.polymorphic_queryset().distinct() \
             .order_by('-date')
         resource_name = 'base'
 
@@ -37,7 +37,7 @@ class ExtendedResourceBaseResource(ResourceBaseResource):
         __inactive_apps_instances = [instance.id for instance in
                                      AppInstance.objects.filter(
                                          app__id__in=__inactive_apps)]
-        active_app_instances = super(ExtendedResourceBaseResource, self)\
+        active_app_instances = super(ExtendedResourceBaseResource, self) \
             .get_object_list(
             request).exclude(
             id__in=__inactive_apps_instances)
@@ -73,7 +73,7 @@ class AllResourcesResource(ModelResource):
         if filters is None:
             filters = {}
         orm_filters = super(AllResourcesResource, self).build_filters(filters)
-        if('resource_type' in filters):
+        if ('resource_type' in filters):
             resource_type = filters['resource_type']
             orm_filters.update({'resource_type': resource_type})
 
@@ -95,8 +95,8 @@ class AllResourcesResource(ModelResource):
                 if hasattr(item, type_filter[filter]):
                     result.append(item.id)
                 elif filter == 'layer' and \
-                        not hasattr(item, type_filter['app']) and\
-                        not hasattr(item, type_filter['doc']) and\
+                        not hasattr(item, type_filter['app']) and \
+                        not hasattr(item, type_filter['doc']) and \
                         not hasattr(item, type_filter['map']):
                     result.append(item.id)
             result = ResourceBase.objects.filter(id__in=result)
@@ -106,7 +106,7 @@ class AllResourcesResource(ModelResource):
 
     def dehydrate_thumbnail_url(self, bundle):
         thumb = bundle.obj.thumbnail_url
-        if not thumb and hasattr(bundle.obj, 'appinstance') and\
+        if not thumb and hasattr(bundle.obj, 'appinstance') and \
                 bundle.obj.appinstance.map:
             thumb = bundle.obj.appinstance.map.thumbnail_url
         return thumb
@@ -192,7 +192,7 @@ class MapLayerResource(ModelResource):
             request, applicable_filters)
         if layer_type:
             filtered = [lyr.id for lyr in filtered
-                        if self.get_layer(lyr.name)and
+                        if self.get_layer(lyr.name) and  # noqa
                         Attribute.objects.filter(
                             attribute_type__contains="gml:",
                             attribute_type__icontains=layer_type.lower(),

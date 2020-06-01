@@ -1,7 +1,9 @@
+import os
+
 from django.test import TestCase
 from django.test import override_settings
+
 from ..db_parser import get_db_url
-import os
 
 
 class DBParserTest(TestCase):

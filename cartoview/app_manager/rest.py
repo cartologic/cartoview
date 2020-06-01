@@ -13,16 +13,6 @@ from django.core.urlresolvers import reverse
 from django.db import transaction
 from django.http import Http404
 from future import standard_library
-from guardian.shortcuts import get_objects_for_user
-from taggit.models import Tag
-from tastypie import fields, http
-from tastypie.constants import ALL, ALL_WITH_RELATIONS
-from tastypie.resources import ModelResource
-from tastypie.utils import trailing_slash
-
-from cartoview.app_manager.models import App, AppInstance, AppStore, AppType
-from cartoview.apps_handler.config import CartoviewApp
-from cartoview.log_handler import get_logger
 from geonode.api.api import ProfileResource
 from geonode.api.authorization import GeoNodeAuthorization
 from geonode.api.resourcebase_api import (CommonMetaApi, LayerResource,
@@ -30,9 +20,18 @@ from geonode.api.resourcebase_api import (CommonMetaApi, LayerResource,
 from geonode.maps.models import MapLayer
 from geonode.people.models import Profile
 from geonode.security.utils import get_visible_resources
+from guardian.shortcuts import get_objects_for_user
+from taggit.models import Tag
+from tastypie import fields, http
+from tastypie.authorization import Authorization
+from tastypie.constants import ALL, ALL_WITH_RELATIONS
+from tastypie.resources import ModelResource
+from tastypie.utils import trailing_slash
 
+from cartoview.app_manager.models import App, AppInstance, AppStore, AppType
+from cartoview.apps_handler.config import CartoviewApp
+from cartoview.log_handler import get_logger
 from .installer import AppInstaller, RestartHelper
-from .resources import FileUploadResource
 from .utils import populate_apps
 
 logger = get_logger(__name__)
@@ -87,15 +86,18 @@ class GeonodeMapLayerResource(ModelResource):
         queryset = MapLayer.objects.distinct()
 
 
-class AppStoreResource(FileUploadResource):
-    class Meta(FileUploadResource.Meta):
+class AppStoreResource(ModelResource):
+    class Meta:
+        always_return_data = True
+        authorization = Authorization()
         queryset = AppStore.objects.all()
 
 
-class AppResource(FileUploadResource):
+class AppResource(ModelResource):
     store = fields.ForeignKey(AppStoreResource, 'store', full=False, null=True)
     order = fields.IntegerField()
     active = fields.BooleanField()
+    pending = fields.BooleanField()
     categories = fields.ListField()
 
     default_config = fields.DictField(default={})
@@ -118,13 +120,18 @@ class AppResource(FileUploadResource):
             active = bundle.obj.config.active
         return active
 
+    def dehydrate_pending(self, bundle):
+        app = bundle.obj
+        cartoview_app = CartoviewApp.objects.get(app.name)
+        return cartoview_app.pending
+
     def dehydrate_categories(self, bundle):
         return [category.name for category in bundle.obj.category.all()]
 
     def dehydrate_app_instance_count(self, bundle):
         return bundle.obj.appinstance_set.all().count()
 
-    class Meta(FileUploadResource.Meta):
+    class Meta():
         queryset = App.objects.all().order_by('order')
         filtering = {
             "id": ALL,
@@ -322,13 +329,14 @@ class AppInstanceResource(ModelResource):
 
     def get_object_list(self, request):
         __inactive_apps = [
-            app.id for app in App.objects.all() if not app.config.active
+            app.id for app in App.objects.all()
+            if app.config and not app.config.active
         ]
         __inactive_apps_instances = [
             instance.id for instance in AppInstance.objects.filter(
                 app__id__in=__inactive_apps)
         ]
-        active_app_instances = super(AppInstanceResource, self)\
+        active_app_instances = super(AppInstanceResource, self) \
             .get_object_list(
             request).exclude(
             id__in=__inactive_apps_instances)
@@ -405,7 +413,7 @@ class AppInstanceResource(ModelResource):
             # results
             if len(filter_set) > 0:
                 sqs = sqs.filter(id__in=filter_set_ids).facet('type').facet(
-                    'owner').facet('keywords').facet('regions')\
+                    'owner').facet('keywords').facet('regions') \
                     .facet('category')
             else:
                 sqs = None
@@ -425,9 +433,8 @@ class AppInstanceResource(ModelResource):
             paginator = Paginator(sqs, request.GET.get('limit'))
 
             try:
-                page = paginator.page(
-                    int(request.GET.get('offset') or 0) /
-                    int(request.GET.get('limit'), 0) + 1)
+                page = paginator.page(int(request.GET.get('offset') or 0)
+                                      / int(request.GET.get('limit'), 0) + 1)  # noqa
             except InvalidPage:
                 raise Http404("Sorry, no results on that page.")
 
@@ -544,21 +551,21 @@ class AppInstanceResource(ModelResource):
             if query.startswith('"') or query.startswith('\''):
                 # Match exact phrase
                 phrase = query.replace('"', '')
-                sqs = (SearchQuerySet() if sqs is None else sqs)\
+                sqs = (SearchQuerySet() if sqs is None else sqs) \
                     .filter(
                     SQ(title__exact=phrase) | SQ(description__exact=phrase)
-                        | SQ(content__exact=phrase)) # noqa
+                    | SQ(content__exact=phrase))  # noqa
             else:
                 words = [
-                    w for w in re.split('\W', query, flags=re.UNICODE) if w
+                    w for w in re.split(r'\W', query, flags=re.UNICODE) if w
                 ]
                 for i, search_word in enumerate(words):
                     if i == 0:
                         sqs = (SearchQuerySet() if sqs is None else sqs) \
                             .filter(
-                            SQ(title=Raw(search_word)) |
-                            SQ(description=Raw(search_word)) |
-                            SQ(content=Raw(search_word))
+                            SQ(title=Raw(search_word))
+                            | SQ(description=Raw(search_word))  # noqa
+                            | SQ(content=Raw(search_word))  # noqa
                         )
                     elif search_word in ["AND", "OR"]:
                         pass

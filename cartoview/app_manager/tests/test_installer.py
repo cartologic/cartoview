@@ -3,10 +3,10 @@ import threading
 from django.contrib.admin import ACTION_CHECKBOX_NAME
 from django.core.urlresolvers import reverse
 from django.test import TestCase
+from geonode.people.models import Profile
 
 from cartoview.app_manager.installer import AppInstaller
 from cartoview.app_manager.models import App
-from geonode.people.models import Profile
 
 lock = threading.RLock()
 
@@ -32,14 +32,14 @@ class AppInstallerTest(TestCase):
             data = {
                 'action': 'suspend_selected',
                 ACTION_CHECKBOX_NAME:
-                [unicode(app.pk) for app in installed_apps]
+                    [unicode(app.pk) for app in installed_apps]
             }
             resp = self.client.post(apps_admin_url, data)
             self.assertNotEqual(resp.status_code, 500)
             data = {
                 'action': 'activate_selected',
                 ACTION_CHECKBOX_NAME:
-                [unicode(app.pk) for app in installed_apps]
+                    [unicode(app.pk) for app in installed_apps]
             }
             resp = self.client.post(apps_admin_url, data)
             self.assertNotEqual(resp.status_code, 500)

@@ -2,11 +2,11 @@
 from __future__ import unicode_literals
 
 from django.db import migrations, models
+
 import cartoview.site_management.models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('sites', '0001_initial'),
     ]
@@ -24,7 +24,7 @@ class Migration(migrations.Migration):
                 ('logo',
                  models.ImageField(
                      upload_to=cartoview.site_management.
-                     models.get_site_logo_path)),
+                         models.get_site_logo_path)),
                 ('site',
                  models.OneToOneField(
                      to='sites.Site')),

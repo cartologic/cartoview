@@ -31,14 +31,14 @@ services:
     networks:
       -cartoview-internal:
   data-dir-conf:
-    image: geonode/geoserver_data:latest
+    image: geonode/geoserver_data:2.15.4
     restart: on-failure
     container_name: gsconf4cartoview
     command: /bin/true
     volumes:
-      - geoserver-data-dir:/geoserver_data/data
+      - geoserver-dir:/geoserver_data/data
   geoserver:
-    image: cartoview/geoserver_docker:tomcat
+    image: geonode/geoserver:2.15.4
     depends_on:
       - postgis
       - data-dir-conf
@@ -46,7 +46,7 @@ services:
     expose:
       - "8080"
     volumes:
-      - "geoserver-data-dir:/geoserver_data"
+      - geoserver-dir:/geoserver_data/data
     env_file:
       - ./env/tomcat.env
     networks:
@@ -55,7 +55,7 @@ services:
       -cartoview-internal:
   cartoview:
     image: cartoview/cartoview:latest
-    command: bash -c "pip install -e . && python manage.py cherry_server"
+    command: bash -c "python manage.py cherry_server"
     restart: unless-stopped
     hostname: cartoview
     depends_on:
@@ -64,7 +64,7 @@ services:
     env_file:
       - ./env/django.env
     volumes:
-      - "./:/code/"
+      - "./:/usr/src/carto_app/cartoview"
     networks:
       -cartoview-external:
         ipv4_address: 10.5.0.3
@@ -73,7 +73,7 @@ services:
       - "8000"
   celery:
     image: cartoview/cartoview:latest
-    command: bash -c "pip install -e . && celery worker --app=cartoview --broker=amqp://guest:guest@rabbitmq:5672/ -B -E -l debug"
+    command: bash -c "celery worker --app=cartoview --broker=amqp://guest:guest@rabbitmq:5672/ -B -E -l debug"
     restart: unless-stopped
     hostname: celery
     depends_on:
@@ -98,6 +98,8 @@ services:
       -cartoview-external:
         ipv4_address: 10.5.0.4
       -cartoview-internal:
+    ports:
+      - "80:80"
 networks:
     -cartoview-external:
       driver: bridge
@@ -107,5 +109,5 @@ networks:
     -cartoview-internal:
        internal: true
 volumes:
-  geoserver-data-dir:
+  geoserver-dir:
   pg-data:

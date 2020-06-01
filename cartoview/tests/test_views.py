@@ -1,10 +1,12 @@
-from django.test import TestCase
-from django.core.urlresolvers import reverse
-from pkg_resources import parse_version
-from cartoview.version import get_current_version
-import requests
-from geonode.urls import api
 import json
+
+import requests
+from django.core.urlresolvers import reverse
+from django.test import TestCase
+from geonode.urls import api
+from pkg_resources import parse_version
+
+from cartoview.version import get_current_version
 
 
 class CartoviewHomeViewTest(TestCase):

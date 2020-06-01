@@ -2,6 +2,7 @@ from django.core.management import call_command
 from django.core.urlresolvers import reverse
 from django.test import RequestFactory, TestCase
 from geonode.people.models import Profile
+from geonode.tests.base import GeoNodeLiveTestSupport
 
 
 class CartoviewAppsViewTest(TestCase):
@@ -23,8 +24,8 @@ class CartoviewAppsViewTest(TestCase):
         self.assertTrue("apps" in resp.context)
 
 
-class CartoviewManageAppsViewTest(TestCase):
-    fixtures = ['sample_admin.json']
+class CartoviewManageAppsViewTest(GeoNodeLiveTestSupport):
+    # fixtures = ['sample_admin.json']
 
     def setUp(self):
         call_command("load_current_apps")

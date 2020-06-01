@@ -22,7 +22,6 @@ class BaseMeta(object):
 
 
 class BaseModelResource(ModelResource):
-
     class Meta(BaseMeta):
         pass
 
@@ -68,7 +67,6 @@ class BaseModelResource(ModelResource):
 
 
 class FileUploadResource(BaseModelResource):
-
     class Meta(BaseModelResource.Meta):
         object_class = None
         serializer = MultipartFormSerializer()

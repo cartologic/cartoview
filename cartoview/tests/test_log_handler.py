@@ -1,6 +1,8 @@
-from django.test import TestCase
-from cartoview.log_handler import get_logger
 from logging import Logger, DEBUG
+
+from django.test import TestCase
+
+from cartoview.log_handler import get_logger
 
 
 class CartoviewHomeViewTest(TestCase):

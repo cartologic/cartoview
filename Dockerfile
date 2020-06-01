@@ -1,4 +1,4 @@
-FROM python:2.7-slim
+FROM python:2.7.16
 LABEL "MAINTAINER"="Cartologic Development Team"
 ENV PYTHONUNBUFFERED 1
 ARG GEONODE_DEV=true
@@ -8,11 +8,13 @@ ARG APP_DIR=/usr/src/carto_app
 # but after any paths given with -I options on the command line.
 # This environment variable is used regardless of which language is being preprocessed.
 ENV CPATH "$CPATH:/usr/include/gdal:/usr/include"
-COPY scripts/docker/setup.sh ./
-COPY . /cartoview
-RUN chmod +x setup.sh
-RUN ./setup.sh
+WORKDIR ${APP_DIR}
+#COPY scripts/docker/setup.sh ./
+COPY . ./cartoview
+RUN chmod +x cartoview/scripts/docker/setup.sh
+RUN cartoview/scripts/docker/setup.sh
 # switch to project dir
 VOLUME ${APP_DIR}
-WORKDIR ${APP_DIR}
+WORKDIR ${APP_DIR}/cartoview
+
 CMD ["/bin/bash"]
