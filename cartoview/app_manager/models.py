@@ -132,7 +132,7 @@ class App(models.Model):
 
     @property
     def open_url(self):
-        from django.core.urlresolvers import reverse
+        from django.urls import reverse
         open_url = reverse('app_manager_base_url') + self.name
         try:
             app_module = __import__(self.name)

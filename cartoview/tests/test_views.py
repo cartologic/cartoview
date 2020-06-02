@@ -1,7 +1,7 @@
 import json
 
 import requests
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.test import TestCase
 from geonode.urls import api
 from pkg_resources import parse_version

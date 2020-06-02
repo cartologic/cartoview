@@ -1,5 +1,5 @@
 from django.core.management import call_command
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.test import RequestFactory, TestCase
 from geonode.people.models import Profile
 from geonode.tests.base import GeoNodeLiveTestSupport

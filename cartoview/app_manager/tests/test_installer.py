@@ -1,7 +1,7 @@
 import threading
 
 from django.contrib.admin import ACTION_CHECKBOX_NAME
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.test import TestCase
 from geonode.people.models import Profile
 
