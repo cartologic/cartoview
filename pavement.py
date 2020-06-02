@@ -31,6 +31,7 @@ import urllib as urllib2
 import zipfile
 from io import BytesIO
 from urllib.parse import urlparse
+from urllib.request import urlopen, Request
 
 import yaml
 from paver.easy import cmdopts, info, needs, path, sh, task
@@ -102,7 +103,7 @@ def setup_apps(options):
     from cartoview.app_manager.helpers import (create_direcotry,
                                                change_path_permission)
     try:
-        f = urllib2.urlopen(TEST_DATA_URL)
+        f = urlopen(TEST_DATA_URL)
         zip_ref = zipfile.ZipFile(BytesIO(f.read()))
         create_direcotry(APPS_DIR)
         if not os.access(APPS_DIR, os.W_OK):
@@ -390,7 +391,7 @@ def waitfor(url, timeout=300):
     started = False
     for a in range(timeout):
         try:
-            resp = urllib.urlopen(url)
+            resp = urlopen(url)
         except IOError:
             pass
         else:
