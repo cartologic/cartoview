@@ -388,7 +388,7 @@ def start_geoserver(options):
 
 def waitfor(url, timeout=300):
     started = False
-    for a in xrange(timeout):
+    for a in range(timeout):
         try:
             resp = urllib.urlopen(url)
         except IOError:
