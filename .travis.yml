@@ -20,7 +20,7 @@ env:
     - CARTOVIEW_TEST=True
     - CARTOVIEW_STAND_ALONE=True
 virtualenv:
-  system_site_packages: true
+  system_site_packages: false
 branches:
   except:
     - 2.6.x_compatible
