@@ -9,7 +9,7 @@ from django.conf import settings
 from django.conf.urls import url
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import InvalidPage, Paginator
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.db import transaction
 from django.http import Http404
 from future import standard_library
@@ -221,18 +221,18 @@ class AppResource(ModelResource):
             store_id = app.get("store_id")
             version = app.get("version")
             app_result = {"app_name": app_name, "success": True, "message": ""}
-            try:
-                with transaction.atomic():
-                    installer = AppInstaller(app_name, store_id, version,
-                                             request.user)
-                    installer.install(restart=False)
-                app_result["message"] = "App Installed Successfully"
-                response_data.append(app_result)
-            except Exception as ex:
-                logger.error(ex.message)
-                app_result["success"] = False
-                app_result["message"] = ex.message
-                response_data.append(app_result)
+            # try:
+            with transaction.atomic():
+                installer = AppInstaller(app_name, store_id, version,
+                                         request.user)
+                installer.install(restart=False)
+            app_result["message"] = "App Installed Successfully"
+            response_data.append(app_result)
+            # except Exception as ex:
+            #     logger.error(ex)
+            #     app_result["success"] = False
+            #     app_result["message"] = "{0}".format(ex)
+            #     response_data.append(app_result)
         if restart:
             RestartHelper.restart_server()
         return self.create_response(

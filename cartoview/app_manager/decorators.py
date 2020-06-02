@@ -20,8 +20,8 @@ def can_change_app_instance(function):
                             PERMISSION_MSG_MODIFY)
         return function(request, *args, **kwargs)
 
-    wrap.__doc__ = function.__doc__
-    wrap.__name__ = function.__name__
+    # wrap.__doc__ = function.__doc__
+    # wrap.__name__ = function.__name__
     return wrap
 
 
@@ -33,8 +33,8 @@ def can_view_app_instance(function):
                             PERMISSION_MSG_VIEW)
         return function(request, *args, **kwargs)
 
-    wrap.__doc__ = function.__doc__
-    wrap.__name__ = function.__name__
+    # wrap.__doc__ = function.__doc__
+    # wrap.__name__ = function.__name__
     return wrap
 
 

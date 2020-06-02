@@ -11,7 +11,7 @@ from django.conf.urls import url
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.db import transaction
 from django.db.models import F, Max, Min
 from django.forms.utils import ErrorList
@@ -249,7 +249,7 @@ def appinstance_detail(request, appinstanceid):
                 if exif:
                     context_dict['exif_data'] = exif
             except BaseException as e:
-                logger.error(e.message + "Exif extraction failed.")
+                logger.error(e.args[0] + "Exif extraction failed.")
         return render(request, "app_manager/appinstance_detail.html",
                       context=context_dict)
 

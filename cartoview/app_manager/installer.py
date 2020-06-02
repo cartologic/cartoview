@@ -33,7 +33,7 @@ from ..apps_handler.req_installer import (ReqFileException,
 logger = get_logger(__name__)
 install_app_batch = getattr(settings, 'INSTALL_APP_BAT', None)
 standard_library.install_aliases()
-reload(pkg_resources)
+importlib.reload(pkg_resources)
 
 lock = threading.RLock()
 
@@ -88,7 +88,7 @@ def remove_unwanted(info):
     app_fields.append("type")
     clean_data = {
         k: v
-        for k, v in dictionary.iteritems() if str(k) in app_fields
+        for k, v in dictionary.items() if str(k) in app_fields
     }
     return clean_data
 
@@ -276,7 +276,7 @@ class AppInstaller(object):
                 except AppAlreadyInstalledException as e:
                     logger.error(e.message)
             self._download_app()
-            reload(pkg_resources)
+            importlib.reload(pkg_resources)
             self.check_then_finlize(restart, installed_apps)
             return installed_apps
 

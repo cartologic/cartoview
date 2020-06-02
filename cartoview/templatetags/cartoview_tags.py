@@ -3,12 +3,12 @@ from __future__ import (absolute_import, division, print_function,
 
 import json
 
-from agon_ratings.models import Rating
+from pinax.ratings.models import Rating
 from django import template
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.models import ContentType
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.db.models import Count
 from django.utils.html import mark_safe
 from future import standard_library
@@ -31,13 +31,13 @@ def dump_json(obj):
     return mark_safe(json.dumps(obj))
 
 
-@register.assignment_tag
+@register.simple_tag
 def num_ratings(obj):
     ct = ContentType.objects.get_for_model(obj)
     return len(Rating.objects.filter(object_id=obj.pk, content_type=ct))
 
 
-@register.assignment_tag(takes_context=True)
+@register.simple_tag(takes_context=True)
 def facets(context):
     request = context['request']
     title_filter = request.GET.get('title__icontains', '')

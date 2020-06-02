@@ -27,7 +27,7 @@ class Migration(migrations.Migration):
                          models.get_site_logo_path)),
                 ('site',
                  models.OneToOneField(
-                     to='sites.Site')),
+                     to='sites.Site', on_delete=models.CASCADE)),
             ],
         ),
     ]

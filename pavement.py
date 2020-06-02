@@ -27,10 +27,10 @@ import subprocess
 import sys
 import time
 import urllib
-import urllib2
+import urllib as urllib2
 import zipfile
 from io import BytesIO
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 import yaml
 from paver.easy import cmdopts, info, needs, path, sh, task
@@ -110,9 +110,9 @@ def setup_apps(options):
         zip_ref.extractall(APPS_DIR)
         zip_ref.close()
     except urllib2.HTTPError as e:
-        print "HTTP Error:", e.code
+        print ("HTTP Error:", e.code)
     except urllib2.URLError as e:
-        print "URL Error:", e.reason
+        print ("URL Error:", e.reason)
 
 
 def cleanup():
@@ -261,7 +261,7 @@ def setup_geoserver(options):
         if not webapp_dir:
             webapp_dir.makedirs()
 
-        print 'extracting geoserver'
+        print ('extracting geoserver')
         z = zipfile.ZipFile(geoserver_bin, "r")
         z.extractall(webapp_dir)
 
@@ -285,10 +285,10 @@ def start_geoserver(options):
     url = GEOSERVER_BASE_URL
 
     if urlparse(GEOSERVER_BASE_URL).hostname != 'localhost':
-        print "Warning: OGC_SERVER['default']['LOCATION'] hostname is not equal to 'localhost'"
+        print ("Warning: OGC_SERVER['default']['LOCATION'] hostname is not equal to 'localhost'")
 
     if not GEOSERVER_BASE_URL.endswith('/'):
-        print "Error: OGC_SERVER['default']['LOCATION'] does not end with a '/'"
+        print ("Error: OGC_SERVER['default']['LOCATION'] does not end with a '/'")
         sys.exit(1)
 
     download_dir = path('downloaded').abspath()
@@ -331,9 +331,9 @@ def start_geoserver(options):
                 try:
                     open("../../downloaded/null.txt", 'w+').close()
                 except IOError as e:
-                    print "Chances are that you have Geoserver currently running.  You \
+                    print ("Chances are that you have Geoserver currently running.  You \
                             can either stop all servers with paver stop or start only \
-                            the django application with paver start_django."
+                            the django application with paver start_django.")
 
                     sys.exit(1)
                 loggernullpath = "../../downloaded/null.txt"
@@ -341,19 +341,19 @@ def start_geoserver(options):
             try:
                 sh(('java -version'))
             except BaseException:
-                print "Java was not found in your path.  Trying some other options: "
+                print ("Java was not found in your path.  Trying some other options: ")
                 javapath_opt = None
                 if os.environ.get('JAVA_HOME', None):
-                    print "Using the JAVA_HOME environment variable"
+                    print ("Using the JAVA_HOME environment variable")
                     javapath_opt = os.path.join(
                         os.path.abspath(os.environ['JAVA_HOME']), "bin",
                         "java.exe")
                 elif options.get('java_path'):
                     javapath_opt = options.get('java_path')
                 else:
-                    print "Paver cannot find java in the Windows Environment.  \
+                    print ("Paver cannot find java in the Windows Environment.  \
                     Please provide the --java_path flag with your full path to \
-                    java.exe e.g. --java_path=C:/path/to/java/bin/java.exe"
+                    java.exe e.g. --java_path=C:/path/to/java/bin/java.exe")
 
                     sys.exit(1)
                 # if there are spaces

@@ -17,7 +17,7 @@ def get_site_logo_path(instance, filename):
 
 @python_2_unicode_compatible
 class SiteLogo(models.Model):
-    site = models.OneToOneField(Site)
+    site = models.OneToOneField(Site, on_delete=models.CASCADE)
     logo = models.ImageField(upload_to=get_site_logo_path)
 
     def __str__(self):

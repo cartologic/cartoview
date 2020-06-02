@@ -7,7 +7,7 @@ from datetime import datetime
 from django.conf import settings as geonode_settings
 from django.contrib.auth.models import Group
 from django.contrib.gis.db import models
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.db.models import signals
 from django.template.defaultfilters import slugify
 from django.utils.encoding import python_2_unicode_compatible
@@ -75,7 +75,7 @@ class App(models.Model):
     date_installed = models.DateTimeField(
         'Date Installed', auto_now_add=True, null=True)
     installed_by = models.ForeignKey(
-        geonode_settings.AUTH_USER_MODEL, null=True, blank=True)
+        geonode_settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.PROTECT)
     single_instance = models.BooleanField(
         default=False, null=False, blank=False)
     category = models.ManyToManyField(AppType, related_name='apps')
@@ -88,7 +88,7 @@ class App(models.Model):
     contact_name = models.CharField(max_length=200, null=True, blank=True)
     contact_email = models.EmailField(null=True, blank=True)
     version = models.CharField(max_length=10)
-    store = models.ForeignKey(AppStore, null=True)
+    store = models.ForeignKey(AppStore, null=True, on_delete=models.PROTECT)
     order = models.IntegerField(null=True, default=0)
 
     default_config = JSONField(default={})
@@ -144,7 +144,7 @@ class App(models.Model):
 
     @property
     def create_new_url(self):
-        from django.core.urlresolvers import reverse
+        from django.urls import reverse
         create_new_url = reverse('{}.new'.format(self.name))
         try:
             app_module = __import__(self.name)

@@ -46,9 +46,8 @@ class AppsHandler(object):
         try:
             call_command("migrate", app_name, interactive=False)
         except CommandError as e:
-            error = e.message
-            logger.error(error)
-            if error and "does not have migrations" not in error:
+            logger.error(e)
+            if e.args[0] and "does not have migrations" not in e.args[0]:
                 self.delete_application_on_fail(app_name)
 
     def collectstatic(self):

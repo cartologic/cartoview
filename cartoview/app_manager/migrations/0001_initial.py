@@ -52,7 +52,7 @@ class Migration(migrations.Migration):
                 ('version', models.CharField(max_length=10)),
                 ('order', models.IntegerField(default=0, null=True)),
                 ('installed_by', models.ForeignKey(
-                    blank=True, to=settings.AUTH_USER_MODEL, null=True)),
+                    blank=True, to=settings.AUTH_USER_MODEL, null=True, on_delete=models.PROTECT)),
             ], ),
         migrations.CreateModel(
             name='AppInstance',
@@ -62,12 +62,12 @@ class Migration(migrations.Migration):
                     auto_created=True,
                     primary_key=True,
                     serialize=False,
-                    to='base.ResourceBase')),
+                    to='base.ResourceBase', on_delete=models.CASCADE)),
                 ('config', models.TextField(null=True, blank=True)),
                 ('app', models.ForeignKey(
-                    blank=True, to='app_manager.App', null=True)),
+                    blank=True, to='app_manager.App', null=True, on_delete=models.CASCADE)),
                 ('map', models.ForeignKey(blank=True, to='maps.Map',
-                                          null=True)),
+                                          null=True, on_delete=models.CASCADE)),
             ],
             options={
                 'abstract': False,
@@ -105,12 +105,12 @@ class Migration(migrations.Migration):
                     auto_created=True,
                     primary_key=True)),
                 ('logo', models.ImageField(upload_to=b'')),
-                ('site', models.OneToOneField(to='sites.Site')),
+                ('site', models.OneToOneField(to='sites.Site', on_delete=models.CASCADE)),
             ], ),
         migrations.AddField(
             model_name='app',
             name='store',
-            field=models.ForeignKey(to='app_manager.AppStore', null=True), ),
+            field=models.ForeignKey(to='app_manager.AppStore', null=True, on_delete=models.CASCADE), ),
         migrations.AddField(
             model_name='app',
             name='tags',
