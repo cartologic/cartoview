@@ -14,7 +14,7 @@ addons:
 services:
   - postgresql
 python:
-  - '2.7'
+  - '3.7'
 env:
   global:
     - CARTOVIEW_TEST=True
@@ -29,10 +29,11 @@ branches:
     - exchange-1.4.x
 install:
   - sudo apt-get -qq -y update
-  - sudo apt-get install -y gcc gettext python-pip libpq-dev sqlite3 git gdal-bin lsof
+  - sudo apt-get install -y gcc gettext python3-pip libpq-dev sqlite3 git gdal-bin lsof
     psmisc
-  - sudo apt-get install -y python-gdal python-psycopg2 python-imaging python-lxml
-  - sudo apt-get install -y python-dev libgdal-dev libgeoip-dev python-ldap libxml2
+  - sudo apt-get install -y python3-gdal python-imaging python-lxml
+  - sudo apt-get install -y python3-pil python3-lxml python3-pyproj python3-shapely python3-httplib2 python3-httplib2
+  - sudo apt-get install -y python3-dev libgdal-dev libgeoip-dev libxml2
     libxml2-dev libxslt-dev git default-jdk
   - sudo apt-get install -y python-dev libxml2 libxml2-dev libxslt1-dev zlib1g-dev libjpeg-dev
     libpq-dev libgdal-dev git default-jdk
