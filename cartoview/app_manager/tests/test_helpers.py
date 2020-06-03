@@ -13,7 +13,7 @@ class HelpersTest(TestCase):
         apps_dir_perm = get_perm(settings.APPS_DIR)
         self.assertEqual(apps_dir_perm, 511)
         apps_dir_perm = get_path_permission(settings.APPS_DIR)
-        self.assertEqual(apps_dir_perm, ('0777', '0777'))
+        self.assertEqual(apps_dir_perm, ('0o777', '0o777'))
         try:
             make_writeable_recursive(settings.APPS_DIR)
         except OSError:
