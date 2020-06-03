@@ -17,7 +17,7 @@ class DBParseException(Exception):
 
 def get_db_url(db_key):
     databases = getattr(settings, 'DATABASES', {})
-    _schemes = {v: k for k, v in dj_database_url.SCHEMES.iteritems()}
+    _schemes = {v: k for k, v in dj_database_url.SCHEMES.items()}
     if db_key in databases:
         db = databases.get(db_key)
         engine = db.get('ENGINE', None)

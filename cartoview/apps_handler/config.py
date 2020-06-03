@@ -61,7 +61,7 @@ class AppsDict(Mapping):
         return iter(self._app_data)
 
     def __unicode__(self):
-        return unicode(repr(self._app_data))
+        return str(repr(self._app_data))
 
     def __sort_apps(self):
         self._app_data = dict(

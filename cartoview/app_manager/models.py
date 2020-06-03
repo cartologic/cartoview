@@ -75,7 +75,8 @@ class App(models.Model):
     date_installed = models.DateTimeField(
         'Date Installed', auto_now_add=True, null=True)
     installed_by = models.ForeignKey(
-        geonode_settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.PROTECT)
+        geonode_settings.AUTH_USER_MODEL, null=True,
+        blank=True, on_delete=models.PROTECT)
     single_instance = models.BooleanField(
         default=False, null=False, blank=False)
     category = models.ManyToManyField(AppType, related_name='apps')
