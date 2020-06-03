@@ -32,14 +32,14 @@ class AppInstallerTest(TestCase):
             data = {
                 'action': 'suspend_selected',
                 ACTION_CHECKBOX_NAME:
-                    [unicode(app.pk) for app in installed_apps]
+                    [str(app.pk) for app in installed_apps]
             }
             resp = self.client.post(apps_admin_url, data)
             self.assertNotEqual(resp.status_code, 500)
             data = {
                 'action': 'activate_selected',
                 ACTION_CHECKBOX_NAME:
-                    [unicode(app.pk) for app in installed_apps]
+                    [str(app.pk) for app in installed_apps]
             }
             resp = self.client.post(apps_admin_url, data)
             self.assertNotEqual(resp.status_code, 500)

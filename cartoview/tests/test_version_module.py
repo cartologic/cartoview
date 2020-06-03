@@ -1,4 +1,3 @@
-from builtins import basestring
 from django.test import TestCase
 
 from cartoview import get_current_version
@@ -8,7 +7,7 @@ from cartoview.version import get_version, json_version_info
 class CartoviewVersionModule(TestCase):
     def test_json_version_info(self):
         version_text = json_version_info()
-        self.assertTrue(isinstance(version_text, basestring))
+        self.assertTrue(isinstance(version_text, str))
         cond1 = "current_version" in version_text
         cond2 = "backward_versions" in version_text
         self.assertTrue(cond1 and cond2)

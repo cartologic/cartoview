@@ -2,7 +2,7 @@
 from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
 
-from urllib import urlencode
+from urllib.parse import urlencode
 
 import dj_database_url
 from django.conf import settings
