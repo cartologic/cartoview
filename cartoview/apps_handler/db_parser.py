@@ -2,7 +2,7 @@
 from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
 
-from urllib import urlencode
+from urllib.parse import urlencode
 
 import dj_database_url
 from django.conf import settings
@@ -17,7 +17,7 @@ class DBParseException(Exception):
 
 def get_db_url(db_key):
     databases = getattr(settings, 'DATABASES', {})
-    _schemes = {v: k for k, v in dj_database_url.SCHEMES.iteritems()}
+    _schemes = {v: k for k, v in dj_database_url.SCHEMES.items()}
     if db_key in databases:
         db = databases.get(db_key)
         engine = db.get('ENGINE', None)

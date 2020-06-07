@@ -146,9 +146,9 @@ if CARTOVIEW_STAND_ALONE or CARTOVIEW_TEST:
         try:
             execfile(settings_file)
         except Exception as e:
-            print(e.message)
+            print(e)
 
 try:
     from .local_settings import *  # noqa
 except Exception as e:
-    print(e.message)
+    print(e)

@@ -43,12 +43,12 @@ def layer_config_json(request, layername):
     zoom = layer.zoom
     viewer['map']['center'] = center
     viewer['map']['zoom'] = zoom
-    for l in viewer.get("map").get("layers"):
-        if l.get('bbox', None):
+    for mapLayer in viewer.get("map").get("layers"):
+        if mapLayer.get('bbox', None):
             newBBox = []
-            for x in l.get('bbox'):
+            for x in mapLayer.get('bbox'):
                 newBBox.append(convert_infinty(x))
-            l.update({"bbox": newBBox})
+            mapLayer.update({"bbox": newBBox})
     return HttpResponse(json.dumps(viewer),
                         content_type="application/json")
 

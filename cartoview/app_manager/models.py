@@ -75,7 +75,8 @@ class App(models.Model):
     date_installed = models.DateTimeField(
         'Date Installed', auto_now_add=True, null=True)
     installed_by = models.ForeignKey(
-        geonode_settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.PROTECT)
+        geonode_settings.AUTH_USER_MODEL, null=True,
+        blank=True, on_delete=models.PROTECT)
     single_instance = models.BooleanField(
         default=False, null=False, blank=False)
     category = models.ManyToManyField(AppType, related_name='apps')
@@ -132,7 +133,7 @@ class App(models.Model):
 
     @property
     def open_url(self):
-        from django.core.urlresolvers import reverse
+        from django.urls import reverse
         open_url = reverse('app_manager_base_url') + self.name
         try:
             app_module = __import__(self.name)

@@ -1,7 +1,7 @@
-from agon_ratings.models import OverallRating
+from pinax.ratings.models import OverallRating
 from dialogos.models import Comment
 from django.contrib.contenttypes.models import ContentType
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.db.models import Avg
 from haystack import indexes
 
