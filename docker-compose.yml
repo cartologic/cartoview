@@ -1,5 +1,4 @@
 version: '3'
-
 services:
   postgis:
     image: kartoza/postgis:11.5-2.5
@@ -65,17 +64,20 @@ services:
   cartoview:
     # image: cartoview/cartoview:latest
     build: .
+    image: cartoview:latest
     container_name: cartoview_django
     command: bash -c "python manage.py cherry_server"
     restart: unless-stopped
     hostname: cartoview
     depends_on:
       - postgis
+      - data-dir-conf
       - geoserver
     env_file:
       - ./env/django.env
     volumes:
       - "./:/usr/src/carto_app/cartoview"
+      - geoserver-dir:/geoserver_data/data
     networks:
       -cartoview-external:
         ipv4_address: 10.5.0.3
@@ -83,7 +85,8 @@ services:
     expose:
       - "8000"
   celery:
-    image: cartoview/cartoview:latest
+    image: cartoview:latest
+    container_name: cartoview_celery
     command: bash -c "celery worker --app=cartoview --broker=amqp://guest:guest@rabbitmq:5672/ -B -E -l debug"
     restart: unless-stopped
     hostname: celery
@@ -121,4 +124,4 @@ networks:
        internal: true
 volumes:
   geoserver-dir:
-  pg-data:
+  postgis-data:
