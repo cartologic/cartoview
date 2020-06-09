@@ -54,7 +54,9 @@ services:
         ipv4_address: 10.5.0.2
       -cartoview-internal:
   cartoview:
-    image: cartoview/cartoview:latest
+    # image: cartoview/cartoview:latest
+    build: .
+    container_name: cartoview_django
     command: bash -c "python manage.py cherry_server"
     restart: unless-stopped
     hostname: cartoview
