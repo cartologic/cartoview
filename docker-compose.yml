@@ -2,14 +2,23 @@ version: '3'
 
 services:
   postgis:
-    image: cartoview/cartoview-postgis:latest
-    restart: unless-stopped
-    env_file:
-      - ./env/postgis.env
+    image: kartoza/postgis:11.5-2.5
+    volumes:
+      - postgis-data:/var/lib/postgresql
+      # - dbbackups:/backups
+    environment:
+      # If you need to create multiple database you can add coma separated databases eg gis,data
+      - POSTGRES_DB=gis,cartoview,cartoview_datastore
+      - POSTGRES_USER=docker
+      - POSTGRES_PASS=docker
+      - ALLOW_IP_RANGE=0.0.0.0/0
+      # Add extensions you need to be enabled by default in the DB. Default are the five specified below
+      - POSTGRES_MULTIPLE_EXTENSIONS=postgis,hstore,postgis_topology,postgis_raster,pgrouting
     expose:
       - "5432"
-    volumes:
-      - "pg-data:/var/lib/postgresql"
+    restart: on-failure
+    healthcheck:
+      test: "exit 0"
     networks:
       -cartoview-internal:
   elasticsearch:
