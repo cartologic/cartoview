@@ -40,7 +40,7 @@ services:
     networks:
       -cartoview-internal:
   data-dir-conf:
-    image: geonode/geoserver_data:2.15.4
+    image: geonode/geoserver_data:2.16.2
     restart: on-failure
     container_name: gsconf4cartoview
     command: /bin/true
@@ -51,7 +51,7 @@ services:
     depends_on:
       - postgis
       - data-dir-conf
-    restart: always
+    restart: unless-stopped
     expose:
       - "8080"
     volumes:
