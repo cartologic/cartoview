@@ -62,9 +62,9 @@ services:
         ipv4_address: 10.5.0.2
       -cartoview-internal:
   cartoview:
-    # image: cartoview/cartoview:latest
-    build: .
-    image: cartoview:latest
+    image: cartoview/cartoview:latest
+    # build: .
+    # image: cartoview:latest
     container_name: cartoview_django
     command: bash -c "python manage.py cherry_server"
     restart: unless-stopped
@@ -85,7 +85,8 @@ services:
     expose:
       - "8000"
   celery:
-    image: cartoview:latest
+    image: cartoview/cartoview:latest
+    # image: cartoview:latest
     container_name: cartoview_celery
     command: bash -c "celery worker --app=cartoview --broker=amqp://guest:guest@rabbitmq:5672/ -B -E -l debug"
     restart: unless-stopped
