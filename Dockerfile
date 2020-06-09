@@ -12,8 +12,8 @@ ARG APP_DIR=/usr/src/carto_app
 ENV CPATH "$CPATH:/usr/include/gdal:/usr/include"
 
 COPY . ${APP_DIR}/cartoview
-RUN chmod +x cartoview/scripts/docker/setup.sh
-RUN cartoview/scripts/docker/setup.sh
+RUN chmod +x ${APP_DIR}/cartoview/scripts/docker/setup.sh
+RUN ${APP_DIR}/cartoview/scripts/docker/setup.sh
 
 # switch to project dir
 VOLUME ${APP_DIR}
