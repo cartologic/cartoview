@@ -38,7 +38,7 @@ services:
     volumes:
       - geoserver-dir:/geoserver_data/data
   geoserver:
-    image: geonode/geoserver:2.15.4
+    image: geonode/geoserver:2.16.2
     depends_on:
       - postgis
       - data-dir-conf
