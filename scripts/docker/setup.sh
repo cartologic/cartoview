@@ -2,33 +2,34 @@
 
 apt-get update -y && apt-get install wget gnupg -y
 
-# add postgres client latest
-touch /etc/apt/sources.list.d/pgdg.list &&
-	echo "deb http://apt.postgresql.org/pub/repos/apt/ stretch-pgdg main" >>/etc/apt/sources.list.d/pgdg.list &&
-	wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
+# Enable postgresql-client-11.x
+echo "deb http://apt.postgresql.org/pub/repos/apt/ stretch-pgdg main" | tee /etc/apt/sources.list.d/pgdg.list
+wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
 
-# add gdal repo
-echo "deb http://http.us.debian.org/debian buster main non-free contrib" >>/etc/apt/sources.list
+# This section is borrowed from the official Django image but adds GDAL and others
+apt-get update && apt-get install -y \
+		gcc \
+		zip \
+		gettext \
+		postgresql-client-11 libpq-dev \
+		sqlite3 \
+		python3-gdal python3-psycopg2 \
+		python3-pil python3-lxml \
+		python3-dev libgdal-dev \
+		libmemcached-dev libsasl2-dev zlib1g-dev \
+		python3-pylibmc \
+		uwsgi uwsgi-plugin-python3 \
+	--no-install-recommends && rm -rf /var/lib/apt/lists/*
 
-# geonode required libraries
-apt-get update -y && apt-get install -y \
-	build-essential gcc git \
-	libxml2-dev libxslt1-dev libxslt-dev python-dev \
-	gettext sqlite3 \
-	python-lxml \
-	postgresql-client libpq-dev python-psycopg2 \
-	python-pil \
-	python-ldap \
-	libmemcached-dev libsasl2-dev \
-	python-pylibmc \
-	gdal-bin libgdal-dev libgeos-dev \
-	--no-install-recommends
+# install geoip-bin
+printf "deb http://archive.debian.org/debian/ jessie main\ndeb-src http://archive.debian.org/debian/ jessie main\ndeb http://security.debian.org jessie/updates main\ndeb-src http://security.debian.org jessie/updates main" > /etc/apt/sources.list
+apt-get update && apt-get install -y geoip-bin
 
-# update python pip version
-pip install --upgrade pip
+# Upgrade pip [Note from geonode-project template on github]
+RUN pip install pip==20.1
 
-# install python gdal stable
-pip install GDAL==2.3.2
+# Install pygdal (after requirements for numpy 1.16 in GeoNode requirements.txt)
+RUN pip install pygdal==$(gdal-config --version).*
 
 # install geonode from commit hash if dev enabled
 #if [ "$GEONODE_DEV" = true ]; then
@@ -40,11 +41,7 @@ pip install GDAL==2.3.2
 # create required dirs
 mkdir -p ${APP_DIR}
 
-#django-admin.py startproject \
-#	--template=https://github.com/cartologic/Cartoview-project-template/archive/1.10.x.zip \
-#	--name django.env,server.py,docker-compose.yml carto_app ${APP_DIR}
-
-# install cartoview
+# install cartoview [this will install GeoNode as a dependancy]
 cd ${APP_DIR}/cartoview && pip install -e .  # && rm -rf /cartoview
 
 # cleanup image
