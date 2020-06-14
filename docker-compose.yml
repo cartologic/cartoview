@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 services:
   postgis:
     image: kartoza/postgis:11.5-2.5
@@ -11,8 +11,7 @@ services:
       - POSTGRES_USER=docker
       - POSTGRES_PASS=docker
       - ALLOW_IP_RANGE=0.0.0.0/0
-      # Add extensions you need to be enabled by default in the DB. Default are the five specified below
-      - POSTGRES_MULTIPLE_EXTENSIONS=postgis,hstore,postgis_topology,postgis_raster,pgrouting
+      - POSTGRES_MULTIPLE_EXTENSIONS=postgis
     expose:
       - "5432"
     restart: on-failure
@@ -109,6 +108,8 @@ services:
       - "80"
     volumes:
       - ./scripts/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./static/:/cartoview/static/
+      - ./uploaded/:/cartoview/uploaded/
     networks:
       -cartoview-external:
         ipv4_address: 10.5.0.4
@@ -116,13 +117,13 @@ services:
     ports:
       - "80:80"
 networks:
-    -cartoview-external:
-      driver: bridge
-      ipam:
-        config:
-          - subnet: 10.5.0.0/16
-    -cartoview-internal:
-       internal: true
+  -cartoview-external:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.5.0.0/16
+  -cartoview-internal:
+    internal: true
 volumes:
   geoserver-dir:
   postgis-data:
