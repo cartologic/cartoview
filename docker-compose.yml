@@ -1,15 +1,22 @@
-version: '3'
-
+version: "3"
 services:
   postgis:
-    image: cartoview/cartoview-postgis:latest
-    restart: unless-stopped
-    env_file:
-      - ./env/postgis.env
+    image: kartoza/postgis:11.5-2.5
+    volumes:
+      - postgis-data:/var/lib/postgresql
+      # - dbbackups:/backups
+    environment:
+      # If you need to create multiple database you can add coma separated databases eg gis,data
+      - POSTGRES_DB=cartoview,cartoview_datastore
+      - POSTGRES_USER=docker
+      - POSTGRES_PASS=docker
+      - ALLOW_IP_RANGE=0.0.0.0/0
+      - POSTGRES_MULTIPLE_EXTENSIONS=postgis
     expose:
       - "5432"
-    volumes:
-      - "pg-data:/var/lib/postgresql"
+    restart: on-failure
+    healthcheck:
+      test: "exit 0"
     networks:
       -cartoview-internal:
   elasticsearch:
@@ -31,18 +38,18 @@ services:
     networks:
       -cartoview-internal:
   data-dir-conf:
-    image: geonode/geoserver_data:2.15.4
+    image: geonode/geoserver_data:2.16.2
     restart: on-failure
     container_name: gsconf4cartoview
     command: /bin/true
     volumes:
       - geoserver-dir:/geoserver_data/data
   geoserver:
-    image: geonode/geoserver:2.15.4
+    image: geonode/geoserver:2.16.2
     depends_on:
       - postgis
       - data-dir-conf
-    restart: always
+    restart: unless-stopped
     expose:
       - "8080"
     volumes:
@@ -54,7 +61,8 @@ services:
         ipv4_address: 10.5.0.2
       -cartoview-internal:
   cartoview:
-    image: cartoview/cartoview:latest
+    image: cartologic/cartoview:latest
+    container_name: cartoview_django
     command: bash -c "python manage.py cherry_server"
     restart: unless-stopped
     hostname: cartoview
@@ -65,6 +73,7 @@ services:
       - ./env/django.env
     volumes:
       - "./:/usr/src/carto_app/cartoview"
+      - geoserver-dir:/geoserver_data/data
     networks:
       -cartoview-external:
         ipv4_address: 10.5.0.3
@@ -72,7 +81,8 @@ services:
     expose:
       - "8000"
   celery:
-    image: cartoview/cartoview:latest
+    image: cartologic/cartoview:latest    
+    container_name: cartoview_celery
     command: bash -c "celery worker --app=cartoview --broker=amqp://guest:guest@rabbitmq:5672/ -B -E -l debug"
     restart: unless-stopped
     hostname: celery
@@ -94,6 +104,8 @@ services:
       - "80"
     volumes:
       - ./scripts/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./static/:/cartoview/static/
+      - ./uploaded/:/cartoview/uploaded/
     networks:
       -cartoview-external:
         ipv4_address: 10.5.0.4
@@ -101,13 +113,13 @@ services:
     ports:
       - "80:80"
 networks:
-    -cartoview-external:
-      driver: bridge
-      ipam:
-        config:
-          - subnet: 10.5.0.0/16
-    -cartoview-internal:
-       internal: true
+  -cartoview-external:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.5.0.0/16
+  -cartoview-internal:
+    internal: true
 volumes:
   geoserver-dir:
-  pg-data:
+  postgis-data:
