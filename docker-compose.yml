@@ -7,7 +7,7 @@ services:
       # - dbbackups:/backups
     environment:
       # If you need to create multiple database you can add coma separated databases eg gis,data
-      - POSTGRES_DB=gis,cartoview,cartoview_datastore
+      - POSTGRES_DB=cartoview,cartoview_datastore
       - POSTGRES_USER=docker
       - POSTGRES_PASS=docker
       - ALLOW_IP_RANGE=0.0.0.0/0
@@ -62,15 +62,12 @@ services:
       -cartoview-internal:
   cartoview:
     image: cartoview/cartoview:latest
-    # build: .
-    # image: cartoview:latest
     container_name: cartoview_django
     command: bash -c "python manage.py cherry_server"
     restart: unless-stopped
     hostname: cartoview
     depends_on:
       - postgis
-      - data-dir-conf
       - geoserver
     env_file:
       - ./env/django.env
@@ -84,8 +81,7 @@ services:
     expose:
       - "8000"
   celery:
-    image: cartoview/cartoview:latest
-    # image: cartoview:latest
+    image: cartoview/cartoview:latest    
     container_name: cartoview_celery
     command: bash -c "celery worker --app=cartoview --broker=amqp://guest:guest@rabbitmq:5672/ -B -E -l debug"
     restart: unless-stopped
