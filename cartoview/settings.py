@@ -152,3 +152,5 @@ try:
     from .local_settings import *  # noqa
 except Exception as e:
     print(e)
+# default uploader.
+os.environ.setdefault('DEFAULT_BACKEND_UPLOADER', 'geonode.importer')
