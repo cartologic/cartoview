@@ -63,9 +63,11 @@ class RestartHelper(object):
     @classmethod
     @restart_enabled
     def restart_server(cls):
-        cls.django_reload()
-        cls.restart_script()
-        cls.cherry_restart()
+        if install_app_batch and os.path.exists(install_app_batch):
+            cls.restart_script()
+        else:
+            cls.django_reload()
+            cls.cherry_restart()
 
     @classmethod
     def cherry_restart(cls):
