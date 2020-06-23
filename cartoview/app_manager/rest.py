@@ -16,7 +16,7 @@ from future import standard_library
 from geonode.api.api import ProfileResource
 from geonode.api.authorization import GeoNodeAuthorization
 from geonode.api.resourcebase_api import (CommonMetaApi, LayerResource,
-                                          MapResource)
+                                          MapResource, CommonModelApi)
 from geonode.maps.models import MapLayer
 from geonode.people.models import Profile
 from geonode.security.utils import get_visible_resources
@@ -306,7 +306,7 @@ class AppTypeResource(ModelResource):
         queryset = AppType.objects.all()
 
 
-class AppInstanceResource(ModelResource):
+class AppInstanceResource(CommonModelApi):
     launch_app_url = fields.CharField(null=True, blank=True)
     edit_url = fields.CharField(null=True, blank=True)
     app = fields.ForeignKey(AppResource, 'app', full=True, null=True)
