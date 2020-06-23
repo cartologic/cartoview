@@ -96,7 +96,7 @@
 
                                         {% endif %}
                                         {% if app.anonymous_urls %}
-                                            {% for key, values in app.anonymous_urls.iteritems %}
+                                            {% for key, values in app.anonymous_urls.items %}
                                                 {% url key as the_url %}
                                                 {% if the_url %}
                                                 <div id="card-buttons">
@@ -109,7 +109,7 @@
                                         {% endif %}
 
                                         {% if user.user.is_authenticated and app.logged_in_urls %}
-                                            {% for key, values in app.logged_in_urls.iteritems %}
+                                            {% for key, values in app.logged_in_urls.items %}
                                                 {% url key as the_url %}
                                                 {% if the_url %}
                                                 <div id="card-buttons">
@@ -121,7 +121,7 @@
                                             {% endfor %}
                                         {% endif %}
                                         {% if user.is_staff and  app.admin_urls %}
-                                            {% for key, values in app.admin_urls.iteritems %}
+                                            {% for key, values in app.admin_urls.items %}
                                                 {% url key as the_url %}
                                                 {% if the_url %}
                                                 <div id="card-buttons">
