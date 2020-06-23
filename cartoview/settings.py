@@ -66,10 +66,6 @@ except ValueError:
     # fallback to regular list of values separated with misc chars
     ALLOWED_HOSTS = ['*'] if os.getenv('ALLOWED_HOSTS') is None \
         else re.split(r' *[,|:|;] *', os.getenv('ALLOWED_HOSTS'))
-try:
-    from .local_settings import *
-except Exception as e:
-    pass
 
 CARTOVIEW_TEST = 'test' in sys.argv or ast.literal_eval(
     os.getenv('CARTOVIEW_TEST', "False")) or 'run_cartoview_test' in sys.argv
