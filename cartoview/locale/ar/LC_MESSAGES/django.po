@@ -111,6 +111,9 @@ msgstr "من أجل أنظمة أفضل"
 msgid "Search for Maps"
 msgstr "ابحث عن خرائط"
 
+msgid "Search for Indicators"
+msgstr "ابحث عن مؤشرات"
+
 msgid "Search in this list"
 msgstr "ابحث في هذه القائمة"
 
@@ -198,7 +201,7 @@ msgstr "تعديل الخريطة"
 #: .\cartoview\maps\wagtail_hooks.py:37 .\cartoview\maps\wagtail_hooks.py:39
 #, python-format
 msgid "Create a New %s"
-msgstr "جديد"
+msgstr "جديد %s"
 
 #: .\cartoview\templates\account\login.html:16
 #: .\cartoview\templates\account\login.html:24

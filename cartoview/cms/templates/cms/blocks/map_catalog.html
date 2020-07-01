@@ -3,6 +3,8 @@
 {% get_current_language as LANGUAGE_CODE %}
 {% slugurl 'keywords_ar' as keywordsurl_ar %}
 {% slugurl 'keywords_en' as keywordsurl_en %}
+{% slugurl 'indicator-list-ar' as indicator_list_url_ar %}
+{% slugurl 'indicator-list-en' as indicator_list_url_en %}
 {% load static from staticfiles %}
 
 <link href="{% static 'cms/blocks/map_catalog.css' %}" rel="stylesheet"/>
@@ -13,10 +15,10 @@
             <div class="title">
                 <h1>{{ self.title }}</h1>
             </div>
-            <form action="{% slugurl 'search' %}" autocomplete="off" class="form-horizontal" method="GET"
+            <form action="{% spaceless %}{% ifequal LANGUAGE_CODE "ar" %} {{ indicator_list_url_ar }} {% else %} {{ indicator_list_url_en }} {% endifequal %}{% endspaceless %}" autocomplete="off" class="form-horizontal" method="GET"
                   accept-charset="utf-8">
                 <div class="input-group">
-                    <input name="q" placeholder="{% trans 'Search for Maps' %}" value="" class="form-control"
+                    <input name="q" placeholder="{% trans 'Search for Indicators' %}" value="" class="form-control"
                            type="text">
                     <span class="input-group-btn">
                <button class="btn btn-white btn-raised btn-fab btn-round" type="submit" id="mapSearch">
