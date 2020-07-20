@@ -24,9 +24,9 @@
         }
         $http.get(APPS_ENDPOINT, {
             params: params
-        }).success(function (data) {
+        }).then(function (data) {
             if ($location.search().hasOwnProperty('app__name__in')) {
-                data.objects = module.set_initial_filters_from_query(data.objects,
+                data.objects = module.set_initial_filters_from_query(data.data.objects,
                     $location.search()['app__name__in'], 'identifier');
             }
             $rootScope.apps = data.objects;
@@ -34,7 +34,7 @@
                 module.haystack_facets($http, $rootScope, $location);
             }
         });
-    }
+    };
 
     /*
     * Load categories and keywords

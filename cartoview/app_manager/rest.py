@@ -9,6 +9,7 @@ from django.conf import settings
 from django.conf.urls import url
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import InvalidPage, Paginator
+from django.forms import model_to_dict
 from django.urls import reverse
 from django.db import transaction
 from django.http import Http404
@@ -307,7 +308,7 @@ class AppTypeResource(ModelResource):
 
 
 class AppInstanceResource(CommonModelApi):
-    launch_app_url = fields.CharField(null=True, blank=True)
+    launch_app_url = fields.CharField(null=True, blank=True, use_in='all')
     edit_url = fields.CharField(null=True, blank=True)
     app = fields.ForeignKey(AppResource, 'app', full=True, null=True)
     map = fields.ForeignKey(MapResource, 'related_map', full=True, null=True)
@@ -342,6 +343,19 @@ class AppInstanceResource(CommonModelApi):
             id__in=__inactive_apps_instances)
 
         return active_app_instances
+
+    def format_objects(self, objects):
+        # hack needed because dehydrate does not seem to work in CommonModelApi
+        formatted_objects = []
+        for obj in objects:
+            formatted_obj = model_to_dict(obj, fields=self.VALUES)
+            formatted_obj['owner__username'] = obj.owner.username
+            formatted_obj['owner_name'] = obj.owner.get_full_name() or obj.owner.username
+            if obj.app is not None:
+                formatted_obj['launch_app_url'] = reverse("%s.view" % obj.app.name, args=[obj.pk])
+                formatted_obj['edit_url'] = reverse("%s.edit" % obj.app.name, args=[obj.pk])
+            formatted_objects.append(formatted_obj)
+        return formatted_objects
 
     def dehydrate_owner(self, bundle):
         return bundle.obj.owner.username
