@@ -15,7 +15,7 @@ def create_direcotry(path, mode=0o777):
             previous_mask = os.umask(0)
             os.makedirs(path, mode=mode)
         except OSError as e:
-            logger.error(e.message)
+            logger.error(e)
         finally:
             # set the previous mask back
             os.umask(previous_mask)

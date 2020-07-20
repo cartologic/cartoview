@@ -47,7 +47,7 @@ class RestartHelper(object):
             from .utils import populate_apps
             populate_apps()
         except Exception as e:
-            logger.error(e.message)
+            logger.error(e)
 
     @classmethod
     def restart_script(cls):
@@ -204,7 +204,7 @@ class AppInstaller(object):
         try:
             self.extract_move_app(zip_ref)
         except shutil.Error as e:
-            logger.error(e.message)
+            logger.error(e)
             raise e
         finally:
             zip_ref.close()
@@ -276,7 +276,7 @@ class AppInstaller(object):
                         name, self.store.id, version, user=self.user)
                     installed_apps += app_installer.install(restart=False)
                 except AppAlreadyInstalledException as e:
-                    logger.error(e.message)
+                    logger.error(e)
             self._download_app()
             importlib.reload(pkg_resources)
             self.check_then_finlize(restart, installed_apps)
@@ -370,7 +370,7 @@ class AppInstaller(object):
                 installer = importlib.import_module('%s.installer' % self.name)
                 installer.uninstall()
             except ImportError as e:
-                logger.error(e.message)
+                logger.error(e)
             self.completely_remove()
             uninstalled = True
             if restart:

@@ -57,5 +57,5 @@ def load_apps(APPS_DIR):
                     # unicode_literals
                     CARTOVIEW_APPS += (app.name.__str__(),)
             except Exception as e:
-                print(e.message)
-                logger.error(e.message)
+                print(e)
+                logger.error(e)

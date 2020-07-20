@@ -22,7 +22,7 @@ def uninstall_selected(modeladmin, request, queryset):
                 version=app.version)
             installer.uninstall()
         except Exception as e:
-            return HttpResponseServerError(e.message)
+            return HttpResponseServerError(e)
 
 
 uninstall_selected.short_description = "Uninstall Selected Apps"

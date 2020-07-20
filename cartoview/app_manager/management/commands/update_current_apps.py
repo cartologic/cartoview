@@ -31,7 +31,7 @@ class Command(BaseCommand):
                           (index + 1, app.name))
             except Exception as ex:
                 print('[%-2s] %-35s  Failed error message %-25s' %
-                      (index + 1, app.name, ex.message))
+                      (index + 1, app.name, ex))
 
     def get_data_from_store(self, appname, url):
         payload = {'name__exact': appname}

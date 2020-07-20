@@ -83,7 +83,7 @@ class Api(object):
             try:
                 app_name = module_name.split('.')[1]
             except BaseException as e:
-                logger.error(e.message)
+                logger.error(e)
         if app_name not in self.apis:
             self.apis[app_name] = BaseApi(app_name)
         self.apis[app_name].register(resource, canonical)
