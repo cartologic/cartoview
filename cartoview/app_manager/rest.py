@@ -350,10 +350,13 @@ class AppInstanceResource(CommonModelApi):
         for obj in objects:
             formatted_obj = model_to_dict(obj, fields=self.VALUES)
             formatted_obj['owner__username'] = obj.owner.username
-            formatted_obj['owner_name'] = obj.owner.get_full_name() or obj.owner.username
+            formatted_obj['owner_name'] = \
+                obj.owner.get_full_name() or obj.owner.username
             if obj.app is not None:
-                formatted_obj['launch_app_url'] = reverse("%s.view" % obj.app.name, args=[obj.pk])
-                formatted_obj['edit_url'] = reverse("%s.edit" % obj.app.name, args=[obj.pk])
+                formatted_obj['launch_app_url'] = \
+                    reverse("%s.view" % obj.app.name, args=[obj.pk])
+                formatted_obj['edit_url'] = \
+                    reverse("%s.edit" % obj.app.name, args=[obj.pk])
             formatted_objects.append(formatted_obj)
         return formatted_objects
 
