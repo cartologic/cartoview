@@ -61,7 +61,7 @@ services:
         ipv4_address: 10.5.0.2
       -cartoview-internal:
   cartoview:
-    image: cartologic/cartoview:latest
+    image: cartologic/cartoview:1.30.0
     container_name: cartoview_django
     command: bash -c "python manage.py cherry_server"
     restart: unless-stopped
