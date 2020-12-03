@@ -22,7 +22,7 @@ CARTOVIEW_INSTALLED_APPS = ("cartoview",
                             "cartoview.site_management",
                             "cartoview.apps_handler.apps.AppsHandlerConfig")
 INSTALLED_APPS += CARTOVIEW_INSTALLED_APPS
-ROOT_URLCONF = "cartoview.urls"
+ROOT_URLCONF = os.getenv('ROOT_URLCONF', "cartoview.urls")
 CARTOVIEW_DIR = os.path.abspath(os.path.dirname(cartoview.__file__))
 BASE_DIR = os.path.dirname(CARTOVIEW_DIR)
 CARTOVIEW_TEMPLATE_DIRS = [
