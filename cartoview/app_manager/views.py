@@ -110,8 +110,8 @@ def install_app(request, store_id, app_name, version):
         installer.install()
         response_data["success"] = True
     except Exception as ex:
-        logger.error(ex.message)
-        response_data["messages"].append({"type": "error", "msg": ex.message})
+        logger.error(ex)
+        response_data["messages"].append({"type": "error", "msg": ex})
 
     return HttpResponse(
         json.dumps(response_data), content_type="application/json")
@@ -126,8 +126,8 @@ def uninstall_app(request, store_id, app_name):
         installer.uninstall(restart=False)
         response_data["success"] = True
     except Exception as ex:
-        logger.error(ex.message)
-        response_data["errors"].append(ex.message)
+        logger.error(ex)
+        response_data["errors"].append(ex)
     return HttpResponse(
         json.dumps(response_data), content_type="application/json")
 

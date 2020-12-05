@@ -47,7 +47,7 @@ class RestartHelper(object):
             from .utils import populate_apps
             populate_apps()
         except Exception as e:
-            logger.error(e.message)
+            logger.error(e)
 
     @classmethod
     def restart_script(cls):
@@ -63,9 +63,11 @@ class RestartHelper(object):
     @classmethod
     @restart_enabled
     def restart_server(cls):
-        cls.django_reload()
-        cls.restart_script()
-        cls.cherry_restart()
+        if install_app_batch and os.path.exists(install_app_batch):
+            cls.restart_script()
+        else:
+            cls.django_reload()
+            cls.cherry_restart()
 
     @classmethod
     def cherry_restart(cls):
@@ -202,7 +204,7 @@ class AppInstaller(object):
         try:
             self.extract_move_app(zip_ref)
         except shutil.Error as e:
-            logger.error(e.message)
+            logger.error(e)
             raise e
         finally:
             zip_ref.close()
@@ -274,7 +276,7 @@ class AppInstaller(object):
                         name, self.store.id, version, user=self.user)
                     installed_apps += app_installer.install(restart=False)
                 except AppAlreadyInstalledException as e:
-                    logger.error(e.message)
+                    logger.error(e)
             self._download_app()
             importlib.reload(pkg_resources)
             self.check_then_finlize(restart, installed_apps)
@@ -368,7 +370,7 @@ class AppInstaller(object):
                 installer = importlib.import_module('%s.installer' % self.name)
                 installer.uninstall()
             except ImportError as e:
-                logger.error(e.message)
+                logger.error(e)
             self.completely_remove()
             uninstalled = True
             if restart:

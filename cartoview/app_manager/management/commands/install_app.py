@@ -40,4 +40,4 @@ class Command(BaseCommand):
                 installer = AppInstaller(app_name, store.id, app_version)
                 installer.install()
         except Exception as ex:
-            logger.error(ex.message)
+            logger.error(ex)

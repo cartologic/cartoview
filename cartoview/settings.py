@@ -22,7 +22,7 @@ CARTOVIEW_INSTALLED_APPS = ("cartoview",
                             "cartoview.site_management",
                             "cartoview.apps_handler.apps.AppsHandlerConfig")
 INSTALLED_APPS += CARTOVIEW_INSTALLED_APPS
-ROOT_URLCONF = "cartoview.urls"
+ROOT_URLCONF = os.getenv('ROOT_URLCONF', "cartoview.urls")
 CARTOVIEW_DIR = os.path.abspath(os.path.dirname(cartoview.__file__))
 BASE_DIR = os.path.dirname(CARTOVIEW_DIR)
 CARTOVIEW_TEMPLATE_DIRS = [
@@ -66,10 +66,6 @@ except ValueError:
     # fallback to regular list of values separated with misc chars
     ALLOWED_HOSTS = ['*'] if os.getenv('ALLOWED_HOSTS') is None \
         else re.split(r' *[,|:|;] *', os.getenv('ALLOWED_HOSTS'))
-try:
-    from .local_settings import *
-except Exception as e:
-    pass
 
 CARTOVIEW_TEST = 'test' in sys.argv or ast.literal_eval(
     os.getenv('CARTOVIEW_TEST', "False")) or 'run_cartoview_test' in sys.argv
@@ -147,6 +143,10 @@ if CARTOVIEW_STAND_ALONE or CARTOVIEW_TEST:
             execfile(settings_file)
         except Exception as e:
             print(e)
+
+# default uploader.
+os.environ.setdefault('DEFAULT_BACKEND_UPLOADER', 'geonode.importer')
+
 
 try:
     from .local_settings import *  # noqa

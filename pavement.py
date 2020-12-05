@@ -361,7 +361,7 @@ def start_geoserver(options):
                 javapath = 'START /B "" "' + javapath_opt + '"'
 
             sh((
-                    '%(javapath)s -Xms512m -Xmx2048m -server -XX:+UseConcMarkSweepGC -XX:MaxPermSize=512m'
+                    '%(javapath)s -Xms512m -Xmx1024m -server -XX:+UseConcMarkSweepGC -XX:MaxPermSize=512m'
                     ' -DGEOSERVER_DATA_DIR=%(data_dir)s'
                     ' -Dgeofence.dir=%(geofence_dir)s'
                     # ' -Dgeofence-ovr=geofence-datasource-ovr.properties'
@@ -597,8 +597,8 @@ def install_docker_data_dir():
 
 @task
 def prepare_docker_oauth_fixture():
-    project_name = os.environ.get('PROJECT_NAME', 'cartoview')
-    fixturefile = path('{}/fixtures/default_oauth_apps_docker.json'.format(project_name))
+    project_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "cartoview")
+    fixturefile = os.path.join(project_dir, 'fixtures', 'default_oauth_apps_docker.json')
     os.remove(fixturefile)
     siteurl = os.environ.get('SITEURL', 'http://localhost/')
     default_fixture = [

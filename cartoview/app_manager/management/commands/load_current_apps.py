@@ -57,4 +57,4 @@ class Command(BaseCommand):
                 except Exception as e:
                     logger.error(('Failed to load %-5s may be ' +
                                   'app folder not found error: %-10s') %
-                                 (app_name, e.message))
+                                 (app_name, e))

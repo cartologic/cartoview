@@ -105,7 +105,7 @@ class App(models.Model):
         try:
             return reverse("%s_settings" % self.name)
         except BaseException as e:
-            logger.error(e.message)
+            logger.error(e)
             return None
 
     @property
@@ -128,7 +128,7 @@ class App(models.Model):
                 else:
                     anonymous_urls = None
         except ImportError as e:
-            logger.error(e.message)
+            logger.error(e)
         return (admin_urls, logged_in_urls, anonymous_urls)
 
     @property
@@ -140,7 +140,7 @@ class App(models.Model):
             if hasattr(app_module, 'OPEN_URL_NAME'):
                 open_url = reverse(getattr(app_module, 'OPEN_URL_NAME'))
         except ImportError as e:
-            logger.error(e.message)
+            logger.error(e)
         return open_url
 
     @property
@@ -153,7 +153,7 @@ class App(models.Model):
                 create_new_url = reverse(
                     getattr(app_module, 'CREATE_NEW_URL_NAME'))
         except ImportError as e:
-            logger.error(e.message)
+            logger.error(e)
         return create_new_url
 
     @property
@@ -173,7 +173,7 @@ class App(models.Model):
         try:
             return reverse("%s.new" % self.name)
         except BaseException as e:
-            logger.error(e.message)
+            logger.error(e)
             return None
 
     def set_active(self, active=True):
@@ -250,7 +250,7 @@ class AppInstance(ResourceBase):
         try:
             return json.loads(self.config)
         except BaseException as e:
-            logger.error(e.message)
+            logger.error(e)
             return None
 
     def set_permissions(self, perm_spec):
