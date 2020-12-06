@@ -1,0 +1,19 @@
+.hljs, .admonition code{
+    background-color: #EEFFCC;
+}
+
+.hljs{
+    padding: 1em;
+}
+
+.wy-plain-list-disc, .rst-content .section ul, .rst-content .toctree-wrapper ul, article ul{
+    margin-bottom: 0;
+}
+
+.admonition{
+    margin: 10px 0px;
+}
+
+.wy-breadcrumbs-aside{
+    display: none !important;
+}

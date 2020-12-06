@@ -1,2 +1,30 @@
-site_name: Cartologic
+site_name: Cartoview
+site_url: https://cartoview.net
+repo_url: https://github.com/cartologic/cartoview.git
+edit_uri: /docs/
+repo_name: Github
+site_author: Cartologic
+copyright: Cartologic
+
+nav:
+  - About: index.md
+  - Key Features: key-features.md
+  - Demo: demo.md
+  - Installation:
+      - Ubuntu: installation/ubuntu.md
+      - Windows: installation/windows.md
+      - Docker: installation/docker.md
+      - Vagrant: installation/vagrant.md
+  - Install App: install-app.md
+  - For Developers: for-developers.md
+  - Upload App to GeoApp Market: upload-app.md
+  - Contribute: contribute.md
+  - Issues: issues.md
+  - Frequently Asked Questions: FAQ.md
 theme: readthedocs
+
+extra_css:
+    - css/custom.css
+
+markdown_extensions:
+    - admonition
