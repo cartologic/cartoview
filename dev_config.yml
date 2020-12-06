@@ -1,8 +1,5 @@
 ---
-GEOSERVER_URL: "https://build.geo-solutions.it/geonode/geoserver/latest/geoserver-2.16.2.war"
-DATA_DIR_URL: "https://build.geo-solutions.it/geonode/geoserver/latest/data-2.16.2.zip"
-JETTY_RUNNER_URL: "https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-runner/9.4.7.v20170914/jetty-runner-9.4.7.v20170914.jar"
-WINDOWS:
-  py2exe: "http://downloads.sourceforge.net/project/py2exe/py2exe/0.6.9/py2exe-0.6.9.win32-py2.7.exe"
-  pyproj: "https://pyproj.googlecode.com/files/pyproj-1.9.3.win32-py2.7.exe"
-  lxml: "https://pypi.python.org/packages/2.7/l/lxml/lxml-3.6.0.win32-py2.7.exe"
+GEOSERVER_URL: "https://www.dropbox.com/s/bdl6p64cuh4xu33/geoserver-2.17.2.war?dl=1"
+DATA_DIR_URL: "https://www.dropbox.com/s/43vw52s99w6w0rb/data-2.17.2.zip?dl=1"
+JETTY_RUNNER_URL: "https://repo1.maven.org/maven2/org/eclipse/jetty/jetty-runner/9.4.31.v20200723/jetty-runner-9.4.31.v20200723.jar"
+

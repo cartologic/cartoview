@@ -244,9 +244,9 @@ def setup_geoserver(options):
     geoserver_dir = path('geoserver')
 
     geoserver_bin = download_dir / \
-                    os.path.basename(dev_config['GEOSERVER_URL'])
+                    os.path.basename(urlparse(dev_config['GEOSERVER_URL']).path)
     jetty_runner = download_dir / \
-                   os.path.basename(dev_config['JETTY_RUNNER_URL'])
+                   os.path.basename(urlparse(dev_config['JETTY_RUNNER_URL']).path)
 
     grab(
         options.get('geoserver', dev_config['GEOSERVER_URL']), geoserver_bin,
