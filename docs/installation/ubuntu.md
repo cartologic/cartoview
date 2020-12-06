@@ -5,7 +5,7 @@
 This document describes the installation of Cartoview with GeoNode 2.10.3 on Ubuntu 18.04.
 
 ## Installation Requirements
-- **Install Python2.7 and Django**
+- **Install Python3.8 and Django**
 ```shell
 sudo apt-get update
 sudo apt-get install python-pip python-django
@@ -22,7 +22,7 @@ sudo apt-get install python-virtualenv python-dev python-gdal libxml2 libxml2-de
 Verify that the important packages are installed successfully. (The versions should be something like what after #)
 ```shell
 python --version      
-# Python 2.7.17
+# Python 3.7
 
 django-admin --version
 # 1.11.11
@@ -65,16 +65,16 @@ sudo apt-get install postgis
 ## Database Configuration
 - **Configure PostgreSQL interactive terminal to create the databases**
 
-You will need to log in with a user called postgres created by the installation to manage the database.
+You must connect to PostgresSQL as the postgres user, PostgresSQL default superuser.
 
 ```shell
 sudo -i -u postgres
 ```
-Change the postgres user password.
+Set the postgres user password to postgis.
 ```shell
 psql
 ```
-This will open PostgreSQL interactive terminal and you can set the postgres user password by typing:
+This will open PostgreSQL interactive terminal and and the set the password to postgis:
 ```shell
 \password
 ```
@@ -116,9 +116,7 @@ CREATE EXTENSION postgis;   # To be executed at psql terminal
 
 You can now logout back to your usual user (other than postgres) by just typing ``exit``.
 
-## GeoNode 2.10.3 Installation
-
-Follow these setps if you don't have GeoNode 2.10.3 installed.
+## Cartoview Installation
 
 - **Create a Python Virtual Environment**
 
@@ -145,12 +143,6 @@ source cartoview_venv/bin/activate
     - Make sure you have installed ``python-pip`` and ``python-gdal`` as we have done above. We will use them to install and run GeoNode and Cartoview.
     
     - From now on, each command associated with geonode or cartoview must be executed while the virtual environment is activated.
-    
-- **Install geonode 2.10.3**
-
-```shell
-pip install geonode==2.10.3
-```
 
 ## Cartoview Libraries Installation
 
@@ -315,14 +307,14 @@ Now we will download Tomcat 9, Navigate to ``/tmp`` directory (we will download 
 
 ```shell
 cd /tmp
-curl -O https://downloads.apache.org/tomcat/tomcat-9/v9.0.33/bin/apache-tomcat-9.0.33.tar.gz
+curl -O https://downloads.apache.org/tomcat/tomcat-9/v9.0.40/bin/apache-tomcat-9.0.40.tar.gz
 ```
 
 Tomcat used to be installed in the directory ``/opt/tomcat``. So we will extract and install it there too.
 
 ```shell
 sudo mkdir /opt/tomcat
-sudo tar xzvf apache-tomcat-9.0.33.tar.gz -C /opt/tomcat --strip-components=1
+sudo tar xzvf apache-tomcat-9.0.40.tar.gz -C /opt/tomcat --strip-components=1
 ```
 
 Now we should set up the tomcat user that we have created before to have the permissions of the directory ``/opt/tomcat``.
