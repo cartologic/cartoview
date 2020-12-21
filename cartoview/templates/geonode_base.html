@@ -7,8 +7,7 @@
 
 {% block tabs %}
 {% if 'cartoview_cms' in INSTALLED_APPS %}
-    {% load menu_tags %}
-    {% main_menu template="menus/main_menu.html" %}
+    {% include "cartoview_cms/menus.html" %}
 {% else %}
     <li><a href="{% url 'app_manager_base_url' %}">{% trans "Apps" %}</a></li> 
     {{block.super}}
