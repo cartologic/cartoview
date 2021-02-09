@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-02-09 22:15+0200\n"
+"POT-Creation-Date: 2021-02-09 23:15+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -70,6 +70,11 @@ msgstr "التطبيقات"
 #: app_manager/templates/app_manager/apps.html:41
 msgid "Explore Apps"
 msgstr "تصفّح التطبيقات"
+
+#: app_manager/templates/app_manager/app_instance_list.html:19
+#: app_manager/templates/app_manager/apps.html:93
+msgid "Create New"
+msgstr "إنشاء جديد"
 
 #: app_manager/templates/app_manager/appinstance_detail.html:63
 msgid "Rate this document"
@@ -189,10 +194,7 @@ msgstr "فتح"
 msgid "Explore"
 msgstr "تصفّح"
 
-#: app_manager/templates/app_manager/apps.html:93
-msgid "Create New"
-msgstr "إنشاء جديد"
-
+#: app_manager/templates/app_manager/apps.html:144
 msgid "No Apps Installed"
 msgstr "لا توجد تطبيقات مثبّتة"
 
@@ -208,9 +210,111 @@ msgstr "تثبيت تطبيق"
 msgid "Cancel"
 msgstr "إلغاء"
 
+#: app_manager/templates/app_manager/manage.html:38
+#: app_manager/templates/app_manager/manage.html:168
+msgid "Server restart is required"
+msgstr "يجب إعادة تشغيل الخادم"
+
+#: app_manager/templates/app_manager/manage.html:40
+msgid ""
+"In order to have the effect of the recently installed apps please restart "
+"the server."
+msgstr "من أجل إستخدام التطبيقات المثبّتة حديثًا، يُرجي إعادة تشغيل الخادم."
+
+#: app_manager/templates/app_manager/manage.html:43
+msgid "Please notice"
+msgstr "الرجاء ملاحظة"
+
+#: app_manager/templates/app_manager/manage.html:46
+msgid "This may take several minutes"
+msgstr "قد يستغرق عدة دقائق"
+
+#: app_manager/templates/app_manager/manage.html:47
+msgid "The server will drop all the connections and tasks during the restart"
+msgstr "سيسقط الخادم كل الإتصالات والمهام أثناء إعادة التشغيل"
+
+#: app_manager/templates/app_manager/manage.html:48
+msgid ""
+"Ask the administrator to restart GeoNode Service if the app does not appear "
+"in the installed apps"
+msgstr "أطلب من المدير إعادة تشغيل خدمة GeoNode إذا لم يظهر التطبيق في التطبيقات المثبّتة"
+
+#: app_manager/templates/app_manager/manage.html:52
+msgid "Restart Server"
+msgstr "إعادة تشغيل الخادم"
+
+#: app_manager/templates/app_manager/manage.html:57
+msgid "Restarting Server, Please Wait..."
+msgstr "إعادة تشغيل الخادم، برجاء الإنتظار..."
+
 #: app_manager/templates/app_manager/manage.html:69
 msgid "Store"
 msgstr "متجر"
+
+#: app_manager/templates/app_manager/manage.html:76
+msgid "Reorder Installed Apps"
+msgstr "إعادة ترتيب التطبيقات المثبّتة"
+
+#: app_manager/templates/app_manager/manage.html:79
+msgid "Search for an App"
+msgstr "إبحث عن تطبيق"
+
+#: app_manager/templates/app_manager/manage.html:80
+#: templates/admin/search_form.html:7
+msgid "Search"
+msgstr "بحث"
+
+#: app_manager/templates/app_manager/manage.html:85
+msgid "Loading"
+msgstr "تحميل"
+
+#: app_manager/templates/app_manager/manage.html:90
+msgid "Cannot connect to App Market"
+msgstr "لا يمكن الإتصال بمتجر التطبيقات"
+
+#: app_manager/templates/app_manager/manage.html:108
+msgid "Full Description"
+msgstr "وصف كامل"
+
+#: app_manager/templates/app_manager/manage.html:126
+msgid "Install"
+msgstr "تثبيت"
+
+#: app_manager/templates/app_manager/manage.html:138
+msgid "Upgrade"
+msgstr "ترقية"
+
+#: app_manager/templates/app_manager/manage.html:146
+msgid "Uninstall"
+msgstr "إلغاء التثبيت"
+
+#: app_manager/templates/app_manager/manage.html:153
+msgid "Activate"
+msgstr "تنشيط"
+
+#: app_manager/templates/app_manager/manage.html:160
+msgid "Suspend"
+msgstr "إيقاف"
+
+#: app_manager/templates/app_manager/manage.html:174
+msgid "Rating"
+msgstr "تقييم"
+
+#: app_manager/templates/app_manager/manage.html:180
+msgid "Installations"
+msgstr "التثبيتات"
+
+#: app_manager/templates/app_manager/manage.html:189
+msgid "Latest version"
+msgstr "أحدث نسخة"
+
+#: app_manager/templates/app_manager/manage.html:195
+msgid "Installed version"
+msgstr "النسخة المثبّتة"
+
+#: app_manager/templates/app_manager/manage.html:203
+msgid "By"
+msgstr "بواسطة"
 
 #: app_manager/views.py:45
 msgid "You are not permitted to delete this document"
@@ -583,10 +687,6 @@ msgstr ""
 #: templates/admin/widgets/related_widget_wrapper.html:23
 #, python-format
 msgid "Delete selected %(model)s"
-msgstr ""
-
-#: templates/admin/search_form.html:7
-msgid "Search"
 msgstr ""
 
 #: templates/admin/search_form.html:9

@@ -15,7 +15,9 @@
         {% verbatim %}
         <a class="btn btn-primary pull-right"
            href="/account/login?next=/apps/{{ app_name }}/new">
-            Create New
+            {% endverbatim %}
+            {% trans "Create New" %}
+            {% verbatim %}
         </a>
         {% endverbatim %}
     {% else %}
