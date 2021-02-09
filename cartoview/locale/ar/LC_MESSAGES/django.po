@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-02-09 20:20+0200\n"
+"POT-Creation-Date: 2021-02-09 22:15+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -135,7 +135,8 @@ msgstr "تعديل التفاصيل لـ"
 
 #: app_manager/templates/app_manager/appinstance_metadata.html:25
 msgid "Error updating metadata.  Please check the following fields: "
-msgstr "حدث خطأ أثناء تحديث البيانات الوصفية. الرجاء التحقق من الحقول التالية: "
+msgstr ""
+"حدث خطأ أثناء تحديث البيانات الوصفية. الرجاء التحقق من الحقول التالية: "
 
 #: app_manager/templates/app_manager/appinstance_metadata.html:28
 msgid "Metadata Author"
@@ -167,6 +168,33 @@ msgstr "تطبيقات"
 #: templates/cartoview/geonode_base.html:26
 msgid "Manage Apps"
 msgstr "إدارة التطبيقات"
+
+#: app_manager/templates/app_manager/apps.html:38
+msgid "Create New App"
+msgstr "إنشاء تطبيق جديد"
+
+#: app_manager/templates/app_manager/apps.html:62
+msgid "More"
+msgstr "المزيد"
+
+#: app_manager/templates/app_manager/apps.html:66
+msgid "No Description Provided"
+msgstr "لا يوجد وصف مٌقدّم"
+
+#: app_manager/templates/app_manager/apps.html:76
+msgid "Open"
+msgstr "فتح"
+
+#: app_manager/templates/app_manager/apps.html:82
+msgid "Explore"
+msgstr "تصفّح"
+
+#: app_manager/templates/app_manager/apps.html:93
+msgid "Create New"
+msgstr "إنشاء جديد"
+
+msgid "No Apps Installed"
+msgstr "لا توجد تطبيقات مثبّتة"
 
 #: app_manager/templates/app_manager/apps_table.html:5
 msgid "Installed Apps"
