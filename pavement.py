@@ -444,7 +444,6 @@ def kill(arg1, arg2):
         running = False
         for line in lines:
             # this kills all java.exe and python including self in windows
-            line = line.decode('utf8')
             if ('%s' % arg2 in line) or (os.name == 'nt'
                                          and '%s' % arg1 in line):
                 running = True
