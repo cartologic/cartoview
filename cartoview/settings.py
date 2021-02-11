@@ -147,12 +147,15 @@ if CARTOVIEW_STAND_ALONE or CARTOVIEW_TEST:
 # default uploader.
 os.environ.setdefault('DEFAULT_BACKEND_UPLOADER', 'geonode.importer')
 
+# Location of translation files
+_DEFAULT_LOCALE_PATHS = (
+    os.path.join(BASE_DIR, "locale"),
+)
+
+LOCALE_PATHS = os.getenv('LOCALE_PATHS', _DEFAULT_LOCALE_PATHS)
+
 
 try:
     from .local_settings import *  # noqa
 except Exception as e:
     print(e)
-
-LOCALE_PATHS = (
-    os.path.join(BASE_DIR, 'locale'),
-)
