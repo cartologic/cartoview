@@ -152,3 +152,7 @@ try:
     from .local_settings import *  # noqa
 except Exception as e:
     print(e)
+
+LOCALE_PATHS = (
+    os.path.join(BASE_DIR, 'locale'),
+)

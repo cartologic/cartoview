@@ -1,0 +1,806 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-02-09 23:15+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
+"&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+
+#: app_manager/decorators.py:7
+msgid "You are not permitted to delete this Instance"
+msgstr ""
+
+#: app_manager/decorators.py:8 app_manager/utils.py:16
+msgid "You do not have permissions for this Instance."
+msgstr ""
+
+#: app_manager/decorators.py:9
+msgid "You are not permitted to modify this Instance"
+msgstr ""
+
+#: app_manager/decorators.py:11
+msgid "You are not permitted to modify this Instance's metadata"
+msgstr ""
+
+#: app_manager/decorators.py:12
+msgid "You are not permitted to view this Instance"
+msgstr ""
+
+#: app_manager/forms.py:20
+msgid "An application with the same user has already installed."
+msgstr ""
+
+#: app_manager/forms.py:22
+msgid "The uploaded file is not an application package."
+msgstr ""
+
+#: app_manager/templates/app_instance/_search_content.html:12
+msgid "Set permissions"
+msgstr "تحديد الصلاحيات"
+
+#: app_manager/templates/app_instance/_search_content.html:19
+msgid "Filters"
+msgstr "فلاتر"
+
+#: app_manager/templates/app_instance/_search_content.html:20
+msgid "Clear"
+msgstr "مسح"
+
+#: app_manager/templates/app_instance/_search_content.html:30
+#: templates/cartoview/geonode_base.html:12
+#: templates/cartoview/geonode_base.html:33
+#: templates/cartoview/site_header.html:28 templates/geonode_base.html:8
+msgid "Apps"
+msgstr "التطبيقات"
+
+#: app_manager/templates/app_manager/app_instance_list.html:5
+#: app_manager/templates/app_manager/apps.html:41
+msgid "Explore Apps"
+msgstr "تصفّح التطبيقات"
+
+#: app_manager/templates/app_manager/app_instance_list.html:19
+#: app_manager/templates/app_manager/apps.html:93
+msgid "Create New"
+msgstr "إنشاء جديد"
+
+#: app_manager/templates/app_manager/appinstance_detail.html:63
+msgid "Rate this document"
+msgstr "قيّم المستند"
+
+#: app_manager/templates/app_manager/appinstance_detail.html:67
+msgid "Average Rating"
+msgstr "تقييم متوسط"
+
+#: app_manager/templates/app_manager/appinstance_detail.html:95
+#: app_manager/templates/app_manager/appinstance_detail.html:103
+msgid "Edit App Instance"
+msgstr "تعديل التطبيق"
+
+#: app_manager/templates/app_manager/appinstance_detail.html:111
+msgid "Metadata"
+msgstr "بيانات وصفية"
+
+#: app_manager/templates/app_manager/appinstance_detail.html:112
+#: app_manager/templates/app_manager/appinstance_detail.html:134
+msgid "Edit"
+msgstr "تعديل"
+
+#: app_manager/templates/app_manager/appinstance_detail.html:119
+msgid "Thumbnail"
+msgstr "صورة مصغرة"
+
+#: app_manager/templates/app_manager/appinstance_detail.html:129
+msgid "App Instance"
+msgstr "مثال التطبيق"
+
+#: app_manager/templates/app_manager/appinstance_detail.html:139
+msgid "Remove"
+msgstr "إزالة"
+
+#: app_manager/templates/app_manager/appinstance_detail.html:148
+msgid "Close"
+msgstr "إغلاق"
+
+#: app_manager/templates/app_manager/appinstance_detail.html:156
+msgid "Permissions"
+msgstr "الصلاحيات"
+
+#: app_manager/templates/app_manager/appinstance_detail.html:157
+msgid "Click the button below to change the permissions of this instance."
+msgstr "إنقر الزر بالأسفل لتغيير صلاحيات هذه التطبيق."
+
+#: app_manager/templates/app_manager/appinstance_detail.html:158
+msgid "Change App Instance Permissions"
+msgstr "تغيير صلاحيات التطبيق"
+
+#: app_manager/templates/app_manager/appinstance_metadata.html:15
+msgid "Explore Appinstances"
+msgstr "تصفّح التطبيقات"
+
+#: app_manager/templates/app_manager/appinstance_metadata.html:16
+msgid "Edit Metadata"
+msgstr "تعديل البيانات الوصفية"
+
+#: app_manager/templates/app_manager/appinstance_metadata.html:21
+msgid "Editing details for"
+msgstr "تعديل التفاصيل لـ"
+
+#: app_manager/templates/app_manager/appinstance_metadata.html:25
+msgid "Error updating metadata.  Please check the following fields: "
+msgstr ""
+"حدث خطأ أثناء تحديث البيانات الوصفية. الرجاء التحقق من الحقول التالية: "
+
+#: app_manager/templates/app_manager/appinstance_metadata.html:28
+msgid "Metadata Author"
+msgstr "محرر البيانات الوصفية"
+
+#: app_manager/templates/app_manager/appinstance_metadata.html:32
+#: app_manager/templates/app_manager/appinstance_metadata.html:54
+msgid "Point of Contact"
+msgstr "جهة إتصال"
+
+#: app_manager/templates/app_manager/appinstance_metadata.html:47
+#: app_manager/templates/app_manager/appinstance_metadata.html:81
+msgid "Update"
+msgstr "تحديث"
+
+#: app_manager/templates/app_manager/appinstance_metadata.html:59
+msgid "Metadata Provider"
+msgstr "مزود بيانات وصفية"
+
+#: app_manager/templates/app_manager/appinstance_metadata.html:64
+msgid "Category"
+msgstr "فئة"
+
+#: app_manager/templates/app_manager/apps.html:5
+msgid "Applications"
+msgstr "تطبيقات"
+
+#: app_manager/templates/app_manager/apps.html:31
+#: templates/cartoview/geonode_base.html:26
+msgid "Manage Apps"
+msgstr "إدارة التطبيقات"
+
+#: app_manager/templates/app_manager/apps.html:38
+msgid "Create New App"
+msgstr "إنشاء تطبيق جديد"
+
+#: app_manager/templates/app_manager/apps.html:62
+msgid "More"
+msgstr "المزيد"
+
+#: app_manager/templates/app_manager/apps.html:66
+msgid "No Description Provided"
+msgstr "لا يوجد وصف مٌقدّم"
+
+#: app_manager/templates/app_manager/apps.html:76
+msgid "Open"
+msgstr "فتح"
+
+#: app_manager/templates/app_manager/apps.html:82
+msgid "Explore"
+msgstr "تصفّح"
+
+#: app_manager/templates/app_manager/apps.html:144
+msgid "No Apps Installed"
+msgstr "لا توجد تطبيقات مثبّتة"
+
+#: app_manager/templates/app_manager/apps_table.html:5
+msgid "Installed Apps"
+msgstr "التطبيقات المثبّتة"
+
+#: app_manager/templates/app_manager/manage.html:6
+msgid "Install App"
+msgstr "تثبيت تطبيق"
+
+#: app_manager/templates/app_manager/manage.html:32
+msgid "Cancel"
+msgstr "إلغاء"
+
+#: app_manager/templates/app_manager/manage.html:38
+#: app_manager/templates/app_manager/manage.html:168
+msgid "Server restart is required"
+msgstr "يجب إعادة تشغيل الخادم"
+
+#: app_manager/templates/app_manager/manage.html:40
+msgid ""
+"In order to have the effect of the recently installed apps please restart "
+"the server."
+msgstr "من أجل إستخدام التطبيقات المثبّتة حديثًا، يُرجي إعادة تشغيل الخادم."
+
+#: app_manager/templates/app_manager/manage.html:43
+msgid "Please notice"
+msgstr "الرجاء ملاحظة"
+
+#: app_manager/templates/app_manager/manage.html:46
+msgid "This may take several minutes"
+msgstr "قد يستغرق عدة دقائق"
+
+#: app_manager/templates/app_manager/manage.html:47
+msgid "The server will drop all the connections and tasks during the restart"
+msgstr "سيسقط الخادم كل الإتصالات والمهام أثناء إعادة التشغيل"
+
+#: app_manager/templates/app_manager/manage.html:48
+msgid ""
+"Ask the administrator to restart GeoNode Service if the app does not appear "
+"in the installed apps"
+msgstr "أطلب من المدير إعادة تشغيل خدمة GeoNode إذا لم يظهر التطبيق في التطبيقات المثبّتة"
+
+#: app_manager/templates/app_manager/manage.html:52
+msgid "Restart Server"
+msgstr "إعادة تشغيل الخادم"
+
+#: app_manager/templates/app_manager/manage.html:57
+msgid "Restarting Server, Please Wait..."
+msgstr "إعادة تشغيل الخادم، برجاء الإنتظار..."
+
+#: app_manager/templates/app_manager/manage.html:69
+msgid "Store"
+msgstr "متجر"
+
+#: app_manager/templates/app_manager/manage.html:76
+msgid "Reorder Installed Apps"
+msgstr "إعادة ترتيب التطبيقات المثبّتة"
+
+#: app_manager/templates/app_manager/manage.html:79
+msgid "Search for an App"
+msgstr "إبحث عن تطبيق"
+
+#: app_manager/templates/app_manager/manage.html:80
+#: templates/admin/search_form.html:7
+msgid "Search"
+msgstr "بحث"
+
+#: app_manager/templates/app_manager/manage.html:85
+msgid "Loading"
+msgstr "تحميل"
+
+#: app_manager/templates/app_manager/manage.html:90
+msgid "Cannot connect to App Market"
+msgstr "لا يمكن الإتصال بمتجر التطبيقات"
+
+#: app_manager/templates/app_manager/manage.html:108
+msgid "Full Description"
+msgstr "وصف كامل"
+
+#: app_manager/templates/app_manager/manage.html:126
+msgid "Install"
+msgstr "تثبيت"
+
+#: app_manager/templates/app_manager/manage.html:138
+msgid "Upgrade"
+msgstr "ترقية"
+
+#: app_manager/templates/app_manager/manage.html:146
+msgid "Uninstall"
+msgstr "إلغاء التثبيت"
+
+#: app_manager/templates/app_manager/manage.html:153
+msgid "Activate"
+msgstr "تنشيط"
+
+#: app_manager/templates/app_manager/manage.html:160
+msgid "Suspend"
+msgstr "إيقاف"
+
+#: app_manager/templates/app_manager/manage.html:174
+msgid "Rating"
+msgstr "تقييم"
+
+#: app_manager/templates/app_manager/manage.html:180
+msgid "Installations"
+msgstr "التثبيتات"
+
+#: app_manager/templates/app_manager/manage.html:189
+msgid "Latest version"
+msgstr "أحدث نسخة"
+
+#: app_manager/templates/app_manager/manage.html:195
+msgid "Installed version"
+msgstr "النسخة المثبّتة"
+
+#: app_manager/templates/app_manager/manage.html:203
+msgid "By"
+msgstr "بواسطة"
+
+#: app_manager/views.py:45
+msgid "You are not permitted to delete this document"
+msgstr ""
+
+#: app_manager/views.py:46
+msgid "You do not have permissions for this document."
+msgstr ""
+
+#: app_manager/views.py:47
+msgid "You are not permitted to modify this document"
+msgstr ""
+
+#: app_manager/views.py:49
+msgid "You are not permitted to modify this document's metadata"
+msgstr ""
+
+#: app_manager/views.py:50
+msgid "You are not permitted to view this document"
+msgstr ""
+
+#: app_manager/views.py:214
+msgid "You are not allowed to view this document."
+msgstr ""
+
+#: app_manager/views.py:272
+msgid "You are not allowed to edit this instance."
+msgstr ""
+
+#: app_manager/views.py:319
+msgid ""
+"You must set a point of contact for this                             resource"
+msgstr ""
+
+#: app_manager/views.py:339
+msgid "You must set an author for this resource"
+msgstr ""
+
+#: templates/admin/404.html:4 templates/admin/404.html:8
+msgid "Page not found"
+msgstr "لا يمكن العثور علي هذه الصفحة"
+
+#: templates/admin/404.html:10
+msgid "We're sorry, but the requested page could not be found."
+msgstr "نأسف، لا يمكن إيجاد الصفحة المطلوبة."
+
+#: templates/admin/500.html:6 templates/admin/app_index.html:9
+#: templates/admin/auth/user/change_password.html:13
+#: templates/admin/base.html:56 templates/admin/change_form.html:18
+#: templates/admin/change_list.html:31
+#: templates/admin/delete_confirmation.html:14
+#: templates/admin/delete_selected_confirmation.html:14
+#: templates/admin/invalid_setup.html:6 templates/admin/object_history.html:6
+msgid "Home"
+msgstr "الرئيسية"
+
+#: templates/admin/500.html:7
+msgid "Server error"
+msgstr ""
+
+#: templates/admin/500.html:11
+msgid "Server error (500)"
+msgstr ""
+
+#: templates/admin/500.html:14
+msgid "Server Error <em>(500)</em>"
+msgstr ""
+
+#: templates/admin/500.html:15
+msgid ""
+"There's been an error. It's been reported to the site administrators via "
+"email and should be fixed shortly. Thanks for your patience."
+msgstr ""
+
+#: templates/admin/actions.html:4
+msgid "Run the selected action"
+msgstr ""
+
+#: templates/admin/actions.html:4
+msgid "Go"
+msgstr ""
+
+#: templates/admin/actions.html:10
+msgid "Click here to select the objects across all pages"
+msgstr ""
+
+#: templates/admin/actions.html:10
+#, python-format
+msgid "Select all %(total_count)s %(module_name)s"
+msgstr ""
+
+#: templates/admin/actions.html:12
+msgid "Clear selection"
+msgstr ""
+
+#: templates/admin/auth/user/add_form.html:6
+msgid ""
+"First, enter a username and password. Then, you'll be able to edit more user "
+"options."
+msgstr ""
+
+#: templates/admin/auth/user/add_form.html:8
+msgid "Enter a username and password."
+msgstr ""
+
+#: templates/admin/auth/user/change_password.html:17
+#: templates/admin/auth/user/change_password.html:55
+#: templates/admin/base.html:44
+msgid "Change password"
+msgstr ""
+
+#: templates/admin/auth/user/change_password.html:28
+#: templates/admin/change_form.html:47 templates/admin/change_list.html:58
+#: templates/admin/login.html:21
+msgid "Please correct the error below."
+msgstr ""
+
+#: templates/admin/auth/user/change_password.html:28
+#: templates/admin/change_form.html:47 templates/admin/change_list.html:58
+#: templates/admin/login.html:21
+msgid "Please correct the errors below."
+msgstr ""
+
+#: templates/admin/auth/user/change_password.html:32
+#, python-format
+msgid "Enter a new password for the user <strong>%(username)s</strong>."
+msgstr ""
+
+#: templates/admin/base.html:30
+msgid "Welcome,"
+msgstr ""
+
+#: templates/admin/base.html:35
+msgid "View site"
+msgstr ""
+
+#: templates/admin/base.html:40
+msgid "Documentation"
+msgstr ""
+
+#: templates/admin/base.html:46
+msgid "Log out"
+msgstr ""
+
+#: templates/admin/base_site.html:3
+msgid "Django site admin"
+msgstr ""
+
+#: templates/admin/base_site.html:6
+msgid "Django administration"
+msgstr ""
+
+#: templates/admin/change_form.html:21 templates/admin/change_list.html:49
+#, python-format
+msgid "Add %(name)s"
+msgstr ""
+
+#: templates/admin/change_form.html:33 templates/admin/object_history.html:10
+msgid "History"
+msgstr ""
+
+#: templates/admin/change_form.html:35
+#: templates/admin/edit_inline/stacked.html:14
+#: templates/admin/edit_inline/tabular.html:36
+msgid "View on site"
+msgstr ""
+
+#: templates/admin/change_list.html:69
+msgid "Filter"
+msgstr ""
+
+#: templates/admin/change_list_results.html:17
+msgid "Remove from sorting"
+msgstr ""
+
+#: templates/admin/change_list_results.html:18
+#, python-format
+msgid "Sorting priority: %(priority_number)s"
+msgstr ""
+
+#: templates/admin/change_list_results.html:19
+msgid "Toggle sorting"
+msgstr ""
+
+#: templates/admin/delete_confirmation.html:18
+#: templates/admin/related_widget_wrapper.html:24
+#: templates/admin/submit_line.html:6
+#: templates/admin/widgets/related_widget_wrapper.html:24
+msgid "Delete"
+msgstr ""
+
+#: templates/admin/delete_confirmation.html:24
+#, python-format
+msgid ""
+"Deleting the %(object_name)s '%(escaped_object)s' would result in deleting "
+"related objects, but your account doesn't have permission to delete the "
+"following types of objects:"
+msgstr ""
+
+#: templates/admin/delete_confirmation.html:31
+#, python-format
+msgid ""
+"Deleting the %(object_name)s '%(escaped_object)s' would require deleting the "
+"following protected related objects:"
+msgstr ""
+
+#: templates/admin/delete_confirmation.html:38
+#, python-format
+msgid ""
+"Are you sure you want to delete the %(object_name)s \"%(escaped_object)s\"? "
+"All of the following related items will be deleted:"
+msgstr ""
+
+#: templates/admin/delete_confirmation.html:40
+#: templates/admin/delete_selected_confirmation.html:39
+msgid "Objects"
+msgstr ""
+
+#: templates/admin/delete_confirmation.html:47
+#: templates/admin/delete_selected_confirmation.html:50
+msgid "Yes, I'm sure"
+msgstr ""
+
+#: templates/admin/delete_confirmation.html:48
+#: templates/admin/delete_selected_confirmation.html:51
+msgid "No, take me back"
+msgstr ""
+
+#: templates/admin/delete_selected_confirmation.html:17
+msgid "Delete multiple objects"
+msgstr ""
+
+#: templates/admin/delete_selected_confirmation.html:23
+#, python-format
+msgid ""
+"Deleting the selected %(objects_name)s would result in deleting related "
+"objects, but your account doesn't have permission to delete the following "
+"types of objects:"
+msgstr ""
+
+#: templates/admin/delete_selected_confirmation.html:30
+#, python-format
+msgid ""
+"Deleting the selected %(objects_name)s would require deleting the following "
+"protected related objects:"
+msgstr ""
+
+#: templates/admin/delete_selected_confirmation.html:37
+#, python-format
+msgid ""
+"Are you sure you want to delete the selected %(objects_name)s? All of the "
+"following objects and their related items will be deleted:"
+msgstr ""
+
+#: templates/admin/edit_inline/stacked.html:12
+#: templates/admin/edit_inline/tabular.html:34 templates/admin/index.html:37
+#: templates/admin/related_widget_wrapper.html:10
+#: templates/admin/widgets/related_widget_wrapper.html:10
+msgid "Change"
+msgstr ""
+
+#: templates/admin/edit_inline/tabular.html:20
+msgid "Delete?"
+msgstr ""
+
+#: templates/admin/filter.html:2
+#, python-format
+msgid " By %(filter_title)s "
+msgstr ""
+
+#: templates/admin/includes/object_delete_summary.html:2
+msgid "Summary"
+msgstr ""
+
+#: templates/admin/index.html:20
+#, python-format
+msgid "Models in the %(name)s application"
+msgstr ""
+
+#: templates/admin/index.html:31 templates/admin/related_widget_wrapper.html:17
+#: templates/admin/widgets/related_widget_wrapper.html:17
+msgid "Add"
+msgstr ""
+
+#: templates/admin/index.html:47
+msgid "You don't have permission to edit anything."
+msgstr ""
+
+#: templates/admin/index.html:55
+msgid "Recent actions"
+msgstr ""
+
+#: templates/admin/index.html:56
+msgid "My actions"
+msgstr ""
+
+#: templates/admin/index.html:60
+msgid "None available"
+msgstr ""
+
+#: templates/admin/index.html:74
+msgid "Unknown content"
+msgstr ""
+
+#: templates/admin/invalid_setup.html:12
+msgid ""
+"Something's wrong with your database installation. Make sure the appropriate "
+"database tables have been created, and make sure the database is readable by "
+"the appropriate user."
+msgstr ""
+
+#: templates/admin/login.html:37
+#, python-format
+msgid ""
+"You are authenticated as %(username)s, but are not authorized to access this "
+"page. Would you like to login to a different account?"
+msgstr ""
+
+#: templates/admin/login.html:57
+msgid "Forgotten your password or username?"
+msgstr ""
+
+#: templates/admin/login.html:61
+msgid "Log in"
+msgstr ""
+
+#: templates/admin/object_history.html:22
+msgid "Date/time"
+msgstr ""
+
+#: templates/admin/object_history.html:23
+msgid "User"
+msgstr ""
+
+#: templates/admin/object_history.html:24
+msgid "Action"
+msgstr ""
+
+#: templates/admin/object_history.html:38
+msgid ""
+"This object doesn't have a change history. It probably wasn't added via this "
+"admin site."
+msgstr ""
+
+#: templates/admin/pagination.html:10 templates/admin/search_form.html:9
+msgid "Show all"
+msgstr ""
+
+#: templates/admin/pagination.html:11 templates/admin/submit_line.html:3
+msgid "Save"
+msgstr ""
+
+#: templates/admin/popup_response.html:3
+msgid "Popup closing..."
+msgstr ""
+
+#: templates/admin/related_widget_wrapper.html:9
+#: templates/admin/widgets/related_widget_wrapper.html:9
+#, python-format
+msgid "Change selected %(model)s"
+msgstr ""
+
+#: templates/admin/related_widget_wrapper.html:16
+#: templates/admin/widgets/related_widget_wrapper.html:16
+#, python-format
+msgid "Add another %(model)s"
+msgstr ""
+
+#: templates/admin/related_widget_wrapper.html:23
+#: templates/admin/widgets/related_widget_wrapper.html:23
+#, python-format
+msgid "Delete selected %(model)s"
+msgstr ""
+
+#: templates/admin/search_form.html:9
+#, python-format
+msgid "%(counter)s result"
+msgid_plural "%(counter)s results"
+msgstr[0] ""
+msgstr[1] ""
+
+#: templates/admin/search_form.html:9
+#, python-format
+msgid "%(full_result_count)s total"
+msgstr ""
+
+#: templates/admin/submit_line.html:8
+msgid "Save as new"
+msgstr ""
+
+#: templates/admin/submit_line.html:9
+msgid "Save and add another"
+msgstr ""
+
+#: templates/admin/submit_line.html:10
+msgid "Save and continue editing"
+msgstr ""
+
+#: templates/cartoview/footer.html:8 templates/cartoview/site_header.html:19
+#: templates/geonode_base.html:18
+msgid "Layers"
+msgstr ""
+
+#: templates/cartoview/footer.html:9 templates/cartoview/site_header.html:25
+#: templates/geonode_base.html:19
+msgid "Documents"
+msgstr ""
+
+#: templates/cartoview/footer.html:11 templates/geonode_base.html:20
+msgid "Remote Services"
+msgstr ""
+
+#: templates/cartoview/footer.html:14 templates/geonode_base.html:30
+msgid "Add Remote Service"
+msgstr ""
+
+#: templates/cartoview/footer.html:21 templates/geonode_base.html:37
+msgid "Explore Maps"
+msgstr ""
+
+#: templates/cartoview/footer.html:23 templates/geonode_base.html:39
+msgid "Create Map"
+msgstr ""
+
+#: templates/cartoview/footer.html:30 templates/cartoview/site_header.html:33
+#: templates/geonode_base.html:46
+msgid "People"
+msgstr ""
+
+#: templates/cartoview/footer.html:31 templates/cartoview/site_header.html:36
+#: templates/geonode_base.html:47
+msgid "Groups"
+msgstr ""
+
+#: templates/cartoview/footer.html:33 templates/geonode_base.html:49
+msgid "Announcements"
+msgstr ""
+
+#: templates/cartoview/footer.html:36 templates/geonode_base.html:53
+msgid "Invite Users"
+msgstr ""
+
+#: templates/cartoview/footer.html:37 templates/geonode_base.html:56
+msgid "Add User"
+msgstr ""
+
+#: templates/cartoview/footer.html:38 templates/geonode_base.html:57
+msgid "Create Group"
+msgstr ""
+
+#: templates/cartoview/footer.html:44 templates/geonode_base.html:66
+msgid "Powered by"
+msgstr ""
+
+#: templates/cartoview/footer.html:44 templates/geonode_base.html:66
+msgid "Cartoview"
+msgstr ""
+
+#: templates/cartoview/footer.html:45 templates/geonode_base.html:66
+msgid "version"
+msgstr ""
+
+#: templates/cartoview/footer.html:46
+msgid "Developers"
+msgstr ""
+
+#: templates/cartoview/footer.html:47
+msgid "About"
+msgstr ""
+
+#: templates/cartoview/footer.html:50 templates/geonode_base.html:68
+msgid "Language"
+msgstr ""
+
+#: templates/cartoview/site_header.html:22
+msgid "Maps"
+msgstr ""
+
+#: templates/cartoview/site_header.html:57
+msgid "Register"
+msgstr ""
+
+#: templates/cartoview/site_header.html:69
+msgid "Sign in"
+msgstr ""
+
+#: templates/geonode_base.html:25
+msgid "Create Layer"
+msgstr ""

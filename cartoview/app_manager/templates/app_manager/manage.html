@@ -35,26 +35,26 @@
     <script type="text/ng-template" id="app-installer.html">
         <div>
             <div class="alert alert-info" ng-if='!loading' ng-show='showRestartPanel()'>
-                <h4><span class="fa fa-exclamation"></span> Server Restart Required</h4>
+                <h4><span class="fa fa-exclamation"></span> {% trans "Server restart is required" %}</h4>
                 <p>
-                    In order to have the effect of the recently installed apps please restart the server.
+                    {% trans "In order to have the effect of the recently installed apps please restart the server." %}
                 </p>
                 <p>
-                    Please notice:
+                    {% trans "Please notice" %}:
                 </p>
                 <ol>
-                    <li>This may take several minutes</li>
-                    <li>The server will drop all the connections and tasks during the restart</li>
-                    <li>Ask the administrator to restart GeoNode Service if the app does not appear in the installed apps</li>
+                    <li>{% trans "This may take several minutes" %}</li>
+                    <li>{% trans "The server will drop all the connections and tasks during the restart" %}</li>
+                    <li>{% trans "Ask the administrator to restart GeoNode Service if the app does not appear in the installed apps" %}</li>
                 </ol>
                 <a ng-click="restart()" class="btn btn-default manager-actions-btn">
                     <span class="glyphicon glyphicon-repeat" aria-hidden="true"></span>
-                     Restart Server
+                     {% trans "Restart Server" %}
                 </a>
             </div>
             <div class="restart-msg" ng-show="restarting">
                 <div class="centered alert alert-danger">
-                    <i class="fa fa-refresh rotating"></i> Restarting Server, Please Wait...
+                    <i class="fa fa-refresh rotating"></i> {% trans "Restarting Server, Please Wait..." %}
                 </div>
 
             </div>
@@ -73,21 +73,21 @@
                 </select>
             </div>
             <div ng-if="!loading && !storeError"  class="row manager-actions">
-                <a ng-click="reorder()" class="btn btn-primary manager-actions-btn ">Reorder Installed Apps</a>
+                <a ng-click="reorder()" class="btn btn-primary manager-actions-btn ">{% trans "Reorder Installed Apps" %}</a>
             </div>
             <div  class="input-group search-box">
-                <input type="text" ng-disabled="loading || storeError" class="form-control" ng-model="search_term" placeholder="Search for an App" aria-describedby="basic-addon2">
-                <span class="input-group-addon" id="basic-addon2">Search</span>
+                <input type="text" ng-disabled="loading || storeError" class="form-control" ng-model="search_term" placeholder="{% trans 'Search for an App' %}" aria-describedby="basic-addon2">
+                <span class="input-group-addon" id="basic-addon2">{% trans "Search" %}</span>
             </div>
             <div ng-if="loading && !storeError" class="row text-center loading-center ">
                 <div class="col-md-12 loading-center">
                     <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
-                    <span class="sr-only">Loading...</span>
+                    <span class="sr-only">{% trans "Loading" %}...</span>
                 </div>
             </div>
             <div ng-if="!loading && storeError" class="row text-center">
                 <div class="col-md-12">
-                    <h3 class="text-danger">Cannot Connect to App Market</h3>
+                    <h3 class="text-danger">{% trans "Cannot connect to App Market" %}</h3>
                 </div>
             </div>
             <div id="the_list">
@@ -104,9 +104,11 @@
                                     <div ng-if="app.description.length > 150">
                                         <p>{{ app.description.slice(0, 150) + '...' }} <span><a data-trigger="hover" data-toggle="tooltip" data-placement="buttom"
                                             title="{{ app.description }}">
-                                         Full Description
+                                         {% endverbatim %}
+                                         {% trans "Full Description" %}
                                          </a></span></p>
                                     </div>
+                                    {% verbatim %}
                                     <div ng-if="(app.description.length <= 150)">
                                         <p>{{ app.description }}</p>
                                     </div>
@@ -120,7 +122,9 @@
                                         ng-hide="installing==app"
                                     ></span>
                                     <span class="fa fa-circle-o-notch rotating" ng-show="installing==app"></span>
-                                    Install
+                                    {% endverbatim %}
+                                    {% trans "Install" %}
+                                    {% verbatim %}
                                     </button>
                                     <button class="btn btn-default btn-xs"  ng-disabled="installing" ng-disabled="!compatible(app.latest_version.cartoview_version)" ng-if="app.installedApp && upgradable(app.installedApp.version,app.latest_version.version)"ng-click="install(app, true)" >
                                     <span
@@ -130,54 +134,73 @@
                                     ></span>
                                     <span class="fa fa-circle-o-notch rotating"
                                                         ng-show="installing==app"></span>
-                                    Upgrade
+                                    {% endverbatim %}
+                                    {% trans "Upgrade" %}
+                                    {% verbatim %}
                                     </button>
                                     <button ng-disabled="installing" class="btn btn-danger btn-xs" ng-if="app.installedApp" ng-click="uninstall(app)">
                                         <span class="glyphicon glyphicon-remove" aria-hidden="true" ng-hide="installing==app"></span>
                                         <span class="fa fa-circle-o-notch rotating"
                                                     ng-show="installing==app"></span>
-                                        Uninstall
+                                        {% endverbatim %}
+                                        {% trans "Uninstall" %}
+                                        {% verbatim %}
                                     </button>
                                     <button class="btn btn-success btn-xs" ng-disabled="installing" ng-if="app.installedApp" ng-click="toggleActive(app)" ng-show="!app.installedApp.active">
                                         <span class="glyphicon glyphicon-play" aria-hidden="true"></span
-                                        >Activate
+                                        >
+                                        {% endverbatim %}
+                                        {% trans "Activate" %}
+                                        {% verbatim %}
                                     </button>
                                     <button class="btn btn-warning btn-xs" ng-disabled="installing" ng-if="app.installedApp" ng-click="toggleActive(app)" ng-show="app.installedApp.active">
                                         <span class="glyphicon glyphicon-pause" aria-hidden="true"></span
-                                        >Suspend
+                                        >
+                                        {% endverbatim %}
+                                        {% trans "Suspend" %}
+                                        {% verbatim %}
                                     </button>
                                 </div>
                                 <div class="actions-wrapper" ng-show='app.installedApp.pending'>
                                     <a href='#'>
                                         <span class="fa fa-exclamation-circle"></span>
-                                        Restarting Server is required
+                                        {% endverbatim %}
+                                        {% trans "Server restart is required" %}
                                     </a>
                                 </div>
                                 <div class="info-panel">
                                     <div class="info-wrapper">
                                     <div class="info-item">
-                                        <span class="info-item-title">Rating:</span>
+                                        <span class="info-item-title">{% trans "Rating" %}:</span>
+                                        {% verbatim %}
                                         <span class="info-item-content">{{ app.stars }} / 5</span>
+                                        {% endverbatim %}
                                     </div>
                                     <div class="info-item">
-                                        <span class="info-item-title">Installations:</span>
+                                        <span class="info-item-title">{% trans "Installations" %}:</span>
+                                        {% verbatim %}
                                         <span class="info-item-content">{{app.downloads}}</span>
+                                        {% endverbatim %}
                                     </div>
                                     </div>
                                     <div class="info-wrapper">
                                     <div class='app-version'>
                                         <div class="info-item">
-                                            <span class="info-item-title">Latest Version:</span>
+                                            <span class="info-item-title">{% trans "Latest version" %}:</span>
+                                            {% verbatim %}
                                             <span class="info-item-content">v{{ app.latest_version.version }}</span>
+                                            {% endverbatim %}
                                             </div>
                                             <div class="info-item">
-                                            <span class="info-item-title">Installed Version:</span>
+                                            <span class="info-item-title">{% trans "Installed version" %}:</span>
+                                            {% verbatim %}
                                             <span class="info-item-content">v{{ app.installedApp.version }}</span>
+                                            {% endverbatim %}
                                         </div>
                                     </div>
 
                                     <div class="app-by">
-                                        By
+                                        {% trans "By" %}
                                         <span class="app-author">
                                         <a href="{{app.author_website}}">{{app.author}}</a>
                                         </span>
@@ -186,7 +209,6 @@
                                 </div>
                         </div>
                     </div>
-                    {% endverbatim %}
             </div>
         </div>
 
