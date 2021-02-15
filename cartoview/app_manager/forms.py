@@ -9,7 +9,7 @@ from future import standard_library
 from geonode.base.forms import ResourceBaseForm
 from modeltranslation.forms import TranslationModelForm
 
-from .models import App, AppInstance
+from .models import App
 
 standard_library.install_aliases()
 
@@ -32,18 +32,3 @@ class AppForm(ModelForm):
     class Meta(object):
         model = App
         fields = ("title",)
-
-
-class AppInstanceForm(TranslationModelForm):
-    class Meta(object):
-        model = AppInstance
-        fields = [
-            'title',
-            'abstract',
-        ]
-
-
-class AppInstanceEditForm(ResourceBaseForm):
-    class Meta(ResourceBaseForm.Meta):
-        model = AppInstance
-        exclude = ResourceBaseForm.Meta.exclude

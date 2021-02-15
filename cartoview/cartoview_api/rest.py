@@ -14,8 +14,7 @@ from tastypie.authentication import MultiAuthentication, SessionAuthentication
 from tastypie.constants import ALL, ALL_WITH_RELATIONS
 from tastypie.resources import ModelResource
 
-from cartoview.app_manager.models import App, AppInstance
-from cartoview.app_manager.rest import LayerFilterExtensionResource
+from cartoview.app_manager.models import App
 
 type_filter = {
     'app': 'appinstance',
@@ -145,94 +144,3 @@ class AllResourcesResource(ModelResource):
             return "Map"
         else:
             return "Layer"
-
-
-class AttributeResource(ModelResource):
-    layer = fields.ToOneField(
-        LayerFilterExtensionResource, 'layer', full=False)
-
-    class Meta:
-        resource_name = "attributes"
-        queryset = Attribute.objects.distinct()
-        fields = ['id', 'attribute', 'description',
-                  'attribute_label', 'attribute_type', 'visible']
-        filtering = {
-            'id': ALL,
-            'attribute': ALL,
-            'description': ALL,
-            'attribute_label': ALL,
-            'attribute_type': ALL,
-            'visible': ALL,
-            'layer': ALL_WITH_RELATIONS
-        }
-        authentication = MultiAuthentication(
-            SessionAuthentication(), GeonodeApiKeyAuthentication())
-
-
-class MapLayerResource(ModelResource):
-    map = fields.ToOneField(MapResource, 'map', full=False)
-    layer_params = fields.DictField(default={})
-    source_params = fields.DictField(default={})
-    layer_type = fields.CharField(null=True, blank=True)
-
-    def build_filters(self, filters=None, **kwargs):
-        if filters is None:
-            filters = {}
-        orm_filters = super(MapLayerResource, self).build_filters(
-            filters, **kwargs)
-        if 'type' in filters:
-            layer_type = filters['type']
-            orm_filters.update({'type': layer_type})
-
-        return orm_filters
-
-    def apply_filters(self, request, applicable_filters):
-        layer_type = applicable_filters.pop('type', None)
-        filtered = super(MapLayerResource, self).apply_filters(
-            request, applicable_filters)
-        if layer_type:
-            filtered = [lyr.id for lyr in filtered
-                        if self.get_layer(lyr.name) and  # noqa
-                        Attribute.objects.filter(
-                            attribute_type__contains="gml:",
-                            attribute_type__icontains=layer_type.lower(),
-                            layer=self.get_layer(lyr.name)).count() > 0]
-            filtered = MapLayer.objects.filter(
-                id__in=filtered)
-        return filtered
-
-    def get_layer(self, name):
-        layer = Layer.objects.filter(alternate=name)
-        if layer.count() > 0:
-            return layer.first()
-        return None
-
-    def dehydrate_layer_type(self, bundle):
-        layer = self.get_layer(bundle.obj.name)
-        if layer:
-            try:
-                qs = layer.attribute_set.get(
-                    attribute_type__contains="gml:")
-                return qs.attribute_type
-            except BaseException:
-                pass
-        return ""
-
-    def dehydrate_layer_params(self, bundle):
-        return json.loads(bundle.obj.layer_params)
-
-    def dehydrate_source_params(self, bundle):
-        return json.loads(bundle.obj.source_params)
-
-    class Meta:
-        resource_name = "maplayers"
-        queryset = MapLayer.objects.distinct()
-        filtering = {
-            'id': ALL,
-            'name': ALL,
-            'map': ALL_WITH_RELATIONS,
-            'fixed': ALL,
-            'local': ALL
-        }
-        authentication = MultiAuthentication(
-            SessionAuthentication(), GeonodeApiKeyAuthentication())

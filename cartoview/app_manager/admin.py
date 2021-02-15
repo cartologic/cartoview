@@ -6,7 +6,7 @@ from django.http import HttpResponseServerError
 from future import standard_library
 
 from .installer import AppInstaller
-from .models import App, AppInstance, AppStore, AppType
+from .models import App, AppStore, AppType
 
 standard_library.install_aliases()
 
@@ -35,5 +35,4 @@ class AppAdmin(admin.ModelAdmin):
 
 
 admin.site.register(AppType)
-admin.site.register(AppInstance)
 admin.site.register(AppStore)

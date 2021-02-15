@@ -7,30 +7,10 @@ import abc
 from django.utils.translation import ugettext as _
 from future import standard_library
 from future.utils import with_metaclass
-from geonode.utils import resolve_object
-
-from cartoview.app_manager.models import AppInstance
 
 standard_library.install_aliases()
 
 _PERMISSION_MSG_GENERIC = _("You do not have permissions for this Instance.")
-
-
-def resolve_appinstance(request,
-                        appinstanceid,
-                        permission='base.change_resourcebase',
-                        msg=_PERMISSION_MSG_GENERIC,
-                        **kwargs):
-    """
-    Resolve the document by the provided primary key
-    and check the optional permission.
-    """
-    return resolve_object(
-        request,
-        AppInstance, {'pk': appinstanceid},
-        permission=permission,
-        permission_msg=msg,
-        **kwargs)
 
 
 class Thumbnail(with_metaclass(abc.ABCMeta, object)):

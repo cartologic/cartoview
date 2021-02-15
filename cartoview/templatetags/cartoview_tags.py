@@ -18,7 +18,7 @@ from geonode.layers.models import Layer
 from geonode.maps.models import Map
 from guardian.shortcuts import get_objects_for_user
 
-from cartoview.app_manager.models import App, AppInstance
+from cartoview.app_manager.models import App
 
 standard_library.install_aliases()
 register = template.Library()
@@ -62,21 +62,6 @@ def facets(context):
         facets = dict([(count['doc_type'], count['count'])
                        for count in counts])
 
-        return facets
-
-    elif facet_type == 'appinstances':
-        appinstances = AppInstance.objects.filter(
-            title__icontains=title_filter)
-        if settings.RESOURCE_PUBLISHING:
-            appinstances = appinstances.filter(is_published=True)
-
-        if not settings.SKIP_PERMS_FILTER:
-            appinstances = appinstances.filter(id__in=authorized)
-
-        counts = appinstances.values('app__title').annotate(
-            count=Count('app__name'))
-        facets = dict([(count['app__title'], count['count'])
-                       for count in counts])
         return facets
 
     else:
