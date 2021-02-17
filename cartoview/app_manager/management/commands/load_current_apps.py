@@ -1,10 +1,10 @@
 import importlib
 
+from django.contrib.auth import get_user_model
 from django.core.management.base import BaseCommand
-from geonode.people.models import Profile
 
-from cartoview.app_manager.models import App, AppType
 from cartoview.app_manager.config import CartoviewApp
+from cartoview.app_manager.models import App, AppType
 from cartoview.log_handler import get_logger
 
 logger = get_logger(with_formatter=True)
@@ -15,7 +15,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         carto_apps = CartoviewApp.objects.get_active_apps().values()
-        user = Profile.objects.filter(is_superuser=True).first()
+        user = get_user_model().objects.filter(is_superuser=True).first()
         for carto_app in carto_apps:
             app_name = carto_app.name
             query = App.objects.filter(name=app_name)
