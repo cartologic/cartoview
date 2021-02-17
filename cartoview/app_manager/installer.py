@@ -20,15 +20,17 @@ from django.db import transaction
 from django.db.models import Max
 from future import standard_library
 
-from cartoview.apps_handler.config import CartoviewApp
 from cartoview.log_handler import get_logger
-from cartoview.store_api.api import StoreAppResource, StoreAppVersion
+from .config import CartoviewApp
 from .decorators import restart_enabled, rollback_on_failure
 from .exceptions import AppAlreadyInstalledException
 from .models import App, AppStore, AppType
-from ..apps_handler.req_installer import (ReqFileException,
-                                          ReqFilePermissionException,
-                                          ReqInstaller)
+from .req_installer import (
+    ReqFileException,
+    ReqFilePermissionException,
+    ReqInstaller
+)
+from .store_api import StoreAppResource, StoreAppVersion
 
 logger = get_logger(__name__)
 install_app_batch = getattr(settings, 'INSTALL_APP_BAT', None)
@@ -144,7 +146,7 @@ class AppInstaller(object):
 
     def get_app_version(self):
         if not self.version or self.version == 'latest' or \
-        (self.info and self.info.latest_version.version == self.version):
+                (self.info and self.info.latest_version.version == self.version):
             self.version = self.info.latest_version
         else:
             data = self._request_rest_data("appversion/?app__name=", self.name,
