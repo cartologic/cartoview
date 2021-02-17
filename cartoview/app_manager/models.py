@@ -3,7 +3,7 @@ from __future__ import (absolute_import, division, print_function,
 
 from datetime import datetime
 
-from cartoview.apps_handler.config import CartoviewApp
+from cartoview.app_manager.config import CartoviewApp
 from cartoview.log_handler import get_logger
 from django.conf import settings as geonode_settings
 from django.contrib.gis.db import models

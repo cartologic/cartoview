@@ -23,8 +23,8 @@ APPS_SETTINGS = []
 
 def load_apps(APPS_DIR):
     with lock:
-        from cartoview.apps_handler.utils import create_apps_dir
-        from cartoview.apps_handler.config import CartoviewApp
+        from cartoview.app_manager.helpers import create_apps_dir
+        from cartoview.app_manager.config import CartoviewApp
         global CARTOVIEW_APPS
         global APPS_SETTINGS
         create_apps_dir(APPS_DIR)

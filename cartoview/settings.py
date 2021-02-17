@@ -6,20 +6,20 @@ import copy
 import os
 import re
 import sys
+from distutils.util import strtobool
 
 import dj_database_url
-from distutils.util import strtobool
 from geonode.settings import *  # noqa
 from kombu import Exchange, Queue
 
 import cartoview
 
 PROJECT_NAME = "cartoview"
-CARTOVIEW_INSTALLED_APPS = ("cartoview",
-                            "cartoview.store_api.apps.StoreApiConfig",
-                            "cartoview.app_manager",
-                            "cartoview.site_management",
-                            "cartoview.apps_handler.apps.AppsHandlerConfig")
+CARTOVIEW_INSTALLED_APPS = (
+    "cartoview",
+    "cartoview.app_manager.apps.AppsHandlerConfig",
+    "cartoview.site_management",
+)
 INSTALLED_APPS += CARTOVIEW_INSTALLED_APPS
 ROOT_URLCONF = os.getenv('ROOT_URLCONF', "cartoview.urls")
 CARTOVIEW_DIR = os.path.abspath(os.path.dirname(cartoview.__file__))
@@ -39,7 +39,8 @@ APPS_MENU = False
 DOCKER = os.getenv('DOCKER', False)
 CARTOVIEW_CONTEXT_PROCESSORS = (
     'cartoview.app_manager.context_processors.cartoview_processor',
-    'cartoview.app_manager.context_processors.site_logo')
+    'cartoview.app_manager.context_processors.site_logo'
+)
 TEMPLATES[0]["OPTIONS"]['context_processors'] += CARTOVIEW_CONTEXT_PROCESSORS
 # django Media Section
 # uncomment the following if you want your files out of geonode folder
@@ -135,6 +136,7 @@ if CARTOVIEW_STAND_ALONE or CARTOVIEW_TEST:
     app_manager_settings = os.path.join(
         os.path.dirname(app_manager.__file__), "settings.py")
     execfile(os.path.realpath(app_manager_settings))
+    # load_apps declared in app_manager_settings in the above line
     load_apps(APPS_DIR)
     INSTALLED_APPS += CARTOVIEW_APPS
     for settings_file in APPS_SETTINGS:
@@ -145,7 +147,6 @@ if CARTOVIEW_STAND_ALONE or CARTOVIEW_TEST:
 
 # default uploader.
 os.environ.setdefault('DEFAULT_BACKEND_UPLOADER', 'geonode.importer')
-
 
 try:
     from .local_settings import *  # noqa

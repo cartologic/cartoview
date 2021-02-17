@@ -7,6 +7,7 @@ import importlib
 from django.conf.urls import include, url
 from future import standard_library
 
+from cartoview.app_manager.config import CartoviewApp
 from . import views as app_manager_views
 
 standard_library.install_aliases()
