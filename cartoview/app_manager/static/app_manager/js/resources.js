@@ -7,7 +7,7 @@
         $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
     });
     app.service("InstalledAppResource", function (urls, $resource) {
-        var resourceUrl = urls.REST_URL + 'app/:appId/:action/';
+        var resourceUrl = urls.APP_URL + ':appId/:action/';
         return $resource(resourceUrl, {}, {
             'query': {
                 isArray: false
@@ -54,7 +54,7 @@
     });
 
     app.service("AppStoreResource", function (urls, $resource) {
-        return $resource(urls.REST_URL + 'appstore/:storeId', {
+        return $resource(urls.APP_STORE + ':storeId', {
             storeId: '@id'
         }, {
             'query': {
@@ -94,6 +94,7 @@
                 }
             });
         }
+
         return {
             AppResource: AppResource
         }
