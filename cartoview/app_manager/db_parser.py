@@ -30,8 +30,8 @@ def get_db_url(db_key):
         options = db.get('OPTIONS', None)
         if db and engine:
             if engine != dj_database_url.SCHEMES[
-                    'sqlite'] and engine != dj_database_url.SCHEMES[
-                    'spatialite']:
+                'sqlite'] and engine != dj_database_url.SCHEMES[
+                'spatialite']:
                 db_url += "{}://".format(_schemes[engine])
                 if user and password:
                     db_url += "{}:{}".format(user, password)

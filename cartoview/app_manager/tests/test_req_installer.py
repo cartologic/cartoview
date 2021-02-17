@@ -4,7 +4,7 @@ import tempfile
 
 from django.test import TestCase
 
-from cartoview.apps_handler.req_installer import ReqFileException, ReqInstaller
+from cartoview.app_manager.req_installer import ReqFileException, ReqInstaller
 
 
 class ReqInstallerTest(TestCase):

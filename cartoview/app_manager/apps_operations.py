@@ -58,7 +58,7 @@ class AppsHandler(object):
                 ignore=['node_modules', '.git'])
 
     def execute_pending(self):
-        from cartoview.apps_handler.config import CartoviewApp
+        from cartoview.app_manager.config import CartoviewApp
         CartoviewApp.load()
         pending_apps = CartoviewApp.objects.get_pending_apps().values()
         for app in pending_apps:
