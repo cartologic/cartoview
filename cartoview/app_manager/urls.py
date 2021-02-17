@@ -4,20 +4,12 @@ from __future__ import (absolute_import, division, print_function,
 
 import importlib
 
-from cartoview.app_manager.rest import (AppResource, AppStoreResource,
-                                        TagResource)
-from cartoview.apps_handler.config import CartoviewApp
 from django.conf.urls import include, url
-from django.views.generic import TemplateView
 from future import standard_library
 
 from . import views as app_manager_views
-from .api import rest_api
 
 standard_library.install_aliases()
-rest_api.register(AppResource())
-rest_api.register(AppStoreResource())
-rest_api.register(TagResource())
 
 urlpatterns = [
     url(r'^$', app_manager_views.index, name='app_manager_base_url'),
@@ -37,7 +29,6 @@ urlpatterns = [
     url(r'^save_app_orders/$',
         app_manager_views.save_app_orders,
         name='save_app_orders'),
-    url(r'^rest/', include(rest_api.urls)),
 ]
 
 

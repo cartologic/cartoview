@@ -80,6 +80,10 @@ def manage_apps(request):
     return render(request, 'app_manager/manage.html', context)
 
 
+def home(request):
+    return render(request, 'app_manager/rest_api/home.html', )
+
+
 def index(request):
     Apps = installed_apps()
     context = {'Apps': Apps}
