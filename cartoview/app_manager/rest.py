@@ -15,8 +15,8 @@ from tastypie.constants import ALL, ALL_WITH_RELATIONS
 from tastypie.resources import ModelResource
 from tastypie.utils import trailing_slash
 
-from cartoview.app_manager.models import App, AppStore, AppType
 from cartoview.app_manager.config import CartoviewApp
+from cartoview.app_manager.models import App, AppStore, AppType
 from cartoview.log_handler import get_logger
 from .installer import AppInstaller, RestartHelper
 from .utils import populate_apps

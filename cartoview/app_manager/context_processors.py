@@ -2,14 +2,14 @@
 from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
 
-from cartoview import __version__
-from cartoview.app_manager.models import App
-from cartoview.site_management.models import SiteLogo
 from django.conf import settings
 from django.contrib.sites.models import Site
 from django.shortcuts import get_object_or_404
 from future import standard_library
 
+from cartoview import __version__
+from cartoview.app_manager.models import App
+from cartoview.site_management.models import SiteLogo
 
 standard_library.install_aliases()
 

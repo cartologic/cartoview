@@ -2,38 +2,22 @@
 from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
 
-import abc
 import json
 import os
 
-from cartoview.log_handler import get_logger
 from django.conf import settings
-from django.conf.urls import url
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
-from django.core.exceptions import PermissionDenied
 from django.db import transaction
-from django.db.models import F, Max, Min
-from django.forms.utils import ErrorList
-from django.http import Http404, HttpResponse, HttpResponseRedirect
-from django.shortcuts import get_object_or_404, render
-from django.urls import reverse
-from django.utils.decorators import method_decorator
-from django.utils.translation import ugettext as _
+from django.db.models import Max, Min
+from django.http import HttpResponse
+from django.shortcuts import render
 from django.views.decorators.http import require_POST
 from future import standard_library
-from future.utils import with_metaclass
-from geonode.base.forms import CategoryForm
-from geonode.base.models import TopicCategory
-from geonode.people.forms import ProfileForm
-from geonode.security.views import _perms_info_json
-from geonode.utils import build_social_links
-from guardian.shortcuts import get_perms
 
-from .decorators import PERMISSION_MSG_VIEW
+from cartoview.log_handler import get_logger
 from .installer import AppInstaller
 from .models import App
-from .utils import AppsThumbnail
 
 logger = get_logger(__name__)
 
@@ -184,62 +168,3 @@ def save_app_orders(request):
                     json.dumps(ajax_vars), content_type="application/json")
 
     return HttpResponse(json.dumps(ajax_vars), content_type="application/json")
-
-
-def appinstance_detail(request, appinstanceid):
-    """
-    The view that show details of each document
-    """
-    appinstance = None
-    try:
-        appinstance = resolve_appinstance(request, appinstanceid,
-                                          'base.view_resourcebase',
-                                          PERMISSION_MSG_VIEW)
-
-    except Http404:
-        return render(request, '404.html', context={}, status=404)
-
-    except PermissionDenied:
-        return render(request, '401.html', context={
-            'error_message':
-                _("You are not allowed to view this document.")
-        }, status=403)
-
-    if appinstance is None:
-        return HttpResponse(
-            'An unknown error has occured.', mimetype="text/plain", status=401)
-
-    else:
-        if request.user != appinstance.owner and not request.user.is_superuser:
-            AppInstance.objects.filter(id=appinstance.id).update(
-                popular_count=F('popular_count') + 1)
-        set_thumbnail_link = appinstance.link_set.filter(
-            link_type='appinstance_thumbnail')
-        context_dict = {
-            'perms_list':
-                get_perms(request.user, appinstance.get_self_resource()),
-            'permissions_json':
-                _perms_info_json(appinstance),
-            'resource':
-                appinstance,
-            # 'appinstance_links': appinstance_links,
-            'set_thumbnail_link':
-                set_thumbnail_link
-            # 'imgtypes': IMGTYPES,
-            # 'related': related
-        }
-
-        if settings.SOCIAL_ORIGINS:
-            context_dict["social_links"] = build_social_links(
-                request, appinstance)
-
-        if getattr(settings, 'EXIF_ENABLED', False):
-            try:
-                from geonode.contrib.exif.utils import exif_extract_dict
-                exif = exif_extract_dict(appinstance)
-                if exif:
-                    context_dict['exif_data'] = exif
-            except BaseException as e:
-                logger.error(e.args[0] + "Exif extraction failed.")
-        return render(request, "app_manager/appinstance_detail.html",
-                      context=context_dict)

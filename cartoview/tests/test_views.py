@@ -1,8 +1,8 @@
 import json
 
 import requests
-from django.urls import reverse
 from django.test import TestCase
+from django.urls import reverse
 from geonode.urls import api
 from pkg_resources import parse_version
 

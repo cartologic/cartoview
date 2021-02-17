@@ -1,8 +1,8 @@
 import threading
 
 from django.contrib.admin import ACTION_CHECKBOX_NAME
-from django.urls import reverse
 from django.test import TestCase
+from django.urls import reverse
 from geonode.people.models import Profile
 
 from cartoview.app_manager.installer import AppInstaller

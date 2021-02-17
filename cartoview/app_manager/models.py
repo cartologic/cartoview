@@ -3,17 +3,17 @@ from __future__ import (absolute_import, division, print_function,
 
 from datetime import datetime
 
-from cartoview.app_manager.config import CartoviewApp
-from cartoview.log_handler import get_logger
 from django.conf import settings as geonode_settings
 from django.contrib.gis.db import models
 from django.template.defaultfilters import slugify
 from django.urls import reverse
 from django.utils.encoding import python_2_unicode_compatible
 from future import standard_library
-
 from jsonfield import JSONField
 from taggit.managers import TaggableManager
+
+from cartoview.app_manager.config import CartoviewApp
+from cartoview.log_handler import get_logger
 
 logger = get_logger(__name__)
 
