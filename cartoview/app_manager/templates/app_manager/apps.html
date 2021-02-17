@@ -1,4 +1,4 @@
-{% extends "app_manager/app_install_base.html" %}
+{% extends "geonode_base.html" %}
 {% load bootstrap_tags staticfiles %}
 {% load i18n %}
 
@@ -8,6 +8,7 @@
 {% block head %}
     {{ block.super }}
     <style>
+        body.appinstances li#nav_appinstances a{color:white}
         h1, h2, h3, h4, h5, h6, p {
             word-wrap: break-word;
         }
@@ -23,8 +24,9 @@
             margin-right: auto
         }
     </style>
+    </style>
 {% endblock %}
-{% block body %}
+{% block body_outer %}
     <link href="{% static 'app_manager/apps_list.css' %}" rel="stylesheet">
     <div class="page-header">
         {% if user.is_staff %}
@@ -79,8 +81,7 @@
                                         {% else %}
                                         <div id="card-buttons">
                                             <a href="{% url 'appinstance_browse' %}?app__name__in={{ app.name }}&&app__title={{app.title}}"
-                                               target="_parent" class="btn btn-sm btn-primary">Explore <span
-                                                    class="badge">{{ app.appinstance_set.all|objects_count:request.user }}</span></a>
+                                               target="_parent" class="btn btn-sm btn-primary">Explore</a>
                                         </div>
                                         {% comment %}
                                         REMOVE THE FOLLOWING CONDITION AFTER FIXING __init__.py OF ALL MULTIPLE INSTANCE APPS
