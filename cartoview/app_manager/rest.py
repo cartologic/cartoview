@@ -4,10 +4,6 @@ from __future__ import (absolute_import, division, print_function,
 
 import json
 
-from cartoview.app_manager.models import App, AppStore, AppType
-from cartoview.apps_handler.config import CartoviewApp
-from cartoview.log_handler import get_logger
-from django.conf import settings
 from django.conf.urls import url
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
@@ -19,6 +15,9 @@ from tastypie.constants import ALL, ALL_WITH_RELATIONS
 from tastypie.resources import ModelResource
 from tastypie.utils import trailing_slash
 
+from cartoview.app_manager.models import App, AppStore, AppType
+from cartoview.app_manager.config import CartoviewApp
+from cartoview.log_handler import get_logger
 from .installer import AppInstaller, RestartHelper
 from .utils import populate_apps
 
@@ -31,6 +30,7 @@ class AppStoreResource(ModelResource):
         always_return_data = True
         authorization = Authorization()
         queryset = AppStore.objects.all()
+        resource_name = 'app_store'
 
 
 class AppResource(ModelResource):
@@ -77,6 +77,7 @@ class AppResource(ModelResource):
             "single_instance": ALL
         }
         can_edit = True
+        resource_name = 'app'
 
     def _build_url_exp(self, view, single=False):
         name = view + "_app"
@@ -240,8 +241,10 @@ class AppTypeResource(ModelResource):
 
     class Meta(object):
         queryset = AppType.objects.all()
+        resource_name = 'app_type'
 
 
 class TagResource(ModelResource):
     class Meta(object):
         queryset = Tag.objects.all()
+        resource_name = 'tag'
