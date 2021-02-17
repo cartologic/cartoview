@@ -1,6 +1,6 @@
 {% extends "app_manager/app_install_base.html" %}
 {% load bootstrap_tags staticfiles%}
-{% load i18n avatar_tags cartoview_tags %}
+{% load i18n  %}
 
 
 {% block title %} {% trans "Install App" %} - {{ block.super }} {% endblock %}
@@ -219,7 +219,7 @@
 {% block extra_script %}
     {{ block.super }}
     <script>
-        const versionInfo={{version_info|dump_json}}
+        const versionInfo={{version_info|safe}}
     </script>
     <script type="text/javascript" src="{{ STATIC_URL }}compare-versions/index.js"></script>
     <script type="text/javascript" src="{% url 'check_version' %}"></script>
