@@ -34,7 +34,9 @@ class AppsThumbnail(Thumbnail):
             instance.save()
 
 
-def populate_apps():
+def populate_apps(new_installed_apps=()):
     from django.apps import apps
     from django.conf import settings
+    if len(new_installed_apps):
+        settings.INSTALLED_APPS += new_installed_apps
     apps.populate(settings.INSTALLED_APPS)
