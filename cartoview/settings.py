@@ -125,30 +125,18 @@ LOGGING['loggers']['django.db.backends'] = {
     'level': 'WARNING',  # Django SQL logging is too noisy at DEBUG
 }
 
-# NOTE:set cartoview_stand_alone environment var if you are not using
-# cartoview_proect_template
-CARTOVIEW_STAND_ALONE = strtobool(os.getenv('CARTOVIEW_STAND_ALONE', 'FALSE'))
-if CARTOVIEW_STAND_ALONE or CARTOVIEW_TEST:
-    TEMPLATES[0]["DIRS"] = CARTOVIEW_TEMPLATE_DIRS + TEMPLATES[0]["DIRS"]
-    from cartoview import app_manager
-    from past.builtins import execfile
-
-    app_manager_settings = os.path.join(
-        os.path.dirname(app_manager.__file__), "settings.py")
-    execfile(os.path.realpath(app_manager_settings))
-    # load_apps declared in app_manager_settings in the above line
-    load_apps(APPS_DIR)
-    INSTALLED_APPS += CARTOVIEW_APPS
-    for settings_file in APPS_SETTINGS:
-        try:
-            execfile(settings_file)
-        except Exception as e:
-            print(e)
-
 # default uploader.
 os.environ.setdefault('DEFAULT_BACKEND_UPLOADER', 'geonode.importer')
+
+# Set cartoview_stand_alone environment var if you are not using cartoview_proect_template
+CARTOVIEW_STAND_ALONE = strtobool(os.getenv('CARTOVIEW_STAND_ALONE', 'FALSE'))
+if CARTOVIEW_STAND_ALONE or CARTOVIEW_TEST:
+    try:
+        from .cartoview_apps_settings import *
+    except Exception as e:
+        print(f'Error while importing cartoview_apps_settings : {e}')
 
 try:
     from .local_settings import *  # noqa
 except Exception as e:
-    print(e)
+    print(f'Error while importing local_settings: {e}')

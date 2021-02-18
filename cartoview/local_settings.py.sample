@@ -18,11 +18,10 @@
 #
 #########################################################################
 
-from past.builtins import execfile
-from cartoview import app_manager
 import os
-from .settings import (MAP_BASELAYERS, INSTALLED_APPS, OGC_SERVER, TEMPLATES,
-                       CARTOVIEW_TEMPLATE_DIRS, APPS_DIR, PROJECT_ROOT)
+
+from .settings import (PROJECT_ROOT)
+
 SITEURL = "http://localhost:8000/"
 ALLOWED_HOSTS = ['*']
 DATABASES = {
@@ -57,7 +56,9 @@ GEOSERVER_PUBLIC_PORT = os.getenv(
     'GEOSERVER_PUBLIC_PORT', 8080
 )
 
-_default_public_location = 'http://{}:{}/geoserver/'.format(GEOSERVER_PUBLIC_HOST, GEOSERVER_PUBLIC_PORT) if GEOSERVER_PUBLIC_PORT else 'http://{}/geoserver/'.format(GEOSERVER_PUBLIC_HOST)
+_default_public_location = 'http://{}:{}/geoserver/'.format(GEOSERVER_PUBLIC_HOST,
+                                                            GEOSERVER_PUBLIC_PORT) if GEOSERVER_PUBLIC_PORT else 'http://{}/geoserver/'.format(
+    GEOSERVER_PUBLIC_HOST)
 
 GEOSERVER_WEB_UI_LOCATION = os.getenv(
     'GEOSERVER_WEB_UI_LOCATION', GEOSERVER_LOCATION
@@ -110,7 +111,6 @@ OGC_SERVER = {
     }
 }
 
-
 # GeoNode javascript client configuration
 
 
@@ -125,14 +125,9 @@ DEFAULT_MAP_CENTER = (0, 0)
 # 0 = entire world;
 # maximum zoom is between 12 and 15 (for Google Maps, coverage varies by area)
 DEFAULT_MAP_ZOOM = 0
-TEMPLATES[0]["DIRS"] = CARTOVIEW_TEMPLATE_DIRS + TEMPLATES[0]["DIRS"]
-app_manager_settings = os.path.join(
-    os.path.dirname(app_manager.__file__), "settings.py")
-execfile(os.path.realpath(app_manager_settings))
-load_apps(APPS_DIR)
-INSTALLED_APPS += CARTOVIEW_APPS
-for settings_file in APPS_SETTINGS:
-    try:
-        execfile(settings_file)
-    except Exception as e:
-        print(e)
+
+# Import cartoview_apps_settings
+try:
+    from .cartoview_apps_settings import *
+except Exception as e:
+    print(f'Error while importing cartoview_apps_settings : {e}')
