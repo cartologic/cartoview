@@ -3,7 +3,7 @@ from __future__ import (absolute_import, division, print_function,
 
 from datetime import datetime
 
-from django.conf import settings as geonode_settings
+from django.conf import settings
 from django.contrib.gis.db import models
 from django.template.defaultfilters import slugify
 from django.urls import reverse
@@ -68,7 +68,7 @@ class App(models.Model):
     date_installed = models.DateTimeField(
         'Date Installed', auto_now_add=True, null=True)
     installed_by = models.ForeignKey(
-        geonode_settings.AUTH_USER_MODEL, null=True,
+        settings.AUTH_USER_MODEL, null=True,
         blank=True, on_delete=models.PROTECT)
     single_instance = models.BooleanField(
         default=False, null=False, blank=False)
