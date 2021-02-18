@@ -20,10 +20,13 @@
 
 import os
 
-from .settings import (PROJECT_ROOT)
+from .settings import (
+    PROJECT_ROOT
+)
 
-SITEURL = "http://localhost:8000/"
-ALLOWED_HOSTS = ['*']
+# ---
+# Override GeoNode Settings
+# ---
 DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
@@ -44,6 +47,7 @@ DATABASES = {
         'PORT': '5432',
     }
 }
+
 GEOSERVER_LOCATION = os.getenv(
     'GEOSERVER_LOCATION', 'http://localhost:8080/geoserver/'
 )
@@ -56,9 +60,10 @@ GEOSERVER_PUBLIC_PORT = os.getenv(
     'GEOSERVER_PUBLIC_PORT', 8080
 )
 
-_default_public_location = 'http://{}:{}/geoserver/'.format(GEOSERVER_PUBLIC_HOST,
-                                                            GEOSERVER_PUBLIC_PORT) if GEOSERVER_PUBLIC_PORT else 'http://{}/geoserver/'.format(
-    GEOSERVER_PUBLIC_HOST)
+_default_public_location = 'http://{}:{}/geoserver/'.format(
+    GEOSERVER_PUBLIC_HOST,
+    GEOSERVER_PUBLIC_PORT
+) if GEOSERVER_PUBLIC_PORT else 'http://{}/geoserver/'.format(GEOSERVER_PUBLIC_HOST)
 
 GEOSERVER_WEB_UI_LOCATION = os.getenv(
     'GEOSERVER_WEB_UI_LOCATION', GEOSERVER_LOCATION
@@ -76,10 +81,6 @@ OGC_SERVER_DEFAULT_PASSWORD = os.getenv(
     'GEOSERVER_ADMIN_PASSWORD', 'geoserver'
 )
 
-GEOFENCE_SECURITY_ENABLED = True
-
-# OGC (WMS/WFS/WCS) Server Settings
-# OGC (WMS/WFS/WCS) Server Settings
 OGC_SERVER = {
     'default': {
         'BACKEND': 'geonode.geoserver',
@@ -110,24 +111,3 @@ OGC_SERVER = {
         'POOL_CONNECTIONS': int(os.getenv('OGC_REQUEST_POOL_CONNECTIONS', '10')),
     }
 }
-
-# GeoNode javascript client configuration
-
-
-DEFAULT_MAP_CRS = "EPSG:3857"
-
-DEFAULT_LAYER_FORMAT = "image/png"
-
-# Where should newly created maps be focused?
-DEFAULT_MAP_CENTER = (0, 0)
-
-# How tightly zoomed should newly created maps be?
-# 0 = entire world;
-# maximum zoom is between 12 and 15 (for Google Maps, coverage varies by area)
-DEFAULT_MAP_ZOOM = 0
-
-# Import cartoview_apps_settings
-try:
-    from .cartoview_apps_settings import *
-except Exception as e:
-    print(f'Error while importing cartoview_apps_settings : {e}')
