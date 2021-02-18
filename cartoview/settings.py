@@ -110,6 +110,9 @@ INSTALLED_APPS = (
     'cartoview.site_management'
 )
 
+# Django Sites
+SITE_ID = 1
+
 # ---
 # CartoView Settings
 # ---
