@@ -2,6 +2,13 @@ from distutils.core import setup
 
 from setuptools import find_packages
 
+
+def parse_requirements(filename):
+    """ load requirements from a pip requirements file """
+    lineiter = (line.strip() for line in open(filename))
+    return [line for line in lineiter if line and not line.startswith("#")]
+
+
 long_description = open('README.md').read()
 setup(
     name='cartoview',
@@ -16,7 +23,9 @@ setup(
     url='https://github.com/cartologic/cartoview',
     include_package_data=True,
     keywords=[
-        'cartoview', 'gis', 'geonode', "django", "web mapping", "applications",
+        'cartoview',
+        'gis', 'geonode',
+        "django", "web mapping", "applications",
         "apps", "application management"
     ],
     classifiers=[
@@ -24,10 +33,5 @@ setup(
         "Topic :: Scientific/Engineering :: GIS"
     ],
     license="BSD",
-    install_requires=[
-        'future', 'geonode>=3.0',
-        'Faker>=0.8.4',
-        'cherrypy==11.0.0',
-        'cheroot==5.8.3',
-        'portalocker==1.3.0'
-    ])
+    install_requires=parse_requirements('requirements.txt'),
+)
