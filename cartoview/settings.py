@@ -8,8 +8,6 @@ import re
 import sys
 from distutils.util import strtobool
 
-import dj_database_url
-from geonode.settings import *  # noqa
 from kombu import Exchange, Queue
 
 import cartoview
@@ -20,13 +18,10 @@ APPS_DIR = os.path.abspath(
     os.path.join(os.path.dirname(CARTOVIEW_DIR), "apps"))
 PENDING_APPS = os.path.join(APPS_DIR, "pendingOperation.yml")
 
-try:
-    # try to parse python notation, default in dockerized env
-    ALLOWED_HOSTS = ast.literal_eval(os.getenv('ALLOWED_HOSTS'))
-except ValueError:
-    # fallback to regular list of values separated with misc chars
-    ALLOWED_HOSTS = ['*'] if os.getenv('ALLOWED_HOSTS') is None \
-        else re.split(r' *[,|:|;] *', os.getenv('ALLOWED_HOSTS'))
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = '94msw_@n5h@v6)q6(jvcuf%r4u&2bjc^8^(wyw9zhr5$x0rhzb'
+
+ALLOWED_HOSTS = ['*']
 
 DOCKER = os.getenv('DOCKER', False)
 
@@ -38,16 +33,16 @@ SITEURL = os.getenv('SITEURL', "http://localhost/")
 
 ROOT_URLCONF = os.getenv('ROOT_URLCONF', "cartoview.urls")
 
-DATABASE_URL = os.getenv(
-    'DATABASE_URL', 'sqlite:////{}/database.sqlite'.format(
-        os.path.dirname(CARTOVIEW_DIR)))
-DATASTORE_DATABASE_URL = os.getenv('DATASTORE_DATABASE_URL', None)
-if DATABASE_URL:
-    DATABASES['default'] = dj_database_url.parse(
-        DATABASE_URL, conn_max_age=0)
-if DATASTORE_DATABASE_URL:
-    DATABASES['datastore'] = dj_database_url.parse(
-        DATASTORE_DATABASE_URL, conn_max_age=0)
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        'NAME': 'cartoview131',
+        'USER': 'postgres',
+        'PASSWORD': '123456',
+        'HOST': 'localhost',
+        'PORT': '5432',
+    },
+}
 
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
@@ -55,37 +50,72 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "uploaded")
 MEDIA_URL = "/uploaded/"
 LOCAL_MEDIA_URL = "/uploaded/"
 
-# ---
-# Override GeoNode Settings
-# ---
-if 'datastore' in DATABASES:
-    OGC_SERVER['default']['DATASTORE'] = 'datastore'
-if 'geonode.geoserver' in INSTALLED_APPS and "LOCAL_GEOSERVER" in \
-        locals() and LOCAL_GEOSERVER in MAP_BASELAYERS:
-    LOCAL_GEOSERVER["source"][
-        "url"] = OGC_SERVER['default']['PUBLIC_LOCATION'] + "wms"
-# default uploader.
-os.environ.setdefault('DEFAULT_BACKEND_UPLOADER', 'geonode.importer')
+MIDDLEWARE = (
+    'django.middleware.common.CommonMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.contrib.sites.middleware.CurrentSiteMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.security.SecurityMiddleware',
+)
+
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [os.path.join(CARTOVIEW_DIR, "templates"), ],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+
+                'django.template.context_processors.i18n',
+                'django.template.context_processors.tz',
+                'django.template.context_processors.media',
+                'django.template.context_processors.static',
+                'django.contrib.auth.context_processors.auth',
+
+                'cartoview.app_manager.context_processors.cartoview_processor',
+                'cartoview.app_manager.context_processors.site_logo'
+            ],
+            'debug': True
+        }
+    }
+]
+
+INSTALLED_APPS = (
+    # Django
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.sites',
+    'django.contrib.admin',
+    'django.contrib.sitemaps',
+    'django.contrib.staticfiles',
+    'django.contrib.messages',
+    'django.contrib.humanize',
+    'django.contrib.gis',
+    # simpler approach to tagging with Django
+    'taggit',
+    # tastypie Api
+    'tastypie',
+    # CartoView
+    'cartoview',
+    'cartoview.app_manager.apps.AppsHandlerConfig',
+    'cartoview.site_management'
+)
 
 # ---
 # CartoView Settings
 # ---
-CARTOVIEW_INSTALLED_APPS = (
-    "cartoview",
-    "cartoview.app_manager.apps.AppsHandlerConfig",
-    "cartoview.site_management",
-)
-INSTALLED_APPS += CARTOVIEW_INSTALLED_APPS
-
-CARTOVIEW_TEMPLATE_DIRS = [
-    os.path.join(CARTOVIEW_DIR, "templates"),
-]
-TEMPLATES[0]["DIRS"] = CARTOVIEW_TEMPLATE_DIRS
-
-CARTOVIEW_STATIC_DIRS = [
+STATICFILES_DIRS = [
     os.path.join(CARTOVIEW_DIR, "static"),
 ]
-STATICFILES_DIRS += CARTOVIEW_STATIC_DIRS
 
 APPS_MENU = False
 
@@ -155,9 +185,3 @@ if CARTOVIEW_STAND_ALONE or CARTOVIEW_TEST:
         from .cartoview_apps_settings import *
     except Exception as e:
         print(f'Error while importing cartoview_apps_settings : {e}')
-
-# Import local_settings to override any of the above settings
-try:
-    from .local_settings import *  # noqa
-except Exception as e:
-    print(f'Error while importing local_settings: {e}')
