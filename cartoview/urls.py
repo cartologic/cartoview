@@ -2,7 +2,6 @@
 from __future__ import absolute_import
 
 from django.conf.urls import include, url
-from geonode.urls import urlpatterns as geonode_urls
 from tastypie.api import Api
 
 from cartoview.app_manager.rest import AppResource, AppTypeResource, AppStoreResource, TagResource
@@ -19,4 +18,3 @@ urlpatterns = [
     url(r'^apps/', include('cartoview.app_manager.urls')),
     url(r'', include(api.urls)),
 ]
-urlpatterns += geonode_urls
