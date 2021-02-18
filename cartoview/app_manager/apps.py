@@ -17,7 +17,7 @@ standard_library.install_aliases()
 logger = get_logger(__name__)
 
 
-class AppsHandlerConfig(AppConfig):
+class AppManagerConfig(AppConfig):
     name = 'cartoview.app_manager'
     verbose_name = "CartoView App Manager"
 

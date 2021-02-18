@@ -106,7 +106,7 @@ INSTALLED_APPS = (
     'tastypie',
     # CartoView
     'cartoview',
-    'cartoview.app_manager.apps.AppsHandlerConfig',
+    'cartoview.app_manager.apps.AppManagerConfig',
     'cartoview.site_management'
 )
 
