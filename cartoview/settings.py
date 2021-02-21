@@ -38,7 +38,7 @@ ROOT_URLCONF = os.getenv('ROOT_URLCONF', "cartoview.urls")
 DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': 'cartoview131',
+        'NAME': 'experimental_cartoview',
         'USER': 'postgres',
         'PASSWORD': '123456',
         'HOST': 'localhost',
@@ -107,6 +107,8 @@ INSTALLED_APPS = (
     'taggit',
     # tastypie Api
     'tastypie',
+    # django-forms-bootstrap
+    'django_forms_bootstrap',
     # CartoView
     'cartoview',
     'cartoview.app_manager.apps.AppManagerConfig',
