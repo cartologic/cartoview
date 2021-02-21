@@ -18,6 +18,8 @@ APPS_DIR = os.path.abspath(
     os.path.join(os.path.dirname(CARTOVIEW_DIR), "apps"))
 PENDING_APPS = os.path.join(APPS_DIR, "pendingOperation.yml")
 
+DEBUG = True
+
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '94msw_@n5h@v6)q6(jvcuf%r4u&2bjc^8^(wyw9zhr5$x0rhzb'
 
