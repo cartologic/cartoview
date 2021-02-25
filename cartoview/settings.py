@@ -103,23 +103,26 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.humanize',
     'django.contrib.gis',
+
     # simpler approach to tagging with Django
     'taggit',
+
     # tastypie Api
     'tastypie',
+
     # django-forms-bootstrap
     'django_forms_bootstrap',
-    # CartoView
-    'cartoview',
-    'cartoview.app_manager.apps.AppManagerConfig',
-    'cartoview.site_management',
-    'cartoview.app_instances_catalog',
 
     # django allauth
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
 
+    # CartoView
+    'cartoview',
+    'cartoview.app_manager.apps.AppManagerConfig',
+    'cartoview.site_management',
+    'cartoview.app_instances_catalog',
     # custom allauth provider for GeoNode
     'cartoview.geonode_allauth_provider',
 )
@@ -140,7 +143,6 @@ SITE_ID = 1
 # ---
 # OAUTH_SERVER_BASEURL
 OAUTH_SERVER_BASEURL = "https://summit2020.cartoview.net/"
-
 
 # ---
 # CartoView Settings
