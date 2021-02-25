@@ -113,6 +113,7 @@ INSTALLED_APPS = (
     'cartoview',
     'cartoview.app_manager.apps.AppManagerConfig',
     'cartoview.site_management',
+    'cartoview.app_instances_catalog',
 
     # django allauth
     'allauth',
