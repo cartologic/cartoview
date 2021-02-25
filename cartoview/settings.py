@@ -112,11 +112,34 @@ INSTALLED_APPS = (
     # CartoView
     'cartoview',
     'cartoview.app_manager.apps.AppManagerConfig',
-    'cartoview.site_management'
+    'cartoview.site_management',
+
+    # django allauth
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+
+    # custom allauth provider for GeoNode
+    'cartoview.geonode_allauth_provider',
 )
+
+AUTHENTICATION_BACKENDS = [
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+
+    # `allauth` specific authentication methods, such as login by e-mail
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
 
 # Django Sites
 SITE_ID = 1
+
+# ---
+# django-allauth settings / geonode_allauth_provider
+# ---
+# OAUTH_SERVER_BASEURL
+OAUTH_SERVER_BASEURL = "https://summit2020.cartoview.net/"
+
 
 # ---
 # CartoView Settings
