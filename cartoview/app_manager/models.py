@@ -11,7 +11,7 @@ from django.conf import settings
 from django.contrib.gis.db import models
 from django.template.defaultfilters import slugify
 from django.urls import reverse
-from django.utils.encoding import python_2_unicode_compatible
+from six import python_2_unicode_compatible
 from future import standard_library
 from jsonfield import JSONField
 from taggit.managers import TaggableManager
