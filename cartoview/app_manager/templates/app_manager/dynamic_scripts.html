@@ -6,10 +6,10 @@
         MEDIA_URL: "{{ MEDIA_URL }}",
         STATIC_URL: "{{ STATIC_URL }}",
         APPS_BASE_URL: "{% url 'app_manager_base_url' %}",
-        APP_URL: "{% url 'api_dispatch_list' api_name='cartoview-api' resource_name='app' %}",
-        APP_STORE: "{% url 'api_dispatch_list' api_name='cartoview-api' resource_name='app_store' %}",
-        BULK_INSTALL: "{% url 'bulk_install'  api_name='cartoview-api' resource_name='app' %}",
-        RESTART_SERVER: "{% url 'restart_server'  api_name='cartoview-api' resource_name='app' %}",
+        APP_URL: "{% url 'api_dispatch_list' api_name='api' resource_name='app' %}",
+        APP_STORE: "{% url 'api_dispatch_list' api_name='api' resource_name='app_store' %}",
+        BULK_INSTALL: "{% url 'bulk_install'  api_name='api' resource_name='app' %}",
+        RESTART_SERVER: "{% url 'restart_server'  api_name='api' resource_name='app' %}",
     });
     angular.module('cartoview.userInfo', []).service("cartoviewUser", function () {
         {% if user.is_authenticated %}

@@ -4,7 +4,7 @@ from __future__ import (absolute_import, division, print_function,
 
 import importlib
 
-from django.conf.urls import include, url
+from django.urls import include, path, re_path
 from future import standard_library
 
 from cartoview.app_manager.config import CartoviewApp
@@ -13,23 +13,26 @@ from . import views as app_manager_views
 standard_library.install_aliases()
 
 urlpatterns = [
-    url(r'^$', app_manager_views.index, name='app_manager_base_url'),
-    url(r'^manage/$', app_manager_views.manage_apps, name='manage_apps'),
-    url(r'^install/(?P<store_id>\d+)/(?P<app_name>.*)/(?P<version>.*)/$',
-        app_manager_views.install_app,
-        name='install_app'),
-    url(r'^uninstall/(?P<store_id>\d+)/(?P<app_name>.*)/$',
-        app_manager_views.uninstall_app,
-        name='cartoview_uninstall_app_url'),
-    url(r'^moveup/(?P<app_id>\d+)/$',
-        app_manager_views.move_up,
-        name='move_up'),
-    url(r'^movedown/(?P<app_id>\d+)/$',
-        app_manager_views.move_down,
-        name='move_down'),
-    url(r'^save_app_orders/$',
-        app_manager_views.save_app_orders,
-        name='save_app_orders'),
+    # /apps/
+    path('', app_manager_views.index, name='app_manager_base_url'),
+    # /apps/manage/
+    path('manage/', app_manager_views.manage_apps, name='manage_apps'),
+
+    path('install/<int:store_id>/<app_name>/<version>/',
+         app_manager_views.install_app,
+         name='install_app'),
+    path('uninstall/<int:store_id>/<app_name>/',
+         app_manager_views.uninstall_app,
+         name='cartoview_uninstall_app_url'),
+    path('moveup/<int:app_id>/',
+         app_manager_views.move_up,
+         name='move_up'),
+    path('movedown/<int:app_id>/',
+         app_manager_views.move_down,
+         name='move_down'),
+    path('save_app_orders/',
+         app_manager_views.save_app_orders,
+         name='save_app_orders'),
 ]
 
 
@@ -44,7 +47,7 @@ def import_app_rest(app_name):
 
 def app_url(app_name):
     app = str(app_name)
-    return url(
+    return re_path(
         r'^' + app + '/', include('%s.urls' % app), name=app + '_base_url')
 
 

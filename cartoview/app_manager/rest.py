@@ -4,9 +4,9 @@ from __future__ import (absolute_import, division, print_function,
 
 import json
 
-from django.conf.urls import url
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
+from django.urls import re_path
 from future import standard_library
 from taggit.models import Tag
 from tastypie import fields, http
@@ -90,18 +90,18 @@ class AppResource(ModelResource):
         else:
             exp = r"^(?P<resource_name>%s)/%s%s$" % (self._meta.resource_name,
                                                      view, trailing_slash())
-        return url(exp, self.wrap_view(view), name=name)
+        return re_path(exp, self.wrap_view(view), name=name)
 
     def prepend_urls(self):
         return [
-            url(r"^(?P<resource_name>%s)/install%s$" %
-                (self._meta.resource_name, trailing_slash()),
-                self.wrap_view('install'),
-                name="bulk_install"),
-            url(r"^(?P<resource_name>%s)/restart-server%s$" %
-                (self._meta.resource_name, trailing_slash()),
-                self.wrap_view('restart_server'),
-                name="restart_server"),
+            re_path(r"^(?P<resource_name>%s)/install%s$" %
+                    (self._meta.resource_name, trailing_slash()),
+                    self.wrap_view('install'),
+                    name="bulk_install"),
+            re_path(r"^(?P<resource_name>%s)/restart-server%s$" %
+                    (self._meta.resource_name, trailing_slash()),
+                    self.wrap_view('restart_server'),
+                    name="restart_server"),
             self._build_url_exp('install'),
             self._build_url_exp('reorder'),
             self._build_url_exp('uninstall', True),

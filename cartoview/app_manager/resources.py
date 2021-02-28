@@ -1,10 +1,10 @@
 from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
 
-from django.conf.urls import url
 from django.db import models
 from django.forms.models import modelform_factory
 from django.shortcuts import render
+from django.urls import re_path
 from future import standard_library
 from tastypie.authorization import Authorization
 from tastypie.resources import ModelResource
@@ -40,10 +40,10 @@ class BaseModelResource(ModelResource):
 
     def prepend_urls(self):
         return [
-            url(r"^(?P<resource_name>%s)/edit/(?P<pk>.*?)/$" %
-                self._meta.resource_name, self.wrap_view('edit')),
-            url(r"^(?P<resource_name>%s)/new/$" % self._meta.resource_name,
-                self.wrap_view('new_item'))
+            re_path(r"^(?P<resource_name>%s)/edit/(?P<pk>.*?)/$" %
+                    self._meta.resource_name, self.wrap_view('edit')),
+            re_path(r"^(?P<resource_name>%s)/new/$" % self._meta.resource_name,
+                    self.wrap_view('new_item'))
         ]
 
     def new_item(self, request, **kwargs):
