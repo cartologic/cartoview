@@ -28,8 +28,8 @@ urlpatterns = [
     path('admin/', admin.site.urls, name="admin")
 ]
 
-# Add allauth urls
+# allauth urls
 urlpatterns += [
-    path('^accounts/', include('allauth.urls')),
-    path('^accounts/profile/', ProfileView.as_view()),
+    path('accounts/', include('allauth.urls')),
+    path('accounts/profile/', ProfileView.as_view()),
 ]
