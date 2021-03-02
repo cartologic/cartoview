@@ -20,6 +20,8 @@ urlpatterns = [
     path('', ProfileView.as_view()),
     # /api/
     path('', include(api.urls)),
+    # /proxy urls
+    path('geonode-proxy/', include('cartoview.proxy.urls')),
     # /check-version/
     path('check-version/', check_version, name='check_version'),
     # /apps

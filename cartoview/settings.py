@@ -118,6 +118,9 @@ INSTALLED_APPS = (
     'allauth.account',
     'allauth.socialaccount',
 
+    # django-rvproxy
+    'revproxy',
+
     # CartoView
     'cartoview',
     'cartoview.app_manager.apps.AppManagerConfig',
@@ -125,6 +128,7 @@ INSTALLED_APPS = (
     'cartoview.app_instances_catalog',
     # custom allauth provider for GeoNode
     'cartoview.geonode_allauth_provider',
+    'cartoview.proxy',
 )
 
 AUTHENTICATION_BACKENDS = [
