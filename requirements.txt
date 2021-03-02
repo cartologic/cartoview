@@ -18,9 +18,10 @@ django-model-utils==4.1.1
 django-revproxy==0.10.0
 django-taggit==1.3.0
 django-tastypie==0.14.3
+djangorestframework==3.12.2
 future==0.18.2
 idna==3.1
-ipython==7.20.0
+ipython==7.21.0
 ipython-genutils==0.2.0
 jaraco.classes==3.2.1
 jaraco.collections==3.2.0
@@ -35,7 +36,7 @@ parso==0.8.1
 Paver==1.3.4
 pexpect==4.8.0
 pickleshare==0.7.5
-Pillow==8.1.0
+Pillow==8.1.1
 portalocker==2.2.1
 portend==2.7.1
 prompt-toolkit==3.0.16
@@ -53,7 +54,7 @@ requests-oauthlib==1.3.0
 six==1.15.0
 sqlparse==0.4.1
 tempora==4.0.1
-tqdm==4.57.0
+tqdm==4.58.0
 traitlets==5.0.5
 urllib3==1.26.3
 vine==5.0.0
