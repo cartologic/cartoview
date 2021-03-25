@@ -25,14 +25,17 @@ INSTALLED_APPS += CARTOVIEW_INSTALLED_APPS
 ROOT_URLCONF = os.getenv('ROOT_URLCONF', "cartoview.urls")
 CARTOVIEW_DIR = os.path.abspath(os.path.dirname(cartoview.__file__))
 BASE_DIR = os.path.dirname(CARTOVIEW_DIR)
+
 CARTOVIEW_TEMPLATE_DIRS = [
     os.path.join(CARTOVIEW_DIR, "templates"),
 ]
-# TEMPLATES[0]["DIRS"] = CARTOVIEW_TEMPLATE_DIRS
+TEMPLATES[0]["DIRS"] = CARTOVIEW_TEMPLATE_DIRS + TEMPLATES[0]["DIRS"]
+
 CARTOVIEW_STATIC_DIRS = [
     os.path.join(CARTOVIEW_DIR, "static"),
 ]
-STATICFILES_DIRS += CARTOVIEW_STATIC_DIRS
+STATICFILES_DIRS = CARTOVIEW_STATIC_DIRS + STATICFILES_DIRS
+
 APPS_DIR = os.path.abspath(
     os.path.join(os.path.dirname(CARTOVIEW_DIR), "apps"))
 PENDING_APPS = os.path.join(APPS_DIR, "pendingOperation.yml")
