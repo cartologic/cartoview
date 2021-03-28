@@ -83,7 +83,7 @@ services:
   celery:
     image: cartologic/cartoview:latest    
     container_name: cartoview_celery
-    command: bash -c "celery worker --app=cartoview --broker=amqp://guest:guest@rabbitmq:5672/ -B -E -l debug"
+    command: bash -c "celery -A cartoview.celery:app worker -B -E --statedb=./worker.state -s ./celerybeat-schedule --loglevel=INFO --concurrency=10 -n worker1@%h -f /var/log/celery.log"
     restart: unless-stopped
     hostname: celery
     depends_on:
