@@ -128,8 +128,7 @@ LOGGING['loggers']['django.db.backends'] = {
     'level': 'WARNING',  # Django SQL logging is too noisy at DEBUG
 }
 
-# NOTE:set cartoview_stand_alone environment var if you are not using
-# cartoview_proect_template
+# NOTE:set cartoview_stand_alone environment var if you are not using cartoview_project_template
 CARTOVIEW_STAND_ALONE = strtobool(os.getenv('CARTOVIEW_STAND_ALONE', 'FALSE'))
 if CARTOVIEW_STAND_ALONE or CARTOVIEW_TEST:
     TEMPLATES[0]["DIRS"] = CARTOVIEW_TEMPLATE_DIRS + TEMPLATES[0]["DIRS"]
@@ -147,8 +146,6 @@ if CARTOVIEW_STAND_ALONE or CARTOVIEW_TEST:
         except Exception as e:
             print(e)
 
-# default uploader.
-os.environ.setdefault('DEFAULT_BACKEND_UPLOADER', 'geonode.importer')
 
 # Location of translation files
 _DEFAULT_LOCALE_PATHS = (
