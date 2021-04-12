@@ -46,12 +46,10 @@ CARTOVIEW_CONTEXT_PROCESSORS = (
     'cartoview.app_manager.context_processors.site_logo')
 TEMPLATES[0]["OPTIONS"]['context_processors'] += CARTOVIEW_CONTEXT_PROCESSORS
 # django Media Section
-# uncomment the following if you want your files out of geonode folder
-MEDIA_ROOT = os.path.join(BASE_DIR, "uploaded")
-MEDIA_URL = "/uploaded/"
-LOCAL_MEDIA_URL = "/uploaded/"
+MEDIA_ROOT = os.getenv('MEDIA_ROOT', os.path.join(BASE_DIR, MEDIAFILES_LOCATION))
+
 # static section
-STATIC_ROOT = os.getenv('STATIC_ROOT', os.path.join(BASE_DIR, "static"))
+STATIC_ROOT = os.getenv('STATIC_ROOT', os.path.join(BASE_DIR, STATICFILES_LOCATION))
 
 DATABASE_URL = os.getenv(
     'DATABASE_URL', 'sqlite:////{}/database.sqlite'.format(
