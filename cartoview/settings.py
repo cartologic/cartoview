@@ -51,7 +51,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "uploaded")
 MEDIA_URL = "/uploaded/"
 LOCAL_MEDIA_URL = "/uploaded/"
 # static section
-STATIC_ROOT = os.path.join(BASE_DIR, "static")
+STATIC_ROOT = os.getenv('STATIC_ROOT', os.path.join(BASE_DIR, "static"))
+
 DATABASE_URL = os.getenv(
     'DATABASE_URL', 'sqlite:////{}/database.sqlite'.format(
         os.path.dirname(CARTOVIEW_DIR)))
