@@ -36,8 +36,7 @@ CARTOVIEW_STATIC_DIRS = [
 ]
 STATICFILES_DIRS = CARTOVIEW_STATIC_DIRS + STATICFILES_DIRS
 
-APPS_DIR = os.path.abspath(
-    os.path.join(os.path.dirname(CARTOVIEW_DIR), "apps"))
+APPS_DIR = os.getenv('APPS_DIR', os.path.abspath(os.path.join(os.path.dirname(CARTOVIEW_DIR), "apps")))
 PENDING_APPS = os.path.join(APPS_DIR, "pendingOperation.yml")
 APPS_MENU = False
 DOCKER = os.getenv('DOCKER', False)

@@ -31,7 +31,8 @@ def load_apps(APPS_DIR):
         if APPS_DIR not in sys.path:
             sys.path.append(APPS_DIR)
         logger.info("Loading Cartoview Apps.....")
-        CartoviewApp.load(apps_dir=APPS_DIR)
+        CartoviewApp.apps_dir = APPS_DIR
+        CartoviewApp.load()
         for app in CartoviewApp.objects.values():
             try:
                 logger.info("Check if {} Healthy.\n".format(app.name))

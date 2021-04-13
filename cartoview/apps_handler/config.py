@@ -2,7 +2,6 @@
 import json
 import os
 from collections import Mapping
-
 import portalocker
 
 
@@ -101,6 +100,7 @@ class AppsDict(Mapping):
 class CartoviewApp(object):
     app_attrs = frozenset(['name', 'active', 'pending', 'order'])
     objects = AppsDict()
+    apps_dir = None
 
     def __init__(self, data):
         if not data and isinstance(data, dict):
@@ -138,31 +138,26 @@ class CartoviewApp(object):
         }
 
     @classmethod
-    def get_apps_json_path(cls, apps_dir=None):
-        if not apps_dir or (os.path.isdir(apps_dir) and os.path.exists(
-                os.path.join(apps_dir, 'apps.json'))):
-            from django.conf import settings
-            apps_dir = getattr(settings, 'APPS_DIR')
-
-        return os.path.join(apps_dir, 'apps.json')
+    def get_apps_json_path(cls):
+        return os.path.join(cls.apps_dir, 'apps.json')
 
     def commit(self):
         CartoviewApp.objects.update({self.name: self})
         return self
 
     @classmethod
-    def load(cls, apps_dir=None):
+    def load(cls):
         if os.path.exists(cls.get_apps_json_path()):
             with portalocker.Lock(
-                    cls.get_apps_json_path(apps_dir=apps_dir), 'r',
+                    cls.get_apps_json_path(), 'r',
                     portalocker.LOCK_EX) as jf:
                 data = jf.read()
                 CartoviewApp.objects.from_json(data)
 
     @classmethod
-    def save(cls, apps_dir=None):
+    def save(cls):
         with portalocker.Lock(
-                cls.get_apps_json_path(apps_dir=apps_dir), 'w',
+                cls.get_apps_json_path(), 'w',
                 portalocker.LOCK_EX) as jf:
             data = CartoviewApp.objects.to_json()
             jf.write(data)

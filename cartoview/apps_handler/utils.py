@@ -13,7 +13,9 @@ from cartoview.app_manager.helpers import (change_path_permission,
 standard_library.install_aliases()
 
 
-def create_apps_dir(apps_dir=getattr(settings, 'APPS_DIR', None)):
+def create_apps_dir(apps_dir):
+    if not apps_dir:
+        apps_dir = getattr(settings, 'APPS_DIR', None)
     if not apps_dir:
         project_dir = getattr(settings, 'BASE_DIR', settings.PROJECT_DIR)
         apps_dir = os.path.abspath(os.path.join(
