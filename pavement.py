@@ -129,7 +129,7 @@ def cleanup():
 ])
 def run_cartoview_test(options):
     try:
-        sh('CARTOVIEW_STAND_ALONE="True" coverage run' +
+        sh('coverage run' +
            ' --source=cartoview --omit="*/migrations/*,*/apps/*"' +
            ' ./manage.py test cartoview -v 3 ' +
            '--settings cartoview.settings')
@@ -405,7 +405,7 @@ def waitfor(url, timeout=300):
 @task
 def run_coverage(options):
     sh(
-        'CARTOVIEW_STAND_ALONE=True coverage run --source=cartoview --omit="*/migrations/*, */apps/*,pavement.py" ./manage.py test'
+        'coverage run --source=cartoview --omit="*/migrations/*, */apps/*,pavement.py" ./manage.py test'
     )
     cleanup()
 

@@ -126,23 +126,21 @@ LOGGING['loggers']['django.db.backends'] = {
     'level': 'WARNING',  # Django SQL logging is too noisy at DEBUG
 }
 
-# NOTE:set cartoview_stand_alone environment var if you are not using cartoview_project_template
-CARTOVIEW_STAND_ALONE = strtobool(os.getenv('CARTOVIEW_STAND_ALONE', 'FALSE'))
-if CARTOVIEW_STAND_ALONE or CARTOVIEW_TEST:
-    TEMPLATES[0]["DIRS"] = CARTOVIEW_TEMPLATE_DIRS + TEMPLATES[0]["DIRS"]
-    from cartoview import app_manager
-    from past.builtins import execfile
 
-    app_manager_settings = os.path.join(
-        os.path.dirname(app_manager.__file__), "settings.py")
-    execfile(os.path.realpath(app_manager_settings))
-    load_apps(APPS_DIR)
-    INSTALLED_APPS += CARTOVIEW_APPS
-    for settings_file in APPS_SETTINGS:
-        try:
-            execfile(settings_file)
-        except Exception as e:
-            print(e)
+TEMPLATES[0]["DIRS"] = CARTOVIEW_TEMPLATE_DIRS + TEMPLATES[0]["DIRS"]
+from cartoview import app_manager
+from past.builtins import execfile
+
+app_manager_settings = os.path.join(
+    os.path.dirname(app_manager.__file__), "settings.py")
+execfile(os.path.realpath(app_manager_settings))
+load_apps(APPS_DIR)
+INSTALLED_APPS += CARTOVIEW_APPS
+for settings_file in APPS_SETTINGS:
+    try:
+        execfile(settings_file)
+    except Exception as e:
+        print(e)
 
 
 # Location of translation files

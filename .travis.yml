@@ -18,7 +18,6 @@ python:
 env:
   global:
     - CARTOVIEW_TEST=True
-    - CARTOVIEW_STAND_ALONE=True
 virtualenv:
   system_site_packages: false
 branches:
