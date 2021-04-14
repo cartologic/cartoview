@@ -4,10 +4,16 @@
 {% block extra_head %}
     {{ block.super }}
 {% endblock %}
+
 {% block tabs %}
-<li><a href="{% url 'app_manager_base_url' %}">{% trans "Apps" %}</a></li> 
-{{block.super}}
+{% if 'cartoview_cms' in INSTALLED_APPS %}
+    {% include "cartoview_cms/menus.html" %}
+{% else %}
+    <li><a href="{% url 'app_manager_base_url' %}">{% trans "Apps" %}</a></li> 
+    {{block.super}}
+{% endif %}
 {% endblock %}
+
 {% block footer %}
 <footer>
         <div class="container">
