@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+{% block extra_head %}
+    {{ block.super }}
+{% endblock %}
+{% block tabs %}
+<li><a href="{% url 'app_manager_base_url' %}">{% trans "Apps" %}</a></li> 
+{{block.super}}
+{% endblock %}
+{% block footer %}
+<footer>
+        <div class="container">
+          <div class="row">
+            <div class="col-md-2">
+              <ul class="list-unstyled">
+                <li>Data</li>
+                <li><a href="{% url "layer_browse" %}?limit={{ CLIENT_RESULTS_LIMIT }}">{% trans "Layers" %}</a></li>
+                <li><a href="{% url "document_browse" %}?limit={{ CLIENT_RESULTS_LIMIT }}">{% trans "Documents" %}</a></li>
+                <li><a href="{% url "services" %}?limit={{ CLIENT_RESULTS_LIMIT }}">{% trans "Remote Services" %}</a></li>
+                {% if user.is_authenticated %}
+                    <li role="separator" class="divider"></li>
+                    <li><a href="{% url "layer_upload" %}">Upload Layer</a></li>
+                    {% if 'geonode.contrib.createlayer' in INSTALLED_APPS %}
+                        <li><a href="{% url "layer_create" %}">{% trans "Create Layer" %}</a></li>
+                    {% endif %}
+                    <li><a href="{% url "document_upload" %}">Upload Document</a></li>
+                {% endif %}
+                {% if user.is_superuser or user.is_staff %}
+                    <li><a href="{% url "register_service" %}">{% trans "Add Remote Service" %}</a></li>
+                {% endif %}
+              </ul>
+            </div>
+            <div class="col-md-2">
+              <ul class="list-unstyled">
+                <li>Maps</li>
+                <li><a href="{% url "maps_browse" %}?limit={{ CLIENT_RESULTS_LIMIT }}">{% trans "Explore Maps" %}</a></li>
+                {% if user.is_authenticated %}
+                <li> <a href="{% url "new_map" %}">{% trans "Create Map" %}</a></li>
+                {% endif %}
+              </ul>
+            </div>
+            <div class="col-md-2">
+              <ul class="list-unstyled">
+                <li>About</li>
+                <li><a href="{% url "profile_browse" %}">{% trans "People" %}</a></li>
+                <li><a href="{% url "group_list" %}">{% trans "Groups" %}</a></li>
+                {% if perms.announcements.can_manage %}
+                <li><a href="{% url "announcements_list" %}">{% trans "Announcements" %}</a></li>
+                {% endif %}
+                {% url "geonode.invitations:geonode-send-invite" as invite_url %}
+                {% if invite_url %}
+                  <li><a href="{{invite_url}}">{% trans "Invite Users" %}</a></li>
+                {% endif %}
+                {% if user.is_superuser %}
+                <li><a href="/admin/people/profile/add/">{% trans "Add User" %}</a></li>
+                <li><a href="{% url "group_create" %}">{% trans "Create Group" %}</a></li>
+                {% endif %}
+              </ul>
+            </div>
+    
+            <div class="col-md-6 text-right">
+              {% block contactus %}
+              {% endblock contactus %}
+              <ul class="list-unstyled">
+                <li>{% trans "Powered by" %} <a href="http://cartoview.net">{% trans "Cartoview" %}</a> <em>{% trans "version" %} {{ CARTOVIEW_VERSION }}</em></li>
+              </ul>
+              <label class="hidden">{% trans "Language" %}</label>
+              {% if csrf_token != "NOTPROVIDED" %}
+              {% get_current_language as LANGUAGE %}
+              <form class="form-inline" action="/i18n/setlang/" method="post">
+              {% csrf_token %}
+                <select class="col-md-6 pull-right" name="language" onchange="javascript:form.submit()">
+                  {% for lang in LANGUAGES %}
+                  <option value="{{ lang.0 }}" {% ifequal LANGUAGE_CODE lang.0 %} selected="selected"{% endifequal %}>
+                    {{ lang.1 }}
+                  </option>
+                  {% endfor %}
+                </select>
+              </form>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </footer>
+{% endblock %}
