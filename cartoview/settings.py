@@ -14,7 +14,6 @@ from kombu import Exchange, Queue
 
 import cartoview
 
-PROJECT_NAME = "cartoview"
 CARTOVIEW_INSTALLED_APPS = ("cartoview",
                             "cartoview.cartoview_api.apps.CartoviewAPIConfig",
                             "cartoview.store_api.apps.StoreApiConfig",
