@@ -45,6 +45,9 @@ apt-get install -y build-essential gcc
 #adjust pip
 pip install pip==9.0.1
 
+#adjust setup tools
+pip install setuptools==45
+
 # install cartoview
 git clone -b ${GIT_BRANCH} --recursive https://github.com/cartologic/cartoview.git &&
 	cd /cartoview && pip install . && rm -rf /cartoview
