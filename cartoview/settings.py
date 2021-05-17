@@ -51,7 +51,7 @@ MEDIA_ROOT = os.getenv('MEDIA_ROOT', os.path.join(BASE_DIR, MEDIAFILES_LOCATION)
 STATIC_ROOT = os.getenv('STATIC_ROOT', os.path.join(BASE_DIR, STATICFILES_LOCATION))
 
 DATABASE_URL = os.getenv(
-    'DATABASE_URL', 'sqlite:////{}/database.sqlite'.format(
+    'DATABASE_URL', 'spatialite:////{}/database.db'.format(
         os.path.dirname(CARTOVIEW_DIR)))
 DATASTORE_DATABASE_URL = os.getenv('DATASTORE_DATABASE_URL', None)
 if DATABASE_URL:
@@ -74,7 +74,7 @@ CARTOVIEW_TEST = 'test' in sys.argv or ast.literal_eval(
 if CARTOVIEW_TEST:
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
+            'ENGINE': 'django.contrib.gis.db.backends.spatialite',
             'NAME': os.path.join(BASE_DIR, 'test.db')
         }
     }
