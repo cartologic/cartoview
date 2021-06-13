@@ -1,0 +1,55 @@
+.apps-container{
+    text-align: center;
+    padding: 1em;
+    position: relative;
+    width: 100% ;
+}
+.btn {
+    display: inline-block;
+    margin-bottom: 0;
+    font-weight: normal;
+    text-align: center;
+    vertical-align: inherit;
+    touch-action: manipulation;
+    cursor: pointer;
+    background-image: none;
+    white-space: nowrap;
+    padding: 4px 8px;
+    line-height: 1.42857143;
+    border-radius: 4px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+.manage {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    margin: 40px;
+    justify-content: flex-end;
+}
+.search input{
+    width: 50%;
+    border-radius: 3px;
+    padding: 10px;
+}
+.search input:focus{
+    border: 1px solid red;
+}
+.input-group-addon:last-child {
+    border-left: 0;
+    display: inline;
+    padding: 10px 15px;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1;
+    text-align: center;
+    background-color: #eeeeee;
+
+}
+.apps-container{
+    //margin-top: 35px;
+    margin: 0 auto;
+}
+

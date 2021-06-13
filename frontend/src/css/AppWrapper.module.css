@@ -1,0 +1,60 @@
+
+.card {
+    boder: 1px solid gray ;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.26);
+    border-radius: 10px;
+    width: 45%;
+    padding: 0px !important;
+    /*min-width: 310px;*/
+    margin: 1em;
+}
+
+
+.card img {
+    max-width: 70px;
+    max-height: 70px;
+    min-height: 70px;
+    margin: 1em;
+
+}
+.card p {
+    max-width: 90%;
+    margin: auto;
+    min-height: 90px;
+
+}
+.card button{
+    width: 20%;
+    min-width: 100px;
+    border-radius: 5px;
+    margin: 1em;
+    font-size: 15px;
+    font-weight: 500;
+    padding: 5px;
+}
+
+button span{
+    margin-right: 10px;
+
+}
+.app-info {
+    margin-top: 10px;
+    background-color: #e5e7e9;
+    display: flex;
+    padding-top: 10px;
+    border-top: 1px solid lightgray;
+}
+.button svg {
+    padding: 1em;
+}
+.card ul {
+    list-style-type: none;
+    text-align: left;
+}
+
+@media screen and (max-width: 701px) {
+    .card {
+        width: 100%;
+        margin: 10px  auto;
+    }
+}
