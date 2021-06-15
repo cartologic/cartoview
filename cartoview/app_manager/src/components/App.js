@@ -17,20 +17,27 @@ const App = (props) => {
 
     // fetch cartoview current version
     function fetchCartoviewVersion(){
-        fetch('http://localhost:8000/frontend/get_version')
-        .then(response => {
-            return response.json();
-        })
-        .then(data => {
-            if(data) {
-                cartoview_version = data.version;
-                appsContext.setCartoViewCurrentVersion(data.version);
-                //console.log('version::', version);
-            }
-            else{
-                console.log('error fetching version');
-            }
-        });
+        // here fetch cartoview version from backend
+        // fetch('http://localhost:8000/frontend/get_version')
+        // .then(response => {
+        //     return response.json();
+        // })
+        // .then(data => {
+        //     if(data) {
+        //         cartoview_version = data.version;
+        //         appsContext.setCartoViewCurrentVersion(data.version);
+        //         //console.log('version::', version);
+        //     }
+        //     else{
+        //         console.log('error fetching version');
+        //     }
+        // });
+
+        // this is for test only
+
+       cartoview_version = '1.31.0';
+       appsContext.setCartoViewCurrentVersion(cartoview_version);
+
     }
 
 
@@ -119,7 +126,6 @@ const App = (props) => {
     return (
 
         <div>
-
                 {loadingState && <h2>Loading...</h2>}
                 {!loadingState && <ManageApps />}
         </div>
@@ -131,3 +137,4 @@ export default App;
 
 const container = document.getElementById("app");
 render(<AppsContextProvider><App /></AppsContextProvider>, container);
+
