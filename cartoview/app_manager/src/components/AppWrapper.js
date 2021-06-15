@@ -12,12 +12,20 @@ const AppWrapper = (props) => {
     // app status
     const [isActive, setIsActive] = useState(app.active);
 
-    const [showModal, setShowModal] = useState(false);
+    const [showUninstallingModal, setShowUninstallingModal] = useState(false);
+    const [showInstallingModal, setShowInstallingModal] = useState(false);
+
     const [uninstalling, setUninstalling] = useState(false);
     const [installing, setInstalling] = useState(false);
 
-    const toggleModal = () => {
-        setShowModal(prevState => !prevState);
+    // toggle install modal (show or hide)
+    const toggleUninstallingModal = () => {
+        setShowUninstallingModal(prevState => {return !prevState});
+    }
+
+    // toggle uninstalling modal (show or hide)
+    const toggleInstallingModal = () => {
+        setShowInstallingModal(prevState => {return !prevState})
     }
 
     // toggle active state of an app (active or suspended)
@@ -77,9 +85,18 @@ const AppWrapper = (props) => {
     // install app
     // Url = 'http://localhost:8000/api/app/install/'
     // payload = {apps: [{'app_name', 'version', 'store_id'}], restart: false}
-    const installApp = (app_name, app_version, store_id) => {
+    const installApp = () => {
         toggleButtonStatus();
         toggleInstalling();
+        if(showInstallingModal){
+            toggleInstallingModal();
+        }
+        let apps = [];
+
+        // push the main app to the payload
+        apps.push({"app_name": app.name, "version": app.latest_version.version, "store_id": appstore_id});
+
+        console.log('apps', apps);
         fetch('../../api/app/install/', {
             method: 'POST',
             headers: {
@@ -88,13 +105,7 @@ const AppWrapper = (props) => {
                 "X_CSRFToken": csrftoken
             },
             body: JSON.stringify({
-                apps: [
-                    {
-                        "app_name": app_name,
-                        "version": app_version,
-                        "store_id": store_id
-                    }
-                ],
+                apps: apps,
                 restart: false,
             })
         })
@@ -122,6 +133,7 @@ const AppWrapper = (props) => {
             .then(response => {
                 toggleButtonStatus();
                 toggleUninstalling();
+
                 return response.json()
             })
             .then(data => {
@@ -132,31 +144,24 @@ const AppWrapper = (props) => {
 
     }
 
-    // handleInstall
+    // handle Install button
     const handleInstall = () => {
-
         // get dependencies of the app to be installed also
         let dependencies = app.latest_version.dependencies;
-        //console.log('dependencies', dependencies);
 
-        // if this app depend on another apps need to be installed first
+        //if this app depend on another apps need to be installed first
         if(Object.keys(dependencies).length){
-            // get apps names to be installed
-            const appsNames = Object.keys(dependencies);
-
-            // install here
-            appsNames.forEach(appName => {
-               installApp(appName, dependencies[app], appstore_id);
-            });
+            toggleInstallingModal();
         }
-
-        // install main app here
-        installApp(app.name, app.latest_version.version, appstore_id);
+        else{
+         // install main app here
+          installApp();
+        }
     }
 
+    // handle uninstall button
     const handleUninstall = () => {
-        toggleModal();
-
+        toggleUninstallingModal();
         // get dependencies of the app to be uninstalled also
         let dependencies = app.latest_version.dependencies;
         dependencies = Object.keys(dependencies);
@@ -166,13 +171,12 @@ const AppWrapper = (props) => {
 
         // uninstall dependencies if exist
         if (dependencies.length > 0) {
-            for (var i = 0; i < dependencies.length; ++i) {
-                console.log('uninstalling ', dependencies[i]);
-                uninstallApp(dependencies[i], appstore_id);
-                console.log('finished uninstalling ', dependencies[i]);
-            }
+            dependencies.forEach(appName => {
+                console.log('uninstalling ', appName);
+                uninstallApp(appName, appstore_id);
+                console.log('finished uninstalling ', appName);
+            });
         }
-
     }
 
     // available app actions content
@@ -190,7 +194,7 @@ const AppWrapper = (props) => {
     const installed = <>{uninstalling ? <button type='button' className='btn btn-danger' disabled={buttonStatus}>
         <i class="fa fa-circle-o-notch fa-spin"></i>Uninstall
     </button> :
-        <button type='button' className='btn btn-danger' disabled={buttonStatus} onClick={toggleModal}>
+        <button type='button' className='btn btn-danger' disabled={buttonStatus} onClick={toggleUninstallingModal}>
             <span className="glyphicon glyphicon-remove" aria-hidden="true"></span>
             Uninstall</button>
 
@@ -206,8 +210,8 @@ const AppWrapper = (props) => {
 
     return (
         <Fragment>
-            {showModal && <Modal app={app} toggleModal={toggleModal} handleConfirm={handleUninstall} />}
-            {}
+            {showUninstallingModal && <Modal app={app} handleToggle={toggleUninstallingModal} handleConfirm={handleUninstall} flag={'uninstalling'}/>}
+            {showInstallingModal && <Modal app={app} handleToggle={toggleInstallingModal} handleConfirm={installApp} flag={'installing'}/>}
             <div className={`${classes.card} col-md-6 col-sm-12 col-xs-12`}>
                 <div className={classes['app-description']}>
                     <img src={app.latest_version.logo} />
