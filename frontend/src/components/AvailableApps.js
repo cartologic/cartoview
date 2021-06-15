@@ -8,10 +8,19 @@ const AvailableApps = (props) => {
     const appsContext = useContext(AppsContext);
     const loadingState = appsContext.isLoading;
     const installedApps = appsContext.installedApps;
+    const availableApps = appsContext.availableApps;
 
     const activeInstalledApps = installedApps.filter(app =>  app.active === true)
-    //console.log('active apps',activeInstalledApps);
 
+    for(var i = 0 ; i < activeInstalledApps.length ; ++i){
+        let app = activeInstalledApps[i];
+        const temp = availableApps.find(element => element.name == app.name);
+        app.logo = temp && temp.latest_version.logo;
+        activeInstalledApps[i] = app;
+
+    }
+
+    //console.log('active apps',activeInstalledApps);
 
     return (
        <Fragment>

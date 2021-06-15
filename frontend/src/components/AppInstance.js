@@ -1,14 +1,12 @@
 import React from 'react';
-import classes from "../css/AvailableApps.module.css";
+import classes from "../css/AppInstance.module.css";
 
 const AppInstance = (props) => {
     console.log('app', props.app);
 
     return(
         <div className={`col-md-3 col-sm-10 col-xs-12 ${classes['app-card']}`}>
-                       <img
-                           src="https://lh3.googleusercontent.com/0dZdu3mhvsx-UM0et0RNJ6yl4LO_JGoki9oU3kEmiaRkwcaK9bXZ8oDg4TosUMWWId-d=w250-h250-rwa"
-                           alt='app logo'/>
+                       <img src={props.app.logo} />
                        <h3>{props.app.title}</h3>
                         <p>{props.app.description}</p>
                        <div className={classes.actions}>

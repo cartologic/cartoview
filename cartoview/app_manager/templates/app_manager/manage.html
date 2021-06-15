@@ -1,259 +1,278 @@
-{% extends "app_manager/app_install_base.html" %}
-{% load bootstrap_tags staticfiles%}
-{% load i18n avatar_tags cartoview_tags %}
+{#{% extends "app_manager/app_install_base.html" %}#}
+{#{% load bootstrap_tags staticfiles%}#}
+{#{% load i18n avatar_tags cartoview_tags %}#}
+{##}
+{##}
+{#{% block title %} {% trans "Install App" %} - {{ block.super }} {% endblock %}#}
+{##}
+{#{% block body_class %}appinstances appinstances-list explore{% endblock body_class %}#}
+{#{% block head %}#}
+{##}
+{#    {{ block.super }}#}
+{#    <link href="{% static 'app_manager/css/manager.css' %}" rel="stylesheet">#}
+{#{% endblock %}#}
+{##}
+{#{% block body %}#}
+{##}
+{##}
+{#<div class="col-md-10 col-md-offset-1 manager-ct" ng-app="cartoview.appManager.manager">#}
+{#    <cartoview-app-manager></cartoview-app-manager>#}
+{#    <cartoview-app-installer></cartoview-app-installer>#}
+{#   #}
+{##}
+{#    <script type="text/ng-template" id="confirm-dialog.html">#}
+{#        <div class="modal-header">#}
+{#            <h4 class="modal-title">{% verbatim %}{{options.title}}{% endverbatim %}</h4>#}
+{#        </div>#}
+{#        <div class="modal-body">#}
+{#            <div dynamic-template template="options.template" context="options"></div>#}
+{#        </div>#}
+{#        <div class="modal-footer">#}
+{#            <button class="btn btn-primary" type="button" ng-click="ok()">{% verbatim %}{{options.okText}}{% endverbatim %}</button>#}
+{#            <button class="btn btn-warning" type="button" ng-click="cancel()">{% trans 'Cancel' %}</button>#}
+{#        </div>#}
+{#    </script>#}
+{#    <script type="text/ng-template" id="app-installer.html">#}
+{#        <div>#}
+{#            <div class="alert alert-info" ng-if='!loading' ng-show='showRestartPanel()'>#}
+{#                <h4><span class="fa fa-exclamation"></span> {% trans "Server restart is required" %}</h4>#}
+{#                <p>#}
+{#                    {% trans "In order to have the effect of the recently installed apps please restart the server." %}#}
+{#                </p>#}
+{#                <p>#}
+{#                    {% trans "Please notice" %}:#}
+{#                </p>#}
+{#                <ol>#}
+{#                    <li>{% trans "This may take several minutes" %}</li>#}
+{#                    <li>{% trans "The server will drop all the connections and tasks during the restart" %}</li>#}
+{#                    <li>{% trans "Ask the administrator to restart GeoNode Service if the app does not appear in the installed apps" %}</li>#}
+{#                </ol>#}
+{#                <a ng-click="restart()" class="btn btn-default manager-actions-btn">#}
+{#                    <span class="glyphicon glyphicon-repeat" aria-hidden="true"></span>#}
+{#                     {% trans "Restart Server" %}#}
+{#                </a>#}
+{#            </div>#}
+{#            <div class="restart-msg" ng-show="restarting">#}
+{#                <div class="centered alert alert-danger">#}
+{#                    <i class="fa fa-refresh rotating"></i> {% trans "Restarting Server, Please Wait..." %}#}
+{#                </div>#}
+{##}
+{#            </div>#}
+{#            {% verbatim %}#}
+{#            <div ng-repeat="appMessage in appsErrors" ng-show="appsErrors.length > 0">#}
+{#                <div class="centered alert alert-{{appMessage.type}}">#}
+{#                    {{appMessage.msg}}#}
+{#                </div>#}
+{#            </div>#}
+{#            {% endverbatim %}#}
+{#            <div class="form-group" ng-show="stores.objects.length > 1">#}
+{#                <label>{% trans "Store" %}</label>#}
+{#                <select class="form-control"#}
+{#                        ng-model="selectedStoreId"#}
+{#                        ng-options="store.id as store.name for store in stores.objects">#}
+{#                </select>#}
+{#            </div>#}
+{#            <div ng-if="!loading && !storeError"  class="row manager-actions">#}
+{#                <a ng-click="reorder()" class="btn btn-primary manager-actions-btn ">{% trans "Reorder Installed Apps" %}</a>#}
+{#            </div>#}
+{#            <div  class="input-group search-box">#}
+{#                <input type="text" ng-disabled="loading || storeError" class="form-control" ng-model="search_term" placeholder="{% trans 'Search for an App' %}" aria-describedby="basic-addon2">#}
+{#                <span class="input-group-addon" id="basic-addon2">{% trans "Search" %}</span>#}
+{#            </div>#}
+{#            <div ng-if="loading && !storeError" class="row text-center loading-center ">#}
+{#                <div class="col-md-12 loading-center">#}
+{#                    <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>#}
+{#                    <span class="sr-only">{% trans "Loading" %}...</span>#}
+{#                </div>#}
+{#            </div>#}
+{#            <div ng-if="!loading && storeError" class="row text-center">#}
+{#                <div class="col-md-12">#}
+{#                    <h3 class="text-danger">{% trans "Cannot connect to App Market" %}</h3>#}
+{#                </div>#}
+{#            </div>#}
+{#            <div id="the_list">#}
+{#                    {% verbatim %}#}
+{#                    <div class="col-xs-12 col-sm-6 app-col" ng-show="compatible(app.latest_version.cartoview_version)" ng-repeat="app in getSelectedStore().apps.objects | filter:{title:search_term}:strict">#}
+{#                            <div class="card-wrapper">#}
+{#                                <div class="title-area">#}
+{#                                    <img src="{{app.latest_version.logo}}" alt="" />#}
+{#                                    <div class="app-title">#}
+{#                                    {{ app.title }}#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                                <div class="app-description">#}
+{#                                    <div ng-if="app.description.length > 150">#}
+{#                                        <p>{{ app.description.slice(0, 150) + '...' }} <span><a data-trigger="hover" data-toggle="tooltip" data-placement="buttom"#}
+{#                                            title="{{ app.description }}">#}
+{#                                         {% endverbatim %}#}
+{#                                         {% trans "Full Description" %}#}
+{#                                         </a></span></p>#}
+{#                                    </div>#}
+{#                                    {% verbatim %}#}
+{#                                    <div ng-if="(app.description.length <= 150)">#}
+{#                                        <p>{{ app.description }}</p>#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                                #}
+{#                                <div class="actions-wrapper" ng-hide='app.installedApp.pending'>#}
+{#                                    <button class="btn btn-default btn-xs" ng-disabled="installing" ng-disabled="!compatible(app.latest_version.cartoview_version)" ng-if="!app.installedApp" ng-click="install(app)">#}
+{#                                    <span#}
+{#                                        class="glyphicon glyphicon-download-alt"#}
+{#                                        aria-hidden="true"#}
+{#                                        ng-hide="installing==app"#}
+{#                                    ></span>#}
+{#                                    <span class="fa fa-circle-o-notch rotating" ng-show="installing==app"></span>#}
+{#                                    {% endverbatim %}#}
+{#                                    {% trans "Install" %}#}
+{#                                    {% verbatim %}#}
+{#                                    </button>#}
+{#                                    <button class="btn btn-default btn-xs"  ng-disabled="installing" ng-disabled="!compatible(app.latest_version.cartoview_version)" ng-if="app.installedApp && upgradable(app.installedApp.version,app.latest_version.version)"ng-click="install(app, true)" >#}
+{#                                    <span#}
+{#                                        class="glyphicon glyphicon-circle-arrow-up"#}
+{#                                        aria-hidden="true"#}
+{#                                        ng-hide="installing==app"#}
+{#                                    ></span>#}
+{#                                    <span class="fa fa-circle-o-notch rotating"#}
+{#                                                        ng-show="installing==app"></span>#}
+{#                                    {% endverbatim %}#}
+{#                                    {% trans "Upgrade" %}#}
+{#                                    {% verbatim %}#}
+{#                                    </button>#}
+{#                                    <button ng-disabled="installing" class="btn btn-danger btn-xs" ng-if="app.installedApp" ng-click="uninstall(app)">#}
+{#                                        <span class="glyphicon glyphicon-remove" aria-hidden="true" ng-hide="installing==app"></span>#}
+{#                                        <span class="fa fa-circle-o-notch rotating"#}
+{#                                                    ng-show="installing==app"></span>#}
+{#                                        {% endverbatim %}#}
+{#                                        {% trans "Uninstall" %}#}
+{#                                        {% verbatim %}#}
+{#                                    </button>#}
+{#                                    <button class="btn btn-success btn-xs" ng-disabled="installing" ng-if="app.installedApp" ng-click="toggleActive(app)" ng-show="!app.installedApp.active">#}
+{#                                        <span class="glyphicon glyphicon-play" aria-hidden="true"></span#}
+{#                                        >#}
+{#                                        {% endverbatim %}#}
+{#                                        {% trans "Activate" %}#}
+{#                                        {% verbatim %}#}
+{#                                    </button>#}
+{#                                    <button class="btn btn-warning btn-xs" ng-disabled="installing" ng-if="app.installedApp" ng-click="toggleActive(app)" ng-show="app.installedApp.active">#}
+{#                                        <span class="glyphicon glyphicon-pause" aria-hidden="true"></span#}
+{#                                        >#}
+{#                                        {% endverbatim %}#}
+{#                                        {% trans "Suspend" %}#}
+{#                                        {% verbatim %}#}
+{#                                    </button>#}
+{#                                </div>#}
+{#                                <div class="actions-wrapper" ng-show='app.installedApp.pending'>#}
+{#                                    <a href='#'>#}
+{#                                        <span class="fa fa-exclamation-circle"></span>#}
+{#                                        {% endverbatim %}#}
+{#                                        {% trans "Server restart is required" %}#}
+{#                                    </a>#}
+{#                                </div>#}
+{#                                <div class="info-panel">#}
+{#                                    <div class="info-wrapper">#}
+{#                                    <div class="info-item">#}
+{#                                        <span class="info-item-title">{% trans "Rating" %}:</span>#}
+{#                                        {% verbatim %}#}
+{#                                        <span class="info-item-content">{{ app.stars }} / 5</span>#}
+{#                                        {% endverbatim %}#}
+{#                                    </div>#}
+{#                                    <div class="info-item">#}
+{#                                        <span class="info-item-title">{% trans "Installations" %}:</span>#}
+{#                                        {% verbatim %}#}
+{#                                        <span class="info-item-content">{{app.downloads}}</span>#}
+{#                                        {% endverbatim %}#}
+{#                                    </div>#}
+{#                                    </div>#}
+{#                                    <div class="info-wrapper">#}
+{#                                    <div class='app-version'>#}
+{#                                        <div class="info-item">#}
+{#                                            <span class="info-item-title">{% trans "Latest version" %}:</span>#}
+{#                                            {% verbatim %}#}
+{#                                            <span class="info-item-content">v{{ app.latest_version.version }}</span>#}
+{#                                            {% endverbatim %}#}
+{#                                            </div>#}
+{#                                            <div class="info-item">#}
+{#                                            <span class="info-item-title">{% trans "Installed version" %}:</span>#}
+{#                                            {% verbatim %}#}
+{#                                            <span class="info-item-content">v{{ app.installedApp.version }}</span>#}
+{#                                            {% endverbatim %}#}
+{#                                        </div>#}
+{#                                    </div>#}
+{##}
+{#                                    <div class="app-by">#}
+{#                                        {% trans "By" %}#}
+{#                                        <span class="app-author">#}
+{#                                        <a href="{{app.author_website}}">{{app.author}}</a>#}
+{#                                        </span>#}
+{#                                    </div>#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                        </div>#}
+{#                    </div>#}
+{#            </div>#}
+{#        </div>#}
+{##}
+{#    </script>#}
+{#    <script type="text/ng-template" id="apps-reorder.html">#}
+{#        <label>Drag and drop items to reorder</label>#}
+{#        <div class="apps-reorder-list">#}
+{#            <ul dnd-list="installedApps">#}
+{#                <li ng-repeat="app in installedApps"#}
+{#                    dnd-draggable="app"#}
+{#                    ng-if="app.active"#}
+{#                    dnd-moved="installedApps.splice($index, 1)"#}
+{#                    dnd-effect-allowed="move"#}
+{#                    dnd-selected="models.selected = app"#}
+{#                    ng-class="{'selected': models.selected === app}">#}
+{#                    {% verbatim %}{{app.title}}{% endverbatim %}#}
+{#                </li>#}
+{#            </ul>#}
+{#        </div>#}
+{#    </script>#}
+{##}
+{#</div>#}
+{##}
+{#<!-- load angularjs here before loading angular from geonode/assets.js-->#}
+{#<script type="text/javascript" src='{{ STATIC_URL }}app_manager/vendor/angular/angular.min.js'></script>#}
+{#{% endblock %}#}
+{##}
+{##}
+{##}
+{#{% block extra_script %}#}
+{#    {{ block.super }}#}
+{#    <script>#}
+{#        const versionInfo={{version_info|dump_json}}#}
+{#    </script>#}
+{#    <script type="text/javascript" src="{{ STATIC_URL }}compare-versions/index.js"></script>#}
+{#    <script type="text/javascript" src="{% url 'check_version' %}"></script>#}
+{#    <script type="text/javascript" src='{{ STATIC_URL }}app_manager/vendor/angular-bootstrap/ui-bootstrap-tpls.min.js'></script>#}
+{#    <script type="text/javascript" src='{{ STATIC_URL }}app_manager/vendor/angular-aria/angular-aria.min.js'></script>#}
+{#    {% include "app_manager/dynamic_scripts.html" %}#}
+{##}
+{#    <script src="{{ STATIC_URL }}app_manager/vendor/angular-resource/angular-resource.min.js"></script>#}
+{#    <script src="{{ STATIC_URL }}app_manager/vendor/angular-drag-and-drop-lists/angular-drag-and-drop-lists.min.js"></script>#}
+{#    <script src="{{ STATIC_URL }}app_manager/js/resources.js"></script>#}
+{#    <script src="{{ STATIC_URL }}app_manager/js/manager.js"></script>#}
+{#    <script>#}
+{#        $("[data-toggle=popover]").popover();#}
+{#    </script>#}
+{#{% endblock %}#}
 
+{% extends 'base.html' %}
+{% block extra_head %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static "css/main.css" %}">
 
-{% block title %} {% trans "Install App" %} - {{ block.super }} {% endblock %}
-
-{% block body_class %}appinstances appinstances-list explore{% endblock body_class %}
-{% block head %}
-
-    {{ block.super }}
-    <link href="{% static 'app_manager/css/manager.css' %}" rel="stylesheet">
 {% endblock %}
 
-{% block body %}
-
-
-<div class="col-md-10 col-md-offset-1 manager-ct" ng-app="cartoview.appManager.manager">
-    <cartoview-app-manager></cartoview-app-manager>
-    <cartoview-app-installer></cartoview-app-installer>
-   
-
-    <script type="text/ng-template" id="confirm-dialog.html">
-        <div class="modal-header">
-            <h4 class="modal-title">{% verbatim %}{{options.title}}{% endverbatim %}</h4>
-        </div>
-        <div class="modal-body">
-            <div dynamic-template template="options.template" context="options"></div>
-        </div>
-        <div class="modal-footer">
-            <button class="btn btn-primary" type="button" ng-click="ok()">{% verbatim %}{{options.okText}}{% endverbatim %}</button>
-            <button class="btn btn-warning" type="button" ng-click="cancel()">{% trans 'Cancel' %}</button>
-        </div>
-    </script>
-    <script type="text/ng-template" id="app-installer.html">
-        <div>
-            <div class="alert alert-info" ng-if='!loading' ng-show='showRestartPanel()'>
-                <h4><span class="fa fa-exclamation"></span> {% trans "Server restart is required" %}</h4>
-                <p>
-                    {% trans "In order to have the effect of the recently installed apps please restart the server." %}
-                </p>
-                <p>
-                    {% trans "Please notice" %}:
-                </p>
-                <ol>
-                    <li>{% trans "This may take several minutes" %}</li>
-                    <li>{% trans "The server will drop all the connections and tasks during the restart" %}</li>
-                    <li>{% trans "Ask the administrator to restart GeoNode Service if the app does not appear in the installed apps" %}</li>
-                </ol>
-                <a ng-click="restart()" class="btn btn-default manager-actions-btn">
-                    <span class="glyphicon glyphicon-repeat" aria-hidden="true"></span>
-                     {% trans "Restart Server" %}
-                </a>
-            </div>
-            <div class="restart-msg" ng-show="restarting">
-                <div class="centered alert alert-danger">
-                    <i class="fa fa-refresh rotating"></i> {% trans "Restarting Server, Please Wait..." %}
-                </div>
-
-            </div>
-            {% verbatim %}
-            <div ng-repeat="appMessage in appsErrors" ng-show="appsErrors.length > 0">
-                <div class="centered alert alert-{{appMessage.type}}">
-                    {{appMessage.msg}}
-                </div>
-            </div>
-            {% endverbatim %}
-            <div class="form-group" ng-show="stores.objects.length > 1">
-                <label>{% trans "Store" %}</label>
-                <select class="form-control"
-                        ng-model="selectedStoreId"
-                        ng-options="store.id as store.name for store in stores.objects">
-                </select>
-            </div>
-            <div ng-if="!loading && !storeError"  class="row manager-actions">
-                <a ng-click="reorder()" class="btn btn-primary manager-actions-btn ">{% trans "Reorder Installed Apps" %}</a>
-            </div>
-            <div  class="input-group search-box">
-                <input type="text" ng-disabled="loading || storeError" class="form-control" ng-model="search_term" placeholder="{% trans 'Search for an App' %}" aria-describedby="basic-addon2">
-                <span class="input-group-addon" id="basic-addon2">{% trans "Search" %}</span>
-            </div>
-            <div ng-if="loading && !storeError" class="row text-center loading-center ">
-                <div class="col-md-12 loading-center">
-                    <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
-                    <span class="sr-only">{% trans "Loading" %}...</span>
-                </div>
-            </div>
-            <div ng-if="!loading && storeError" class="row text-center">
-                <div class="col-md-12">
-                    <h3 class="text-danger">{% trans "Cannot connect to App Market" %}</h3>
-                </div>
-            </div>
-            <div id="the_list">
-                    {% verbatim %}
-                    <div class="col-xs-12 col-sm-6 app-col" ng-show="compatible(app.latest_version.cartoview_version)" ng-repeat="app in getSelectedStore().apps.objects | filter:{title:search_term}:strict">
-                            <div class="card-wrapper">
-                                <div class="title-area">
-                                    <img src="{{app.latest_version.logo}}" alt="" />
-                                    <div class="app-title">
-                                    {{ app.title }}
-                                    </div>
-                                </div>
-                                <div class="app-description">
-                                    <div ng-if="app.description.length > 150">
-                                        <p>{{ app.description.slice(0, 150) + '...' }} <span><a data-trigger="hover" data-toggle="tooltip" data-placement="buttom"
-                                            title="{{ app.description }}">
-                                         {% endverbatim %}
-                                         {% trans "Full Description" %}
-                                         </a></span></p>
-                                    </div>
-                                    {% verbatim %}
-                                    <div ng-if="(app.description.length <= 150)">
-                                        <p>{{ app.description }}</p>
-                                    </div>
-                                </div>
-                                
-                                <div class="actions-wrapper" ng-hide='app.installedApp.pending'>
-                                    <button class="btn btn-default btn-xs" ng-disabled="installing" ng-disabled="!compatible(app.latest_version.cartoview_version)" ng-if="!app.installedApp" ng-click="install(app)">
-                                    <span
-                                        class="glyphicon glyphicon-download-alt"
-                                        aria-hidden="true"
-                                        ng-hide="installing==app"
-                                    ></span>
-                                    <span class="fa fa-circle-o-notch rotating" ng-show="installing==app"></span>
-                                    {% endverbatim %}
-                                    {% trans "Install" %}
-                                    {% verbatim %}
-                                    </button>
-                                    <button class="btn btn-default btn-xs"  ng-disabled="installing" ng-disabled="!compatible(app.latest_version.cartoview_version)" ng-if="app.installedApp && upgradable(app.installedApp.version,app.latest_version.version)"ng-click="install(app, true)" >
-                                    <span
-                                        class="glyphicon glyphicon-circle-arrow-up"
-                                        aria-hidden="true"
-                                        ng-hide="installing==app"
-                                    ></span>
-                                    <span class="fa fa-circle-o-notch rotating"
-                                                        ng-show="installing==app"></span>
-                                    {% endverbatim %}
-                                    {% trans "Upgrade" %}
-                                    {% verbatim %}
-                                    </button>
-                                    <button ng-disabled="installing" class="btn btn-danger btn-xs" ng-if="app.installedApp" ng-click="uninstall(app)">
-                                        <span class="glyphicon glyphicon-remove" aria-hidden="true" ng-hide="installing==app"></span>
-                                        <span class="fa fa-circle-o-notch rotating"
-                                                    ng-show="installing==app"></span>
-                                        {% endverbatim %}
-                                        {% trans "Uninstall" %}
-                                        {% verbatim %}
-                                    </button>
-                                    <button class="btn btn-success btn-xs" ng-disabled="installing" ng-if="app.installedApp" ng-click="toggleActive(app)" ng-show="!app.installedApp.active">
-                                        <span class="glyphicon glyphicon-play" aria-hidden="true"></span
-                                        >
-                                        {% endverbatim %}
-                                        {% trans "Activate" %}
-                                        {% verbatim %}
-                                    </button>
-                                    <button class="btn btn-warning btn-xs" ng-disabled="installing" ng-if="app.installedApp" ng-click="toggleActive(app)" ng-show="app.installedApp.active">
-                                        <span class="glyphicon glyphicon-pause" aria-hidden="true"></span
-                                        >
-                                        {% endverbatim %}
-                                        {% trans "Suspend" %}
-                                        {% verbatim %}
-                                    </button>
-                                </div>
-                                <div class="actions-wrapper" ng-show='app.installedApp.pending'>
-                                    <a href='#'>
-                                        <span class="fa fa-exclamation-circle"></span>
-                                        {% endverbatim %}
-                                        {% trans "Server restart is required" %}
-                                    </a>
-                                </div>
-                                <div class="info-panel">
-                                    <div class="info-wrapper">
-                                    <div class="info-item">
-                                        <span class="info-item-title">{% trans "Rating" %}:</span>
-                                        {% verbatim %}
-                                        <span class="info-item-content">{{ app.stars }} / 5</span>
-                                        {% endverbatim %}
-                                    </div>
-                                    <div class="info-item">
-                                        <span class="info-item-title">{% trans "Installations" %}:</span>
-                                        {% verbatim %}
-                                        <span class="info-item-content">{{app.downloads}}</span>
-                                        {% endverbatim %}
-                                    </div>
-                                    </div>
-                                    <div class="info-wrapper">
-                                    <div class='app-version'>
-                                        <div class="info-item">
-                                            <span class="info-item-title">{% trans "Latest version" %}:</span>
-                                            {% verbatim %}
-                                            <span class="info-item-content">v{{ app.latest_version.version }}</span>
-                                            {% endverbatim %}
-                                            </div>
-                                            <div class="info-item">
-                                            <span class="info-item-title">{% trans "Installed version" %}:</span>
-                                            {% verbatim %}
-                                            <span class="info-item-content">v{{ app.installedApp.version }}</span>
-                                            {% endverbatim %}
-                                        </div>
-                                    </div>
-
-                                    <div class="app-by">
-                                        {% trans "By" %}
-                                        <span class="app-author">
-                                        <a href="{{app.author_website}}">{{app.author}}</a>
-                                        </span>
-                                    </div>
-                                    </div>
-                                </div>
-                        </div>
-                    </div>
-            </div>
-        </div>
-
-    </script>
-    <script type="text/ng-template" id="apps-reorder.html">
-        <label>Drag and drop items to reorder</label>
-        <div class="apps-reorder-list">
-            <ul dnd-list="installedApps">
-                <li ng-repeat="app in installedApps"
-                    dnd-draggable="app"
-                    ng-if="app.active"
-                    dnd-moved="installedApps.splice($index, 1)"
-                    dnd-effect-allowed="move"
-                    dnd-selected="models.selected = app"
-                    ng-class="{'selected': models.selected === app}">
-                    {% verbatim %}{{app.title}}{% endverbatim %}
-                </li>
-            </ul>
-        </div>
-    </script>
+{% block middle %}
+<div id="app">
+{% csrf_token %}
+    <!-- React will load here -->
 
 </div>
-
-<!-- load angularjs here before loading angular from geonode/assets.js-->
-<script type="text/javascript" src='{{ STATIC_URL }}app_manager/vendor/angular/angular.min.js'></script>
-{% endblock %}
-
-
+{% endblock middle %}
 
 {% block extra_script %}
-    {{ block.super }}
-    <script>
-        const versionInfo={{version_info|dump_json}}
-    </script>
-    <script type="text/javascript" src="{{ STATIC_URL }}compare-versions/index.js"></script>
-    <script type="text/javascript" src="{% url 'check_version' %}"></script>
-    <script type="text/javascript" src='{{ STATIC_URL }}app_manager/vendor/angular-bootstrap/ui-bootstrap-tpls.min.js'></script>
-    <script type="text/javascript" src='{{ STATIC_URL }}app_manager/vendor/angular-aria/angular-aria.min.js'></script>
-    {% include "app_manager/dynamic_scripts.html" %}
-
-    <script src="{{ STATIC_URL }}app_manager/vendor/angular-resource/angular-resource.min.js"></script>
-    <script src="{{ STATIC_URL }}app_manager/vendor/angular-drag-and-drop-lists/angular-drag-and-drop-lists.min.js"></script>
-    <script src="{{ STATIC_URL }}app_manager/js/resources.js"></script>
-    <script src="{{ STATIC_URL }}app_manager/js/manager.js"></script>
-    <script>
-        $("[data-toggle=popover]").popover();
-    </script>
-{% endblock %}
+<script src="{% static "app_manager/main.js" %}"></script>
+{% endblock extra_script %}

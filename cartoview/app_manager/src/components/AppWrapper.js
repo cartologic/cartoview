@@ -1,7 +1,7 @@
 import React, { Fragment, useState } from 'react';
 import Modal from './Modal';
 import classes from '../css/AppWrapper.module.css';
-import { csrftoken } from '../../static/js/csrf_token';
+import { csrftoken } from '../../static/app_manager/js/csrf_token';
 
 const AppWrapper = (props) => {
     const REST_URL = 'http://localhost:8000/apps/rest/app_manager/';
@@ -80,7 +80,7 @@ const AppWrapper = (props) => {
     const installApp = (app_name, app_version, store_id) => {
         toggleButtonStatus();
         toggleInstalling();
-        fetch('../api/app/install/', {
+        fetch('../../api/app/install/', {
             method: 'POST',
             headers: {
                 "Accept": 'application/json',
@@ -111,8 +111,7 @@ const AppWrapper = (props) => {
     const uninstallApp = (app_name, store_id) => {
         toggleUninstalling();
         toggleButtonStatus();
-        // this url need to be updated
-        fetch(`../apps/uninstall/${store_id}/${app_name}/`, {
+        fetch(`../uninstall/${store_id}/${app_name}/`, {
             method: 'POST',
             headers: {
                 "Accept": 'application/json',
