@@ -81,13 +81,25 @@ const ManageApps = (props) => {
         e.preventDefault();
         toggleRestartLoadingModal();
         fetch(RESTART_SERVER_URL)
-        .then(response => {return response.json()})
+        .then(response => {
+            if(!response.ok){
+                throw new Error('Error Restarting Server!');
+            }
+            return response.json()})
         .then(data => {
-            console.log(data);
-            // reload page after server is restarted
-            window.location.reload();
+            if(data) {
+                console.log(data);
+                // reload page after server is restarted
+                window.location.reload();
+            }
+            else{
+                throw new Error('Error Restaring Server!');
+            }
         })
-
+        .catch(error => {
+            toggleRestartLoadingModal();
+            appsContext.setError(error.message);
+        })
     }
     //console.log('from manage apps');
     // console.log('available', availableApps);

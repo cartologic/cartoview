@@ -19,7 +19,7 @@ export const AppsContextProvider = props => {
     const [availableApps, setAvailableApps] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [cartoviewCurrentVersion, setCartoViewCurrentVersion] = useState('');
-    const [error, setError] = useState('error');
+    const [error, setError] = useState(null);
 
 
     const errorHandler = (message) => {

@@ -51,11 +51,13 @@ const App = (props) => {
         fetchCartoviewVersion();
         fetch( APPS_URL )
         .then(response => {
+            if(!response.ok){
+                throw new Error('Error fetching Available apps!');
+            }
             return response.json();
         })
         .then(data => {
             if(data) {
-
                 const apps = data.objects.map(app => {
                     return app
                 });
@@ -76,9 +78,7 @@ const App = (props) => {
                                return true;
                            }
                        }
-
                        return false;
-
                    }
                 });
 
@@ -88,9 +88,14 @@ const App = (props) => {
             }
             // error handling
             else{
-                console.log('error fetching available apps');
+                throw new Error('Error fetching available apps');
             }
-        });
+        })
+        .catch(error => {
+            appsContext.toggleIsLoading();
+            appsContext.setError(error.message);
+        })
+        ;
     }
 
 
@@ -100,9 +105,16 @@ const App = (props) => {
         appsContext.toggleIsLoading();
         fetch(REST_URL + 'app', {
             method: 'GET'
-        }).then(response => {
-            return response.json();
-        }).then(data => {
+        })
+        .then(response => {
+            if(!response.ok){
+                throw new Error('Error Fetching installed apps!');
+            }
+            else {
+                return response.json();
+            }
+        })
+        .then(data => {
             if(data) {
                 const apps = data.objects.map(app => {
                     return app
@@ -111,9 +123,15 @@ const App = (props) => {
                 appsContext.toggleIsLoading();
             }
             else{
-                console.log('error fetching installed apps');
+                throw new Error('Error fetching installed apps');
             }
-        });
+        })
+        .catch(error => {
+            //console.log('catch error here', error);
+            appsContext.toggleIsLoading();
+            appsContext.setError(error.message);
+        })
+        ;
     }
 
     // load data once at the first rendering
@@ -121,6 +139,7 @@ const App = (props) => {
         //fetchCartoviewVersion();
         fetchAvailableApps();
         fetchInstalledApps();
+
     }, []);
 
     const loadingState = appsContext.isLoading;

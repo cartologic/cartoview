@@ -1,12 +1,15 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useState, useContext } from 'react';
 import Modal from './Modal';
 import classes from '../css/AppWrapper.module.css';
+import AppsContext from "../store/apps-context";
 import { csrftoken } from '../../static/app_manager/js/csrf_token';
 
 const AppWrapper = (props) => {
     const REST_URL = 'http://localhost:8000/apps/rest/app_manager/';
     const appstore_id = 1;
+    const appsContext = useContext(AppsContext);
 
+    // extract props
     const { app, buttonStatus, toggleButtonStatus, toggleRestartServer } = props;
 
     // app status
@@ -57,13 +60,24 @@ const AppWrapper = (props) => {
 
         })
             .then(response => {
+                if(!response.ok){
+                    throw new Error('Error suspending App ' + app.name);
+                }
                 toggleButtonStatus();
                 return response.json()
             })
             .then(data => {
-                console.log(data);
+                if(data){
+                    console.log(data);
+                }
+                else{
+                    throw new Error('Error suspending App ' + app.name);
+                }
             })
-
+            .catch(error => {
+                toggleButtonStatus();
+                appsContext.setError(error.message);
+            })
     }
 
     // activate suspended app
@@ -76,10 +90,24 @@ const AppWrapper = (props) => {
             },
         })
             .then(response => {
+                if(!response.ok){
+                    throw new Error('Error Activating App ' + app.name);
+                }
                 toggleButtonStatus();
                 return response.json()
             })
-            .then(data => console.log(data))
+            .then(data => {
+                if(data){
+                    console.log(data);
+                }
+                else{
+                    throw new Error('Error Activating App ' + app.name);
+                }
+            })
+            .catch(error => {
+                toggleButtonStatus();
+                appsContext.setError(error.message);
+            });
     }
 
     // install app
@@ -110,6 +138,9 @@ const AppWrapper = (props) => {
             })
         })
             .then(response => {
+                if(!response.ok){
+                    throw new Error('Error Installing app ' + app.name);
+                }
                 toggleButtonStatus();
                 toggleInstalling();
                 toggleRestartServer();
@@ -117,9 +148,18 @@ const AppWrapper = (props) => {
                 window.scroll({top: 0, left: 0, behavior: 'smooth' });
                 return response.json();
             })
-            .then(data => { console.log(data) })
+            .then(data => {
+                if(data) {
+                    console.log(data);
+                }
+                else{
+                    throw new Error('Error Installing app ' + app.name);
+                }
+            })
             .catch(error => {
-                console.log(error);
+                toggleButtonStatus();
+                toggleInstalling();
+                appsContext.setError(error.message);
             });
     }
 
@@ -137,15 +177,29 @@ const AppWrapper = (props) => {
             },
         })
             .then(response => {
+                if(!response.ok){
+                    throw new Error('Error Uninstalling app ' + app.name);
+                }
                 toggleButtonStatus();
                 toggleUninstalling();
                 return response.json()
             })
             .then(data => {
-                console.log(data);
-                // Reload page after uninstalling app
-                window.location.reload();
-            });
+                if(data) {
+                    console.log(data);
+                    // Reload page after uninstalling app
+                    window.location.reload();
+                }
+                else{
+                    throw new Error('Error Uninstalling app ' + app.name);
+                }
+            })
+            .catch(error => {
+                toggleUninstalling();
+                toggleButtonStatus();
+                appsContext.setError(error.message);
+            })
+        ;
 
     }
 
@@ -175,6 +229,8 @@ const AppWrapper = (props) => {
         if (dependencies.length > 0) {
             toggleUninstalling();
             toggleButtonStatus();
+            // first uninstall the main app and after it's request is done
+            // uninstall it's dependencies in sync
              fetch(`../uninstall/${appstore_id}/${app.name}/`, {
                     method: 'POST',
                     headers: {
@@ -183,9 +239,16 @@ const AppWrapper = (props) => {
                         "X-CSRFToken": csrftoken
                     },
                 })
-                 .then(response => {return response.json();})
+                 .then(response => {
+                     if(!response){
+                         throw new Error('Error Uninstalling app ' + app.name);
+                     }
+                     return response.json();
+                 })
                  .then(data => {
                      console.log(data);
+
+                     // here start uninstalling app dependencies
                      dependencies.forEach(appName => {
                          console.log('uninstalling', appName);
                           fetch(`../uninstall/${appstore_id}/${appName}/`, {
@@ -196,7 +259,12 @@ const AppWrapper = (props) => {
                                 "X-CSRFToken": csrftoken
                             },
                             })
-                        .then(response => {return response.json();})
+                        .then(response => {
+                            if(!response.ok){
+                                throw new Error('Error Uninstalling app ' + appName);
+                            }
+                            return response.json();
+                        })
                         .then(data => {
                              // after uninstalling dependencies
                             toggleUninstalling();
@@ -204,16 +272,25 @@ const AppWrapper = (props) => {
                             console.log(data);
                             // Reload page after finish uninstalling
                             window.location.reload();
-                        })
-                     });
-
+                        }).catch(error => {
+                            // catch dependencies errors
+                            toggleUninstalling();
+                            toggleButtonStatus();
+                            appsContext.setError(error.message);
+                          })
+                     })
+                     .catch(error => {
+                        toggleUninstalling();
+                        toggleButtonStatus();
+                        appsContext.setError(error.message);
+                      })
+                     ;
                  })
         }
         else{
-            //  uninstall single app
+            //  uninstall single app (no dependencies)
             uninstallApp(app.name, appstore_id);
         }
-
     }
 
     // available app actions content
