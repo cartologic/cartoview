@@ -49,6 +49,7 @@
     background-color: #eeeeee;
 
 }
+
 @media screen and (max-width: 701px) {
     .apps-container {
         padding-left: 0%;

@@ -7,7 +7,7 @@ const AppWrapper = (props) => {
     const REST_URL = 'http://localhost:8000/apps/rest/app_manager/';
     const appstore_id = 1;
 
-    const { app, buttonStatus, toggleButtonStatus } = props;
+    const { app, buttonStatus, toggleButtonStatus, toggleRestartServer } = props;
 
     // app status
     const [isActive, setIsActive] = useState(app.active);
@@ -112,7 +112,10 @@ const AppWrapper = (props) => {
             .then(response => {
                 toggleButtonStatus();
                 toggleInstalling();
-                return response.json()
+                toggleRestartServer();
+                // scroll to the top of the page to restart server
+                window.scroll({top: 0, left: 0, behavior: 'smooth' });
+                return response.json();
             })
             .then(data => { console.log(data) });
     }
@@ -192,7 +195,7 @@ const AppWrapper = (props) => {
 
     // installed apps actions content
     const installed = <>{uninstalling ? <button type='button' className='btn btn-danger' disabled={buttonStatus}>
-        <i class="fa fa-circle-o-notch fa-spin"></i>Uninstall
+        <i className="fa fa-circle-o-notch fa-spin"></i>Uninstall
     </button> :
         <button type='button' className='btn btn-danger' disabled={buttonStatus} onClick={toggleUninstallingModal}>
             <span className="glyphicon glyphicon-remove" aria-hidden="true"></span>

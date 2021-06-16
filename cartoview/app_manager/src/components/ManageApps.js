@@ -1,13 +1,18 @@
 import React, { Fragment, useContext, useState, useEffect } from 'react';
 import AppWrapper from "./AppWrapper";
 import AppsContext from "../store/apps-context";
+import RestartServer from "./RestartServer";
+import RestartLoadingModal from "./RestartLoadingModal";
 import '../css/ManageApps.css';
 
 const ManageApps = (props) => {
+    const RESTART_SERVER_URL = '../../api/app/restart-server/';
+
     // local states
     const [searchInput, setSearchInput] = useState('');
     const [buttonStatus, setButtonStatus] = useState(false);
-
+    const [showRestartServer, setShowRestartServer] = useState(false);
+    const [showRestartLoadingModal, setShowRestartLoadingModal] = useState(false);
 
     const appsContext = useContext(AppsContext);
 
@@ -21,6 +26,17 @@ const ManageApps = (props) => {
         setSearchInput(event.target.value);
     }
 
+    // toggle restart server state
+    const toggleRestartServerStatus = () => {
+        setShowRestartServer(prevState => {
+            return !prevState;
+        })
+    }
+
+    // toggle resatart loading modal
+    const toggleRestartLoadingModal = () => {
+        setShowRestartLoadingModal(prevState => {return !prevState});
+    }
     // toggle button status (disabled / enabled)
     const toggleButtonStatus = () => {
         setButtonStatus((prevState) => {
@@ -58,14 +74,32 @@ const ManageApps = (props) => {
         });
     }
 
+
+    //http://localhost:8000/api/app/restart-server/
+    // handle restart-server button
+    const restartServer = (e) => {
+        e.preventDefault();
+        toggleRestartLoadingModal();
+        fetch(RESTART_SERVER_URL)
+        .then(response => {return response.json()})
+        .then(data => {
+            console.log(data);
+            // reload page after server is restarted
+            window.location.reload();
+        })
+
+    }
     //console.log('from manage apps');
     // console.log('available', availableApps);
     // console.log('installed', installedAppsNames);
     // console.log(currentApps);
 
+
     return (
         <Fragment>
+            {showRestartLoadingModal && <RestartLoadingModal />}
             <div className='container'>
+                {showRestartServer && <RestartServer handleRestartButton={restartServer}/>}
                 <div className='row manage'>
                     <button type='button' className='btn-primary btn'>Reorder Installed Apps</button>
                 </div>
@@ -76,11 +110,12 @@ const ManageApps = (props) => {
 
                 <div className='apps-container'>
                 {currentApps && currentApps.map(app => {
-                    return <AppWrapper key={app.id} app={app}  buttonStatus={buttonStatus} toggleButtonStatus={toggleButtonStatus}/>
+                    return <AppWrapper key={app.id} app={app} toggleRestartServer={toggleRestartServerStatus}  buttonStatus={buttonStatus} toggleButtonStatus={toggleButtonStatus}/>
                 })}
 
                 </div>
             </div>
+
         </Fragment>
     )
 };

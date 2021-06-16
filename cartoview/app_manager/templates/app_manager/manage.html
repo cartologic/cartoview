@@ -18,7 +18,7 @@
 {#<div class="col-md-10 col-md-offset-1 manager-ct" ng-app="cartoview.appManager.manager">#}
 {#    <cartoview-app-manager></cartoview-app-manager>#}
 {#    <cartoview-app-installer></cartoview-app-installer>#}
-{##}
+{#   #}
 {##}
 {#    <script type="text/ng-template" id="confirm-dialog.html">#}
 {#        <div class="modal-header">#}
@@ -113,7 +113,7 @@
 {#                                        <p>{{ app.description }}</p>#}
 {#                                    </div>#}
 {#                                </div>#}
-{##}
+{#                                #}
 {#                                <div class="actions-wrapper" ng-hide='app.installedApp.pending'>#}
 {#                                    <button class="btn btn-default btn-xs" ng-disabled="installing" ng-disabled="!compatible(app.latest_version.cartoview_version)" ng-if="!app.installedApp" ng-click="install(app)">#}
 {#                                    <span#}
@@ -257,6 +257,7 @@
 {#        $("[data-toggle=popover]").popover();#}
 {#    </script>#}
 {#{% endblock %}#}
+
 
 {% extends 'base.html' %}
 {% block extra_head %}
