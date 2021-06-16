@@ -117,7 +117,10 @@ const AppWrapper = (props) => {
                 window.scroll({top: 0, left: 0, behavior: 'smooth' });
                 return response.json();
             })
-            .then(data => { console.log(data) });
+            .then(data => { console.log(data) })
+            .catch(error => {
+                console.log(error);
+            });
     }
 
     // uninstall app
@@ -136,13 +139,12 @@ const AppWrapper = (props) => {
             .then(response => {
                 toggleButtonStatus();
                 toggleUninstalling();
-
                 return response.json()
             })
             .then(data => {
                 console.log(data);
-
-
+                // Reload page after uninstalling app
+                window.location.reload();
             });
 
     }
@@ -169,17 +171,49 @@ const AppWrapper = (props) => {
         let dependencies = app.latest_version.dependencies;
         dependencies = Object.keys(dependencies);
 
-        // first uninstall the app
-        uninstallApp(app.name, appstore_id);
-
-        // uninstall dependencies if exist
+        // uninstall app with dependencies if exist
         if (dependencies.length > 0) {
-            dependencies.forEach(appName => {
-                console.log('uninstalling ', appName);
-                uninstallApp(appName, appstore_id);
-                console.log('finished uninstalling ', appName);
-            });
+            toggleUninstalling();
+            toggleButtonStatus();
+             fetch(`../uninstall/${appstore_id}/${app.name}/`, {
+                    method: 'POST',
+                    headers: {
+                        "Accept": 'application/json',
+                        "Content-Type": "application/json",
+                        "X-CSRFToken": csrftoken
+                    },
+                })
+                 .then(response => {return response.json();})
+                 .then(data => {
+                     console.log(data);
+                     dependencies.forEach(appName => {
+                         console.log('uninstalling', appName);
+                          fetch(`../uninstall/${appstore_id}/${appName}/`, {
+                            method: 'POST',
+                            headers: {
+                                "Accept": 'application/json',
+                                "Content-Type": "application/json",
+                                "X-CSRFToken": csrftoken
+                            },
+                            })
+                        .then(response => {return response.json();})
+                        .then(data => {
+                             // after uninstalling dependencies
+                            toggleUninstalling();
+                            toggleButtonStatus();
+                            console.log(data);
+                            // Reload page after finish uninstalling
+                            window.location.reload();
+                        })
+                     });
+
+                 })
         }
+        else{
+            //  uninstall single app
+            uninstallApp(app.name, appstore_id);
+        }
+
     }
 
     // available app actions content
