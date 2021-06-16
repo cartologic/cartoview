@@ -4,15 +4,16 @@ import { render } from "react-dom";
 import ManageApps from "./ManageApps";
 import {AppsContextProvider} from "../store/apps-context";
 import AppsContext from "../store/apps-context";
+import ErrorModal from "./ErrorModal";
 
 let cartoview_version = null ;
 
 const App = (props) => {
     const appsContext = useContext(AppsContext);
+
+    const error = appsContext.error;
     const REST_URL = 'http://localhost:8000/apps/rest/app_manager/';
     const APPS_URL = 'https://appstore.cartoview.net/api/v1/app/';
-
-
 
 
     // fetch cartoview current version
@@ -38,7 +39,7 @@ const App = (props) => {
        cartoview_version = '1.31.0';
        appsContext.setCartoViewCurrentVersion(cartoview_version);
 
-    }
+    };
 
 
     // fetch all the available apps based on cartoview version
@@ -124,13 +125,14 @@ const App = (props) => {
 
     const loadingState = appsContext.isLoading;
     return (
-
         <div>
-                {loadingState && <h2>Loading...</h2>}
-                {!loadingState && <ManageApps />}
+            {error && <ErrorModal errorMessage={error}/>}
+            {loadingState && <h2>Loading...</h2>}
+            {!loadingState && <ManageApps />}
         </div>
     );
 };
+
 
 
 export default App;
