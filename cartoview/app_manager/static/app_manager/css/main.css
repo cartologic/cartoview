@@ -2,3 +2,10 @@
     background: #FFFFFF;
     text-align: center;
 }
+.manage {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    margin: 40px;
+    justify-content: flex-end;
+}

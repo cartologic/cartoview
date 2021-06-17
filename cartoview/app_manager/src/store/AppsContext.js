@@ -154,7 +154,6 @@ export const AppsContextProvider = props => {
   }
 
 
-
   /**
    * toggles loading state
    */
@@ -183,7 +182,7 @@ export const AppsContextProvider = props => {
 
   useEffect(() => {
     installedAppsHandler();
-    fetchAvailableApps();
+    //fetchAvailableApps();
   }, []);
 
   return (<AppsContext.Provider value={contextValue}>

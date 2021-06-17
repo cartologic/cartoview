@@ -117,24 +117,18 @@ const ManageApps = (props) => {
     return (
         <Fragment>
             {showRestartLoadingModal && <RestartLoadingModal />}
-            <div className='container'>
+
                 {showRestartServer && <RestartServer handleRestartButton={restartServer}/>}
-                <div className='row manage'>
-                    <button type='button' className='btn-primary btn'>Reorder Installed Apps</button>
-                </div>
-                 <form className="search">
+                <div className='apps-container'>
+                <form className="search">
                     <input type="text" placeholder="Search For an App" name="search2"  onChange={changeHandler}/>
                     <span className='input-group-addon' >Search</span>
                 </form>
-
-                <div className='apps-container'>
                 {currentApps && currentApps.map(app => {
                     return <AppWrapper key={app.id} app={app} toggleRestartServer={toggleRestartServerStatus}  buttonStatus={buttonStatus} toggleButtonStatus={toggleButtonStatus}/>
                 })}
 
                 </div>
-            </div>
-
         </Fragment>
     )
 };

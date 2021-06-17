@@ -23,13 +23,6 @@
     -ms-user-select: none;
     user-select: none;
 }
-.manage {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    margin: 40px;
-    justify-content: flex-end;
-}
 .search input{
     width: 50%;
     border-radius: 3px;
@@ -38,6 +31,7 @@
 .search input:focus{
     border: 1px solid red;
 }
+
 .input-group-addon:last-child {
     border-left: 0;
     display: inline;
