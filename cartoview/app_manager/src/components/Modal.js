@@ -10,7 +10,6 @@ const Modal = props => {
     // };
 
     dependencies = Object.keys(dependencies);
-    //console.log(dependencies);
 
     return (
         <div>

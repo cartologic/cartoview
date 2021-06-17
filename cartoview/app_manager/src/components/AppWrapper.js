@@ -5,12 +5,14 @@ import AppContext from "../store/AppsContext";
 import { csrftoken } from '../../static/app_manager/js/csrf_token';
 
 const AppWrapper = (props) => {
-    const REST_URL = '../rest/app_manager/';
-    const appstore_id = 1;
+    const restURL = '../rest/app_manager/';
+    const appstoreId = 1;
     const appsContext = useContext(AppContext);
 
     // extract props
     const { app, buttonStatus, toggleButtonStatus, toggleRestartServer } = props;
+
+    const { setError } = appsContext;
 
     // app status
     const [isActive, setIsActive] = useState(app.active);
@@ -21,38 +23,50 @@ const AppWrapper = (props) => {
     const [uninstalling, setUninstalling] = useState(false);
     const [installing, setInstalling] = useState(false);
 
-    // toggle install modal (show or hide)
+    /**
+     * toggles uninstalling Modal UI state (show or hide)
+     */
     const toggleUninstallingModal = () => {
         setShowUninstallingModal(prevState => {return !prevState});
     }
 
-    // toggle uninstalling modal (show or hide)
+    /**
+     * toggles installing UI state
+     */
     const toggleInstallingModal = () => {
         setShowInstallingModal(prevState => {return !prevState})
     }
 
-    // toggle active state of an app (active or suspended)
+    /**
+     * toggles app status (active or suspend)
+     */
     const toggleActivate = () => {
         isActive ? suspendApp() : activateApp();
         setIsActive(prevState => { return !prevState });
     }
 
-    // toggle uninstalling state (true or false)
+    /**
+     * toggles uninstalling UI state
+     */
     const toggleUninstalling = () => {
         setUninstalling(prevState => { return !prevState });
     }
 
-    // toggle installing state (true or false)
+    /**
+     * toggles installing UI state
+     */
     const toggleInstalling = () => {
         setInstalling( prevState => {
             return !prevState;
         })
     }
 
-    // suspend active app
+    /**
+     * suspends an active app from the backend
+     */
     const suspendApp = () => {
         toggleButtonStatus();
-        fetch(REST_URL + `app/${app.store_id}/suspend/`, {
+        fetch(restURL + `app/${app.store_id}/suspend/`, {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json",
@@ -76,14 +90,16 @@ const AppWrapper = (props) => {
             })
             .catch(error => {
                 toggleButtonStatus();
-                appsContext.setError(error.message);
+                setError(error.message);
             })
     }
 
-    // activate suspended app
+    /**
+     * Activates suspended app from the backend
+     */
     const activateApp = () => {
         toggleButtonStatus();
-        fetch(REST_URL + `app/${app.store_id}/activate/`, {
+        fetch(restURL + `app/${app.store_id}/activate/`, {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json",
@@ -106,13 +122,15 @@ const AppWrapper = (props) => {
             })
             .catch(error => {
                 toggleButtonStatus();
-                appsContext.setError(error.message);
+                setError(error.message);
             });
     }
 
-    // install app
-    // Url = 'http://localhost:8000/api/app/install/'
-    // payload = {apps: [{'app_name', 'version', 'store_id'}], restart: false}
+
+    /**
+     * install app
+     * payload = {apps: [{'app_name', 'version', 'store_id'}], restart: false}
+     */
     const installApp = () => {
         toggleButtonStatus();
         toggleInstalling();
@@ -122,7 +140,7 @@ const AppWrapper = (props) => {
         let apps = [];
 
         // push the main app to the payload
-        apps.push({"app_name": app.name, "version": app.latest_version.version, "store_id": appstore_id});
+        apps.push({"app_name": app.name, "version": app.latest_version.version, "store_id": appstoreId});
 
         console.log('apps', apps);
         fetch('../../api/app/install/', {
@@ -159,12 +177,15 @@ const AppWrapper = (props) => {
             .catch(error => {
                 toggleButtonStatus();
                 toggleInstalling();
-                appsContext.setError(error.message);
+                setError(error.message);
             });
     }
 
-    // uninstall app
-    // url = 'http://localhost:8000/apps/uninstall/:store_id/:app_name'
+    /**
+     * uninstall app
+     * @param app_name
+     * @param store_id
+     */
     const uninstallApp = (app_name, store_id) => {
         toggleUninstalling();
         toggleButtonStatus();
@@ -197,13 +218,15 @@ const AppWrapper = (props) => {
             .catch(error => {
                 toggleUninstalling();
                 toggleButtonStatus();
-                appsContext.setError(error.message);
+                setError(error.message);
             })
         ;
 
     }
 
-    // handle Install button
+    /**
+     * Handles install button
+     */
     const handleInstall = () => {
         // get dependencies of the app to be installed also
         let dependencies = app.latest_version.dependencies;
@@ -218,7 +241,9 @@ const AppWrapper = (props) => {
         }
     }
 
-    // handle uninstall button
+    /**
+     * handles uninstall button
+     */
     const handleUninstall = () => {
         toggleUninstallingModal();
         // get dependencies of the app to be uninstalled also
@@ -231,7 +256,7 @@ const AppWrapper = (props) => {
             toggleButtonStatus();
             // first uninstall the main app and after it's request is done
             // uninstall it's dependencies in sync
-             fetch(`../uninstall/${appstore_id}/${app.name}/`, {
+             fetch(`../uninstall/${appstoreId}/${app.name}/`, {
                     method: 'POST',
                     headers: {
                         "Accept": 'application/json',
@@ -251,7 +276,7 @@ const AppWrapper = (props) => {
                      // here start uninstalling app dependencies
                      dependencies.forEach(appName => {
                          console.log('uninstalling', appName);
-                          fetch(`../uninstall/${appstore_id}/${appName}/`, {
+                          fetch(`../uninstall/${appstoreId}/${appName}/`, {
                             method: 'POST',
                             headers: {
                                 "Accept": 'application/json',
@@ -276,20 +301,20 @@ const AppWrapper = (props) => {
                             // catch dependencies errors
                             toggleUninstalling();
                             toggleButtonStatus();
-                            appsContext.setError(error.message);
+                            setError(error.message);
                           })
                      })
                      .catch(error => {
                         toggleUninstalling();
                         toggleButtonStatus();
-                        appsContext.setError(error.message);
+                        setError(error.message);
                       })
                      ;
                  })
         }
         else{
             //  uninstall single app (no dependencies)
-            uninstallApp(app.name, appstore_id);
+            uninstallApp(app.name, appstoreId);
         }
     }
 

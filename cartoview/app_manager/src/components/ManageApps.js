@@ -16,28 +16,38 @@ const ManageApps = (props) => {
 
     const appsContext = useContext(AppContext);
 
-    // get both installed and available apps from context
-    const installedApps = appsContext.installedApps;
-    const availableApps = appsContext.availableApps;
 
-    // search input handler
+    const { installedApps, availableApps, setError} = appsContext;
+
+    /**
+     * handles search input change
+     * @param event
+     */
     const changeHandler = (event) => {
         event.preventDefault();
         setSearchInput(event.target.value);
     }
 
-    // toggle restart server state
+    /**
+     * toggles the Restarting server UI state
+     */
     const toggleRestartServerStatus = () => {
         setShowRestartServer(prevState => {
             return !prevState;
         })
     }
 
-    // toggle resatart loading modal
+    /**
+     * toggles Restart server modal UI state
+     */
     const toggleRestartLoadingModal = () => {
         setShowRestartLoadingModal(prevState => {return !prevState});
     }
-    // toggle button status (disabled / enabled)
+
+
+    /**
+     * toggles Button UI state (disabled or enabled)
+     */
     const toggleButtonStatus = () => {
         setButtonStatus((prevState) => {
             return !prevState
@@ -55,7 +65,6 @@ const ManageApps = (props) => {
     availableApps.forEach(app => {
         if(installedAppsNames[app.name]){
             app.installed = true;
-
             // get store_id to activate, suspend, install and uninstall apps
             app.store_id = installedApps.find(element => element.name == app.name).id;
             app.active = installedApps.find(element => element.name == app.name).active;
@@ -66,7 +75,8 @@ const ManageApps = (props) => {
         currentApps.push(app);
     });
 
-    // handle search input
+
+    // filter available apps based on the search input
     if(searchInput) {
         let key = searchInput.toLowerCase();
         currentApps = currentApps.filter(app => {
@@ -75,10 +85,12 @@ const ManageApps = (props) => {
     }
 
 
-    //http://localhost:8000/api/app/restart-server/
-    // handle restart-server button
-    const restartServer = (e) => {
-        e.preventDefault();
+    /**
+     * restarts the backend server then reload the app
+     * @param event
+     */
+    const restartServer = (event) => {
+        event.preventDefault();
         toggleRestartLoadingModal();
         fetch(RESTART_SERVER_URL)
         .then(response => {
@@ -98,14 +110,10 @@ const ManageApps = (props) => {
         })
         .catch(error => {
             toggleRestartLoadingModal();
-            appsContext.setError(error.message);
+            setError(error.message);
         })
     }
-    //console.log('from manage apps');
-    // console.log('available', availableApps);
-    // console.log('installed', installedAppsNames);
-    //console.log(currentApps);
-    
+
     return (
         <Fragment>
             {showRestartLoadingModal && <RestartLoadingModal />}

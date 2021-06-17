@@ -6,8 +6,9 @@ import AppContext from "../store/AppsContext";
 const ErrorModal = (props) => {
     const appsContext = useContext(AppContext);
 
+    const { setError } = appsContext;
     const closeModal = () => {
-        appsContext.setError(null);
+        setError(null);
     }
 
     return (
