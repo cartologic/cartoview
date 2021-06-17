@@ -1,6 +1,6 @@
 import React, { Fragment, useContext, useState, useEffect } from 'react';
 import AppWrapper from "./AppWrapper";
-import AppsContext from "../store/apps-context";
+import AppContext from "../store/AppsContext";
 import RestartServer from "./RestartServer";
 import RestartLoadingModal from "./RestartLoadingModal";
 import '../css/ManageApps.css';
@@ -14,7 +14,7 @@ const ManageApps = (props) => {
     const [showRestartServer, setShowRestartServer] = useState(false);
     const [showRestartLoadingModal, setShowRestartLoadingModal] = useState(false);
 
-    const appsContext = useContext(AppsContext);
+    const appsContext = useContext(AppContext);
 
     // get both installed and available apps from context
     const installedApps = appsContext.installedApps;
@@ -104,9 +104,8 @@ const ManageApps = (props) => {
     //console.log('from manage apps');
     // console.log('available', availableApps);
     // console.log('installed', installedAppsNames);
-    // console.log(currentApps);
-
-
+    //console.log(currentApps);
+    
     return (
         <Fragment>
             {showRestartLoadingModal && <RestartLoadingModal />}

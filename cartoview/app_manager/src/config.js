@@ -1,0 +1,1 @@
+export const appsURL = 'https://appstore.cartoview.net/api/v1/app/';

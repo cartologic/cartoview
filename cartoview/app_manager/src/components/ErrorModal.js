@@ -1,12 +1,10 @@
 import React, { useContext } from 'react';
 import classes from "../css/RestartLoadingModal.module.css";
-import AppsContext from "../store/apps-context";
-
-
+import AppContext from "../store/AppsContext";
 
 
 const ErrorModal = (props) => {
-    const appsContext = useContext(AppsContext);
+    const appsContext = useContext(AppContext);
 
     const closeModal = () => {
         appsContext.setError(null);

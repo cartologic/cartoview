@@ -1,13 +1,13 @@
 import React, { Fragment, useState, useContext } from 'react';
 import Modal from './Modal';
 import classes from '../css/AppWrapper.module.css';
-import AppsContext from "../store/apps-context";
+import AppContext from "../store/AppsContext";
 import { csrftoken } from '../../static/app_manager/js/csrf_token';
 
 const AppWrapper = (props) => {
-    const REST_URL = 'http://localhost:8000/apps/rest/app_manager/';
+    const REST_URL = '../rest/app_manager/';
     const appstore_id = 1;
-    const appsContext = useContext(AppsContext);
+    const appsContext = useContext(AppContext);
 
     // extract props
     const { app, buttonStatus, toggleButtonStatus, toggleRestartServer } = props;
