@@ -182,7 +182,7 @@ export const AppsContextProvider = props => {
 
   useEffect(() => {
     installedAppsHandler();
-    //fetchAvailableApps();
+    fetchAvailableApps();
   }, []);
 
   return (<AppsContext.Provider value={contextValue}>

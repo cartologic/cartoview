@@ -1,8 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import classes from '../css/ReorderModal.module.css';
 import Box from "./Box";
+import { csrftoken } from '../../static/app_manager/js/csrf_token';
+import AppsContext from "../store/AppsContext";
+
 const ReorderModal = (props) => {
+    const appsContext = useContext(AppsContext);
+
     const { apps, handleConfirm, handleToggle} = props;
+    const { setError } = appsContext;
+
     // local states
     const [dragId, setDragId] = useState();
     const [boxes, setBoxes] = useState(apps);
@@ -43,14 +50,44 @@ const ReorderModal = (props) => {
      * payload: array contains apps ids
      */
     const reorderApps = () => {
-        let apps = [];
-        boxes.forEach(box => {
-            apps.push(box.id);
-        })
-        console.log(apps);
+        const reorderURL = '../rest/app_manager/app/reorder/';
+        const appsIds = apps.map( app => {return app.id});
+        //console.log(apps);
         // here fetch reorder apps url
+        fetch(reorderURL, {
+            method: 'POST',
+            headers: {
+                "Accept": 'application/json',
+                'Content-Type': 'application/json',
+                "X_CSRFToken": csrftoken
+            },
+            body: JSON.stringify({
+                apps: appsIds
+            })
+        })
+        .then(response => {
+            if(!response.ok){
+                throw new Error('Error Reordering installed apps');
+            }
+            else{
+                return response.json();
+            }
+        })
+        .then(data => {
+            if(data){
+                console.log(data);
+                handleToggle();
+            }
+            else{
+                throw new Error('Error Reordering installed apps');
+            }
+        })
+        .catch(error => {
+            setError(error.message);
+        });
 
     }
+
     return (
         <div>
             <div className={classes.backdrop} onClick={handleToggle}/>
@@ -59,12 +96,12 @@ const ReorderModal = (props) => {
                     <h4>Reorder Installed Apps</h4>
                 </header>
                 <div className={classes.content}>
-                    {boxes.sort((a, b) => a.order - b.order)
-                        .map(box =>  {
+                    {apps.sort((a, b) => a.order - b.order)
+                        .map(app =>  {
                         return <Box
-                            key={box.id}
-                            app={box}
-                            boxNum={box.id}
+                            key={app.id}
+                            app={app}
+                            boxNum={app.id}
                             handleDrag={handleDrag}
                             handleDrop={handleDrop}
                         />}
