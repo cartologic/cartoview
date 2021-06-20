@@ -23,7 +23,7 @@
 
 }
 .card button{
-    min-width: 40%;
+    width: 30%;
     border-radius: 5px;
     margin: 1em;
     font-size: 15px;
@@ -55,6 +55,7 @@ button span{
         width: 100%;
         margin: 10px  auto;
     }
+
     .card p, .card h4{
         font-size: initial !important;
     }
@@ -62,6 +63,7 @@ button span{
 @media screen and (max-width: 993px) {
     .card button{
         margin: 0.5em;
+
     }
   .card {
         font-size: smaller;

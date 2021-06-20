@@ -34,7 +34,19 @@
   animation-iteration-count: infinite;
   animation-timing-function: linear;
 }
+@media (min-width: 768px) {
+  .Modal {
+    left: calc(45% - 20rem);
+    width: 50rem;
+  }
+}
 
+@media (max-width: 500px) {
+  .Modal {
+    left: calc(45% - 20rem);
+    width: 50rem;
+  }
+}
 @-webkit-keyframes rotate {
   from {
     -webkit-transform: rotate(0deg);
