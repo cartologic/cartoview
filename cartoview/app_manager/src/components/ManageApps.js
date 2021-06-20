@@ -4,6 +4,7 @@ import AppContext from "../store/AppsContext";
 import RestartServer from "./RestartServer";
 import RestartLoadingModal from "./RestartLoadingModal";
 import '../css/ManageApps.css';
+import {csrftoken} from "../../static/app_manager/js/csrf_token";
 
 const ManageApps = (props) => {
     const RESTART_SERVER_URL = '../../api/app/restart-server/';
@@ -92,26 +93,46 @@ const ManageApps = (props) => {
     const restartServer = (event) => {
         event.preventDefault();
         toggleRestartLoadingModal();
-        fetch(RESTART_SERVER_URL)
+
+        fetch(RESTART_SERVER_URL, {
+            method: 'GET',
+            headers: {
+                "Accept": 'application/json',
+                "Content-Type": "application/json",
+                "X-CSRFToken": csrftoken
+            }
+        })
         .then(response => {
             if(!response.ok){
                 throw new Error('Error Restarting Server!');
+
             }
-            return response.json()})
+            return response.json();})
         .then(data => {
             if(data) {
                 console.log(data);
-                // reload page after server is restarted
-                //window.location.reload();
+                // reload page after server is restarted successfully
+                window.location.reload();
             }
             else{
-                throw new Error('Error Restaring Server!');
+                throw new Error('Error Restarting Server!');
             }
         })
-        .catch(error => {
-            toggleRestartLoadingModal();
-            setError(error.message);
-        })
+             // Here requesting loacalhost every 5 seconds untill server is restarted
+            .catch(error => {
+                console.log('error restarting server');
+                let interavl = setInterval(keepFetching, 5000);
+                function keepFetching(){
+                    fetch('../../')
+                        .then(response => {
+                            if(response.ok){
+                                clearInterval(interavl);
+                                window.location.reload();
+                            }
+                        })
+                }
+            })
+
     }
 
     return (

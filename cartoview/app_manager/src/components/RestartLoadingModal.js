@@ -3,7 +3,7 @@ import classes from '../css/RestartLoadingModal.module.css';
 const RestartLoadingModal = (props) => {
     return(
       <div>
-        <div className={classes.backdrop} onClick={props.handleToggle}/>
+        <div className={classes.backdrop} />
         <div className={classes.Modal}>
 
             <div className='alert alert-danger'>
