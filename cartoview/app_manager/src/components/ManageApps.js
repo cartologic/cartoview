@@ -102,7 +102,7 @@ const ManageApps = (props) => {
             if(data) {
                 console.log(data);
                 // reload page after server is restarted
-                window.location.reload();
+                //window.location.reload();
             }
             else{
                 throw new Error('Error Restaring Server!');

@@ -21,16 +21,19 @@ const AppsContext = createContext({
 });
 
 /**
- * fetches the cartoview version from the backend .....
+ * fetches the cartoview version from the django context .....
  * @returns string
  */
 function fetchCartoviewVersion() {
-  // required to get the cartoview version from backend
-  // this is for test only
-  const cartoviewVersion = '1.31.0';
-  return cartoviewVersion;
-};
+  // get cartoview current version form the manage.html template
+  // version = '1.31';
+  let version = window.version;
 
+  if(version.length == 4){
+    version += '.0';
+  }
+  return version;
+};
 
 export const AppsContextProvider = props => {
   const [installedApps, setInstalledApps] = useState([]);
@@ -184,6 +187,7 @@ export const AppsContextProvider = props => {
     installedAppsHandler();
     fetchAvailableApps();
   }, []);
+
 
   return (<AppsContext.Provider value={contextValue}>
     {props.children}

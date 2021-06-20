@@ -22,6 +22,7 @@ const App = (props) => {
     }
 
     const loadingState = appsContext.isLoading;
+
     return (
         <div>
             <div className='container'>

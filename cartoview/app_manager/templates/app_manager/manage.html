@@ -267,14 +267,20 @@
 {% endblock %}
 
 {% block middle %}
+    {# Access cartoview current version from the context   #}
+    <p id="version" style="display: none;">{{ version_info.current_version }}</p>
 <div id="app">
 {% csrf_token %}
     <!-- React will load here -->
-
 </div>
 {% endblock middle %}
 
 {% block extra_script %}
+<script>
+    // pass cartoview current version to the react context
+    const element = document.getElementById("version").innerHTML;
+    window.version = element;
+</script>
 <script src="{% static "app_manager/main.js" %}"></script>
 {% endblock extra_script %}
 
