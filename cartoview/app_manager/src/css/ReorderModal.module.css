@@ -11,8 +11,8 @@
 .Modal {
   position: fixed;
   top: 15vh;
-  left: 25%;
-  width: 45%;
+    margin: auto;
+  width: 95%;
   z-index: 100;
   overflow: hidden;
   background: #FFFFFF;
@@ -56,9 +56,10 @@
     margin: 0.25em;
 }
 
+
 @media (min-width: 768px) {
-  .modal {
-    left: calc(50% - 20rem);
-    width: 40rem;
+  .Modal {
+    left: calc(45% - 20rem);
+    width: 50rem;
   }
 }

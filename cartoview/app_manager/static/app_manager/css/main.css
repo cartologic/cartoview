@@ -9,3 +9,12 @@
     margin: 40px;
     justify-content: flex-end;
 }
+@media screen and (max-width: 701px) {
+    .manage {
+        justify-content: center;
+    }
+    .manage button{
+        width: auto;
+        justify-content: flex-start;
+    }
+}

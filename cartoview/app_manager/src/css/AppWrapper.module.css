@@ -2,7 +2,7 @@
 .card {
     border: 1px solid lightgray ;
     border-radius: 10px;
-    width: 40%;
+    width: 45%;
     padding: 0px !important;
     /*min-width: 310px;*/
     margin: 1em;
@@ -23,8 +23,7 @@
 
 }
 .card button{
-    width: 20%;
-    min-width: 100px;
+    min-width: 40%;
     border-radius: 5px;
     margin: 1em;
     font-size: 15px;
@@ -55,5 +54,16 @@ button span{
     .card {
         width: 100%;
         margin: 10px  auto;
+    }
+    .card p, .card h4{
+        font-size: initial !important;
+    }
+}
+@media screen and (max-width: 993px) {
+    .card button{
+        margin: 0.5em;
+    }
+  .card {
+        font-size: smaller;
     }
 }

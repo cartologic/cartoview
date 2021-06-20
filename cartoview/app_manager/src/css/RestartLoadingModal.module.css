@@ -11,8 +11,8 @@
 .Modal {
   position: fixed;
   top: 40vh;
-  left: 25%;
-  width: 50%;
+    margin: auto;
+  width: 95%;
   z-index: 100;
   overflow: hidden;
   color: #000000;

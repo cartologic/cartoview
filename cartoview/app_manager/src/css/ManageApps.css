@@ -1,6 +1,6 @@
 .apps-container{
     text-align: center;
-    padding-left: 10%;
+    padding-left: 2.5%;
     margin: 0 auto;
     position: relative;
     width: 100% ;
@@ -24,9 +24,9 @@
     user-select: none;
 }
 .search input{
-    width: 50%;
+    width: 80%;
     border-radius: 3px;
-    padding: 10px;
+    padding: 6px 10px 10px 10px;
 }
 .search input:focus{
     border: 1px solid red;
@@ -34,7 +34,7 @@
 
 .input-group-addon:last-child {
     border-left: 0;
-    display: inline;
+    display: inline-table;
     padding: 10px 15px;
     font-size: 16px;
     font-weight: 400;
@@ -47,6 +47,11 @@
 @media screen and (max-width: 701px) {
     .apps-container {
         padding-left: 0%;
+    }
+
+    .search {
+        width: auto;
+        margin-bottom: 0.5em;
     }
 }
 
