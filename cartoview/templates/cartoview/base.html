@@ -4,6 +4,7 @@
 {% block extra_head %}
     {{ block.super }}
     <link href="{% static 'cartoview/css/base.css' %}" rel="stylesheet"/>
+    {% include 'cartoview/theme_css.html' %}
 {% endblock %}
 
 {% block header %}
