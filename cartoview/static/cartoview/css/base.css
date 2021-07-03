@@ -32,6 +32,11 @@
     align-items: center;
 }
 
+.navbar-inverse .navbar-nav > li > a.apps-dropdown{
+    padding-top: 20px;
+    padding-bottom: 16px;
+}
+
 .navbar-inverse .navbar-header{
     color: #bebebf;
 }
@@ -87,6 +92,7 @@ li.open .apps-icons {
 
 .apps-icons li img {
     padding-bottom: 10px;
+    width: 20px;
 }
 
 .apps-icons li i {

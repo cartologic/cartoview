@@ -2,34 +2,53 @@
 
 <a href="#" class="dropdown-toggle  apps-dropdown {% if mobile == True %}apps-mobile{% endif %}" data-toggle="dropdown" role="button"
    aria-haspopup="true" aria-expanded="false">
-    <i class="fa fa-th" aria-hidden="true"></i> <span>{% trans "Apps" %}</span>
+    <i class="fa fa-th fa-2x" aria-hidden="true"></i>
 </a>
 <ul class=" apps-icons dropdown-menu {% if mobile == True %}mobile{% endif %}">
     <li>
         <img src="{% static 'img/icons/home-black.png' %}" alt="home"/>
-        <a href="#" className="app-link">{% trans 'home' %}</a>
+        <a href="{% url "home" %}" className="app-link">{% trans 'home' %}</a>
     </li>
     <li>
         <img src="{% static 'img/icons/search.png' %}" alt="search"/>
-        <a href="#" className="app-link">{% trans 'search' %}</a>
+        <a href="{% url 'search' %}" className="app-link">{% trans 'search' %}</a>
     </li>
     <li>
         <img src="{% static 'img/icons/map-black.png' %}" alt="map"/>
-        <a href="#" className="app-link">{% trans 'maps' %}</a>
+        <a href="{% url "maps_browse" %}" className="app-link">{% trans 'maps' %}</a>
     </li>
     <li>
         <img src="{% static 'img/icons/layers.png' %}" alt="layers"/>
-        <a href="#" className="app-link">{% trans 'layers' %}</a>
+        <a href="{% url "layer_browse" %}" className="app-link">{% trans 'layers' %}</a>
     </li>
     <li>
         <img src="{% static 'img/icons/docs.png' %}" alt="docs"/>
 
-        <a href="#" className="app-link">{% trans 'Docs' %}</a>
+        <a href="{% url "document_browse" %}" className="app-link">{% trans 'Docs' %}</a>
     </li>
     <li>
         <img src="{% static 'img/icons/manage.png' %}" alt="manage"/>
-        <a href="#" className="app-link">{% trans 'Manage' %}</a>
+        <a href="{% url "apps_browse" %}?app_type__in=GeoStory" className="app-link">{% trans 'Geostory' %}</a>
+    </li>
+<hr style="width: 100%">
+    <li>
+        <img src="{% static 'img/icons/manage.png' %}" alt="manage"/>
+        <a href="{% url "manage_apps" %}" className="app-link">{% trans 'Manage' %}</a>
     </li>
 
+    {#  -------------------  Cartoview Active Apps  ------------------ #}
+    {% for app in apps %}
+        {% if not app.config.pending and app.config.active %}
+        <li>
+            <img src="{{ STATIC_URL }}{{ app.name }}/logo.png" alt="{{ app.title }}"/>
+            {% if app.single_instance %}
+                <a href="{{app.open_url}}" className="app-link">{{ app.title }}</a>
+            {% else %}
+                <a href="{% url 'appinstance_browse' %}?app__name__in={{ app.name }}&&app__title={{app.title}}"
+                   className="app-link">{{ app.title }}</a>
+            {% endif %}
+        </li>
+        {% endif %}
+    {% endfor %}
 </ul>
 
