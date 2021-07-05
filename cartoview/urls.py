@@ -23,12 +23,10 @@ api.register(AttributeResource())
 api.register(MapLayerResource())
 api.register(ExtendedResourceBaseResource())
 urlpatterns = [
-    url(r'^layer/(?P<layername>[^/]*)/json/?$',
-        layer_config_json, name='layer_json'),
-    url(r'^update/extent/(?P<typename>[^/]*)$', update_extent,
-        name='cartoview.update_extent'),
+    url(r'^layer/(?P<layername>[^/]*)/json/?$', layer_config_json, name='layer_json'),
+    url(r'^update/extent/(?P<typename>[^/]*)$', update_extent, name='cartoview.update_extent'),
     url(r'^check-version/$', check_version, name='check_version'),
     url(r'', include(api.urls)),
-    url(r'^apps/', include('cartoview.app_manager.urls')),
+    url(r'^cv_apps/', include('cartoview.app_manager.urls')),
 ]
 urlpatterns += geonode_urls

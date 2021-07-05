@@ -52,7 +52,7 @@ $("#btn-install-app").click(function(event) {
 function get_installed_app_info(app_name){
     $.ajax({
         dataType: "json",
-        url: home_url + "apps/rest/app_manager/app/",
+        url: home_url + "cv_apps/rest/app_manager/app/",
         data:{
             name:app_name,
             format: 'json'

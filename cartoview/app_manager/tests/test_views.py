@@ -10,7 +10,7 @@ class CartoviewAppsViewTest(TestCase):
         call_command("load_current_apps")
 
     def test_view_url_exists_at_desired_location(self):
-        resp = self.client.get('/apps/')
+        resp = self.client.get('/cv_apps/')
         self.assertEqual(resp.status_code, 200)
 
     def test_view_url_accessible_by_name(self):
@@ -38,7 +38,7 @@ class CartoviewManageAppsViewTest(GeoNodeLiveTestSupport):
         self.client.login(username=self.username, password=self.password)
 
     def test_view_url_exists_at_desired_location(self):
-        resp = self.client.get("/apps/manage/")
+        resp = self.client.get("/cv_apps/manage/")
         self.assertEqual(resp.status_code, 200)
 
     def test_view_url_accessible_by_name(self):
