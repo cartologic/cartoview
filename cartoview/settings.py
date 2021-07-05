@@ -19,7 +19,6 @@ CARTOVIEW_INSTALLED_APPS = ("cartoview",
                             "cartoview.cartoview_api.apps.CartoviewAPIConfig",
                             "cartoview.store_api.apps.StoreApiConfig",
                             "cartoview.app_manager",
-                            "cartoview.site_management",
                             "cartoview.apps_handler.apps.AppsHandlerConfig")
 INSTALLED_APPS += CARTOVIEW_INSTALLED_APPS
 ROOT_URLCONF = os.getenv('ROOT_URLCONF', "cartoview.urls")
@@ -40,9 +39,7 @@ APPS_DIR = os.getenv('APPS_DIR', os.path.abspath(os.path.join(os.path.dirname(CA
 PENDING_APPS = os.path.join(APPS_DIR, "pendingOperation.yml")
 APPS_MENU = False
 DOCKER = os.getenv('DOCKER', False)
-CARTOVIEW_CONTEXT_PROCESSORS = (
-    'cartoview.app_manager.context_processors.cartoview_processor',
-    'cartoview.app_manager.context_processors.site_logo')
+CARTOVIEW_CONTEXT_PROCESSORS = ('cartoview.app_manager.context_processors.cartoview_processor',)
 TEMPLATES[0]["OPTIONS"]['context_processors'] += CARTOVIEW_CONTEXT_PROCESSORS
 # django Media Section
 MEDIA_ROOT = os.getenv('MEDIA_ROOT', os.path.join(BASE_DIR, MEDIAFILES_LOCATION))

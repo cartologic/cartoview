@@ -14,7 +14,6 @@ from guardian.shortcuts import get_objects_for_user
 
 from cartoview import __version__
 from cartoview.app_manager.models import App, AppInstance
-from cartoview.site_management.models import SiteLogo
 
 standard_library.install_aliases()
 
@@ -44,11 +43,3 @@ def cartoview_processor(request):
         'instances': AppInstance.objects.all().order_by('app__order')[:5]
     }
     return defaults
-
-
-def site_logo(request):
-    try:
-        logo = get_object_or_404(SiteLogo, site=Site.objects.get_current())
-        return {'site_logo': logo}
-    except BaseException:
-        return {'site_logo': None}
