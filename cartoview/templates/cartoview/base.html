@@ -1,95 +1,13 @@
 {% extends "base.html" %}
-{% load i18n avatar_tags static base_tags %}
 
+{% load i18n %}
 {% block extra_head %}
     {{ block.super }}
-    <link href="{% static 'cartoview/css/base.css' %}" rel="stylesheet"/>
-    {% include 'cartoview/theme_css.html' %}
 {% endblock %}
-
-{% block header %}
-    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-        <div class="nav-container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
-                        aria-expanded="false" aria-controls="navbar">
-                    <i class="fa fa-navicon fa-lg"></i>
-                </button>
-                {% block brand %}<a class="navbar-brand" href="{% url "home" %}">{% trans 'home' %}</a>{% endblock %}
-                {% if user.is_authenticated %}
-                    {% include 'cartoview/apps_menu.html' with mobile=True %}
-                {% endif %}
-            </div>
-            <div id="navbar" class="navbar-collapse collapse">
-                <ul class="nav navbar-nav navbar-left">
-                    <li>
-                        {% block main_search %}
-                        {% include 'cartoview/search_box.html' %}
-                        {% endblock main_search %}
-                    </li>
-                </ul>
-                <ul class="nav navbar-nav navbar-right">
-                {% block extra_tab %}
-                    {% render_nav_menu 'TOPBAR_MENU' %}
-                {% endblock extra_tab %}
-                    {% if user.is_authenticated %}
-                        <li class="">
-                        {% include 'cartoview/apps_menu.html' %}
-                        </li>
-                    {% endif %}
-
-                    {% if not user.is_authenticated and ACCOUNT_OPEN_SIGNUP and not READ_ONLY_MODE %}
-                        <li><a href="{% url "account_signup" %}">{% trans "Register" %}</a></li>
-                    {% endif %}
-                    {% if user.is_authenticated %}
-                        <li class="">
-                            <a href="#" class="dropdown-toggle avatar" data-toggle="dropdown" role="button"
-                               aria-haspopup="true" aria-expanded="false">
-                                {% autoescape off %}{% avatar user 40 %}{% endautoescape %}
-                                {% with full_name=user.first_name|add:' '|add:user.last_name %}
-                                    {% if full_name.strip %}
-                                        {{ full_name | truncatechars:20 }}
-                                    {% else %}
-                                        {{ user.username | truncatechars:20 }}
-                                    {% endif %}
-                                {% endwith %}
-                            </a>
-                            <ul class="dropdown-menu dropdown-avatar">
-                                <li><a href="{{ user.get_absolute_url }}">{% trans "Profile" %}</a></li>
-                                <li><a href="{% url "recent-activity" %}">{% trans "Recent Activity" %}</a></li>
-                                {% if FAVORITE_ENABLED and user.is_authenticated %}
-                                    <li><a href="{% url "favorite_list" %}">{% trans "Favorites" %}</a></li>
-                                {% endif %}
-                                <li><a href="{% url "messages_inbox" %}">{% trans "Inbox" %}</a></li>
-                                {% if user.is_superuser or user.is_staff %}
-                                    <li><a href="{% url "admin:index" %}">{% trans "Admin" %}</a></li>
-                                    {% if 'geonode.geoserver' in INSTALLED_APPS %}
-                                        <li><a href="{{ OGC_SERVER.default.WEB_UI_LOCATION }}">GeoServer</a></li>
-                                    {% endif %}
-                                    {% if USE_MONITORING %}
-                                        <li>
-                                            <a href="{% url "monitoring:index" %}">{% trans "Monitoring & Analytics" %}</a>
-                                        </li>
-                                    {% endif %}
-                                {% endif %}
-                                <li><a href="{% url "help" %}">{% trans "Help" %}</a></li>
-                                <li class="logout"><a href="
-                                        {% if SITEURL|default:""|slice:"-1:" == "/" %}{{ SITEURL }}{% else %}{{ SITEURL }}/{% endif %}account/logout/"><img
-                                        src="{{ STATIC_URL }}img/icons/logout.png" alt="logout"/>{% trans "Log out" %}
-                                </a></li>
-                            </ul>
-                        </li>
-                    {% else %}
-                        <li><a href="#" data-toggle="modal" data-target="#SigninModal" role="button">
-                            {% trans "Sign in" %} </a></li>
-                    {% endif %}
-                </ul>
-            </div> <!--/.nav-collapse -->
-        </div>
-    </nav>
-{% endblock header %}
-
-
+{% block tabs %}
+<li><a href="{% url 'app_manager_base_url' %}">{% trans "CV Apps" %}</a></li>
+{{block.super}}
+{% endblock %}
 {% block footer %}
-   {% include 'cartoview/footer.html' %}
+{% include 'cartoview/footer.html' %}
 {% endblock %}

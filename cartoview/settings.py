@@ -26,11 +26,15 @@ CARTOVIEW_DIR = os.path.abspath(os.path.dirname(cartoview.__file__))
 BASE_DIR = os.path.dirname(CARTOVIEW_DIR)
 
 CARTOVIEW_TEMPLATE_DIRS = [
-    os.path.join(CARTOVIEW_DIR, "templates"),
+    # remove the theme to use GeoNode default design
+    os.path.join(CARTOVIEW_DIR, "theme", "templates"),
+    os.path.join(CARTOVIEW_DIR, "templates")
 ]
 TEMPLATES[0]["DIRS"] = CARTOVIEW_TEMPLATE_DIRS + TEMPLATES[0]["DIRS"]
 
 CARTOVIEW_STATIC_DIRS = [
+    # remove the theme to use GeoNode default design
+    os.path.join(CARTOVIEW_DIR, "theme", "static"),
     os.path.join(CARTOVIEW_DIR, "static"),
 ]
 STATICFILES_DIRS = CARTOVIEW_STATIC_DIRS + STATICFILES_DIRS
