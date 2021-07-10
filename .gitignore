@@ -229,7 +229,7 @@ cartoview/local_settings.py
 .idea/
 cartoview/static/landing/
 cartoview/pre_settings.py
-apps/
+/apps/
 cartoview_project/apps/*
 cartoview_project/uploaded/*
 cartoview_project/static/*
