@@ -1,0 +1,28 @@
+{% extends "groups/group_list.html" %}
+
+{% load i18n %}
+
+{% block body %}
+  <div class="page-header">
+    {% if user.is_authenticated and not READ_ONLY_MODE %}
+    <a href="{% url "group_create" %}" class="btn btn-primary pull-right">{% trans "Create a New Group" %}</a>
+    {% endif %}
+  </div>
+
+  {% with include_type_filter='true' %}
+  {% with facet_type='groups' %}
+  {% include "search/_search_user_content.html" %}
+  {% endwith %}
+  {% endwith %}
+  {% include "_bulk_permissions_form.html" %}
+{% endblock %}
+
+{% block extra_script %}
+{{ block.super }}
+  <script type="text/javascript">
+  SEARCH_URL = '{% url 'api_dispatch_list' api_name='api' resource_name='group_profile' %}'
+  </script>
+  {% with include_spatial='false' %}
+  {% include 'search/search_scripts.html' %}
+  {% endwith %}
+{% endblock extra_script %}

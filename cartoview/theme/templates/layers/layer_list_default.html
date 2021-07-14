@@ -1,0 +1,19 @@
+{% extends 'layers/layer_list_default.html' %}
+
+{% load i18n %}
+
+
+{% block body %}
+<div class="page-header">
+  {% if user.is_authenticated and not READ_ONLY_MODE %}
+    <a href="{% url "layer_upload" %}" class="btn btn-primary pull-right">{% trans "Upload Layers" %}</a>
+  {% endif %}
+</div>
+  {% with include_type_filter='true' %}
+    {% with header='Type' %}
+      {% with filter='type__in' %}
+        {% include "search/_search_content.html" %}
+      {% endwith %}
+    {% endwith %}
+  {% endwith %}
+{% endblock %}

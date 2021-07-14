@@ -1,0 +1,12 @@
+{% extends 'layers/layer_base.html' %}
+
+{% load i18n %}
+
+{% block brand %}
+    <div class="navbar-brand no-logo">
+        <a href="{% url 'layer_browse' %}">
+        {% block brand_title%}{% trans 'Layers' %}{% endblock %}
+        </a>
+        <span>{% block brand_details %}{% if resource %} - {{ resource.title }}{% endif %}{% endblock %}</span>
+    </div>
+{% endblock %}

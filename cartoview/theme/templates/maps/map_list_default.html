@@ -1,0 +1,12 @@
+{% extends "maps/map_list_default.html" %}
+
+{% load i18n %}
+
+{% block body %}
+  <div class="page-header">
+    {% if user.is_authenticated and not READ_ONLY_MODE %}
+      <a href="{% url "new_map" %}" class="btn btn-primary pull-right">{% trans "Create a New Map" %}</a>
+    {% endif %}
+  </div>
+  {% include "search/_search_content.html" %}
+{% endblock %}

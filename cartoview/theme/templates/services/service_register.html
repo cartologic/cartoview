@@ -1,0 +1,28 @@
+{% extends "services/service_register.html" %}
+
+{% load i18n bootstrap_tags %}
+
+{% block brand_details %} - {% trans "Register New Service" %}{% endblock %}
+
+{% block body_outer %}
+    <form method="POST" id="service_register_form">
+    {% csrf_token %}
+    {{ form|as_bootstrap }}
+    <input type="submit" class="btn btn-primary" data-toggle="modal" data-target="progressModal" id="submit_button" value="{% trans "Create" %}" />
+    </form>
+    <div class="modal fade" data-backdrop="static" data-keyboard="false" id="progressModal" tabindex="-1" role="dialog" aria-labelledby="progressModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    {% trans "Connecting to service..." %}
+                </div>
+                <div class="modal-body">
+                    <div class="progress" id="serviceRegisterProgress">
+                        <div class="progress-bar progress-bar-striped progress-bar-info active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

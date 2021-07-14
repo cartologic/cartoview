@@ -1,0 +1,27 @@
+{% extends "documents/document_upload_base.html" %}
+
+{% load i18n %}
+
+{% block brand %}
+    <div class="navbar-brand no-logo">
+        <a href="{% url 'document_browse' %}">
+        {% block brand_title%}{% trans 'Documents' %}{% endblock %}
+        </a>
+        <span>{% block brand_details %}{% trans "Upload Documents" %}{% endblock %}</span>
+    </div>
+{% endblock %}
+
+{% block body_outer %}
+<div class="page-header">
+	<p>{% trans "Allowed document types" %}:</p>
+	<p>
+	{% for doc in ALLOWED_DOC_TYPES %}
+		<span class="label label-default">.{{ doc }}</span>
+	{% endfor %}
+	</p>
+</div>
+<div class="row">
+  {% block body %}{% endblock body %}
+  {% block sidebar %}{% endblock sidebar %}
+</div>
+{% endblock body_outer %}

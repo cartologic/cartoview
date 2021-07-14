@@ -1,0 +1,32 @@
+{% extends "people/profile_edit.html" %}
+
+{% load i18n avatar_tags bootstrap_tags %}
+
+{% block brand_details %} - {% if user == profile %}
+    {% trans "Edit Your Profile" %}
+  {% else %}
+   {% trans "Edit Profile for" %} {{ profile.username }}
+  {% endif %}:{{ profile.username }}
+{% endblock %}
+
+
+{% block body %}
+<div class="col-xs-3 col-md-2 profile-image">
+  {% autoescape off %}{% avatar profile.username 240 %}{% endautoescape %}
+  {% if user == profile %}
+  <p><a class="btn btn-primary btn-block" href="{% url 'avatar_change' %}">{% trans "Change your avatar" %}</a></p>
+  {% endif %}
+</div>
+
+<div class="col-xs-9 col-md-7">
+  <form action="" method="post">
+    {% csrf_token %}
+    <div class="form-controls">
+      {{ form|as_bootstrap }}
+    </div>
+    <div class="form-actions">
+      <input type="submit" class="btn btn-primary" value="{% trans "Update profile" %}" />
+    </div>
+  </form>
+</div>
+{% endblock %}

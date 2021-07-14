@@ -1,0 +1,11 @@
+{% extends "maps/map_base.html" %}
+{% load i18n %}
+
+{% block brand %}
+    <div class="navbar-brand no-logo">
+        <a href="{% url 'maps_browse' %}">
+        {% block brand_title%}{% trans 'Maps' %}{% endblock %}
+        </a>
+        <span>{% block brand_details %}{% endblock %}</span>
+    </div>
+{% endblock %}

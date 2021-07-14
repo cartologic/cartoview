@@ -32,6 +32,10 @@
     align-items: center;
 }
 
+.navbar-brand a{
+    color: #bebebf;
+}
+
 .navbar-inverse .navbar-nav > li > a.apps-dropdown{
     padding-top: 20px;
     padding-bottom: 16px;
@@ -39,6 +43,17 @@
 
 .navbar-inverse .navbar-header{
     color: #bebebf;
+}
+
+.navbar-header .navbar-brand.no-logo{
+    background-image: none;
+    text-indent: 0;
+    padding: 20px;
+    width: 100%;
+}
+
+.navbar-header .navbar-brand.no-logo a{
+    font-size: 36px;
 }
 
 .navbar-inverse .apps-mobile {
@@ -156,6 +171,17 @@ li.logout {
 .fa-th {
     margin-right: 10px
 }
+
+
+/* ------------------------------  inner pages ------------------*/
+.page-header{
+    min-height: 50px;
+}
+
+.data .container-fluid.page-header{
+    min-height: 100px;
+}
+/*-------------------------------  end inner pages --------------*/
 
 @media (min-width: 992px){
     .navbar-header{

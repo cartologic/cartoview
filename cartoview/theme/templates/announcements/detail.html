@@ -1,0 +1,22 @@
+{% extends "announcements/detail.html" %}
+
+{% load i18n %}
+
+{% block brand %}
+    <div class="navbar-brand no-logo">
+        <a href="{% url 'announcements_list' %}">
+        {% block brand_title%}{% trans 'Announcements' %}{% endblock %}
+        </a>
+        <span>{% block brand_details %}- {{ announcement.title }} ({{ announcement.level_label }}){% endblock %}</span>
+    </div>
+{% endblock %}
+
+{% block body %}
+<p>{{ announcement.creation_date }}</p>
+<div class="col-md-10">
+  <blockquote>
+    <p>{{ announcement.content }}</p>
+    <small>{{ announcement.creator }}</small>
+  </blockquote>
+</div>
+{% endblock %}

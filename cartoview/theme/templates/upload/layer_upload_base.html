@@ -1,0 +1,13 @@
+{% extends "upload/layer_upload_base.html" %}
+
+{% load i18n %}
+
+{% block brand %}
+    <div class="navbar-brand no-logo">
+        <a href="{% url 'layer_browse' %}">
+        {% block brand_title%}{% trans 'Layers' %}{% endblock %}
+        </a>
+        <span>{% block brand_details %}{% trans "Upload Layers" %}{% endblock %}</span>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends "people/profile_base.html" %}
+
+{% load i18n %}
+
+{% block brand %}
+    <div class="navbar-brand no-logo">
+        <a href="{% url 'profile_browse' %}">
+        {% block brand_title%}{% trans 'People' %}{% endblock %}
+        </a>
+        <span>{% block brand_details %}{% if profile %} - {{ profile.username }}{% endif %}{% endblock %}</span>
+    </div>
+{% endblock %}

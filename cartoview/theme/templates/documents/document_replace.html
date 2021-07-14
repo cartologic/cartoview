@@ -1,0 +1,27 @@
+{% extends "documents/document_replace.html" %}
+
+{% load i18n %}
+
+{% block brand_details %} - {% trans "Replace " %}{{ document.title }}{% endblock %}
+
+{% block body %}
+  <div class="block">
+    <div class="col-md-8">
+      <div id="upload_form">
+        <form method="post" enctype="multipart/form-data" action="{% url "document_replace" document.id %}">
+          <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}" />
+          {{ form.errors }}
+          {% if document.doc_file %}
+            {{ form.doc_file }}
+          {% elif document.doc_url %}
+            {{ form.doc_url }}
+          {% endif %}
+          <section>
+            <button id="clear-button" type="reset" class="btn btn-default">{% trans "Clear" %}</button>
+            <button id="upload-button" type="submit" class="btn btn-primary" value="Update">{% trans "Replace Document" %}</button>
+          </section>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends 'groups/group_base.html' %}
+
+{% load i18n %}
+
+{% block brand %}
+    <div class="navbar-brand no-logo">
+        <a href="{% url 'group_list' %}">
+        {% block brand_title%}{% trans 'Groups' %}{% endblock %}
+        </a>
+        <span>{% block brand_details %}
+            {% if object %}
+                - {{ object.title|default:object.slug }}
+            {% elif group %}
+                - {{ group.title|default:group.slug }}
+            {% endif %}
+        {% endblock %}</span>
+    </div>
+{% endblock %}

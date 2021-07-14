@@ -1,0 +1,56 @@
+{% extends "base/thumbnail_upload.html" %}
+
+{% load i18n %}
+
+{% block brand %}
+    <div class="navbar-brand no-logo">
+       {% if resource.resource_type == "document" %}
+        <a href="{% url 'document_browse' %}">{% trans "Documents" %}</a>
+        {% elif resource.resource_type == "layer" %}
+        <a href="{% url 'layer_browse' %}">{% trans "Layers" %}</a>
+        {% elif resource.resource_type == "map" %}
+        <a href="{% url 'maps_browse' %}">{% trans "Maps" %}</a>
+        {% elif resource.resource_type == "geoapp" %}
+        <a href="{% url 'apps_browse' %}" >{{ resource.type }}</a>
+        {% endif %}
+        <span>{% block brand_details %} - {% trans "Upload a Thumbnail" %} : {{ resource.title }}{% endblock %}</span>
+    </div>
+{% endblock %}
+
+{% block body_outer %}
+{% if error %}
+<div class="alert alert-error">{{ error }}</div>
+{% endif %}
+
+<div class="row">
+
+  <div class="col-md-4">
+
+    <!-- current uploaded thumb -->
+    {% if resource.curatedthumbnail %}
+      <h5>Current thumbnail</h5>
+      <img src='{{ resource.curatedthumbnail.thumbnail_url }}'></img>
+      <form method="POST" class="post-form">
+        {% csrf_token %}
+          <button type="submit" class="save btn btn-default" name="remove-thumb">
+            {% trans "Remove (and use auto generated thumbnail)" %}</button>
+      </form>
+    {% endif %}
+
+    <!-- upload form -->
+    <form method="POST" enctype="multipart/form-data" class="post-form">
+      {% csrf_token %}
+        {{ form.img }}
+        <button type="submit" class="save btn btn-default"  name="upload-thumb">{% trans "Upload" %}</button>
+    </form>
+
+  </div>
+
+  <div class="col-md-4">
+    <h5>{% trans "Auto generated thumbnail" %}</h5>
+    <img src='{{ resource.thumbnail_url }}'></img>
+  </div>
+
+</div>
+
+{% endblock %}
