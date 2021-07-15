@@ -15,7 +15,7 @@
                         aria-expanded="false" aria-controls="navbar">
                     <i class="fa fa-navicon fa-lg"></i>
                 </button>
-                {% block brand %}<a class="navbar-brand" href="{% url "home" %}">{% trans 'home' %}</a>{% endblock %}
+                {% block brand %}<a class="navbar-brand" href="{% url "home" %}"></a>{% endblock %}
                 {% if user.is_authenticated %}
                     {% include 'cartoview/apps_menu.html' with mobile=True %}
                 {% endif %}
