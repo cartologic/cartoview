@@ -2,6 +2,10 @@
 
 {% load i18n %}
 
+{% block top_middle %}
+    {% include "search/text_search.html" %}
+{% endblock %}
+
 {% block body %}
   <div class="page-header">
     {% if user.is_authenticated and not READ_ONLY_MODE %}
