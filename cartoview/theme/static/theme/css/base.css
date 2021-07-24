@@ -57,11 +57,13 @@
     padding-left: 0;
 }
 
-.navbar-header .navbar-brand a:first-of-type{
+.navbar-header .navbar-brand a{
+    text-decoration: unset;
+    color: #bebebf;
+}
+.navbar-header .navbar-brand a.brand-link{
     font-size: 36px;
     padding-left: 80px;
-    text-decoration: unset;
-     color: #bebebf;
 }
 
 .navbar-inverse .apps-mobile {
@@ -71,6 +73,11 @@
 
 .navbar-inverse .navbar-nav li a i {
     margin: 0 5px;
+}
+
+.navbar-nav .search{
+    top: unset;
+    font-size: 16px;
 }
 
 .navbar-nav .search input , .navbar-nav .search #text_search_input{

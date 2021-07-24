@@ -17,7 +17,8 @@
                 </button>
                 {% block brand %}
                      <div class="navbar-brand">
-                        <a href="{% if brand_url_name %}{% url brand_url_name %}{% else %}{% url "home" %}{% endif %}">
+                        <a class="brand-link"
+                           href="{% if brand_url_name %}{% url brand_url_name %}{% else %}{% url "home" %}{% endif %}">
                             {% block brand_title %}{% trans brand_title %}{% endblock %}
                         </a>
                         <span>{% block brand_details %}{% endblock %}</span>
