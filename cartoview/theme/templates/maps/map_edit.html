@@ -1,13 +1,25 @@
-{% extends "maps/map_edit.html" %}
+{% extends "maps/map_base.html" %}
 
 {% load i18n %}
 
-{% block brand %}
-    <div class="navbar-brand no-logo">
-        <a href="{% url 'maps_browse' %}">
-        {% block brand_title%}{% trans 'Maps' %}{% endblock %}
-        </a>
-        <span>{% block brand_details %} - {{ map.title }}{% endblock %}</span>
-    </div>
+{% load i18n %}
+{% load base_tags %}
+{% load client_lib_tags %}
 
+{% block title %} {% trans "Edit Map" %} - {{ block.super }} {% endblock %}
+
+{% block top_middle %}{% trans "Edit Map" %}{% endblock %}
+
+{% block head %}
+
+    <style>
+        #paneltbar {
+            margin-top: 90px !important;
+        }
+    </style>
+
+    {% get_map_edit %}
+	{{ block.super }}
 {% endblock %}
+
+{% block footer %}{% endblock %}

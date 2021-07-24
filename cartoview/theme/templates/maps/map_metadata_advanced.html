@@ -2,14 +2,22 @@
 
 {% load i18n static bootstrap_tags%}
 
+{% block body_class %}maps {{ block.super }}{% endblock body_class %}
+
 {% block brand %}
-    <div class="navbar-brand no-logo">
-        <a href="{% url 'maps_browse' %}">
-        {% block brand_title%}{% trans 'Maps' %}{% endblock %}
-        </a>
-        <span>{% block brand_details %} - {% trans "Editing details for" %} {{ map.title }}{% endblock %}</span>
-    </div>
+    {% with brand_url_name="maps_browse" %}
+        {{ block.super }}
+    {% endwith %}
 {% endblock %}
+
+{% if map %}
+    {% block brand_details %}
+        <a href="{{ map.get_absolute_url }}">{{ map.title }}</a>
+    {% endblock %}
+{% endif %}
+
+{% block top_middle %}{% trans "Editing Metadata details" %}{% endblock %}
+
 
 
 {% block body_outer %}
@@ -52,7 +60,6 @@
       </div>
       {% endif %}
       <div class="form-actions">
-        <a href="{% url 'map_detail' mapid=map.id %}" class="btn btn-primary">{% trans "Return to Map" %}</a>
         <input type="submit" id="btn_upd_md_up" class="btn btn-primary" value="{% trans "Update" %}"/>
       </div>
       {% csrf_token %}
@@ -126,7 +133,6 @@
 
               {% block form_actions %}
               <div class="form-actions">
-                <a href="{% url 'map_detail' mapid=map.id %}" class="btn btn-primary">{% trans "Return to Map" %}</a>
                 <input type="submit" id="btn_upd_md_dwn" class="btn btn-primary" value="{% trans "Update" %}"/>
               </div>
               {% endblock form_actions %}

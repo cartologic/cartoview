@@ -2,14 +2,21 @@
 
 {% load i18n floppyforms  bootstrap_tags %}
 
+{% block body_class %}maps {{ block.super }}{% endblock body_class %}
+
 {% block brand %}
-    <div class="navbar-brand no-logo">
-        <a href="{% url 'maps_browse' %}">
-        {% block brand_title%}{% trans 'Maps' %}{% endblock %}
-        </a>
-        <span>{% block brand_details %} - {% trans "Metadata" %}&nbsp;{% blocktrans with map.title as map_title %}for {{ map_title }}{% endblocktrans %}{% endblock %}</span>
-    </div>
+    {% with brand_url_name="maps_browse" %}
+        {{ block.super }}
+    {% endwith %}
 {% endblock %}
+
+{% if map %}
+    {% block brand_details %}
+        <a href="{{ map.get_absolute_url }}">{{ map.title }}</a>
+    {% endblock %}
+{% endif %}
+
+{% block top_middle %}{% trans "Metadata" %}{% endblock %}
 
 
 

@@ -1,13 +1,25 @@
-{% extends "maps/map_new.html" %}
+{% extends "maps/map_base.html" %}
 
 {% load i18n %}
+{% load base_tags %}
+{% load client_lib_tags %}
 
-{% block brand %}
-    <div class="navbar-brand no-logo">
-        <a href="{% url 'maps_browse' %}">
-        {% block brand_title%}{% trans 'Maps' %}{% endblock %}
-        </a>
-        <span>{% block brand_details %}{% endblock %}</span>
-    </div>
+{% block title %} {% trans "New Map" %} - {{ block.super }} {% endblock %}
 
+{% block brand_title %}{% trans "Maps" %}{% endblock %}
+
+{% block top_middle %}{% trans "New Map" %}{% endblock %}
+
+{% block head %}
+
+    <style>
+        #paneltbar {
+            margin-top: 90px !important;
+        }
+    </style>
+
+    {% get_map_new %}
+	{{ block.super }}
 {% endblock %}
+
+{% block footer %}{% endblock %}

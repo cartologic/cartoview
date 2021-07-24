@@ -225,6 +225,12 @@ li.logout {
 }
 /*-------------------------------  end inner pages --------------*/
 
+/*-------------------------------  maps -------------------------*/
+.maps .navbar-brand{
+    background-image: url("../../img/icons/map-black.png");
+}
+/*------------------------------- end maps-----------------------*/
+
 @media (min-width: 992px){
     .navbar-header{
         max-width: 33vw;

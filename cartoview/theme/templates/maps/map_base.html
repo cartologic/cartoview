@@ -1,11 +1,16 @@
 {% extends "maps/map_base.html" %}
 {% load i18n %}
 
+{% block body_class %}maps {{ block.super }}{% endblock %}
+
 {% block brand %}
-    <div class="navbar-brand no-logo">
-        <a href="{% url 'maps_browse' %}">
-        {% block brand_title%}{% trans 'Maps' %}{% endblock %}
-        </a>
-        <span>{% block brand_details %}{% endblock %}</span>
-    </div>
+    {% with brand_url_name="maps_browse" %}
+        {{ block.super }}
+    {% endwith %}
 {% endblock %}
+
+{% if resource or map %}
+    {% block brand_details %}
+        <a href="{{ resource.get_absolute_url }}{{ map.get_absolute_url }}">{{ resource.title }}{{ map.title }}</a>
+    {% endblock %}
+{% endif %}
