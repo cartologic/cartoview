@@ -238,6 +238,22 @@ li.logout {
     .navbar-nav .search input:focus {
         width: 35vw;
     }
+
+    #navbar .navbar-left {
+        min-width: 30vw;
+        height: 72px;
+        display: flex;
+        justify-content: space-around;
+
+    }
+
+    #navbar .navbar-left li:first-of-type {
+        align-content: center;
+        display: flex;
+        flex-wrap: wrap;
+        font-size: 24px;
+        color: white;
+    }
 }
 
 @media (max-width: 991px) {
