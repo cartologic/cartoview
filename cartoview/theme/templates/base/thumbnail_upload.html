@@ -2,20 +2,46 @@
 
 {% load i18n %}
 
-{% block brand %}
-    <div class="navbar-brand no-logo">
-       {% if resource.resource_type == "document" %}
-        <a href="{% url 'document_browse' %}">{% trans "Documents" %}</a>
-        {% elif resource.resource_type == "layer" %}
-        <a href="{% url 'layer_browse' %}">{% trans "Layers" %}</a>
-        {% elif resource.resource_type == "map" %}
-        <a href="{% url 'maps_browse' %}">{% trans "Maps" %}</a>
-        {% elif resource.resource_type == "geoapp" %}
-        <a href="{% url 'apps_browse' %}" >{{ resource.type }}</a>
-        {% endif %}
-        <span>{% block brand_details %} - {% trans "Upload a Thumbnail" %} : {{ resource.title }}{% endblock %}</span>
-    </div>
+
+{% block body_class %}
+    {% if resource.resource_type == "document" %}
+        documents
+    {% elif resource.resource_type == "layer" %}
+        layers
+    {% elif resource.resource_type == "map" %}
+        maps
+    {% elif resource.resource_type == "geoapp" %}
+        apps
+    {% endif %}
 {% endblock %}
+
+{% block brand %}
+    {% if resource.resource_type == "document" %}
+        {% with brand_url_name="document_browse" %}
+            {{ block.super }}
+        {% endwith %}
+    {% elif resource.resource_type == "layer" %}
+        {% with brand_url_name="layer_browse" %}
+            {{ block.super }}
+        {% endwith %}
+    {% elif resource.resource_type == "map" %}
+        {% with brand_url_name="maps_browse" %}
+            {{ block.super }}
+        {% endwith %}
+    {% elif resource.resource_type == "geoapp" %}
+        {% with brand_url_name="apps_browse" %}
+            {{ block.super }}
+        {% endwith %}
+    {% endif %}
+{% endblock %}
+
+
+{% block brand_details %}
+    <a href="{{ resource.detail_url }}">{{ resource.title }}</a>
+{% endblock %}
+
+
+{% block top_middle %}{% trans "Upload a Thumbnail" %}{% endblock %}
 
 {% block body_outer %}
 {% if error %}
