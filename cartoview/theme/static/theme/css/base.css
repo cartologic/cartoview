@@ -249,6 +249,12 @@ li.logout {
 }
 /*------------------------------- end search-----------------------*/
 
+/*-------------------------------  people -------------------------*/
+.people .navbar-brand{
+    background-image: url("../../img/icons/users.svg");
+}
+/*------------------------------- end people-----------------------*/
+
 @media (min-width: 992px){
     .navbar-header{
         max-width: 33vw;

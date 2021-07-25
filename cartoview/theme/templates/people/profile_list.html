@@ -1,5 +1,9 @@
 {% extends "people/profile_list.html" %}
 
+{% load i18n %}
+
+{% block brand_title %}{% trans "People" %}{% endblock %}
+
 {% block top_middle %}
     {% include "search/text_search.html" %}
 {% endblock %}

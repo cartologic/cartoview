@@ -2,11 +2,11 @@
 
 {% load i18n avatar_tags bootstrap_tags %}
 
-{% block brand_details %} - {% if user == profile %}
+{% block top_middle %}{% if user == profile %}
     {% trans "Edit Your Profile" %}
   {% else %}
-   {% trans "Edit Profile for" %} {{ profile.username }}
-  {% endif %}:{{ profile.username }}
+   {% trans "Edit Profile" %}
+  {% endif %}
 {% endblock %}
 
 
