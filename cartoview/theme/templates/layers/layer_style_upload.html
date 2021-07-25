@@ -2,12 +2,11 @@
 
 {% load i18n guardian_tags %}
 
-{% block brand_details %} - {% trans "Upload Layer Style" %}: {{ resource.title }}{% endblock %}
+{% block top_middle %}{% trans "Upload Layer Style" %}{% endblock %}
 
 {% block body_outer %}
 
 <div class="page-header">
-  <a href="{% url 'layer_detail' layername=resource.alternate %}" class="btn btn-primary pull-right" style="margin-left: 3px;">{% trans "Return to Layer" %}</a>
   <h2 class="page-title"><small>{% trans "(SLD - Style Layer Descriptor 1.0, 1.1)" %}<small></h2>
 </div>
 

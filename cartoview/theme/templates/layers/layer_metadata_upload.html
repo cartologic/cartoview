@@ -2,13 +2,9 @@
 
 {% load i18n guardian_tags%}
 
-{% block brand_details %} - {% trans "Upload Layer Metadata" %}: {{ layer.title }}{% endblock %}
-
-
 {% block body_outer %}
 
 <div class="page-header">
-  <a href="{% url 'layer_detail' layername=resource.alternate %}" class="btn btn-primary pull-right" style="margin-left: 3px;">{% trans "Return to Layer" %}</a>
   <h2 class="page-title"> <small>{% trans "(XML - ISO, FGDC, ebRIM, Dublin Core)" %}<small></h2>
 </div>
 

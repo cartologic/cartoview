@@ -2,12 +2,16 @@
 
 {% load i18n %}
 
-{% block brand %}
-    <div class="navbar-brand no-logo">
-        <a href="{% url 'layer_browse' %}">
-        {% block brand_title%}{% trans 'Layers' %}{% endblock %}
-        </a>
-        <span>{% block brand_details %}{% trans "Upload Layers" %}{% endblock %}</span>
-    </div>
+{% block body_class %}layers {{ block.super }}{% endblock body_class %}
 
+{% block brand %}
+    {% with brand_url_name="layer_browse" %}
+        {{ block.super }}
+    {% endwith %}
 {% endblock %}
+
+{% if resource %}
+    {% block brand_details %}
+        <a href="{{ resource.get_absolute_url }}">{{ resource.title }}</a>
+    {% endblock %}
+{% endif %}

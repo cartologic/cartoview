@@ -1,16 +1,21 @@
 {% extends "layers/layer_metadata_advanced.html" %}
 {% load i18n static bootstrap_tags %}
 
+{% block body_class %}layers {{ block.super }}{% endblock body_class %}
+
 {% block brand %}
-    <div class="navbar-brand no-logo">
-        <a href="{% url 'layer_browse' %}">
-        {% block brand_title%}{% trans 'Layers' %}{% endblock %}
-        </a>
-        <span>{% block brand_details %} - {% blocktrans with layer.title as layer_title %}
-        Editing details for {{ layer_title }}
-      {% endblocktrans %}{% endblock %}</span>
-    </div>
+    {% with brand_url_name="layer_browse" %}
+        {{ block.super }}
+    {% endwith %}
 {% endblock %}
+
+{% if layer %}
+    {% block brand_details %}
+        <a href="{{ layer.get_absolute_url }}">{{ layer.title }}</a>
+    {% endblock %}
+{% endif %}
+
+{% block top_middle %}{% trans "Editing Metadata Details" %}{% endblock %}
 
 {% block body_outer %}
 
@@ -76,7 +81,6 @@
 
         {% if not layer.metadata_uploaded_preserve %}
         <div class="form-actions">
-          <a href="{% url 'layer_detail' layername=resource.alternate %}" class="btn btn-primary">{% trans "Return to Layer" %}</a>
           <input type="submit" id="btn_upd_md_up" class="btn btn-primary" value="{% trans "Update" %}"/>
         </div>
         {% endif %}
@@ -206,7 +210,6 @@
             {% if not layer.metadata_uploaded_preserve %}
             {% block form_actions %}
             <div class="form-actions">
-              <a href="{% url 'layer_detail' layername=resource.alternate %}" class="btn btn-primary">{% trans "Return to Layer" %}</a>
               <input type="submit" id="btn_upd_md_dwn" class="btn btn-primary" value="{% trans "Update" %}"/>
             </div>
             {% endblock form_actions %}

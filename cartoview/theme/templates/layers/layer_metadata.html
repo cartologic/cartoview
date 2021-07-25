@@ -1,15 +1,21 @@
 {% extends "layers/layer_metadata.html" %}
 {% load i18n floppyforms bootstrap_tags %}
 
+{% block body_class %}layers {{ block.super }}{% endblock body_class %}
+
 {% block brand %}
-    <div class="navbar-brand no-logo">
-        <a href="{% url 'layer_browse' %}">
-            {% block brand_title %}{% trans 'Layers' %}{% endblock %}
-        </a>
-        <span>{% block brand_details %} - {% trans "Metadata" %}&nbsp;{% blocktrans with layer.title as layer_title %}for {{ layer_title }}{% endblocktrans %}{% endblock %}</span>
-    </div>
+    {% with brand_url_name="layer_browse" %}
+        {{ block.super }}
+    {% endwith %}
 {% endblock %}
 
+{% if layer %}
+    {% block brand_details %}
+        <a href="{{ layer.get_absolute_url }}">{{ layer.title }}</a>
+    {% endblock %}
+{% endif %}
+
+{% block top_middle %}{% trans "Metadata" %}{% endblock %}
 
 {% block body_outer %}
 <div class="container-fluid page-header" style="position: relative;">

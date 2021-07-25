@@ -2,12 +2,9 @@
 
 {% load i18n guardian_tags base_tags %}
 
-{% block brand_details %} - {% trans "Replace Layer" %}:{{ resource.title }}{% endblock %}
+{% block top_middle %}{% trans "Replace Layer" %}{% endblock %}
 
 {% block body_outer %}
-<div class="page-header">
-  <a href="{% url 'layer_detail' layername=resource.service_typename %}" class="btn btn-primary pull-right" style="margin-left: 3px;">{% trans "Return to Layer" %}</a>
-</div>
 <div class="row">
   <div class="col-md-8">
     {% block additional_info %}{% endblock %}

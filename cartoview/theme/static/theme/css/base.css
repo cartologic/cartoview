@@ -230,6 +230,11 @@ li.logout {
     background-image: url("../../img/icons/map-black.png");
 }
 /*------------------------------- end maps-----------------------*/
+/*-------------------------------  layers -------------------------*/
+.layers .navbar-brand{
+    background-image: url("../../img/icons/layers.png");
+}
+/*------------------------------- end layers-----------------------*/
 
 @media (min-width: 992px){
     .navbar-header{
