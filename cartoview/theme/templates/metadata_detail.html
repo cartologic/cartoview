@@ -5,7 +5,13 @@
 
 {% block title %}{{ resource.title }} — {{ block.super }}{% endblock %}
 
-{% block body_class %}maps data{% endblock %}
+{% block body_class %}
+    {% if resource.class_name == "Document" %}documents
+    {% elif resource.class_name == "Layer" %}layers
+    {% elif resource.class_name == "Map" %}maps
+    {% elif resource.class_name == "GeoApp" %}apps
+    {% endif %}{{ block.super }}
+{% endblock %}
 
 
 {% block brand %}
