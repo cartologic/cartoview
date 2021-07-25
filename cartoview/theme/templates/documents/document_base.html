@@ -3,10 +3,13 @@
 {% load i18n %}
 
 {% block brand %}
-    <div class="navbar-brand no-logo">
-        <a href="{% url 'document_browse' %}">
-        {% block brand_title%}{% trans 'Documents' %}{% endblock %}
-        </a>
-        <span>{% block brand_details %}{% endblock %}</span>
-    </div>
+    {% with brand_url_name="document_browse" %}
+        {{ block.super }}
+    {% endwith %}
 {% endblock %}
+
+{% if resource or document %}
+    {% block brand_details %}
+        <a href="{{ resource.get_absolute_url }}{{ document.get_absolute_url }}">{{ resource.title }}{{ document.title }}</a>
+    {% endblock %}
+{% endif %}

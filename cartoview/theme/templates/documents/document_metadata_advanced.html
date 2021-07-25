@@ -2,17 +2,17 @@
 
 {% load i18n static bootstrap_tags %}
 
+{% block body_class %}documents {{ block.super }}{% endblock %}
+
 {% block brand %}
-    <div class="navbar-brand no-logo">
-        <a href="{% url 'document_browse' %}">
-        {% block brand_title%}{% trans 'Documents' %}{% endblock %}
-        </a>
-        <span>
-            {% block brand_details %}
-                {% trans "Editing details for" %} {{ document.title }}
-            {% endblock %}
-        </span>
-    </div>
+    {% with brand_url_name="document_browse" %}
+        {{ block.super }}
+    {% endwith %}
+{% endblock %}
+
+
+{% block brand_details %}
+    <a href="{{ document.get_absolute_url }}">{{ document.title }}</a>
 {% endblock %}
 
 {% block body_outer %}
@@ -56,7 +56,6 @@
         </ul>
       {% endif %}
         <div class="form-actions">
-          <a href="{% url 'document_detail' docid=document.id %}" class="btn btn-primary">{% trans "Return to Document" %}</a>
           <input type="submit" id="btn_upd_md_up" class="btn btn-primary" value="{% trans "Update" %}"/>
         </div>
       {% csrf_token %}
@@ -129,7 +128,6 @@
                 <button type='button' class="modal-cloose-btn btn btn-primary">{% trans "Done" %}</button>
               </fieldset>
               <div class="form-actions">
-                <a href="{% url 'document_detail' docid=document.id %}" class="btn btn-primary">{% trans "Return to Document" %}</a>
                 <input type="submit" id="btn_upd_md_dwn" class="btn btn-primary" value="{% trans "Update" %}"/>
               </div>
           </div>

@@ -2,18 +2,20 @@
 
 {% load i18n floppyforms bootstrap_tags %}
 
+{% block body_class %}documents {{ block.super }}{% endblock %}
+
 {% block brand %}
-    <div class="navbar-brand no-logo">
-        <a href="{% url 'document_browse' %}">
-        {% block brand_title%}{% trans 'Documents' %}{% endblock %}
-        </a>
-        <span>
-            {% block brand_details %}{% trans "Metadata" %}&nbsp;
-            {% blocktrans with document.title as document_title %}for {{ document_title }}{% endblocktrans %}
-            {% endblock %}
-        </span>
-    </div>
+    {% with brand_url_name="document_browse" %}
+        {{ block.super }}
+    {% endwith %}
 {% endblock %}
+
+
+{% block brand_details %}
+    <a href="{{ document.get_absolute_url }}">{{ document.title }}</a>
+{% endblock %}
+
+{% block top_middle %}{% trans "Metadata" %}{% endblock %}
 
 {% block body_outer %}
 <div class="container-fluid page-header" style="position: relative;">
