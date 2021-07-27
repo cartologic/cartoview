@@ -237,6 +237,12 @@ li.logout {
 }
 /*------------------------------- end layers-----------------------*/
 
+/*-------------------------------  remote services -------------------------*/
+.remote-services .navbar-brand{
+    background-image: url("../../img/icons/remote-services.svg");
+}
+/*------------------------------- end remote services-----------------------*/
+
 /*-------------------------------  documents -------------------------*/
 .documents .navbar-brand{
     background-image: url("../../img/icons/docs.png");

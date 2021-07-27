@@ -2,11 +2,16 @@
 
 {% load i18n %}
 
+{% block body_class %}remote-services {{ block.super }}{% endblock %}
+
 {% block brand %}
-    <div class="navbar-brand no-logo">
-        <a href="{% url 'services' %}">
-        {% block brand_title%}{% trans 'Remote Services' %}{% endblock %}
-        </a>
-        <span>{% block brand_details %}{% if service %} - {{ service.title }}{% endif %}{% endblock %}</span>
-    </div>
+    {% with brand_url_name="services" %}
+        {{ block.super }}
+    {% endwith %}
 {% endblock %}
+
+{% if service %}
+    {% block brand_details %}
+        <a href="{{ service.get_absolute_url }}">{{ service.title }}</a>
+    {% endblock %}
+{% endif %}

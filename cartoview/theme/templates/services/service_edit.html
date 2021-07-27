@@ -2,7 +2,9 @@
 
 {% load i18n bootstrap_tags %}
 
-{% block brand_details %} - {% trans "Edit Service" %}: {{ service.title }}{% endblock %}
+{#{% block brand_title %}{% trans "R" %}{% endblock %}#}
+
+{% block top_middle %}{% trans "Edit Service" %}{% endblock %}
 
 {% block body %}
 <form method="POST" id="service_edit_form">
