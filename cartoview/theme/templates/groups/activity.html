@@ -2,16 +2,19 @@
 
 {% load i18n activity_tags social_tags %}
 
+{% block body_class %}groups {{ block.super }}{% endblock %}
+
 {% block brand %}
-    <div class="navbar-brand no-logo">
-        <a href="{% url 'group_list' %}">
-        {% block brand_title%}{% trans 'Groups' %}{% endblock %}
-        </a>
-        <span>{% block brand_details %}
-            {%  trans "Activity Feed for"  %}: {{ group.title }}
-        {% endblock %}</span>
-    </div>
+    {% with brand_url_name="group_list" %}
+        {{ block.super }}
+    {% endwith %}
 {% endblock %}
+
+{% block brand_details %}
+    <a href="{{ group.get_absolute_url }}">{{ group.title|default:group.slug }}</a>
+{% endblock %}
+
+{% block top_middle %}{% trans "Group Activities" %}{% endblock %}
 
 {% block body_outer %}
 <div class="row">

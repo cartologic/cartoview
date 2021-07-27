@@ -255,6 +255,12 @@ li.logout {
 }
 /*------------------------------- end people-----------------------*/
 
+/*-------------------------------  groups -------------------------*/
+.groups .navbar-brand{
+    background-image: url("../../img/icons/groups.svg");
+}
+/*------------------------------- end groups-----------------------*/
+
 @media (min-width: 992px){
     .navbar-header{
         max-width: 33vw;

@@ -1,0 +1,21 @@
+{% extends "groups/category_list.html" %}
+
+{% load i18n %}
+
+{% block brand_title %}{% trans "Group Categories" %}{% endblock %}
+
+{% block body %}
+    {% if user.is_authenticated and not READ_ONLY_MODE %}
+        <div class="page-header">
+            <a href="{% url "group_category_create" %}"
+               class="btn btn-primary pull-right">{% trans "Create a New Group Category" %}</a>
+        </div>
+    {% endif %}
+
+    {% with include_type_filter='true' %}
+        {% with facet_type='groupcategories' %}
+            {% include "search/_search_user_content.html" %}
+        {% endwith %}
+    {% endwith %}
+    {% include "_bulk_permissions_form.html" %}
+{% endblock %}

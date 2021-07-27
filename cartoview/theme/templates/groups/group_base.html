@@ -3,16 +3,18 @@
 {% load i18n %}
 
 {% block brand %}
-    <div class="navbar-brand no-logo">
-        <a href="{% url 'group_list' %}">
-        {% block brand_title%}{% trans 'Groups' %}{% endblock %}
-        </a>
-        <span>{% block brand_details %}
-            {% if object %}
-                - {{ object.title|default:object.slug }}
-            {% elif group %}
-                - {{ group.title|default:group.slug }}
-            {% endif %}
-        {% endblock %}</span>
-    </div>
+    {% with brand_url_name="group_list" %}
+        {{ block.super }}
+    {% endwith %}
 {% endblock %}
+
+{% block brand_details %}
+    {% if object %}
+        <a href="{{ object.get_absolute_url }}">{{ object.title|default:object.slug }}</a>
+    {% elif group %}
+        <a href="{{ group.get_absolute_url }}">{{ group.title|default:group.slug }}</a>
+    {% else %}
+        {{ block.super }}
+    {% endif %}
+{% endblock %}
+
