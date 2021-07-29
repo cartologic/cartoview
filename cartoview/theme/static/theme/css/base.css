@@ -157,6 +157,10 @@ li.open .apps-icons {
     margin-bottom: 10px;
 }
 
+.apps-icons hr{
+    width: 100%;
+}
+
 .navbar-nav .dropdown-menu li a {
     font-size: 16px;
     text-transform: capitalize;

@@ -22,15 +22,32 @@
         <a href="{% url "layer_browse" %}" className="app-link">{% trans 'layers' %}</a>
     </li>
     <li>
+        <img src="{% static 'img/icons/remote-services.svg' %}" alt="Remote services"/>
+        <a href="{% url "services" %}?limit={{ CLIENT_RESULTS_LIMIT }}">{% trans "Remote Services" %}</a>
+    </li>
+    <li>
         <img src="{% static 'img/icons/docs.png' %}" alt="docs"/>
 
         <a href="{% url "document_browse" %}" className="app-link">{% trans 'Docs' %}</a>
     </li>
     <li>
-        <img src="{% static 'img/icons/manage.png' %}" alt="manage"/>
+        <img src="{% static 'img/icons/manage.png' %}" alt="Geostory"/>
         <a href="{% url "apps_browse" %}?app_type__in=GeoStory" className="app-link">{% trans 'Geostory' %}</a>
     </li>
-<hr style="width: 100%">
+<hr>
+    <li>
+        <img src="{% static 'img/icons/users.svg' %}" alt="People"/>
+        <a href="{% url "profile_browse" %}">{% trans "People" %}</a>
+    </li>
+     <li>
+        <img src="{% static 'img/icons/groups.svg' %}" alt="Groups"/>
+        <a href="{% url "group_list" %}">{% trans "Groups" %}</a>
+    </li>
+    <li>
+        <img src="{% static 'img/icons/announcement.svg' %}" alt="Announcement"/>
+        <a href="{% url "announcements_list" %}">{% trans "Announcements" %}</a>
+    </li>
+<hr>
     <li>
         <img src="{% static 'img/icons/manage.png' %}" alt="manage"/>
         <a href="{% url "manage_apps" %}" className="app-link">{% trans 'Manage' %}</a>
