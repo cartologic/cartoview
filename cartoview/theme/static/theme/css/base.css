@@ -271,6 +271,12 @@ li.logout {
 }
 /*------------------------------- end groups-----------------------*/
 
+/*-------------------------------  announcements -------------------------*/
+.announcements .navbar-brand{
+    background-image: url("../../img/icons/announcement.svg");
+}
+/*------------------------------- end groups-----------------------*/
+
 @media (min-width: 992px){
     .navbar-header{
         max-width: 33vw;

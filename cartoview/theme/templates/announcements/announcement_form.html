@@ -2,9 +2,25 @@
 
 {% load i18n bootstrap_tags %}
 
+{% block brand %}
+    {% with brand_url_name="announcements_list" %}
+        {{ block.super }}
+    {% endwith %}
+{% endblock %}
+
+{% block brand_title %}
+    {% if not announcement %}
+        {% trans "Announcements" %}
+    {% endif %}
+{% endblock %}
+
 {% block brand_details %}
-    - {% if announcement %}
-        {% trans "Edit Announcement" %}:{{ announcement.title }}
+    <a href="{{ announcement.get_absolute_url }}">{{ announcement.title }}</a>
+{% endblock %}
+
+{% block top_middle %}
+    {% if announcement %}
+        {% trans "Edit Announcement" %}
     {% else %}
         {% trans "Create Announcement" %}
     {% endif %}
