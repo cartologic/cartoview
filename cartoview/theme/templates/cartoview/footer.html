@@ -1,0 +1,22 @@
+{% extends "cartoview/footer.html" %}
+
+{% block footer_content %}
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    {% block contact_us %}{{ block.super }}{% endblock %}
+                    {% block powered_by %}{{ block.super }}{% endblock %}
+                </div>
+                <div class="col-md-6 text-right">
+                    {% block lanaguage_selector %}{{ block.super }}{% endblock %}
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    {% block copyright %}
+        {{ block.super }}
+    {% endblock copyright%}
+
+{% endblock footer_content %}
