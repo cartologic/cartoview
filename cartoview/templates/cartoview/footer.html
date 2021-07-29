@@ -1,8 +1,10 @@
 {% load i18n %}
+{% block footer_content %}
 <footer>
     <div class="container">
         <div class="row">
             <div class="col-md-2">
+            {% block footer_column_1 %}
                 <ul class="list-unstyled">
                     <li>{% trans "Data" %}</li>
                     <li><a href="{% url "layer_browse" %}?limit={{ CLIENT_RESULTS_LIMIT }}">{% trans "Layers" %}</a>
@@ -27,8 +29,10 @@
                         {% endif %}
                     {% endif %}
                 </ul>
+            {% endblock footer_column_1 %}
             </div>
             <div class="col-md-2">
+            {% block footer_column_2 %}
                 <ul class="list-unstyled">
                     <li>{% trans "Maps" %}</li>
                     <li>
@@ -38,8 +42,10 @@
                         <li><a href="{% url "new_map" %}">{% trans "Create Map" %}</a></li>
                     {% endif %}
                 </ul>
+            {% endblock footer_column_2 %}
             </div>
             <div class="col-md-2">
+            {% block footer_column_3 %}
                 <ul class="list-unstyled">
                     <li>{% trans "About" %}</li>
                     <li><a href="{% url "profile_browse" %}">{% trans "People" %}</a></li>
@@ -58,9 +64,10 @@
                         <li><a href="{% url "group_create" %}">{% trans "Create Group" %}</a></li>
                     {% endif %}
                 </ul>
+            {% endblock footer_column_3 %}
             </div>
-
             <div class="col-md-6 text-right">
+            {% block footer_column_4 %}
                 {% block contactus %}
                     {% if custom_theme.contactus %}
                         <ul class="list-unstyled">
@@ -91,6 +98,7 @@
                         </ul>
                     {% endif %}
                 {% endblock contactus %}
+                {% block powered_by %}
                 <ul class="list-unstyled">
                     <li>{% trans "Powered by" %} <a href="https://cartoview.net">{% trans "Cartoview" %}</a>
                         {% if user.is_staff %} <em>{% trans "version" %} {{ CARTOVIEW_VERSION }}</em>{% endif %}</li>
@@ -98,6 +106,8 @@
                             href="{% url "about" %}">{% trans "About" %}</a>
                     <li>
                 </ul>
+                {% endblock powered_by %}
+                {% block lanaguage_selector %}
                 <label class="hidden">{% trans "Language" %}</label>
                 {% if csrf_token != "NOTPROVIDED" %}
                     {% get_current_language as LANGUAGE %}
@@ -113,21 +123,26 @@
                         </select>
                     </form>
                 {% endif %}
+                {% endblock lanaguage_selector %}
+            {% endblock footer_column_4 %}
             </div>
         </div>
     </div>
 </footer>
 
-{% if custom_theme.copyright %}
-    <section class="footer-copyright">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12 copyright ">
-                    <div class="module">
-                        <small>{{ custom_theme.copyright|safe }}</small>
+{% block copyright %}
+    {% if custom_theme.copyright %}
+        <section class="footer-copyright">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 copyright ">
+                        <div class="module">
+                            <small>{{ custom_theme.copyright|safe }}</small>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
-{% endif %}
+        </section>
+    {% endif %}
+{% endblock %}
+{% endblock footer_content %}
