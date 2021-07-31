@@ -224,6 +224,10 @@ li.logout {
     min-height: 50px;
 }
 
+.page-header a.btn{
+    margin-left: 20px;
+}
+
 .data .container-fluid.page-header{
     min-height: 100px;
 }

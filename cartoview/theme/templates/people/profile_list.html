@@ -9,10 +9,22 @@
 {% endblock %}
 
 {% block body %}
-  {% with include_type_filter='true' %}
-  {% with facet_type='people' %}
-  {% include "search/_search_user_content.html" %}
-  {% endwith %}
-  {% endwith %}
-  {% include "_bulk_permissions_form.html" %}
+    {% if user.is_authenticated and not READ_ONLY_MODE %}
+    <div class="page-header">
+        {% if user.is_superuser %}
+            <a class="btn btn-primary pull-right"
+               href="{% if SITEURL|default:""|slice:"-1:" == "/" %}{{ SITEURL }}{% else %}{{ SITEURL }}/{% endif %}admin/people/profile/add/">
+                {% trans "Add User" %}
+            </a>
+        {% endif %}
+            <a href="{% url "geonode.invitations:geonode-send-invite" %}"
+               class="btn btn-primary pull-right">{% trans "Invite Users" %}</a>
+    </div>
+    {% endif %}
+    {% with include_type_filter='true' %}
+        {% with facet_type='people' %}
+            {% include "search/_search_user_content.html" %}
+        {% endwith %}
+    {% endwith %}
+    {% include "_bulk_permissions_form.html" %}
 {% endblock %}
