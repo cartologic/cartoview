@@ -22,6 +22,9 @@ CARTOVIEW_INSTALLED_APPS = ("cartoview",
                             "cartoview.app_manager",
                             "cartoview.apps_handler.apps.AppsHandlerConfig")
 INSTALLED_APPS += CARTOVIEW_INSTALLED_APPS
+
+GEONODE_APPS_NAV_MENU_ENABLE = ast.literal_eval(os.getenv("GEONODE_APPS_NAV_MENU_ENABLE", "False"))
+
 ROOT_URLCONF = os.getenv('ROOT_URLCONF', "cartoview.urls")
 CARTOVIEW_DIR = os.path.abspath(os.path.dirname(cartoview.__file__))
 BASE_DIR = os.path.dirname(CARTOVIEW_DIR)
