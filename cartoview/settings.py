@@ -15,6 +15,7 @@ from kombu import Exchange, Queue
 import cartoview
 
 PROJECT_NAME = "cartoview"
+
 CARTOVIEW_INSTALLED_APPS = ("cartoview",
                             "cartoview.cartoview_api.apps.CartoviewAPIConfig",
                             "cartoview.store_api.apps.StoreApiConfig",
@@ -26,18 +27,19 @@ CARTOVIEW_DIR = os.path.abspath(os.path.dirname(cartoview.__file__))
 BASE_DIR = os.path.dirname(CARTOVIEW_DIR)
 
 CARTOVIEW_TEMPLATE_DIRS = [
-    # remove the theme to use GeoNode default design
-    os.path.join(CARTOVIEW_DIR, "theme", "templates"),
     os.path.join(CARTOVIEW_DIR, "templates")
 ]
 TEMPLATES[0]["DIRS"] = CARTOVIEW_TEMPLATE_DIRS + TEMPLATES[0]["DIRS"]
 
 CARTOVIEW_STATIC_DIRS = [
-    # remove the theme to use GeoNode default design
-    os.path.join(CARTOVIEW_DIR, "theme", "static"),
     os.path.join(CARTOVIEW_DIR, "static"),
 ]
 STATICFILES_DIRS = CARTOVIEW_STATIC_DIRS + STATICFILES_DIRS
+
+ENABLE_CARTOVIEW_ENTERPRISE_THEME = os.getenv('ENABLE_CARTOVIEW_ENTERPRISE_THEME', True)
+if ENABLE_CARTOVIEW_ENTERPRISE_THEME:
+    TEMPLATES[0]["DIRS"] = [os.path.join(CARTOVIEW_DIR, "theme", "templates"), ] + TEMPLATES[0]["DIRS"]
+    STATICFILES_DIRS = [os.path.join(CARTOVIEW_DIR, "theme", "static"), ] + STATICFILES_DIRS
 
 APPS_DIR = os.getenv('APPS_DIR', os.path.abspath(os.path.join(os.path.dirname(CARTOVIEW_DIR), "apps")))
 PENDING_APPS = os.path.join(APPS_DIR, "pendingOperation.yml")
@@ -128,7 +130,6 @@ LOGGING['loggers']['django.db.backends'] = {
 }
 
 
-TEMPLATES[0]["DIRS"] = CARTOVIEW_TEMPLATE_DIRS + TEMPLATES[0]["DIRS"]
 from cartoview import app_manager
 from past.builtins import execfile
 
