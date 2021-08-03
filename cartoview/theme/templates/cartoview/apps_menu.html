@@ -6,63 +6,88 @@
 </a>
 <ul class=" apps-icons dropdown-menu {% if mobile == True %}mobile{% endif %}">
     <li>
-        <img src="{% static 'img/icons/home-black.png' %}" alt="home"/>
-        <a href="{% url "home" %}" className="app-link">{% trans 'home' %}</a>
+        <a href="{% url "home" %}" className="app-link">
+            <img src="{% static 'img/icons/home-black.png' %}" alt="home"/>
+            <span>{% trans 'home' %}</span>
+        </a>
     </li>
     <li>
-        <img src="{% static 'img/icons/search.png' %}" alt="search"/>
-        <a href="{% url 'search' %}" className="app-link">{% trans 'search' %}</a>
+        <a href="{% url 'search' %}" className="app-link">
+            <img src="{% static 'img/icons/search.png' %}" alt="search"/>
+            <span>{% trans 'search' %}</span>
+        </a>
     </li>
     <li>
-        <img src="{% static 'img/icons/map-black.png' %}" alt="map"/>
-        <a href="{% url "maps_browse" %}" className="app-link">{% trans 'maps' %}</a>
+        <a  href="{% url "maps_browse" %}" className="app-link">
+            <img src="{% static 'img/icons/map-black.png' %}" alt="map"/>
+            <span>{% trans 'maps' %}</span>
+        </a>
     </li>
     <li>
-        <img src="{% static 'img/icons/layers.png' %}" alt="layers"/>
-        <a href="{% url "layer_browse" %}" className="app-link">{% trans 'layers' %}</a>
+        <a href="{% url "layer_browse" %}" className="app-link">
+            <img src="{% static 'img/icons/layers.png' %}" alt="layers"/>
+            <span>{% trans 'layers' %}</span>
+        </a>
     </li>
     <li>
-        <img src="{% static 'img/icons/remote-services.svg' %}" alt="Remote services"/>
-        <a href="{% url "services" %}?limit={{ CLIENT_RESULTS_LIMIT }}">{% trans "Remote Services" %}</a>
+        <a href="{% url "services" %}?limit={{ CLIENT_RESULTS_LIMIT }}">
+            <img src="{% static 'img/icons/remote-services.svg' %}" alt="Remote services"/>
+            <span >{% trans "Remote Services" %}</span>
+        </a>
     </li>
     <li>
-        <img src="{% static 'img/icons/docs.png' %}" alt="docs"/>
-
-        <a href="{% url "document_browse" %}" className="app-link">{% trans 'Docs' %}</a>
+        <a  href="{% url "document_browse" %}" className="app-link">
+            <img src="{% static 'img/icons/docs.png' %}" alt="docs"/>
+            <span>{% trans 'Docs' %}</span>
+        </a>
     </li>
     <li>
-        <img src="{% static 'img/icons/manage.png' %}" alt="Geostory"/>
-        <a href="{% url "apps_browse" %}?app_type__in=GeoStory" className="app-link">{% trans 'Geostory' %}</a>
+        <a href="{% url "apps_browse" %}?app_type__in=GeoStory" className="app-link">
+            <img src="{% static 'img/icons/manage.png' %}" alt="Geostory"/>
+            <span>{% trans 'Geostory' %}</span>
+        </a>
     </li>
 <hr>
     <li>
-        <img src="{% static 'img/icons/users.svg' %}" alt="People"/>
-        <a href="{% url "profile_browse" %}">{% trans "People" %}</a>
+        <a href="{% url "profile_browse" %}">
+            <img src="{% static 'img/icons/users.svg' %}" alt="People"/>
+            <span>{% trans "People" %}</span>
+        </a>
     </li>
      <li>
-        <img src="{% static 'img/icons/groups.svg' %}" alt="Groups"/>
-        <a href="{% url "group_list" %}">{% trans "Groups" %}</a>
+        <a href="{% url "group_list" %}">
+            <img src="{% static 'img/icons/groups.svg' %}" alt="Groups"/>
+            <span>{% trans "Groups" %}</span>
+        </a>
     </li>
     <li>
-        <img src="{% static 'img/icons/announcement.svg' %}" alt="Announcement"/>
-        <a href="{% url "announcements_list" %}">{% trans "Announcements" %}</a>
+        <a href="{% url "announcements_list" %}">
+            <img src="{% static 'img/icons/announcement.svg' %}" alt="Announcement"/>
+            <span>{% trans "Announcements" %}</span>
+        </a>
     </li>
 <hr>
     <li>
-        <img src="{% static 'img/icons/manage.png' %}" alt="manage"/>
-        <a href="{% url "manage_apps" %}" className="app-link">{% trans 'Manage' %}</a>
+        <a href="{% url "manage_apps" %}" className="app-link">
+            <img src="{% static 'img/icons/manage.png' %}" alt="manage"/>
+            <span>{% trans 'Manage' %}</span>
+        </a>
     </li>
 
     {#  -------------------  Cartoview Active Apps  ------------------ #}
     {% for app in apps %}
         {% if not app.config.pending and app.config.active %}
         <li>
-            <img src="{{ STATIC_URL }}{{ app.name }}/logo.png" alt="{{ app.title }}"/>
             {% if app.single_instance %}
-                <a href="{{app.open_url}}" className="app-link">{{ app.title }}</a>
+                <a href="{{app.open_url}}" className="app-link">
+                    <img src="{{ STATIC_URL }}{{ app.name }}/logo.png" alt="{{ app.title }}"/>
+                    <span>{{ app.title }}</span>
+                </a>
             {% else %}
-                <a href="{% url 'appinstance_browse' %}?app__name__in={{ app.name }}&&app__title={{app.title}}"
-                   className="app-link">{{ app.title }}</a>
+                <a href="{% url 'appinstance_browse' %}?app__name__in={{ app.name }}&&app__title={{app.title}}">
+                    <img src="{{ STATIC_URL }}{{ app.name }}/logo.png" alt="{{ app.title }}"/>
+                    <span>{{ app.title }}</span>
+                </a>
             {% endif %}
         </li>
         {% endif %}
