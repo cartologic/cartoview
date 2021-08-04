@@ -28,5 +28,6 @@ urlpatterns = [
     url(r'^check-version/$', check_version, name='check_version'),
     url(r'', include(api.urls)),
     url(r'^cv_apps/', include('cartoview.app_manager.urls')),
+    url(r'', include('cartoview.layer_attachments.urls')),
 ]
 urlpatterns += geonode_urls

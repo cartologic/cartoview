@@ -1,0 +1,22 @@
+{% extends "app_manager/app_install_base.html" %}
+{% load bootstrap_tags %}
+{% load app_details %}
+{% load staticfiles %}
+{% load static %}
+{% load i18n %}
+{% block title %} {{ block.super }} - {%trans "Layer Attachments" %} {% endblock title %}
+{% block body %}
+<div id="page-wrapper">
+    <div class="container-fluid">
+        <script>
+          const djangoProps = {
+            baseURL: "{{ request.scheme }}://{{ request.get_host }}/",
+            accessToken: "{{request.session.access_token}}",
+            appVersion: "{% app_version %}"
+          };
+        </script>
+        <div id="root"></div>
+        <script src="{% static 'layer_attachments/dist/layer_attachments.js' %}"></script>
+    </div>
+</div>
+{% endblock body %}

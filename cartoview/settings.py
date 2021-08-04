@@ -19,7 +19,8 @@ CARTOVIEW_INSTALLED_APPS = ("cartoview",
                             "cartoview.cartoview_api.apps.CartoviewAPIConfig",
                             "cartoview.store_api.apps.StoreApiConfig",
                             "cartoview.app_manager",
-                            "cartoview.apps_handler.apps.AppsHandlerConfig")
+                            "cartoview.apps_handler.apps.AppsHandlerConfig",
+                            "cartoview.layer_attachments.apps.LayerAttachmentsConfig")
 INSTALLED_APPS += CARTOVIEW_INSTALLED_APPS
 ROOT_URLCONF = os.getenv('ROOT_URLCONF', "cartoview.urls")
 CARTOVIEW_DIR = os.path.abspath(os.path.dirname(cartoview.__file__))
@@ -36,6 +37,7 @@ CARTOVIEW_STATIC_DIRS = [
     # remove the theme to use GeoNode default design
     os.path.join(CARTOVIEW_DIR, "theme", "static"),
     os.path.join(CARTOVIEW_DIR, "static"),
+    os.path.join(CARTOVIEW_DIR, "layer_attachments", "static"),
 ]
 STATICFILES_DIRS = CARTOVIEW_STATIC_DIRS + STATICFILES_DIRS
 
