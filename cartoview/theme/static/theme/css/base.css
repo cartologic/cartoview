@@ -232,7 +232,7 @@ li.logout {
     background-color: transparent;
     color: #2c689c;
 }
-.navbar-nav .dropdown-menu li:hover {
+.navbar-nav  .apps-icons li:hover {
     background: #2c689c21;
 }
 .navbar-nav .dropdown-menu li a:hover .apps-icons li img{
