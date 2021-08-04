@@ -146,6 +146,7 @@ li.open .apps-icons {
     text-align: center;
     border-radius: 0.25rem;
     width: 350px;
+    margin-top: 5px;
 }
 
 .apps-icons li {
