@@ -1,0 +1,76 @@
+{
+    "name": "layer_attachments",
+    "version": "0.1.0",
+    "description": "Manages layer attachments",
+    "main": "index.js",
+    "scripts": {
+        "start": "webpack serve --config webpack/webpack.config.js --env env=dev",
+        "dev": "webpack --watch --config webpack/webpack.config.js --env env=prod",
+        "build": "webpack --config webpack/webpack.config.js --env env=prod",
+        "lint": "eslint --fix \"./src/**/*.{js,jsx,ts,tsx,json}\"",
+        "format": "prettier --write \"./src/**/*.{js,jsx,ts,tsx,json,css,scss,md}\"",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "Cartologic",
+    "license": "BSD-2-Clause",
+    "dependencies": {
+        "axios": "^0.21.1",
+        "classnames": "^2.3.1",
+        "leaflet": "^1.7.1",
+        "react": "^17.0.2",
+        "react-dom": "^17.0.2",
+        "react-leaflet": "^3.2.1",
+        "react-router-dom": "^5.2.0"
+    },
+    "devDependencies": {
+        "@babel/core": "^7.14.8",
+        "@babel/plugin-transform-runtime": "^7.14.5",
+        "@babel/preset-env": "^7.14.9",
+        "@babel/preset-react": "^7.14.5",
+        "@babel/preset-typescript": "^7.14.5",
+        "@babel/runtime": "^7.14.8",
+        "@pmmmwh/react-refresh-webpack-plugin": "^0.4.3",
+        "@types/leaflet": "^1.7.4",
+        "@types/react": "^17.0.15",
+        "@types/react-dom": "^17.0.9",
+        "@types/react-router-dom": "^5.1.8",
+        "@typescript-eslint/eslint-plugin": "^4.28.5",
+        "@typescript-eslint/parser": "^4.28.5",
+        "babel-loader": "^8.2.2",
+        "babel-plugin-transform-runtime": "^6.23.0",
+        "clean-webpack-plugin": "^4.0.0-alpha.0",
+        "css-loader": "^6.2.0",
+        "eslint": "^7.32.0",
+        "eslint-config-prettier": "^8.3.0",
+        "eslint-plugin-eslint-comments": "^3.2.0",
+        "eslint-plugin-import": "^2.23.4",
+        "eslint-plugin-jsx-a11y": "^6.4.1",
+        "eslint-plugin-prettier": "^3.4.0",
+        "eslint-plugin-react": "^7.24.0",
+        "eslint-plugin-react-hooks": "^4.2.0",
+        "html-webpack-plugin": "^5.3.2",
+        "husky": "^7.0.1",
+        "lint-staged": "^11.1.1",
+        "prettier": "^2.3.2",
+        "react-refresh": "^0.10.0",
+        "style-loader": "^3.2.1",
+        "tslint-config-prettier": "^1.18.0",
+        "typescript": "^4.3.5",
+        "webpack": "^5.48.0",
+        "webpack-cli": "^4.7.2",
+        "webpack-dev-server": "^3.11.2"
+    },
+    "husky": {
+        "hooks": {
+            "pre-commit": "lint-staged"
+        }
+    },
+    "lint-staged": {
+        "src/**/*.{js,jsx,ts,tsx,json}": [
+            "eslint --fix"
+        ],
+        "src/**/*.{js,jsx,ts,tsx,json,css,scss,md}": [
+            "prettier --write"
+        ]
+    }
+}
