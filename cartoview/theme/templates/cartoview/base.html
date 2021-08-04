@@ -54,37 +54,46 @@
                             <a href="#" class="dropdown-toggle avatar" data-toggle="dropdown" role="button"
                                aria-haspopup="true" aria-expanded="false">
                                 {% autoescape off %}{% avatar user 40 %}{% endautoescape %}
-                                {% with full_name=user.first_name|add:' '|add:user.last_name %}
-                                    {% if full_name.strip %}
-                                        {{ full_name | truncatechars:20 }}
-                                    {% else %}
-                                        {{ user.username | truncatechars:20 }}
-                                    {% endif %}
-                                {% endwith %}
                             </a>
                             <ul class="dropdown-menu dropdown-avatar">
-                                <li><a href="{{ user.get_absolute_url }}">{% trans "Profile" %}</a></li>
-                                <li><a href="{% url "recent-activity" %}">{% trans "Recent Activity" %}</a></li>
-                                {% if FAVORITE_ENABLED and user.is_authenticated %}
-                                    <li><a href="{% url "favorite_list" %}">{% trans "Favorites" %}</a></li>
-                                {% endif %}
-                                <li><a href="{% url "messages_inbox" %}">{% trans "Inbox" %}</a></li>
-                                {% if user.is_superuser or user.is_staff %}
-                                    <li><a href="{% url "admin:index" %}">{% trans "Admin" %}</a></li>
-                                    {% if 'geonode.geoserver' in INSTALLED_APPS %}
-                                        <li><a href="{{ OGC_SERVER.default.WEB_UI_LOCATION }}">GeoServer</a></li>
-                                    {% endif %}
-                                    {% if USE_MONITORING %}
-                                        <li>
-                                            <a href="{% url "monitoring:index" %}">{% trans "Monitoring & Analytics" %}</a>
-                                        </li>
-                                    {% endif %}
-                                {% endif %}
-                                <li><a href="{% url "help" %}">{% trans "Help" %}</a></li>
+                                <li class="user-info">
+                                    <div class="user-pic"></div>
+                                    <h3 class="user-name">{% with full_name=user.first_name|add:' '|add:user.last_name %}
+                                        {% if full_name.strip %}
+                                            {{ full_name | truncatechars:20 }}
+                                        {% else %}
+                                            {{ user.username | truncatechars:20 }}
+                                        {% endif %}
+                                    {% endwith %}</h3>
+                                </li>
+                                <li>
+                                    <ul class="quickly-links">
+                                        <li><a href="{{ user.get_absolute_url }}">{% trans "Profile" %}</a></li>
+                                        <li><a href="{% url "recent-activity" %}">{% trans "Recent Activity" %}</a></li>
+                                        {% if FAVORITE_ENABLED and user.is_authenticated %}
+                                            <li><a href="{% url "favorite_list" %}">{% trans "Favorites" %}</a></li>
+                                        {% endif %}
+                                        <li><a href="{% url "messages_inbox" %}">{% trans "Inbox" %}</a></li>
+                                        {% if user.is_superuser or user.is_staff %}
+                                            <li><a href="{% url "admin:index" %}">{% trans "Admin" %}</a></li>
+                                            {% if 'geonode.geoserver' in INSTALLED_APPS %}
+                                                <li><a href="{{ OGC_SERVER.default.WEB_UI_LOCATION }}">GeoServer</a></li>
+                                            {% endif %}
+                                            {% if USE_MONITORING %}
+                                                <li>
+                                                    <a href="{% url "monitoring:index" %}">{% trans "Monitoring & Analytics" %}</a>
+                                                </li>
+                                            {% endif %}
+                                        {% endif %}
+                                        <li><a href="{% url "help" %}">{% trans "Help" %}</a></li>
+                                       
+                                    </ul>
+                                </li>
+                               
                                 <li class="logout"><a href="
-                                        {% if SITEURL|default:""|slice:"-1:" == "/" %}{{ SITEURL }}{% else %}{{ SITEURL }}/{% endif %}account/logout/"><img
-                                        src="{{ STATIC_URL }}img/icons/logout.png" alt="logout"/>{% trans "Log out" %}
-                                </a></li>
+                                    {% if SITEURL|default:""|slice:"-1:" == "/" %}{{ SITEURL }}{% else %}{{ SITEURL }}/{% endif %}account/logout/"><img
+                                    src="{{ STATIC_URL }}img/icons/logout.png" alt="logout"/>{% trans "Log out" %}
+                            </a></li>
                             </ul>
                         </li>
                     {% else %}

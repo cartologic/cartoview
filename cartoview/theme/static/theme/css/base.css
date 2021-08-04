@@ -1,4 +1,6 @@
-
+ul{
+    list-style: none;
+}
 .toolbar {
     display: flex;
     width: 30%;
@@ -17,8 +19,10 @@
 
 .navbar-inverse .navbar-nav li .dropdown-avatar {
     min-width: 10rem;
-    width: 250px;
-    padding: 0;
+    width: 410px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 30px 0 0 0;
     font-size: 1rem;
     text-align: left;
     list-style: none;
@@ -205,15 +209,19 @@ li.open .apps-icons {
 li.logout {
     background: #343a40;
     padding: 5px 0;
+    width: 100%;
 }
 
 .navbar-nav .dropdown-menu li.logout a {
     color: #d9d9d9;
     text-transform: capitalize;
     font-weight: bold;
-
+    flex-direction: row;
+    justify-content: center;
 }
-
+.navbar-nav .dropdown-menu li.logout a img {
+    padding: 0 5px;
+}
 .navbar-nav .dropdown-menu li a:hover {
     background-color: transparent;
     color: red;
@@ -230,7 +238,66 @@ li.logout {
 .fa-th {
     margin-right: 10px
 }
+/* ------------------------------  avatar dropdown ------------------*/
+li.open .dropdown-avatar {
+    display: flex;
+    margin-top: 10px;
+}
+.navbar-inverse .navbar-nav li .dropdown-avatar .user-info{
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.navbar-inverse .navbar-nav li .dropdown-avatar .user-info .user-pic{
+    background-image: url("../../img/icons/default.png");
+    width: 122px;
+    height: 122px;
+    border-radius: 50%;
+    background-size: contain;
+    background-position: center;
+    border: 3px solid #2c689c;
+}
+.navbar-inverse .navbar-nav li .dropdown-avatar .user-info .user-name{
+    font-size: 18px;
+    text-transform: capitalize;
+    color: #2c689c;
+}
+.navbar-inverse .navbar-nav li .dropdown-avatar li .quickly-links{
+    list-style: none;
+    padding: 0 0 10px 0;
+}
+.navbar-inverse .navbar-nav li .dropdown-avatar li .quickly-links li{
+    padding: 5px 0;
+}
+.navbar-nav .dropdown-avatar li .quickly-links li a{
+    text-align: left;
+    align-items: flex-start;
+    position: relative;
 
+}
+.navbar-nav .dropdown-avatar li .quickly-links li a::before{
+    font-family: 'FontAwesome';
+    content: "\f178";
+    position: absolute;
+    right: 0;
+    display: none;
+    top: 0;
+    vertical-align: middle;
+    -webkit-transform: perspective(1px) translateZ(0);
+    transform: perspective(1px) translateZ(0);
+    -webkit-transition-duration: 0.3s;
+    transition-duration: 0.3s;
+    -webkit-transition-property: right;
+    transition-property: right;
+}
+.navbar-nav .dropdown-avatar li .quickly-links li a:hover{
+    color: #2c689c;
+}
+.navbar-nav .dropdown-avatar li .quickly-links li a:hover::before{
+    display: block;
+    right: -40px; 
+}
 
 /* ------------------------------  inner pages ------------------*/
 .page-header{
