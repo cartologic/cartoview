@@ -152,6 +152,10 @@ li.open .apps-icons {
 .apps-icons li {
     width: 96px;
     height: 96px;
+    display: flex;
+    align-items: center;
+    margin: 7px 5px;
+    border-radius: 5px;
 }
 
 .apps-icons li img {
@@ -170,7 +174,8 @@ li.open .apps-icons {
 
 .navbar-nav .dropdown-menu li a {
     width: 100%;
-    font-size: 16px;
+    font-size: 12px;
+    font-weight: bold;
     text-transform: capitalize;
     cursor: pointer;
     display: flex;
@@ -226,6 +231,9 @@ li.logout {
 .navbar-nav .dropdown-menu li a:hover {
     background-color: transparent;
     color: #2c689c;
+}
+.navbar-nav .dropdown-menu li:hover {
+    background: #2c689c21;
 }
 .navbar-nav .dropdown-menu li a:hover .apps-icons li img{
     border-radius: 5;
