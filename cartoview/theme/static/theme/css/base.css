@@ -225,7 +225,7 @@ li.logout {
 }
 .navbar-nav .dropdown-menu li a:hover {
     background-color: transparent;
-    color: red;
+    color: #2c689c;
 }
 .navbar-nav .dropdown-menu li a:hover .apps-icons li img{
     border-radius: 5;
