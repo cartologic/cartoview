@@ -66,13 +66,7 @@ if DATABASE_URL:
 if DATASTORE_DATABASE_URL:
     DATABASES['datastore'] = dj_database_url.parse(
         DATASTORE_DATABASE_URL, conn_max_age=0)
-try:
-    # try to parse python notation, default in dockerized env
-    ALLOWED_HOSTS = ast.literal_eval(os.getenv('ALLOWED_HOSTS'))
-except ValueError:
-    # fallback to regular list of values separated with misc chars
-    ALLOWED_HOSTS = ['*'] if os.getenv('ALLOWED_HOSTS') is None \
-        else re.split(r' *[,|:|;] *', os.getenv('ALLOWED_HOSTS'))
+
 
 CARTOVIEW_TEST = 'test' in sys.argv or ast.literal_eval(
     os.getenv('CARTOVIEW_TEST', "False")) or 'run_cartoview_test' in sys.argv
