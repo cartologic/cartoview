@@ -244,3 +244,6 @@ uploaded
 *.db
 database.sqlite
 .vscode
+
+# Django
+static
