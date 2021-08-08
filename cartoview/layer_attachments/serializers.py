@@ -1,5 +1,3 @@
-import json
-
 from geonode.layers.models import Layer
 from rest_framework import serializers
 
