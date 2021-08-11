@@ -2,13 +2,11 @@ import { useContext } from "react";
 import { useHistory } from "react-router-dom";
 
 import { Manager } from "../../context";
-import { FeaturesTableProps } from "../../types";
 import "./FeaturesTable.css";
 
-const FeaturesTable = (props: FeaturesTableProps) => {
+const FeaturesTable = () => {
     const { activeLayer, setActiveFeatureId } = useContext(Manager);
     const history = useHistory();
-    const { tableHeaders, tableRows } = props;
 
     return (
         <div className="table-wrapper">
@@ -16,36 +14,50 @@ const FeaturesTable = (props: FeaturesTableProps) => {
                 <thead>
                     <tr>
                         <th>index</th>
-                        {tableHeaders &&
-                            tableHeaders.map((tableHeader) => (
+                        {activeLayer &&
+                            activeLayer.layerAttributes.map((tableHeader) => (
                                 <th key={tableHeader}>{tableHeader}</th>
                             ))}
                     </tr>
                 </thead>
                 <tbody>
-                    {tableHeaders &&
-                        tableRows &&
-                        tableRows.map((tableRow, index) => (
-                            <tr
-                                key={`row-${tableRow.fid}`}
-                                className="cursor-hand text-primary"
-                                onClick={() => {
-                                    history.push(
-                                        `/${activeLayer?.name}/${tableRow.fid}/`
-                                    );
-                                    setActiveFeatureId(tableRow.fid);
-                                }}
-                            >
-                                <th style={{ color: "green" }}>{index + 1}</th>
-                                {tableHeaders.map((tableHeader, index) => (
-                                    <th
-                                        key={`row-entry-${tableRow.fid}-${index}`}
-                                    >
-                                        {tableRow[tableHeader]}
+                    {activeLayer &&
+                        activeLayer.geojson &&
+                        activeLayer.geojson.features.map(
+                            (singleFeature, index) => (
+                                <tr
+                                    key={`row-${singleFeature.properties.fid}`}
+                                    className="cursor-hand text-primary"
+                                    onClick={() => {
+                                        history.push(
+                                            `/${activeLayer?.name}/${singleFeature.properties.fid}/`
+                                        );
+                                        setActiveFeatureId(
+                                            singleFeature.properties.fid
+                                        );
+                                    }}
+                                >
+                                    <th style={{ color: "green" }}>
+                                        {index + 1}
                                     </th>
-                                ))}
-                            </tr>
-                        ))}
+                                    {activeLayer &&
+                                        activeLayer.layerAttributes.map(
+                                            (tableHeader, index) => (
+                                                <th
+                                                    key={`row-entry-${singleFeature.properties.fid}-${index}`}
+                                                >
+                                                    {
+                                                        singleFeature
+                                                            .properties[
+                                                            tableHeader
+                                                        ]
+                                                    }
+                                                </th>
+                                            )
+                                        )}
+                                </tr>
+                            )
+                        )}
                 </tbody>
             </table>
         </div>

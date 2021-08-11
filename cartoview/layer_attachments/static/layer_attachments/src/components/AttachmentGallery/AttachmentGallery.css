@@ -1,0 +1,37 @@
+.gallery-container {
+    margin-top: 15px;
+}
+
+.credits-user {
+    position: absolute;
+    top: 10px;
+    left: 25px;
+}
+
+.credits-date {
+    position: absolute;
+    bottom: 30px;
+    left: 25px;
+}
+
+.credits-size {
+    position: absolute;
+    bottom: 30px;
+    right: 25px;
+}
+
+.attachment-img {
+    height: 200px !important;
+    width: 100%;
+    object-fit: cover;
+}
+
+.attachment-video {
+    height: 300px !important;
+    width: 100%;
+    object-fit: cover;
+}
+
+.attachment-title {
+    display: inline-block;
+}

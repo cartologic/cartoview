@@ -1,8 +1,13 @@
 import axios, { AxiosResponse } from "axios";
-import { Fragment, useContext, useEffect, useState } from "react";
+import { Fragment, useContext, useEffect } from "react";
 import { RouteComponentProps } from "react-router-dom";
 
-import { Breadcrumbs, FeatureTable, MapComponent } from "../../components";
+import {
+    Breadcrumbs,
+    DownloadAttachments,
+    FeatureTable,
+    MapComponent,
+} from "../../components";
 import { Manager } from "../../context";
 import {
     Layer,
@@ -16,51 +21,41 @@ const LayerDetails = ({
     const layerName = match.params.layerName;
     const { availableLayers, setActiveLayer, activeLayer } =
         useContext(Manager);
-    const [layerFeatures, setLayerFeatures] = useState<any>([]);
 
     useEffect(() => {
-        if (layerName && availableLayers.length) {
-            const activeLayer: Layer = availableLayers.filter(
-                (layer) => layer.name === layerName
-            )[0];
-            setActiveLayer(activeLayer);
-        }
-    }, [availableLayers, layerName, setActiveLayer]);
-
-    useEffect(() => {
-        async function fetchLayerFeatures() {
-            if (activeLayer) {
+        const fetchLayerDetails = async () => {
+            if (layerName && availableLayers.length && !activeLayer) {
+                const tempActiveLayer: Layer = availableLayers.filter(
+                    (layer) => layer.name === layerName
+                )[0];
                 const params = {
                     service: "WFS",
                     request: "GetFeature",
                     outputFormat: "application/json",
-                    typenames: activeLayer?.typeName,
+                    srsName: "EPSG:4326",
+                    typenames: tempActiveLayer?.typeName,
                 };
                 try {
                     const layerFeaturesResponse: AxiosResponse<LayerFeaturesRemoteResponse> =
-                        await axios.get(activeLayer.owsUrl, { params });
-                    const tempLayerFeatures =
-                        layerFeaturesResponse.data.features.map(
-                            (feature) => feature.properties
-                        );
-                    setLayerFeatures(tempLayerFeatures);
+                        await axios.get(tempActiveLayer.owsUrl, { params });
+                    tempActiveLayer.geojson = layerFeaturesResponse.data;
+                    setActiveLayer(tempActiveLayer);
                 } catch (error) {
                     console.log(error);
                 }
             }
-        }
-        fetchLayerFeatures();
-    }, [activeLayer]);
+        };
+
+        fetchLayerDetails();
+    }, [activeLayer, availableLayers, layerName, setActiveLayer]);
 
     return (
         <Fragment>
             <h2>{activeLayer?.title}</h2>
             <Breadcrumbs />
             <MapComponent />
-            <FeatureTable
-                tableHeaders={activeLayer?.layerAttributes}
-                tableRows={layerFeatures}
-            />
+            <FeatureTable />
+            <DownloadAttachments />
         </Fragment>
     );
 };

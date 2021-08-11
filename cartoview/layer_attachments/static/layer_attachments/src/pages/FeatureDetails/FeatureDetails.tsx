@@ -1,9 +1,19 @@
 import { Fragment, useContext, useEffect } from "react";
 import { RouteComponentProps } from "react-router-dom";
 
-import { Breadcrumbs, MapComponent } from "../../components";
-import { FeatureDetailsPageParams, Layer } from "../../types";
+import {
+    AttachmentGallery,
+    Breadcrumbs,
+    MapComponent,
+    SingleFeatureTable,
+} from "../../components";
+import {
+    FeatureDetailsPageParams,
+    Layer,
+    LayerFeaturesRemoteResponse,
+} from "../../types";
 import { Manager } from "../../context";
+import axios, { AxiosResponse } from "axios";
 
 const FeatureDetails = ({
     match,
@@ -18,13 +28,31 @@ const FeatureDetails = ({
     const { layerName, featureId } = match.params;
 
     useEffect(() => {
-        if (!activeLayer && availableLayers && layerName) {
-            const activeLayer: Layer = availableLayers.filter(
-                (layer) => layer.name === layerName
-            )[0];
-            setActiveLayer(activeLayer);
-        }
-    }, [availableLayers, activeLayer, setActiveLayer, layerName]);
+        const fetchLayerDetails = async () => {
+            if (layerName && availableLayers.length && !activeLayer) {
+                const tempActiveLayer: Layer = availableLayers.filter(
+                    (layer) => layer.name === layerName
+                )[0];
+                const params = {
+                    service: "WFS",
+                    request: "GetFeature",
+                    outputFormat: "application/json",
+                    srsName: "EPSG:4326",
+                    typenames: tempActiveLayer?.typeName,
+                };
+                try {
+                    const layerFeaturesResponse: AxiosResponse<LayerFeaturesRemoteResponse> =
+                        await axios.get(tempActiveLayer.owsUrl, { params });
+                    tempActiveLayer.geojson = layerFeaturesResponse.data;
+                    setActiveLayer(tempActiveLayer);
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+        };
+
+        fetchLayerDetails();
+    }, [activeLayer, availableLayers, layerName, setActiveLayer]);
 
     useEffect(() => {
         setActiveFeatureId(featureId);
@@ -40,7 +68,11 @@ const FeatureDetails = ({
                 <div className="col-md-6">
                     <MapComponent />
                 </div>
+                <div className="col-md-6">
+                    <SingleFeatureTable />
+                </div>
             </div>
+            <AttachmentGallery />
         </Fragment>
     );
 };

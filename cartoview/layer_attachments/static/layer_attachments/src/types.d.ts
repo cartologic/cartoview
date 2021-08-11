@@ -1,3 +1,14 @@
+import { GeoJsonObject, GeoJsonProperties } from "geojson";
+
+export interface GeoJsonFeature {
+    type: "Feature";
+    properties: GeoJsonProperties;
+}
+
+interface GeoJson extends GeoJsonObject {
+    features: Feature[];
+}
+
 export interface DjangoProps {
     baseURL: string;
     collectionTaskId: string;
@@ -14,6 +25,7 @@ export interface Layer {
     thumbnailUrl: string;
     date: string;
     layerAttributes: string[];
+    geojson?: GeoJson;
 }
 
 export interface LayerRemoteResponse {
@@ -31,11 +43,6 @@ export type LayerDetailsPageParams = { layerName: string };
 
 export type FeatureDetailsPageParams = { layerName: string; featureId: string };
 
-export interface FeaturesTableProps {
-    tableHeaders: string[] | undefined;
-    tableRows: any[];
-}
-
 export interface LayerFeatureRemoteResponse {
     properties: {
         fid: number;
@@ -43,5 +50,34 @@ export interface LayerFeatureRemoteResponse {
 }
 
 export interface LayerFeaturesRemoteResponse {
+    type:
+        | "Point"
+        | "MultiPoint"
+        | "LineString"
+        | "MultiLineString"
+        | "Polygon"
+        | "MultiPolygon"
+        | "GeometryCollection"
+        | "Feature"
+        | "FeatureCollection";
     features: LayerFeatureRemoteResponse[];
+}
+
+export interface Attachment {
+    id: string;
+    file: string;
+    created_by: string;
+    created_at: string;
+    size: number;
+}
+
+export interface ImageAttachmentsProps {
+    attachmentList: Attachment[];
+}
+
+export interface VideoAttachmentsProps {
+    attachmentList: Attachment[];
+}
+export interface DocumentAttachmentsProps {
+    attachmentList: Attachment[];
 }
