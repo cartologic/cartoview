@@ -50,6 +50,9 @@ class AttachmentViewSet(ModelViewSet):
     filter_backends = [DjangoFilterBackend]
     filterset_class = AttachmentFilter
 
+    def perform_create(self, serializer):
+        return serializer.save(created_by=self.request.user)
+
 
 class DownloadAttachmentsView(APIView):
 
