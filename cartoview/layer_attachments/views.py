@@ -37,7 +37,7 @@ class LayerViewSet(ReadOnlyModelViewSet):
 class AttachmentFilter(django_filters.FilterSet):
     class Meta:
         model = LayerAttachment
-        fields = ['id', 'layer__id', 'layer__name', 'feature_id', 'created_by__username']
+        fields = ['id', 'layer__id', 'layer__typename', 'feature_id', 'created_by__username']
 
 
 class AttachmentViewSet(ModelViewSet):
@@ -51,7 +51,10 @@ class AttachmentViewSet(ModelViewSet):
     filterset_class = AttachmentFilter
 
     def perform_create(self, serializer):
-        return serializer.save(created_by=self.request.user)
+        layer_typename = self.request.POST.get('layer_typename')
+        layer_feature_id = self.request.POST.get('layer_feature_id')
+        layer = Layer.objects.filter(typename=layer_typename).first()
+        return serializer.save(created_by=self.request.user, layer=layer, feature_id=layer_feature_id)
 
 
 class DownloadAttachmentsView(APIView):

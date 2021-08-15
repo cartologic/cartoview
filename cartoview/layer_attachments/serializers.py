@@ -42,14 +42,15 @@ class AttachmentSerializer(serializers.HyperlinkedModelSerializer):
     """
     Serializer class for the attachments
     """
-    layer = serializers.PrimaryKeyRelatedField(queryset=Layer.objects.all())
+    layer_id = serializers.ReadOnlyField(source='layer.id')
     layer_name = serializers.ReadOnlyField(source='layer.name')
     layer_typename = serializers.ReadOnlyField(source='layer.typename')
     created_by = serializers.ReadOnlyField(source='created_by.username')
+    feature_id = serializers.ReadOnlyField()
     size = serializers.ReadOnlyField(source='file.size')
 
     class Meta:
         model = LayerAttachment
         fields = (
-        'id', 'file', 'layer', 'layer_name', 'layer_typename', 'feature_id', 'created_by', 'created_at', 'updated_at',
-        'size')
+            'id', 'file', 'layer_id', 'layer_name', 'layer_typename', 'feature_id',
+            'created_by', 'created_at', 'updated_at', 'size')
