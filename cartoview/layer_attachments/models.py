@@ -11,13 +11,13 @@ def get_upload_path(instance, filename) -> str:
     """
     Create a dynamic path for each attachment
     """
-    layer_name = instance.layer.name
+    layer_typename = instance.layer.typename
     feature_id = str(instance.feature_id)
     discard, ext = os.path.splitext(filename)
     basename = uuid.uuid4().urn
     uuid_filename = basename + ext
     upload_folder = os.path.join(LayerAttachmentsConfig.name, 'attachments',
-                                 layer_name,
+                                 layer_typename,
                                  feature_id,
                                  uuid_filename)
     return upload_folder

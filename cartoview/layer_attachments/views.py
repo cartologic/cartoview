@@ -63,10 +63,10 @@ class DownloadAttachmentsView(APIView):
         """
         Return a zipped file of all task attachments
         """
-        layer_name = request.GET.get('layer_name', '')
-        feature_id = request.GET.get('feature_id', '')
-        target_dir = os.path.join(settings.MEDIA_ROOT, LayerAttachmentsConfig.name, 'attachments', layer_name,
-                                  feature_id)
+        layer_typename = request.GET.get('layer_typename', '')
+        layer_feature_id = request.GET.get('layer_feature_id', '')
+        target_dir = os.path.join(settings.MEDIA_ROOT, LayerAttachmentsConfig.name, 'attachments', layer_typename,
+                                  layer_feature_id)
         result_file = shutil.make_archive(target_dir, 'zip', target_dir)
         if os.path.exists(result_file):
             with open(result_file, 'rb') as fh:
