@@ -4,28 +4,63 @@ import L, {
     LatLng,
     LatLngExpression,
     Map as LeafletMap,
+    PathOptions,
+    StyleFunction,
 } from "leaflet";
+import { Feature, GeometryObject } from "geojson";
 import { MapContainer, TileLayer, LayersControl, GeoJSON } from "react-leaflet";
 
-import icon from "../../assets/images/marker-icon.png";
-import iconShadow from "../../assets/images/marker-shadow.png";
+import defaultMarkerIcon from "../../assets/images/default-marker-icon.png";
+import customMarkerIcon from "../../assets/images/custom-marker-icon.png";
+import markerShadow from "../../assets/images/marker-shadow.png";
 import VersionControl from "./versioncontrol";
 import { Manager } from "../../context";
 import "./Map.css";
-
-const DefaultIcon = L.icon({
-    iconUrl: icon,
-    shadowUrl: iconShadow,
-});
-
-L.Marker.prototype.options.icon = DefaultIcon;
 
 const MapComponent = () => {
     const position: LatLngExpression = [30, 30];
     const zoom = 6;
     const [leafletMap, setLeafletMap] = useState<LeafletMap>();
     const geojsonRef = useRef<LeafletGeoJSON>(null);
-    const { activeLayer } = useContext(Manager);
+    const { activeLayer, activeFeatureId } = useContext(Manager);
+
+    const geojsonStylePolygon: StyleFunction = (feature): PathOptions => {
+        if (
+            activeFeatureId &&
+            feature &&
+            feature.properties &&
+            activeFeatureId == feature.properties.fid
+        ) {
+            return { fillColor: "#FF4848", color: "#B61919", weight: 2 };
+        } else {
+            return { fillColor: "#6E85B2", color: "#0F52BA", weight: 2 };
+        }
+    };
+
+    const geojsonStylePoint = (
+        feature: Feature<GeometryObject>,
+        latlng: LatLng
+    ) => {
+        const defaultMapMarker = L.icon({
+            iconUrl: defaultMarkerIcon,
+            shadowUrl: markerShadow,
+        });
+        const highlightMapMarker = L.icon({
+            iconUrl: customMarkerIcon,
+            shadowUrl: markerShadow,
+        });
+
+        if (
+            activeFeatureId &&
+            feature &&
+            feature.properties &&
+            activeFeatureId == feature.properties.fid
+        ) {
+            return L.marker(latlng, { icon: highlightMapMarker });
+        } else {
+            return L.marker(latlng, { icon: defaultMapMarker });
+        }
+    };
 
     const fitMapToGeojson = () => {
         if (activeLayer && activeLayer.geojson && geojsonRef && leafletMap) {
@@ -78,7 +113,12 @@ const MapComponent = () => {
             </LayersControl>
             <VersionControl />
             {activeLayer && activeLayer.geojson && (
-                <GeoJSON data={activeLayer.geojson} ref={geojsonRef} />
+                <GeoJSON
+                    data={activeLayer.geojson}
+                    ref={geojsonRef}
+                    style={geojsonStylePolygon}
+                    pointToLayer={geojsonStylePoint}
+                />
             )}
         </MapContainer>
     );

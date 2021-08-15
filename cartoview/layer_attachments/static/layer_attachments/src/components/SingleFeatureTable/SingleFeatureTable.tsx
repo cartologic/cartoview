@@ -21,19 +21,15 @@ const SingleFeatureTable = () => {
                 {activeFeature &&
                     activeLayer &&
                     activeLayer.geojson &&
-                    activeLayer.layerAttributes.map(
-                        (layerAttribute, index) => (
-                            <tr key={`feature-attribute-${index}`}>
-                                <th scope="row">{layerAttribute}</th>
-                                <td>
-                                    {activeFeature.properties &&
-                                        activeFeature.properties[
-                                        layerAttribute
-                                        ]}
-                                </td>
-                            </tr>
-                        )
-                    )}
+                    activeLayer.layerAttributes.map((layerAttribute, index) => (
+                        <tr key={`feature-attribute-${index}`}>
+                            <th scope="row">{layerAttribute}</th>
+                            <td>
+                                {activeFeature.properties &&
+                                    activeFeature.properties[layerAttribute]}
+                            </td>
+                        </tr>
+                    ))}
             </tbody>
         </table>
     );

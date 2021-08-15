@@ -1,11 +1,19 @@
-import { GeoJsonObject, GeoJsonProperties } from "geojson";
-
 export interface GeoJsonFeature {
     type: "Feature";
     properties: GeoJsonProperties;
 }
 
 interface GeoJson extends GeoJsonObject {
+    type:
+        | "Point"
+        | "MultiPoint"
+        | "LineString"
+        | "MultiLineString"
+        | "Polygon"
+        | "MultiPolygon"
+        | "GeometryCollection"
+        | "Feature"
+        | "FeatureCollection";
     features: Feature[];
 }
 
