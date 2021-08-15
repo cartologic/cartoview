@@ -9,7 +9,7 @@ const SingleFeatureTable = () => {
     useEffect(() => {
         if (activeFeatureId && activeLayer && activeLayer.geojson) {
             const tempActiveFeature = activeLayer.geojson.features.filter(
-                (feature) => feature.properties.fid == activeFeatureId
+                (feature) => feature.id == activeFeatureId
             )[0];
             setActiveFeature(tempActiveFeature);
         }
@@ -18,6 +18,12 @@ const SingleFeatureTable = () => {
     return (
         <table className="table table-striped table-responsive">
             <tbody>
+                <tr style={{ color: "green" }}>
+                    <th>ID</th>
+                    <td>
+                        {activeFeature?.id}
+                    </td>
+                </tr>
                 {activeFeature &&
                     activeLayer &&
                     activeLayer.geojson &&

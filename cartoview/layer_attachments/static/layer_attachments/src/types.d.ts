@@ -1,5 +1,6 @@
 export interface GeoJsonFeature {
     type: "Feature";
+    id: string;
     properties: GeoJsonProperties;
 }
 
@@ -52,6 +53,7 @@ export type LayerDetailsPageParams = { layerName: string };
 export type FeatureDetailsPageParams = { layerName: string; featureId: string };
 
 export interface LayerFeatureRemoteResponse {
+    id: string;
     properties: {
         fid: number;
     };

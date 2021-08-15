@@ -28,7 +28,7 @@ class LayerAttachment(models.Model):
     A single attachment file that is related to a feature in a vector layer
     """
     layer = models.ForeignKey(Layer, on_delete=models.CASCADE, related_name="layer_attachments")
-    feature_id = models.IntegerField()
+    feature_id = models.CharField(max_length=100)
     file = models.FileField(upload_to=get_upload_path)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

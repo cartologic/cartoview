@@ -13,7 +13,8 @@ const FeaturesTable = () => {
             <table className="table table-striped table-responsive">
                 <thead>
                     <tr>
-                        <th>index</th>
+                        <th>Index</th>
+                        <th>ID</th>
                         {activeLayer &&
                             activeLayer.layerAttributes.map((tableHeader) => (
                                 <th key={tableHeader}>{tableHeader}</th>
@@ -26,30 +27,33 @@ const FeaturesTable = () => {
                         activeLayer.geojson.features.map(
                             (singleFeature, index) => (
                                 <tr
-                                    key={`row-${singleFeature.properties.fid}`}
+                                    key={`${singleFeature.id}`}
                                     className="cursor-hand text-primary"
                                     onClick={() => {
                                         history.push(
-                                            `/${activeLayer?.name}/${singleFeature.properties.fid}/`
+                                            `/${activeLayer?.name}/${singleFeature.id}/`
                                         );
                                         setActiveFeatureId(
-                                            singleFeature.properties.fid
+                                            singleFeature.id
                                         );
                                     }}
                                 >
                                     <th style={{ color: "green" }}>
                                         {index + 1}
                                     </th>
+                                    <th style={{ color: "green" }}>
+                                        {singleFeature.id}
+                                    </th>
                                     {activeLayer &&
                                         activeLayer.layerAttributes.map(
                                             (tableHeader, index) => (
                                                 <th
-                                                    key={`row-entry-${singleFeature.properties.fid}-${index}`}
+                                                    key={`row-entry-${singleFeature.id}-${index}`}
                                                 >
                                                     {
                                                         singleFeature
                                                             .properties[
-                                                            tableHeader
+                                                        tableHeader
                                                         ]
                                                     }
                                                 </th>

@@ -55,8 +55,10 @@ const FeatureDetails = ({
     }, [activeLayer, availableLayers, layerName, setActiveLayer]);
 
     useEffect(() => {
-        setActiveFeatureId(featureId);
-    }, [featureId, setActiveFeatureId]);
+        if (!activeFeatureId) {
+            setActiveFeatureId(featureId);
+        }
+    }, [activeFeatureId, featureId, setActiveFeatureId]);
 
     return (
         <Fragment>

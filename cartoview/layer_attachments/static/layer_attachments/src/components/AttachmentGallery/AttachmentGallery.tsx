@@ -37,7 +37,7 @@ const AttachmentGallery = () => {
                     `api/layer_attachments/attachments/`,
                     {
                         params: {
-                            layer__name: activeLayer.name,
+                            layer__typename: activeLayer.typeName,
                             feature_id: activeFeatureId,
                         },
                     }
