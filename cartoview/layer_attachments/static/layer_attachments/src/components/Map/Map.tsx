@@ -29,7 +29,7 @@ const MapComponent = () => {
             activeFeatureId &&
             feature &&
             feature.properties &&
-            activeFeatureId == feature.properties.fid
+            activeFeatureId == feature.id
         ) {
             return { fillColor: "#FF4848", color: "#B61919", weight: 2 };
         } else {
@@ -54,7 +54,7 @@ const MapComponent = () => {
             activeFeatureId &&
             feature &&
             feature.properties &&
-            activeFeatureId == feature.properties.fid
+            activeFeatureId == feature.id
         ) {
             return L.marker(latlng, { icon: highlightMapMarker });
         } else {

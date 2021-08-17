@@ -54,9 +54,6 @@ export type FeatureDetailsPageParams = { layerName: string; featureId: string };
 
 export interface LayerFeatureRemoteResponse {
     id: string;
-    properties: {
-        fid: number;
-    };
 }
 
 export interface LayerFeaturesRemoteResponse {
