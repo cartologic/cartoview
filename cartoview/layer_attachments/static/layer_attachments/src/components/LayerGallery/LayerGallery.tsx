@@ -8,7 +8,7 @@ const LayerGallery = () => {
     const { availableLayers } = useContext(Manager);
 
     return (
-        <div className="layer-gallery panel panel-info">
+        <div className="layer-gallery panel panel-default">
             <div className="panel-body">
                 <div className="row">
                     {availableLayers.map((layer) => (
