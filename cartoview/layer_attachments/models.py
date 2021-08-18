@@ -12,6 +12,8 @@ def get_upload_path(instance, filename) -> str:
     Create a dynamic path for each attachment
     """
     layer_typename = instance.layer.typename
+    # replace colon with an underscore for windows directories
+    layer_typename = layer_typename.replace(":", "_")
     feature_id = str(instance.feature_id)
     discard, ext = os.path.splitext(filename)
     basename = uuid.uuid4().urn
