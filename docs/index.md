@@ -13,5 +13,5 @@ Cartoview has been built utilizing open source software and open standards to ma
 
 [1]: https://cartoview.net
 [2]: https://appstore.cartoview.net/
-[3]: http://geonode.org
-[4]: http://www.cartologic.com
+[3]: https://geonode.org
+[4]: https://www.cartologic.com

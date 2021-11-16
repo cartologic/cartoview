@@ -5,7 +5,7 @@
     
 Cartoview is a [Geo App market][1] for GeoNode. It is not a fork / improvement / reprlacement of Geonode, but rather additional code aimed to make it more extensible to integrate third party apps directly from the browser.
 
-[1]: http://www.cartoview.net
+[1]: https://www.cartoview.net
 ***
 
 **2. What are the goals of Cartoview?**
@@ -55,8 +55,8 @@ Of course. This is the purpose of Cartoview. Read the instructions on developing
 
 - [WebApp Builder][7]: Configure a map with multiple components, based on Boundless SDK.
 
-[5]: http://appstore.cartoview.net/app/cartoview_map_viewer/
-[6]: http://appstore.cartoview.net/app/cartoview_feature_list/
+[5]: https://appstore.cartoview.net/app/cartoview_map_viewer/
+[6]: https://appstore.cartoview.net/app/cartoview_feature_list/
 [7]: https://appstore.cartoview.net/app/cartoview_webapp_builder/
 
 ***
