@@ -1,9 +1,7 @@
 ![Cartoview Logo](img/cartoview-logo.png)
 # For Developers
 
-Cartoview provides [GeoApp Market][1] for GIS Developers.
-
-[1]: https://appstore.cartoview.net/
+Cartoview provides [GeoApp Market](https://appstore.cartoview.net/) for GIS Developers.
 
 ## Create and Add your django app to Cartoview
 
@@ -51,4 +49,4 @@ Click ``Explore`` button to open the app home page.
 
 ![Developers app](img/for-developers/app_home.PNG)
 
-Congratulations, now you have created your first app on Cartoview. You can upload it to [Cartoview App market][1] to make use of the features provided by this market.
+Congratulations, now you have created your first app on Cartoview. You can upload it to [Cartoview App market](https://appstore.cartoview.net/) to make use of the features provided by this market.
