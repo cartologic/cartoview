@@ -1,27 +1,31 @@
 ![Cartoview Logo](img/cartoview-logo.png)
 # For Developers
 
-Cartoview Provides [GeoApp Market][1] for GIS Developers.
+Cartoview provides [GeoApp Market][1] for GIS Developers.
 
-[1]: https://cartoview.net/
+[1]: https://appstore.cartoview.net/
 
-- **Create your own app**
+## Create and Add your django app to Cartoview
 
 ***
 
-Create a new empty App from Cartoview App template as below in your Cartoview project directory.
+Create a new empty app from **Cartoview App template** as below in your Cartoview project directory.
 
 ```shell
-cd apps
-django-admin.py startapp --template=https://github.com/cartologic/Cartoview-app-template/archive/master.zip <your_App_name>
+cd cartoview_project/apps
+django-admin.py startapp --template=https://github.com/cartologic/Cartoview-app-template/archive/master.zip <app_name>
 ```
 
-Edit ``cartoview_project/apps/apps.yml`` and add entry for your app or create ``apps.yml`` file. If you can't find it, add the following lines:
+Edit ``cartoview_project/apps/apps.json`` and add an entry for your app. If you can't find `apps.json`, create it and add the following lines:
 
-```shell
-- name: <app_name>
-  active: true
-  order: 0
+```json
+{
+    "app_name": {
+        "active": true,
+        "order": 1,
+        "pending": false
+    },
+}
 ```
 
 Add stores using the following command inside Cartoview project directory.
@@ -30,13 +34,14 @@ Add stores using the following command inside Cartoview project directory.
 python manage.py loaddata app_stores.json
 ```
 
-Add the new App to the database form at Django admin interface.
+Add the new app to the database using the admin interface at `/admin`.
 
 ![Developers app](img/for-developers/developers_app.png)
-![Developers app](img/for-developers/single_instance.PNG)
 
 !!! note
     Don't forget to check Single instance option if you want to test it for the first time.
+
+![Developers app](img/for-developers/single_instance.PNG)
     
 Now open Cartoview, navigate to ``Apps``, your app should be there.
 
@@ -46,4 +51,4 @@ Click ``Explore`` button to open the app home page.
 
 ![Developers app](img/for-developers/app_home.PNG)
 
-Congratulations, now you have created your first app on Cartoview. You can upload it to Cartoview App market to make use of the features provided by this market.
+Congratulations, now you have created your first app on Cartoview. You can upload it to [Cartoview App market][1] to make use of the features provided by this market.
