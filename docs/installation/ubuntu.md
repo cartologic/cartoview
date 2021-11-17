@@ -361,6 +361,17 @@ Make sure you're logged in with **admin/admin** in Cartoview at [http://localhos
 You can change the **admin** password by navigating to Security > Users, Groups, and Roles. Select `Users/Groups` tab, select `admin` user, and you can now update the password as you want. 
 ![Change GeoServer Password](../img/installation/Ubuntu/geoserver-password.png "Change GeoServer Login")
 
+### Stop GeoServer
+GeoServer can be stopped by running the task `stop_geoserver`.
+
+```shell
+paver stop_geoserver
+```
+
+!!! note
+    When GeoServer is stopped, the jetty server got down also but all the uploaded data (e.g. layers) is saved in the folder called `geoserver` in cartoview directory.
+---
+
 ## Post-Installation Notes
 
 Congratulations! Cartoview is now installed successfully.
