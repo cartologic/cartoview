@@ -2,69 +2,84 @@
 # Cartoview Installation | Ubuntu
 
 ## Introduction
-This document describes the installation of Cartoview with GeoNode 2.10.3 on Ubuntu 18.04.
+This guide describes how to install and configure a fresh setup of Cartoview to run it in DEBUG mode (also known as DEVELOPMENT mode) on **Ubuntu 20.04 LTS** 64-bit clean environment (Desktop or Server).
+
+This part of the documentation describes installation of **Cartoview-1.32.0** which comes with **GeoNode-3.2.1** and **GeoServer-2.18.2**.
+
+!!! warning
+    Those guides are not meant to be used on a production system. Instead, you can follow the [Docker](docker.md) guide.
+
+!!! note
+    All examples use shell commands that you must enter on a local terminal or a remote shell.
+
+---
 
 ## Installation Requirements
-- **Install Python3.8 and Django**
+
+### Install all system packages that are needed for Cartoview setup.
 ```shell
-sudo apt-get update
-sudo apt-get install python-pip python-django
+# Update and Upgrade system packages
+sudo apt update -y; sudo apt upgrade -y;
+
+# Install required packages
+sudo apt install -y build-essential gdal-bin \
+    python3.8-dev python3.8-venv virtualenvwrapper \
+    libxml2 libxml2-dev gettext \
+    libxslt1-dev libjpeg-dev libpng-dev libpq-dev libgdal-dev \
+    software-properties-common build-essential \
+    gcc zlib1g-dev libgeos-dev libproj-dev
+
+# Install Openjdk
+sudo apt install openjdk-8-jdk-headless default-jdk-headless -y
+sudo update-java-alternatives --jre-headless --jre --set java-1.8.0-openjdk-amd64
+
+# Verify GDAL version
+gdalinfo --version
+  $> GDAL 3.3.2, released 2021/09/01
+
+# Verify Python version
+python3.8 --version
+  $> Python 3.8.10
+
+which python3.8
+  $> /usr/bin/python3.8
+
+# Verify Java version
+java -version
+  $> openjdk version "1.8.0_292"
+  $> OpenJDK Runtime Environment (build 1.8.0_292-8u292-b10-0ubuntu2~20.04-b10)
+  $> OpenJDK 64-Bit Server VM (build 25.292-b10, mixed mode)
+
+# Cleanup the packages
+sudo apt update -y; sudo apt upgrade -y; sudo apt autoremove --purge
 ```
 
-!!! note
-    This will install the latest compatible with Python2.7 version of django which is 1.11.11 for now.
-
-- **Install the following required packages**
-```shell
-sudo apt-get update
-sudo apt-get install python-virtualenv python-dev python-gdal libxml2 libxml2-dev libxslt1-dev zlib1g-dev libjpeg-dev libpq-dev libgdal-dev git default-jdk
-```
-Verify that the important packages are installed successfully. (The versions should be something like what after #)
-```shell
-python --version      
-# Python 3.7
-
-django-admin --version
-# 1.11.11
-
-virtualenv --version
-# 15.1.0
-
-update-java-alternatives –l 
-# java-1.11.0-openjdk-amd64 1111 /usr/lib/jvm/java-1.11.0-openjdk-amd64
-
-python -c "from osgeo import gdal; print gdal.__version__"
-# 2.2.3
-```
+---
 
 ## Database Installation
-- **Install PostgreSQL Database**
+In this section we are going to install **PostgreSQL** database along with the **PostGIS** extension which is a spatial database extender for PostgreSQL. It adds support for geographic objects allowing location queries to be run in SQL.
+[1].
+!!! note
+    Those steps must be done only if you don’t have the DB already installed on your system.
 
 ```shell
-sudo apt-get install postgresql postgresql-contrib
-```
-
-- **Install PostGIS**
-
-It's a spatial database extender for [PostgreSQL][1] database. It adds support for geographic objects allowing location queries to be run in SQL.
-
-[1]: https://www.postgresql.org/
-
-```shell
-sudo apt-get install postgis
+# Ubuntu 20.04 (focal)
+sudo sh -c 'echo "deb https://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" >> /etc/apt/sources.list.d/pgdg.list'
+sudo wget --no-check-certificate --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+sudo apt update -y; sudo apt install -y postgresql-13 postgresql-13-postgis-3 postgresql-13-postgis-3-scripts postgresql-13 postgresql-client-13
 ```
 
 !!! note
-    Optional | You can also install [pgAdmin][2] ( A PostgreSQL GUI tool using ): `sudo apt-get install pgadmin4`
+    Optional | You can also install [pgAdmin](https://www.pgadmin.org/) ( A PostgreSQL GUI tool using ): `sudo apt-get install pgadmin4`
 !!! note
-    For more Information, visit [PostgreSQL dowload page][3].
-    
-[2]: https://www.pgadmin.org/
-[3]: https://www.postgresql.org/download/linux/ubuntu/
+    For more Information, visit [PostgreSQL dowload page](https://www.postgresql.org/download/linux/ubuntu/).
+
+---
 
 ## Database Configuration
-- **Configure PostgreSQL interactive terminal to create the databases**
+In this section we are going to configure PostgreSQL interactive terminal to create the databases.
 
+### Connect to a running database instance
 You must connect to PostgresSQL as the postgres user, PostgresSQL default superuser.
 
 ```shell
@@ -74,7 +89,7 @@ Set the postgres user password to postgis.
 ```shell
 psql
 ```
-This will open PostgreSQL interactive terminal and and the set the password to postgis:
+This will open PostgreSQL interactive terminal. Set the postgres user password to postgis:
 ```shell
 \password
 ```
@@ -83,19 +98,60 @@ Exit the PostgreSQL prompt by typing:
 \q
 ```
 
-- **Create two new databases** ``cartoview`` **and** ``cartoview_datastore``
+### Update Access Policies for local connections 
+Update access policies for local connections in the file ``pg_hba.conf`` to be able to connect to the database properly.
+```shell
+sudo nano /etc/postgresql/13/main/pg_hba.conf
+```
+Scroll down to the bottom of the document. We want to make local connection trusted for the default user.
+
+Make sure your configuration looks like the one below.
+```shell
+...
+# DO NOT DISABLE!
+# If you change this first entry you will need to make sure that the
+# database superuser can access the database using some other method.
+# Noninteractive access to all databases is required during automatic
+# maintenance (custom daily cronjobs, replication, and similar tasks).
+#
+# Database administrative login by Unix domain socket
+local   all             postgres                                trust
+
+# TYPE  DATABASE        USER            ADDRESS                 METHOD
+
+# "local" is for Unix domain socket connections only
+local   all             all                                     md5
+# IPv4 local connections:
+host    all             all             127.0.0.1/32            md5
+# IPv6 local connections:
+host    all             all             ::1/128                 md5
+# Allow replication connections from localhost, by a user with the
+# replication privilege.
+local   replication     all                                     peer
+host    replication     all             127.0.0.1/32            md5
+host    replication     all             ::1/128                 md5
+```
+
+!!! warning
+    If your PostgreSQL database resides on a **separate/remote machine**, you’ll have to allow remote access to the databases in the 
+    `/etc/postgresql/13/main/pg_hba.conf` to the postgres user and tell PostgreSQL to accept non-local connections in your 
+    `/etc/postgresql/13/main/postgresql` conf file.
+Restart PostgreSQL to make the change effective and be able to connect to PostgreSQL successfully.
+```shell
+sudo service postgresql restart
+```
+
+### Create Cartoview Databases
+Create two new databases ``cartoview`` and ``cartoview_datastore``.
 
 ```shell
 createdb cartoview
 createdb cartoview_datastore
 ```
 
-!!! note
-    You can change the name of the databases but make sure to change their names also in the ``local_settings.py`` file in Cartoview directory after you have installed it as the file is pre-configured for these names specifically.
-    
-- **Add PostGIS extension to the created databases to deal with the geographic objects**
+Add PostGIS extension to the created databases to deal with the geographic objects.
 
-For ``cartoview`` database: (Copy the command before the hash symbol)
+For ``cartoview`` database:
 
 ```shell
 psql cartoview               # To be executed at ubuntu terminal
@@ -104,7 +160,7 @@ CREATE EXTENSION postgis;    # To be executed at psql terminal
 
 Exit the PostgreSQL terminal with ``\q``
 
-For ``cartoview_datastore`` database: (Copy the command before the hash symbol)
+For ``cartoview_datastore`` database:
 
 ```shell
 psql cartoview_datastore    # To be executed at ubuntu terminal
@@ -114,13 +170,15 @@ CREATE EXTENSION postgis;   # To be executed at psql terminal
 !!! note
     The previous step must be done for the two databases, ``cartoview`` and ``cartoview_datastore``.
 
-You can now logout back to your usual user (other than postgres) by just typing ``exit``.
+You can now log out back to your usual user (other than postgres) by just typing ``exit``.
+
+---
 
 ## Cartoview Installation
 
-- **Create a Python Virtual Environment**
+### Create a Python Virtual Environment
 
-Let's make a directory called ``cartoview_service`` (You can name it whatever you prefer) that will contain two folders, python virtual environment and cartoview.
+Let's make a directory called ``cartoview_service`` (You can name it whatever you prefer) that will contain two folders, **python virtual environment** and **cartoview**.
 
 ```shell
 mkdir cartoview_service
@@ -130,26 +188,21 @@ cd cartoview_service
 Create and activate the python virtual environment, we will name it ``cartoview_venv``.
 
 !!! note
-    You can name it whatever you prefer, but bare in mind to change every ``cartoview_venv`` in the commands below with the name you want for your virtual environment.
+    You can name it whatever you prefer, but bear in mind changing every ``cartoview_venv`` in the commands below with the name you want for your virtual environment.
     
 ```shell
-virtualenv cartoview_venv
-source cartoview_venv/bin/activate
+# Create the Cartoview Virtual Environment (first time only)
+mkvirtualenv --python=python3.8 cartoview_venv
 ```
 
 !!! note
-    - You would notice how your prompt is now prefixed with the name of the virtual environment, ``cartoview_venv`` in our case.
-    
-    - Make sure you have installed ``python-pip`` and ``python-gdal`` as we have done above. We will use them to install and run GeoNode and Cartoview.
-    
-    - From now on, each command associated with geonode or cartoview must be executed while the virtual environment is activated.
+    - You would notice how your prompt is now prefixed with the name of the virtual environment, ``cartoview_venv`` in our case. This indicates that your virtualenv is active.
+    - From now on, each command must be executed while the virtual environment is activated.
 
-## Cartoview Libraries Installation
+### Cartoview Libraries Installation
 
 !!! warning
     Make sure you're inside ``cartoview_service`` directory and the ``cartoview_venv`` is still activated.
-
-- **Download and install Cartoview**
 
 Download the latest version of cartoview by cloning the repository.
 
@@ -159,7 +212,8 @@ git clone https://github.com/cartologic/cartoview.git
 
 This will create a folder called ``cartoview`` inside ``cartoview_service`` directory.
 
-Now we need to install cartoview dependencies, but first go to ``cartoview`` directory.
+#### Cartoview Dependencies Installation
+Navigate to ``cartoview`` directory and install cartoview dependencies.
 
 ```shell
 cd cartoview
@@ -168,69 +222,48 @@ pip install -e .
 
 !!! warning
     Make sure you got the dot ``.`` when you copy the previous command.
-    
-- **Make sure the created databases are in the ``settings.py`` file**
 
-Go to ``cartoview`` directory, you will find inside it another folder called ``cartoview``. Navigate inside it also.
+#### Add Cartoview Environment Variables
+Cartoview requires adding some environment variables while running it or executing commands through terminal.
 
-You should find a file called ``local_settings.py.sample``. Remove the last word ``sample``.
+It's recommended to use [PyCharm](https://www.jetbrains.com/pycharm/) which is a powerful python IDE that has a lot of features to offer.
 
-```shell
-cp local_settings.py.sample local_settings.py
-```
-
-This will override the ``settings.py`` file with a another configured settings file which is ``local_settings.py``.
-
-If you print the contents of ``local_settings.py`` with the below command.
+Create a new PyCharm configuration and add the following environment variables accordingly.
+![PyCharm Configuration](../img/installation/Ubuntu/pycharm_1.png "PyCharm Configuration")
 
 ```shell
-cat local_settings.py
+DATABASE_URL=postgis://postgres:postgis@localhost:5432/cartoview
+
+DATASTORE_DATABASE_URL=postgis://postgres:postgis@localhost:5432/cartoview_datastore
+
+ALLOWED_HOSTS=['*']
+
+DJANGO_SETTINGS_MODULE=cartoview.settings
+
+DEFAULT_BACKEND_UPLOADER=geonode.importer
 ```
 
-You can see the databases that we have created above inside ``local_settings.py`` as below.
+![PyCharm Configuration](../img/installation/Ubuntu/pycharm_2.png "PyCharm Environment Variables")
 
-```
-DATABASES = {
-  'default': {
-      'ENGINE': 'django.contrib.gis.db.backends.postgis',
-      'NAME': 'cartoview',
-      'USER': 'postgres',
-      'PASSWORD': 'cartoview',
-      'HOST': 'localhost',
-      'PORT': '5432',
-  },
-  # vector datastore for uploads
-  'datastore': {
-      'ENGINE': 'django.contrib.gis.db.backends.postgis’,
-      'NAME': 'cartoview_datastore',
-      'USER': 'postgres',
-      'PASSWORD': 'cartoview',
-      'HOST': 'localhost',
-      'PORT': '5432',
-  }
-}
-```
+It's required to add them also to the terminal configuration.
+![PyCharm Configuration](../img/installation/Ubuntu/pycharm_3.png "Terminal Environment Variables")
 
-!!! note
-    If you want to override any variable settings (for example to change the database password ,name or host), you can do this inside ``local_settings.py`` to override the settings in ``settings.py``.
-    
-- **Create a symbolic link of OSGeo in your virtualenv needed by GDAL to run properly**
-
+But the following variables only.
 ```shell
-ln -s /usr/lib/python2.7/dist-packages/osgeo  cartoview_venv/lib/python2.7/site-packages/osgeo
+DATABASE_URL=postgis://postgres:postgis@localhost:5432/cartoview
+
+DATASTORE_DATABASE_URL=postgis://postgres:postgis@localhost:5432/cartoview_datastore
+
+ALLOWED_HOSTS=['*']
 ```
 
-!!! note
-    The point of creating a symbolic link is to share the development source code of GDAL (which is installed previously at [Installation Requirements][4] section) instead of copying it every time we need to use it inside a python virtual environment.
- 
- [4]: #installation-requirements
- 
-- **Migrate & Load default data**
+#### Migrate & Load default data
 
 Inside ``cartoview`` folder, run the below commands to migrate and load Cartoview data.
 
-!!! note
-    Make sure the virtual environment is still activated (If you see its name prefixed your prompt, you're good to go).
+!!! warning
+    - Make sure the virtual environment is still activated (If you see its name prefixed your prompt, you're good to go).
+    - Make sure to add the above environment variables to the terminal so that the following commands run smoothly.
 
 Detect changes in the ``app_manager``.
 ```shell
@@ -243,7 +276,7 @@ python manage.py makemigrations
 python manage.py migrate
 ```
 
-Create accounts table.
+Migrate accounts table.
 ```shell
 python manage.py migrate account
 ```
@@ -258,234 +291,87 @@ Load default oauth apps so that you will be able to authenticate with defined ex
 python manage.py loaddata default_oauth_apps.json
 ```
 
-Load default Initial Data for Cartoivew.
-```shell
-python manage.py loaddata initial_data.json
-```
-
-Load default Cartoview Appstore data.
+Load default cartoview appstore data.
 ```shell
 python manage.py loaddata app_stores.json
 ```
 
-- **Test Development Server by running this Command**
+Load default cartoview initial data.
+```shell
+python manage.py loaddata initial_data.json
+```
+
+#### Test Development Server
+Check if Cartoview is working as expected.
 ```shell
 python manage.py runserver 0.0.0.0:8000
 ```
 
-At ``localhost:8000``, you should get:
+Open a browser and check if cartoview is running at [localhost:8000](http://localhost:8000/).
 
 ![Cartoview website](../img/installation/Ubuntu/cartoview.png "Cartoview")
 
-**Sign-in with:**
+You should be able to successfully log with the default admin user (admin / admin) and start using it right away.
+
+Now we have Cartoview up and running. The last thing we need to do, is to install and configure GeoServer.
+
+---
+
+## GeoServer Installation
+Cartoview comes with a pre-configured GeoServer available by GeoNode. So it can be installed with [Paver](https://pythonhosted.org/Paver/) commands.
+
+If you check the `pavement.py` file, you can see multiple created tasks like, `setup_geoserver`, `start_geoserver`, and `stop_geoserver`.
+
+### Setup GeoServer
+!!! warning
+    Make sure the virtual environment is still activated (If you see its name prefixed your prompt, you're good to go).
+
+Run the task called `setup_geoserver` to download a customized version of GeoServer WAR file (provided by GeoNode) and setup [jetty](https://www.eclipse.org/jetty/).
+
+!!! note
+    - Jetty provides a web server and servlet container. It's used to host GeoServer.
+    - The file called `dev_config.yml` holds the download URL for GeoServer and Jetty.
+
 ```shell
-user: admin
-password: admin
+paver setup_geoserver
 ```
 
-Now we have Cartoview up and running, last thing we need to do, is to install and configure GeoServer to run with it.
+This will create two folders, the first one called `downloaded`, it contains the downloaded required files and `geoserver` which contains all the files related to GeoServer.
 
-## GeoServer 2.16.2 Installation 
-We need to install Tomcat to be able to run GeoServer inside it as a Java application.
-
-- **Install and configure Tomcat 9**
+### Start GeoServer
+Run the task called `start_geoserver` to launch jetty on port `8080` and start GeoServer.
 
 !!! warning
-    Make sure you have installed ``default-jdk`` as we have done before.
-    
-We will create a new group and a user that will run and control the tomcat service.
+    Make sure nothing is running on port `8080`.
 
 ```shell
-sudo groupadd tomcat
-sudo useradd -s /bin/false -g tomcat -d /opt/tomcat tomcat
+paver start_geoserver
 ```
 
-!!! note
-    We made this user a member of the tomcat group, with a home directory of ``/opt/tomcat`` (where we will install Tomcat), and with a shell of ``/bin/false`` (so nobody can log into the account).
-    
-Now we will download Tomcat 9, Navigate to ``/tmp`` directory (we will download Tomcat there, you can download it anywhere else).
-
-```shell
-cd /tmp
-curl -O https://downloads.apache.org/tomcat/tomcat-9/v9.0.40/bin/apache-tomcat-9.0.40.tar.gz
-```
-
-Tomcat used to be installed in the directory ``/opt/tomcat``. So we will extract and install it there too.
-
-```shell
-sudo mkdir /opt/tomcat
-sudo tar xzvf apache-tomcat-9.0.40.tar.gz -C /opt/tomcat --strip-components=1
-```
-
-Now we should set up the tomcat user that we have created before to have the permissions of the directory ``/opt/tomcat``.
-
-```shell
-cd /opt/tomcat
-sudo chgrp -R tomcat /opt/tomcat
-sudo chmod -R g+r conf
-sudo chmod g+x conf
-sudo chown -R tomcat webapps/ work/ temp/ logs/
-```
-
-!!! note
-    Basically, what we have done in the previous step:
-
-    - Give the tomcat group the ownership over the entire installation directory.
-    - Give the tomcat group read access to the ``conf`` directory and all of its contents, and execute access to the directory itself.
-    - Make the tomcat user to be the owner of the webapps, work, temp, and logs directories.
-    
-**Let’s create a system service to manage tomcat startup.**
-```shell
-sudo nano /etc/systemd/system/tomcat.service
-```
-
-Copy the text below inside this file.
-```shell
-[Unit]
-Description=Apache Tomcat Web Application Container
-After=network.target
-
-[Service]
-Type=forking
-
-Environment=JAVA_HOME=/usr/lib/jvm/java-1.11.0-openjdk-amd64
-Environment=CATALINA_PID=/opt/tomcat/temp/tomcat.pid
-Environment=CATALINA_HOME=/opt/tomcat
-Environment=CATALINA_BASE=/opt/tomcat
-Environment='CATALINA_OPTS=-Xms512M -Xmx1024M -server -XX:+UseParallelGC'
-Environment='JAVA_OPTS=-Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom'
-
-ExecStart=/opt/tomcat/bin/startup.sh
-ExecStop=/opt/tomcat/bin/shutdown.sh
-
-User=tomcat
-Group=tomcat
-UMask=0007
-RestartSec=10
-Restart=always
-
-[Install]
-WantedBy=multi-user.target
-```
-
-!!! warning
-    For ``Environment=JAVA_HOME``, make sure you have added the correct path for you installed version of Java.
-
-**To test the service:**
-```shell
-sudo systemctl daemon-reload
-sudo systemctl start tomcat.service
-sudo systemctl status tomcat.service
-```
-To make the service enabled by default permanently.
-```shell
-sudo systemctl enable tomcat.service
-```
-
-**Configure Tomcat Web Management Interface**
-
-In order to use the manager web app that comes with Tomcat, we need to add a login user to our Tomcat server. We will do this by editing ``tomcat-users.xml`` file.
-```shell
-sudo nano /opt/tomcat/conf/tomcat-users.xml
-```
-Add the following line to be between ``tomcat-users`` tags. You can set the username and password that you prefer. For us, username will be ``admin`` and password to be ``cartoview``.
-```shell
-<user username="admin" password="cartoview" roles="manager-gui,admin-gui"/>
-```
-By default, newer versions of Tomcat restrict access to the Manager and Host Manager apps to connections coming from the server itself. You might want to alter this behaviour.
-
-##### FOR MANAGER APP TYPE:
-```shell
-sudo nano /opt/tomcat/webapps/manager/META-INF/context.xml
-```
-
-##### FOR HOST MANAGER APP TYPE:
-```shell
-sudo nano /opt/tomcat/webapps/host-manager/META-INF/context.xml
-```
-
-Inside both, comment out the IP address restriction to allow connections from anywhere.
-
-###### INSTEAD OF THIS:
-```shell
-<Valve className="org.apache.catalina.valves.RemoteAddrValve" allow="127\.\d+\.\d+\.\d+|::1|0:0:0:0:0:0:0:1" />
-```
-
-###### TO BE THIS:
-```shell
-<!--<Valve className="org.apache.catalina.valves.RemoteAddrValve" allow="127\.\d+\.\d+\.\d+|::1|0:0:0:0:0:0:0:1" />-->
-```
-
-**Restart Tomcat service**
-```shell
-sudo systemctl restart tomcat.service
-```
-
-In the browser if you navigate to ``localhost:8080``, you should see Tomcat up and running and you can access the Manager App by logging in with the credentials you have entered inside ``tomcat-users.xml``.
-
-**Download and Install GeoServer war file**
-
-Now we will download the latest stable version of GeoServer war file from [here][5] or you can execute the following command.
-
-[5]: https://build.geo-solutions.it/geonode/geoserver/latest/geoserver-2.16.2.war
-
-```shell
-cd /tmp
-wget --no-check-certificate https://build.geo-solutions.it/geonode/geoserver/latest/geoserver-2.16.2.war
-```
-
-!!! note
-    We have downloaded the war file inside ``/tmp`` directory, but you can download it anywhere else.
-    
-For simplicity, rename the file to be ``geoserver.war`` instead of ``geoserver-2.16.2.war``.
-```shell
-mv geoserver-2.16.2.war geoserver.war
-```
-
-Copy the ``geoserver.war`` file to ``/tomcat/webapps`` directory.
-```shell
-sudo cp geoserver.war /opt/tomcat/webapps/
-```
-
-Restart Tomcat so that it will be able to manage GeoServer as a web app.
-```shell
-sudo systemctl restart tomcat.service
-```
-
-This will cause Tomcat to serve GeoServer from the war file which we have put inside ``tomcat/webapps``.
-
-!!! note
-    Make sure that GeoServer is running:
-    
-    - Navigate to ``localhost:8080`` to open Tomcat then click on Manager App.
-    
-    - Login with the credentials, you have entered in ``tomcat-users.xml``.
-    
-    - You should find GeoServer under Applications section started already.
-
-![Tomcat Application Manager](../img/installation/Ubuntu/tomcat_manager.png "Tomcat Application Manager")
-    
-Now GeoServer is up and running at ``localhost:8080/geoserver``.
-
+GeoServer is now available and running at [http://localhost:8080/geoserver/](http://localhost:8080/geoserver/).
 ![GeoServer](../img/installation/Ubuntu/geoserver.png "GeoServer")
-**Sign-in with:**
+
+Make sure you're logged in with **admin/admin** in Cartoview at [http://localhost:8000/](http://localhost:8000/) then navigate to 
+[http://localhost:8080/geoserver/](http://localhost:8080/geoserver/) and click on the GeoNode button to use the pre-configured authentication between GeoNode and GeoServer.
+![GeoServer Login](../img/installation/Ubuntu/geoserver-login.png "GeoServer Login")
+
+!!! note
+    You can also log in with the default GeoServer credentials admin/geoserver, but using GeoNode button is easier.
+
+You can change the **admin** password by navigating to Security > Users, Groups, and Roles. Select `Users/Groups` tab, select `admin` user, and you can now update the password as you want. 
+![Change GeoServer Password](../img/installation/Ubuntu/geoserver-password.png "Change GeoServer Login")
+
+## Post-Installation Notes
+
+Congratulations! Cartoview is now installed successfully.
+
+You can upload layers, create maps, and install Cartoview apps to visualize these maps.
+
+Once Cartoview is installed, You can navigate to [http://localhost:8000/apps/](http://localhost:8000/apps/) to check and install all available apps from the [App Store](https://appstore.cartoview.net/).
+
+After installing any app, you may need to restart the running django server if you can't see your app in `/apps`.
+
+Collect static files using the command:
 ```shell
-user: admin
-password: geoserver
+python manage.py collectstatic --noinput
 ```
-
-## Deployment Notes
-
-Once Cartoview is installed, it's expected to install all apps from the App Store automatically.
-
-At the moment, Cartoview will fully support Apache server only. For Nginx deployments, Cartoview will be able to detect new apps and get the updates, however to apply them, a web server restart will be required to complete the process as Cartoview will not be able to restart Nginx when new apps are installed.
-
-After you install or update apps from the app manager page, you will need to restart Nginx manually until this issue is addressed in the future.
-
-**Follow these steps to get the apps working on Nginx:**
-
-- Collect static files using the command, ``python manage.py collectstatic --noinput``.
-
-- Restart server now as you should after installing any app.
-
-&nbsp;
