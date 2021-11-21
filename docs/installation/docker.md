@@ -66,7 +66,7 @@ Right-click on the whale icon, select **Settings**, navigate to **Resources** ta
 
 ## Cartoview Installation
 
-### Running Catoview Docker Services
+### Running Cartoview Docker Services
 Download **cartoview-1.31.0** by cloning the repository and using the tag **v1.31.0**.
 
 ```shell
@@ -86,7 +86,7 @@ docker-compose up -d
 !!! warning
     For **Ubuntu**, if you didn't configure docker to run without ``sudo``, make sure to prefix each docker command with it.
     
-Get a cup of coffee and wait untill all the images are pulled and installed successfully.
+Get a cup of coffee and wait until all the images are pulled and installed successfully.
 
 !!! warning
     While installing using **Windows Docker Desktop**, you may be prompted to accept whether to give permission for Docker to mount its containers on one of your hard-drives or to not. Accept this so that the containers can run properly.
@@ -96,7 +96,7 @@ Get a cup of coffee and wait untill all the images are pulled and installed succ
 After all images are downloaded, you can monitor the logs of initiating Cartoview with this command.
 
 ```shell
-# This will show the logs of each serivce in the docker-compose.yml
+# This will show the logs of each service in the docker-compose.yml
 docker-compose logs -f --tail=100
 
 # Show logs only for cartoview service
@@ -171,7 +171,7 @@ Load default Cartoview Appstore data.
 python manage.py loaddata app_stores.json
 ```
 
-Load default Initial Data for Cartoivew.
+Load default Initial Data for Cartoview.
 ```shell
 python manage.py loaddata initial_data.json
 ```
