@@ -38,7 +38,7 @@ docker-compose --version
 Docker Desktop is an easy-to-install application for your Mac or Windows environment that enables you to build and share containerized applications and 
 microservices. Docker Desktop includes [Docker Engine](https://docs.docker.com/engine/), Docker CLI client, [Docker Compose](https://docs.docker.com/compose/), and many useful tools.
 
-Walk through this guide to download and install [Docker Desktop](https://docs.docker.com/desktop/windows/install/#install-docker-desktop-on-windows).
+Walk through this guide to download and install [Docker Desktop](https://docs.docker.com/desktop/windows/install/).
 
 Proceed with installation and leave everything as default.
 
@@ -54,13 +54,11 @@ When you see the Docker menu (A whale icon) in the taskbar stays steady, **Docke
     
 **Docker Dashboard** provides a useful interface to handle and control all the available containers easily. Please visit [Docker Desktop Dashboard](https://docs.docker.com/desktop/dashboard/) for more details.
 
-**Optional | Configure Docker Resources**
+#### Docker Configuration
 
-You may want to change the default resources given to Docker to speed up operations that will be done on the containers.
+Make sure that **Use Docker Compose V2** option is **unchecked** to avoid potential issues.
 
-Right-click on the whale icon, select **Settings**, navigate to **Resources** tab and change the resources as you wish.
-
-![Docker Resources](../img/installation/Docker/docker_resources.png)
+![Docker Configuration](../img/installation/Docker/compose_v2.png)
 
 ---
 
@@ -73,8 +71,16 @@ Download **cartoview-1.31.0** by cloning the repository and using the tag **v1.3
 git clone -b v1.31.0 https://github.com/cartologic/cartoview.git
 ```
 
-This will create a directory called ``cartoview``. Navigate inside it to install Cartoview using docker.
-    
+This will create a directory called ``cartoview``. Navigate inside it to install Cartoview with docker.
+
+Open `docker-compose.yml` and navigate to **cartoview** docker service and update as the following:
+```yaml
+# Change the line
+image: cartologic/cartoview:latest
+# With:
+image: cartologic/cartoview:1.31.0
+```
+
 ```shell
 cd cartoview
 docker-compose up -d
@@ -114,9 +120,19 @@ Also, you can see the logs by just ``double-click`` on ``cartoview``.
 ![Cartoview Logs](../img/installation/Docker/cartoview_logs.png)
 
 ### Migrate & Load default data
-We need to execute post-installation commands to make `cartoview` work properly after it's up and running. So we will open a terminal inside this service to execute these commands.
+We need to execute post-installation commands (e.g. migrations, collect static files, etc.) to make `cartoview` work properly after it's up and running. So we will open a terminal inside this service to execute these commands.
 
-If you have [Make](https://www.gnu.org/software/make/) installed on your machine, you can just use the Makefile available at cartoview directory.
+#### Use Make
+If you have [Make](https://www.gnu.org/software/make/) installed on your machine, you can just use the Makefile available at [cartoview](https://github.com/cartologic/cartoview/blob/v1.31.0/Makefile).
+
+!!! note
+    - For Windows, if you don't have Make, install it from [here](http://gnuwin32.sourceforge.net/packages/make.htm).
+    - Make sure to add `make.exe` path (e.g. C:\Program Files (x86)\GnuWin32\bin) to [PATH system variable](https://www.java.com/en/download/help/path.html). 
+
+!!! warning
+    For Windows:
+    - All the comments found at the **Makefile** should be removed to avoid any potential errors related to Make.
+    - Replace the Unix `sleep` command with Windows `timeout`.
 ```shell
 # This will go through the Makefile and execute the command called "run"
 make run
@@ -134,7 +150,7 @@ docker-compose exec cartoview bash
 ```
 
 #### For Windows:
-Open **Docker Dashboard** and for ``cartoview_cartoview_1`` container, click on the Cli button to open the terminal in which we will execute the below commands.
+Open **Docker Dashboard** and for ``cartoview_django`` container, click on the Cli button to open the terminal in which we will execute the below commands.
 
 ![Cartoview CLI](../img/installation/Docker/cartoview_cli.PNG)
 
@@ -192,11 +208,8 @@ In the browser, navigate to [http://10.5.0.4/](http://10.5.0.4/).
 !!! note
     Cartoview is running on **10.5.0.4** according to a pre-configured [external IP](https://github.com/cartologic/cartoview/blob/v1.31.0/docker-compose.yml#L111).
 
-**For Windows:**
-
-Open Docker Dashboard and for ``cartoview_nginx_1``container, click on ``Open in browser`` button to open Cartoview in the browser.
-
-![Cartoview open browser](../img/installation/Docker/cartoview_browser.PNG)
+!!! warning
+    Do Not run Cartoview on **localhost** as it's not configured to work on that.
 
 You should get:
 
