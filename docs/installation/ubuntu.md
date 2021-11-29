@@ -1,5 +1,5 @@
 ![Cartoview Logo](../img/cartoview-logo.png)
-# Cartoview Installation | Ubuntu
+# Cartoview Core Installation | Ubuntu
 
 ## Introduction
 This guide describes how to install and configure a fresh setup of Cartoview to run it in DEBUG mode (also known as DEVELOPMENT mode) on **Ubuntu 20.04 LTS** 64-bit clean environment (Desktop or Server).

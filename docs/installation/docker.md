@@ -1,5 +1,5 @@
 ![Cartoview Logo](../img/cartoview-logo.png)
-# Cartoview Installation | Docker
+# Cartoview Core Installation | Docker
 
 ## Introduction
 This guide describes how to install and configure a fresh setup of Cartoview to run it in Production mode using Docker on [**Ubuntu 20.04**](#for-ubuntu-2004) or [**Windows 10**](#for-windows-10).
