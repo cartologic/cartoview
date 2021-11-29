@@ -43,11 +43,13 @@ Of course! This is the purpose of Cartoview. Read the instructions on developing
 
 **7. What are the best Cartoview Apps?**
 
-- [Simple Map Viewer](https://appstore.cartoview.net/app/cartoview_map_viewer/) : This app allows the creation of html mobile ready map viewer app with most basic features.
+- [ArcGIS Importer](https://appstore.cartoview.net/app/arcgis_importer/): This app allows importing ArcGIS feature layer into a PostGIS database while adding it to GeoServer and GeoNode.
 
-- [Feature Detailed Viewer](https://appstore.cartoview.net/app/cartoview_feature_list/) : A map and configurable feature list applications for store locations.
+- [Data Manager](https://appstore.cartoview.net/app/data_manager/): Upload and puplish a [GeoPackage](https://www.geopackage.org/) to GeoServer and GeoNode.
 
-- [WebApp Builder](https://appstore.cartoview.net/app/cartoview_webapp_builder/): Configure a map with multiple components, based on Boundless SDK.
+- [Terria Map](https://appstore.cartoview.net/app/cartoview_terriaJs/): Visulaize GeoNode maps using a library for building rich, web-based geospatial data platforms called [TerriaJS](https://terria.io/).
+
+- (Coming Soon) **Data Collection**: This app enables you to collect data through dynamically configured forms using mobile app and add them as features to an empty layer in GeoNode.
 
 ***
 
