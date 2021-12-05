@@ -99,6 +99,6 @@ Get a cup of coffee and wait until all cartoview containers are built.
 
 ## Customize the Look and Feel
 
-With `cartoview-project`, you should have control on the appearance of Cartoview as being able to add and customize the avaiable content (e.g. CSS and other static files, templates, models, etc.).
+With `cartoview-project`, you should have control on the appearance of Cartoview as being able to add and customize the available content (e.g. CSS and other static files, templates, models, etc.).
 
 For more information regarding Cartoview & GeoNode theming, please follow [this guide](https://docs.geonode.org/en/master/basic/theme/index.html#geonode-themes) provided by GeoNode.
