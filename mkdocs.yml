@@ -16,6 +16,7 @@ nav:
       - Docker: installation/docker.md
       - Vagrant: installation/vagrant.md
       - Cartoview Project: installation/cartoview-project.md
+      - Windows Installer: installation/windows-installer.md
   - Install App: install-app.md
   - For Developers: for-developers.md
   - Upload App to GeoApp Market: upload-app.md
