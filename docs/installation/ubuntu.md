@@ -12,6 +12,8 @@ This part of the documentation describes installation of **Cartoview-1.32.0** wh
 !!! note
     All examples use shell commands that you must enter on a local terminal or a remote shell.
 
+If you plan to customize Cartoview & GeoNode user interface components to your needs, it's recommended to use [cartoview-project](https://github.com/cartologic/cartoview-project). Check the available cartoview-project [guide](cartoview-project.md).
+
 ---
 
 ## Installation Requirements
@@ -72,7 +74,7 @@ sudo apt update -y; sudo apt install -y postgresql-13 postgresql-13-postgis-3 po
 !!! note
     Optional | You can also install [pgAdmin](https://www.pgadmin.org/) ( A PostgreSQL GUI tool using ): `sudo apt-get install pgadmin4`
 !!! note
-    For more Information, visit [PostgreSQL dowload page](https://www.postgresql.org/download/linux/ubuntu/).
+    For more Information, visit [PostgreSQL download page](https://www.postgresql.org/download/linux/ubuntu/).
 
 ---
 
@@ -301,6 +303,11 @@ Load default cartoview initial data.
 python manage.py loaddata initial_data.json
 ```
 
+Collect static files.
+```shell
+python manage.py collectstatic --noinput
+```
+
 #### Test Development Server
 Check if Cartoview is working as expected.
 ```shell
@@ -381,8 +388,3 @@ You can upload layers, create maps, and install Cartoview apps to visualize thes
 Once Cartoview is installed, You can navigate to [http://localhost:8000/apps/](http://localhost:8000/apps/) to check and install all available apps from the [App Store](https://appstore.cartoview.net/).
 
 After installing any app, you may need to restart the running django server if you can't see your app in `/apps`.
-
-Collect static files using the command:
-```shell
-python manage.py collectstatic --noinput
-```
