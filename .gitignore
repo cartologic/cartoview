@@ -241,6 +241,7 @@ node_modules
 dist/
 vendor
 uploaded
+static
 *.db
 database.sqlite
 .vscode
