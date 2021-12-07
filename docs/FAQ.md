@@ -3,9 +3,8 @@
 
 **1. What is Cartoview exactly? Is it a replacement for GeoNode?**
     
-Cartoview is a [Geo App market][1] for GeoNode. It is not a fork / improvement / reprlacement of Geonode, but rather additional code aimed to make it more extensible to integrate third party apps directly from the browser.
+[Cartoview](https://cartoview.net/) is a [Geo App market](https://appstore.cartoview.net/) for GeoNode. It is not a fork / improvement / reprlacement of GeoNode, but rather additional code aimed to make it more extensible to integrate third party apps directly from the browser.
 
-[1]: http://www.cartoview.net
 ***
 
 **2. What are the goals of Cartoview?**
@@ -26,38 +25,31 @@ Cartoview starts working with GeoNode 2.5
 
 **4. I have an idea! What should I do?**
 
-Please [file an issue][2]. Issues are a great way to discuss new ideas, build consensus and talk about implementation details.
-
-[2]: https://github.com/cartologic/cartoview/issues/new
+Please [file an issue](https://github.com/cartologic/cartoview/issues/new). Issues are a great way to discuss new ideas, build consensus, and talk about implementation details.
 
 ***
 
-**5. I built something with Cartoview can I show you?**
+**5. I built something with Cartoview, can I show you?**
 
-Absolutely! Share it on twitter with [@ahmednosman][3] or [@Cartoview][4]. You can add your project to the list in the readme too.
-
-[3]: https://twitter.com/ahmednosman
-[4]: https://twitter.com/CartoView
+Absolutely! Share it on Twitter with [@ahmednosman](https://twitter.com/ahmednosman) or [@Cartoview](https://twitter.com/CartoView).
 
 ***
 
 **6. I built a reusable app can I contribute it?**
 
-Of course. This is the purpose of Cartoview. Read the instructions on developing and deploying apps. Create an account on [Cartoview][1] and load your app. Your app will be immediately available to all Cartoview deployments.
+Of course! This is the purpose of Cartoview. Read the instructions on developing and deploying apps. Create an account on [Cartoview App market](https://appstore.cartoview.net/) and load your app. Your app will be immediately available to all Cartoview deployments.
 
 ***
 
 **7. What are the best Cartoview Apps?**
 
-- [Simple Map Viewer][5] : This app allows the creation of html mobile ready map viewer app with most basic features.
+- [ArcGIS Importer](https://appstore.cartoview.net/app/arcgis_importer/): This app allows importing ArcGIS feature layer into a PostGIS database while adding it to GeoServer and GeoNode.
 
-- [Feature Detailed Viewer][6] : A map and configurable feature list applications for store locations.
+- [Data Manager](https://appstore.cartoview.net/app/data_manager/): Upload and puplish a [GeoPackage](https://www.geopackage.org/) to GeoServer and GeoNode.
 
-- [WebApp Builder][7]: Configure a map with multiple components, based on Boundless SDK.
+- [Terria Map](https://appstore.cartoview.net/app/cartoview_terriaJs/): Visulaize GeoNode maps using a library for building rich, web-based geospatial data platforms called [TerriaJS](https://terria.io/).
 
-[5]: http://appstore.cartoview.net/app/cartoview_map_viewer/
-[6]: http://appstore.cartoview.net/app/cartoview_feature_list/
-[7]: https://appstore.cartoview.net/app/cartoview_webapp_builder/
+- (Coming Soon) **Data Collection**: This app enables you to collect data through dynamically configured forms using mobile app and add them as features to an empty layer in GeoNode.
 
 ***
 

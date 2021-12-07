@@ -1,302 +1,377 @@
 ![Cartoview Logo](../img/cartoview-logo.png)
-# Cartoview Installation | Windows
+# Cartoview Core Installation | Windows
 
 ## Introduction
-This document describes the installation of Cartoview with GeoNode 2.10.3 on Windows 10.
+
+This guide describes how to install and configure a fresh setup of Cartoview to run it in DEBUG mode (also known as DEVELOPMENT mode) on **Windows 10** 64-bit clean environment.
+
+This part of the documentation describes installation of **Cartoview-1.32.0** which comes with **GeoNode-3.2.1** and **GeoServer-2.18.2**.
+
+!!! warning
+    Those guides are not meant to be used on a production system. Instead, you can follow the [Docker](docker.md) guide.
+
+!!! note
+    The following steps will use shell commands that you must enter on a local terminal (e.g. CMD, Powershell, etc.).
+
+If you plan to customize Cartoview & GeoNode user interface components to your needs, it's recommended to use [Cartoview Windows Installer](https://cartoview.net/download/). Check the available Windows installer [guide](windows-installer.md).
 
 ## Installation Requirements
-- **Install Python2.7**
-***
 
-Download [Python Windows installer][1] and proceed with installation.
+### Python Setup
 
-[1]: https://www.python.org/ftp/python/2.7.17/python-2.7.17.amd64.msi
+Download and install [Python-3.8.10 32-bit](https://www.python.org/ftp/python/3.8.10/python-3.8.10.exe).
 
-While installing python, we need to add it to the path so that we can use it inside the command prompt.
+Make sure to check the option `Add Python 3.8 to PATH` so that we can use it inside the local terminal.
 
-![Python](../img/installation/Windows/install_python.png "Python 2.7.17")
+!!! note
+    If Python is not added to PATH, check this tutorial regarding [How to add Python to Windows PATH](https://datatofish.com/add-python-to-windows-path/).
 
-Then click ``Next`` then ``Finish`` to complete the installation.
+![Python](../img/installation/Windows/install_python.png "Python-3.8.10 32-bit")
 
-- **Install Virtualenv & Create a Python Virtual Environment**
-***
+After installing, open your local terminal (e.g. CMD) and execute the following command to make sure python is installed and added to PATH correctly.
+
+```shell
+# Should print Python 3.8.10
+python --version
+```
+
+### Create a Python Virtual Environment
+
+Make sure **virtualenv** is installed by executing:
+```shell
+# Should print virtualenv 20.10.0
+virtualenv --version
+```
+
+!!! note
+    If **virtualenv** is not installed, install it with `pip install virtualenv`.
 
 Create a folder in the directory at which you want to install Cartoview and Let's name it ``cartoview_service`` (You can name it whatever you want).
 
-Inside ``cartoview_service`` folder, ``right-click with left-Shift`` on the free space and select ``Open PowerShell window here``.
-
-![PowerShell](../img/installation/Windows/powershell.png "PowerShell")
-
-This will open a terminal in which we will execute all the upcoming commands. Just copy-paste the commands and hit the ``Enter`` button.
-
-Check whether virtualenv is installed or not.
-```shell
-virtualenv --version
-# virtualenv 20.0.15 from c:\python27\lib\site-packages\virtualenv\__init__.pyc
-```
-
-If it's not installed, do:
-```shell
-pip install virtualenv
-```
+Inside ``cartoview_service`` folder, open your local terminal (e.g. CMD).
 
 Create a virtual environment and call it ``cartoview_venv``.
 ```shell
 virtualenv cartoview_venv
 ```
-
-![Virtualenv](../img/installation/Windows/powershell_terminal.png "Virtualenv")
-
-!!! note
-    You can name it whatever you prefer, but bare in mind to change every ``cartoview_venv`` in the commands below with the name you want for your virtual environment.
     
-Now after creating the virtual environment, we need to activate so that we will be able to use it.
+Now after creating the virtual environment, activate it so that it can be used.
 ```shell
 .\cartoview_venv\Scripts\activate
 ```
 
 !!! note
-    - If you are having an issue executing the above command, specifically if you got this ``error cannot be loaded because the execution of scripts is disabled on this system``. Close current powershell session and open another but with the "Run as Administrator" option (You can search for the powershell inside the search bar then right-click on it and select ``Run as Administrator``).
-    
-    Inside the terminal session, execute this:
-    ```
-    .\cartoview_venv\Scripts\activate
-    ```
-    
-    - This will allow running unsigned scripts that you write on your local computer and signed scripts from Internet. Now, you can try activating the virtual environment again.
-    
-    - You would notice how your prompt is now prefixed with the name of the virtual environment, ``cartoview_venv`` in our case.
-    
-- **Install the following required packages**
-***
+    You would notice how your prompt is now prefixed with the name of the virtual environment, ``cartoview_venv`` in our case. This indicates that your virtualenv is active.
 
-!!! note
-    From now on, each command must be executed inside the PowerShell while the virtual environment is activated.
+Each upcoming command must be executed while the virtual environment is activated.
 
+### GDAL Installation
+
+**GDAL** can be installed through [OSGeo4W](https://trac.osgeo.org/osgeo4w/). But this time we need to install it manually inside our virtual environment.
+
+Download GDAL‑3.2.3‑cp38‑cp38‑win32 wheel file from the [Unofficial Windows Binaries for Python Extension Packages](https://www.lfd.uci.edu/~gohlke/pythonlibs/#gdal).
+
+Install downloaded GDAL wheel file with `pip` in the virtual environment.
 ```shell
-pip install django==1.11.11 GDAL==2.2.4 Shapely==1.6.4.post2 Pillow==6.2.2 libxml2-python==2.9.3 pytz==2019.3
+pip install GDAL-3.2.3-cp38-cp38-win32.whl
 ```
 
-If you got errors while installing the above packages, you can download the wheel files of the packages that cause these errors from [The Unofficial Windows Binaries for Python Packages][2].
+![Install GDAL](../img/installation/Windows/install_gdal.png "GDAL‑3.2.3 Installation")
 
-[2]: https://www.lfd.uci.edu/~gohlke/pythonlibs/
-    
-For example, to install **GDAL 2.2.4**:
-
-1. Download the wheel file of GDAL 2.2.4 that is compatible with Python    2.7 from the above link. You should get a file called, ``GDAL-2.2.4-    cp27-cp27m-win_amd64.whl``.
-2. While having the virtual environment ``cartoview_venv`` activated, navigate to the downloads folder (or the folder in which you have downloaded the wheel file), execute the following.
-
-```shell
-cd C:\Users\your_user\Downloads
-pip install GDAL-2.2.4-cp27-cp27m-win_amd64.whl
-```
+---
 
 ## Database Installation
 
-- **Download and Install PostgreSQL**
+In this section we are going to install **PostgreSQL** database along with the **PostGIS** extension which is a spatial database extender for PostgreSQL. It adds support for geographic objects allowing location queries to be run in SQL.
 
-***
+### Install PostgreSQL 13
 
-Download PostgreSQL installer certified by EnterpriseDB from [here][3]. We will use version **10.12**.
+Download PostgreSQL Windows installer certified by EnterpriseDB from [here](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads). We will use version **13.5**.
 
-[3]: https://www.enterprisedb.com/downloads/postgres-postgresql-downloads
+Open the downloaded executable file and proceed with the installation.
 
-&nbsp;&nbsp;&nbsp;&nbsp;1. Open the downloaded exe and proceed with the installation.
+Choose the components that you want to be installed in your system. It's recommended to leave it as default.
 
-&nbsp;&nbsp;&nbsp;&nbsp;2. Change the Installation directory if required, else leave it as default.
-
-&nbsp;&nbsp;&nbsp;&nbsp;3. You can choose the components that you want to be installed in your system. We will leave it as default.
-&nbsp;&nbsp;&nbsp;&nbsp;![PostgreSQL1](../img/installation/Windows/postgres/postgres1.png "PostgreSQL Installation")
+![PostgreSQL Components](../img/installation/Windows/postgres/postgres1.png "PostgreSQL Components")
 
 !!! note
-    This will install ``pgAdmin4`` which is a management tool for PostgreSQL database.
+    This will install [**pgAdmin4**](https://www.pgadmin.org/) which is a GUI management tool for PostgreSQL database.
 
-&nbsp;&nbsp;&nbsp;&nbsp;4. Leave the data location as default.
+Enter a superuser password. This is the one by which you will access all your databases including what we will create next, so please save it.
 
-&nbsp;&nbsp;&nbsp;&nbsp;5. Enter a super user password. This is the one by which you will access all your databases including what we will create next, so remember it.
-&nbsp;&nbsp;&nbsp;&nbsp;![PostgreSQL2](../img/installation/Windows/postgres/postgres2.png "PostgreSQL Installation")
+![PostgreSQL Password](../img/installation/Windows/postgres/postgres2.png "PostgreSQL Password")
 
-&nbsp;&nbsp;&nbsp;&nbsp;6. Leave the port number ``5432`` as default.
+Leave everything as default and continue.
 
-&nbsp;&nbsp;&nbsp;&nbsp;7. Click ``Next`` to start the installation.
+Before click on **Finish**, make sure to leave the check on for the **stack builder** to start it after finishing.
 
-&nbsp;&nbsp;&nbsp;&nbsp;8. Before click on ``Finish``, make sure to leave the check on for the stack builder to start it after finishing.
+Select ``PostgreSQL 13 (x64) on port 5432``.
 
-&nbsp;&nbsp;&nbsp;&nbsp;9. Select ``PostgreSQL 10 (X64) on port 5432``.
-&nbsp;&nbsp;&nbsp;&nbsp;![PostgreSQL3](../img/installation/Windows/postgres/postgres3.png "PostgreSQL Installation")
+![Stack Builder](../img/installation/Windows/postgres/postgres3.png "Stack Builder")
 
-&nbsp;&nbsp;&nbsp;&nbsp;10. Install PostGIS 2.4 and select ``Next`` to download all the required files.
-&nbsp;&nbsp;&nbsp;&nbsp;![PostgreSQL4](../img/installation/Windows/postgres/postgres4.png "PostgreSQL Installation")
+Install PostGIS-3.1 and select ``Next`` to download all the required files.
 
-&nbsp;&nbsp;&nbsp;&nbsp;11. Select PostGIS. Click Ok for any prompt appears.
-&nbsp;&nbsp;&nbsp;&nbsp;![PostgreSQL5](../img/installation/Windows/postgres/postgres5.png "PostgreSQL Installation")
+![PostGIS-3.1](../img/installation/Windows/postgres/postgres4.png "PostGIS-3.1")
 
-Now the installation of PostgreSQL database is completed successfully.
+Select PostGIS. Click **Ok** for any prompt appears.
 
-- **Acess pgAdmin4**
+![PostGIS-3.1](../img/installation/Windows/postgres/postgres5.png "PostGIS-3.1")
 
-***
+Now PostgreSQL database is successfully installed and running.
+
+### Access PostgreSQL 
+
+#### Using Terminal
+We can access PostgreSQL through command prompt, but first we need to add the **bin** directory of PostgreSQL to PATH system variable.
+
+![Add PostgreSQL to Path](../img/installation/Windows/postgres/add-path.png "Add PostgreSQL to Path")
+
+Open a CMD terminal and connect to the database with user **postgres** with the password that you set during the installation.
+
+![Connect with CMD](../img/installation/Windows/postgres/access-terminal.png "Connect with CMD")
+
+#### Using pgAdmin4
 
 In the search bar (beside windows icon), search for ``pgAdmin4`` application and run it.
 
-If you click on PostgreSQL under Servers panel, you will be prompted to enter the password that you set during the installation.
-&nbsp;&nbsp;&nbsp;&nbsp;![pgAdmin1](../img/installation/Windows/pgAdmin/pgAdmin1.png "pgAdmin4 Configuration")
+Set the master password that should be used each time you open pgAdmin4.
 
-You will should get pgAdmin4 dashboard.
-&nbsp;&nbsp;&nbsp;&nbsp;![pgAdmin2](../img/installation/Windows/pgAdmin/pgAdmin2.png "pgAdmin4 Configuration")
+![Set Master Password](../img/installation/Windows/pgAdmin/set-password.png "Set Master Password")
+
+Navigate to left panel, under **Servers** dropdown, **right-click** and create a new server, we will name it **Local PostgreSQL-13**.
+
+![Create PostgreSQL Server](../img/installation/Windows/pgAdmin/new-server-1.png "Create PostgreSQL Server")
+
+Add the server information including the password that you set during the installation.
+
+![Create PostgreSQL Server](../img/installation/Windows/pgAdmin/new-server-2.png "Create PostgreSQL Server")
+
+Click **Save**. Now the installed PostgreSQL server is connected successfully to pgAdmin4.
+
+You can now access PostgreSQL dashboard inside pgAdmin4.
+
+![pgAdmin4 Dashboard](../img/installation/Windows/pgAdmin/pgAdmin-dashboard.png "pgAdmin4 Dashboard")
 
 !!! note
-    You may notice that there's a created databse already called ``postgres`` that will be used to create Cartoview databases.
-    
+    You may notice that there's an already created database called ``postgres`` that will be used to create Cartoview databases.
+
+---
+
 ## Database Configuration
 
-- **Create Cartoview databases using pgAdmin**
+In this section we are going to configure PostgreSQL to create and connect to Cartoview databases.
 
-***
+### Update Access Policies for local connections
 
-Now we will create Cartoview databases. Particularly, ``cartoview`` and ``cartoview_datastore``.
+Update access policies for local connections in the file **pg_hba.conf** available at `C:\Program Files\PostgreSQL\13\data` to be able to connect to the database without password.
 
-&nbsp;&nbsp;&nbsp;&nbsp;1. Under PostgreSQL 10 tree, right click and select ``Create`` >> ``Database``.
-&nbsp;&nbsp;&nbsp;&nbsp;![pgAdmin3](../img/installation/Windows/pgAdmin/pgAdmin3.png "pgAdmin4 Configuration")
-
-&nbsp;&nbsp;&nbsp;&nbsp;2. You will be prompted a pop-up to enter information about the database like the database name and template. Set the fields as in the images below.
-&nbsp;&nbsp;&nbsp;&nbsp;![Database1](../img/installation/Windows/pgAdmin/database1.png "Database Configuration")
-&nbsp;&nbsp;&nbsp;&nbsp;![Database2](../img/installation/Windows/pgAdmin/database2.png "Database Configuration")
-
-&nbsp;&nbsp;&nbsp;&nbsp;3. After creating the database, add ``postgis`` extension to it.
-&nbsp;&nbsp;&nbsp;&nbsp;![Database3](../img/installation/Windows/pgAdmin/postgis.png "Database Configuration")
-
-In the Name field, search for ``postgis`` and select it. Then click ``Save``.
-&nbsp;&nbsp;&nbsp;&nbsp;![Database4](../img/installation/Windows/pgAdmin/postgis2.png "Database Configuration")
-
-!!! note
-    For **step 3**, if you got the following error when you click save after selecting ``postgis`` extension.
-    ``ERROR: could not load library "C:/Program Files/PostgreSQL/10/lib/rtpostgis-2.4.dll": %1 is not a valid Win32 application.``
-    
-    Navigate to this path: ``C:\Program Files\PostgreSQL\10\bin\postgisgui`` in PostgreSQL installation directory and copy these files, ``libeay32.dll`` and ``ssleay32.dll`` to the bin path, ``C:\Program Files\PostgreSQL\10\bin`` and try to save again.
-
-&nbsp;&nbsp;&nbsp;&nbsp;4. Repeat the steps from 1 to 3 to create the second database, ``cartoview_datastore``.
-
-!!! warning
-    When repeating the steps to create the second database, don't forget to name the database in step 2 to be ``cartoview_datastore``.
-    
-## GeoNode 2.10.3 Installation
-
-Follow these steps if you don't have GeoNode 2.10.3 installed on your Windows 10 machine.
-
-- **Install GeoNode 2.10.3**
-
-***
-
-!!! note
-    Make sure you're inside ``cartoview_service`` directory and the ``cartoview_venv`` is still activated.
-    
-Download [GeoNode 2.10.3][4].
-
-[4]: https://github.com/GeoNode/geonode/archive/2.10.3.zip
-
-Extract it in the directory of ``cartoview_service`` folder. This will make a folder called ``geonode-2.10.3`` that contains GeoNode instance.
-
-Now we need to navigate inside ``geonode-2.10.3`` folder and install the packages from ``requirements.txt`` file.
-
-```shell
-cd geonode-2.10.3
-pip install -r requirements.txt --no-deps
+```
+# "local" is for Unix domain socket connections only
+# local   all             all                                     peer
+local   all             all                                     trust
 ```
 
-Finally, install geonode from the current directory using the following command.
+Restart PostgreSQL to make the change effective.
+
+In the search bar (beside windows icon), search for Services and open it then navigate until you find **postgresql-x64-13** and restart it.
+
+![Restart PostgreSQL](../img/installation/Windows/postgres/restart-postgres.png "Restart PostgreSQL")
+
+### Create Cartoview Databases
+
+Create two new databases ``cartoview`` and ``cartoview_datastore``.
+
+You can create the databases using one of two approaches, through CMD terminal with [SQL commands](https://www.postgresql.org/docs/13/sql-commands.html) or using pgAdmin4 GUI.
+
+#### SQL Commands with CMD
+
+Open a CMD terminal and open **psql** command line.
 
 ```shell
+# Open psql command line
+psql -U postgres
+```
+
+```shell
+# Create database named as cartoview and cartoview_datastore
+CREATE DATABASE cartoview;
+CREATE DATABASE cartoview_datastore;
+```
+
+Add PostGIS extension to the created databases to deal with the geographic objects.
+
+For **cartoview** database:
+
+```shell
+# To be executed at CMD terminal
+psql cartoview -U postgres
+
+# To be executed at psql terminal
+CREATE EXTENSION postgis;
+```
+
+Exit the PostgreSQL terminal with ``\q``
+
+For **cartoview_datastore** database:
+
+```shell
+# To be executed at CMD terminal
+psql cartoview_datastore -U postgres
+
+# To be executed at psql terminal
+CREATE EXTENSION postgis;
+```
+
+!!! note
+    The previous step must be done for the two databases, **cartoview** and **cartoview_datastore**.
+
+#### Using pgAdmin4 GUI
+
+Open pgAdmin4 and under **Local PostgreSQL-13** tree, right-click and select **Create** >> **Database**.
+
+![Create Database](../img/installation/Windows/pgAdmin/create-database.png "Create Database")
+
+You will be prompted a pop-up to enter information about the database like the name and template.
+
+Under **General** tab, set the name of the database to **cartoview** and under **Definition** tab, set the template to **template0**.
+
+![Database Name](../img/installation/Windows/pgAdmin/database-name.png "Database Name")
+
+Add ``postgis`` extension to the created database **cartoview**.
+
+![Add PostGIS Extension](../img/installation/Windows/pgAdmin/add-extension.png "Add PostGIS Extension")
+
+Repeat the previous steps to create the second database, **cartoview_datastore**.
+
+---
+
+## Cartoview Installation
+
+As Cartoview is build on top of GeoNode, we need to install GeoNode first.
+
+### Install GeoNode
+
+Navigate inside ``cartoview_service`` directory and make sure ``cartoview_venv`` is still activated. 
+
+Clone [GeoNode-3.2.1](https://github.com/GeoNode/geonode/tree/3.2.1) from GitHub.
+
+```shell
+git clone -b 3.2.1 https://github.com/GeoNode/geonode.git
+```
+
+Edit `requirement.txt` and `setup.cfg` files commenting the **production** and **test** packages as they are not compatible with Windows environment.
+
+Install GeoNode packages.
+```shell
+pip install -r requirements.txt --upgrade --no-cache --no-cache-dir
 pip install -e .
 ```
 
-!!! warning
-    Make sure you got the dot ``.`` when you copy the previous command.
-    
-## Cartoview Libraries Installation 
-
-!!! warning
-    Make sure you're inside ``cartoview_service`` directory and the ``cartoview_venv`` is still activated.
-
-- **Download and install Cartoview**
-
-***
+### Install Cartoview
 
 Download the latest version of cartoview by cloning the repository.
-
 ```shell
-git clone https://github.com/cartologic/cartoview.git
+git clone -b v1.32.0 https://github.com/cartologic/cartoview.git
 ```
 
-This will create a directory called ``cartoview`` inside ``cartoview_service`` directory.
+This will create a folder called ``cartoview`` inside ``cartoview_service``.
 
-Now we need to install cartoview dependencies, but first go to ``cartoview`` directory.
+Navigate to ``cartoview`` directory and install cartoview dependencies.
 
 ```shell
 cd cartoview
 pip install -e .
 ```
 
-!!! warning
-    Make sure you got the dot ``.`` when you copy the previous command.
-    
-- **Make sure the created databases are in the ``settings.py`` file**
+### Add Cartoview Environment Variables
+Cartoview requires adding some environment variables while running it or executing commands through terminal.
 
-***
+It's recommended to use [PyCharm](https://www.jetbrains.com/pycharm/) which is a powerful python IDE that has a lot of features to offer.
 
-Go to ``cartoview`` directory, you will find inside it another folder called ``cartoview``. Navigate inside it.
+Create a new PyCharm configuration and add the following environment variables accordingly.
+![PyCharm Configuration](../img/installation/Windows/pycharm/env-settings.png "PyCharm Configuration")
 
-You should find a file called ``local_settings.py.sample``. Remove the last word ``sample``.
+```shell
+DATABASE_URL=postgis://postgres:postgis@localhost:5432/cartoview
 
-This will override the ``settings.py`` file with a configured another settings file which is ``local_settings.py``.
+DATASTORE_DATABASE_URL=postgis://postgres:postgis@localhost:5432/cartoview_datastore
 
-If you open ``local_settings.py``, you will find the databases that we have created above:
+ALLOWED_HOSTS=['*']
 
+DJANGO_SETTINGS_MODULE=cartoview.settings
+
+DEFAULT_BACKEND_UPLOADER=geonode.importer
 ```
-DATABASES = {
-  'default': {
-      'ENGINE': 'django.contrib.gis.db.backends.postgis',
-      'NAME': 'cartoview',
-      'USER': 'postgres',
-      'PASSWORD': 'cartoview',
-      'HOST': 'localhost',
-      'PORT': '5432',
-  },
-  # vector datastore for uploads
-  'datastore': {
-      'ENGINE': 'django.contrib.gis.db.backends.postgis’,
-      'NAME': 'cartoview_datastore',
-      'USER': 'postgres',
-      'PASSWORD': 'cartoview',
-      'HOST': 'localhost',
-      'PORT': '5432',
-  }
-}
+
+![PyCharm Configuration](../img/installation/Windows/pycharm/env-variables.png "PyCharm Environment Variables")
+
+It's required to add them also to the terminal configuration.
+![PyCharm Configuration](../img/installation/Windows/pycharm/terminal-settings.png "Terminal Environment Variables")
+
+But the following variables only.
+```shell
+DATABASE_URL=postgis://postgres:postgis@localhost:5432/cartoview
+
+DATASTORE_DATABASE_URL=postgis://postgres:postgis@localhost:5432/cartoview_datastore
+
+ALLOWED_HOSTS=['*']
 ```
 
 !!! note
-    If you want to override any variable settings (for example to change the database password ,name or host), you can do this inside ``local_settings.py`` to override the settings in ``settings.py``.
-    
-- **Create a symbolic link of OSGeo into ``cartoview_venv`` needed by GDAL to run properly**
+    This means that you must ONLY use Pycharm terminal in order for everything to work properly. To be able to use CMD, add the environment variables mentioned above to Windows by following [this guide](https://docs.oracle.com/en/database/oracle/machine-learning/oml4r/1.5.1/oread/creating-and-modifying-environment-variables-on-windows.html).
 
-***
+#### Import GDAL Library
+As we have installed GDAL before, we need to import the location of its libraries into Cartoview settings.
 
-Add the following lines inside ``local_settings.py``, replacing ``your_path`` with the complete path to ``cartoview_service`` folder.
+Navigate to `cartoview\cartoview\`, create a file there called **pre_settings.py**, and add the following content.
 
+```python
+import os
+from distutils.sysconfig import get_python_lib
+
+
+if os.name == 'nt':
+    os.environ['Path'] = (r'%s\osgeo;' % (get_python_lib())) + os.environ['Path']
+    os.environ['GEOS_LIBRARY_PATH'] = (r'%s\osgeo\geos_c.dll' % (get_python_lib()))
+    os.environ['GDAL_LIBRARY_PATH'] = (r'%s\osgeo\gdal302.dll' % (get_python_lib()))
 ```
-os.environ['Path'] = r'your_path\cartoview_service\cartoview_venv\Lib\site-packages\osgeo;' + os.environ['Path']
-os.environ['GEOS_LIBRARY_PATH'] = r'your_path\cartoview_service\cartoview_venv\Lib\site-packages\osgeo\geos_c.dll'
-os.environ['GDAL_LIBRARY_PATH'] = r'your_path\cartoview_service\cartoview_venv\Lib\site-packages\osgeo\gdal202.dll'
+
+Import this file in `cartoview\cartoview\settings.py` to be before GeoNode settings.
+
+```python
+...
+from cartoview.pre_settings import *
+from geonode.settings import *  # noqa
+...
 ```
 
-- **Migrate & Load default data**
+Import it also in `cartoview\pavement.py`.
 
-***
+As Django-2.2.20 [doesn't support GDAL >= 3.0](https://github.com/django/django/blob/2.2.20/docs/ref/contrib/gis/install/geolibs.txt#L13), we need to add the installed GDAL version inside django.
+
+Navigate to django package in the virtual environment `site-packages` and modify the Django GDAL package python file **libgdal.py** available at `\path\to\cartoview_service\Lib\site-packages\django\contrib\gis\gdal\libgdal.py` according to the following.
+```python
+# Replace this line
+lib_names = ['gdal203', 'gdal202', 'gdal201', 'gdal20', 'gdal111']
+# With this line
+lib_names = ['gdal302', 'gdal203', 'gdal202', 'gdal201', 'gdal20', 'gdal111']
+```
+
+To make sure everything is working properly, open Pycharm terminal and make sure the `cartoview_service` virtual environment is activated, and run the following command.
+```shell
+python manage.py check
+```
+
+Should print something like this:
+![Check Project](../img/installation/Windows/pycharm/terminal-check.png "Check project configuration")
+
+### Migrate & Load default data
 
 Inside ``cartoview`` folder, run the below commands to migrate and load Cartoview data.
 
-!!! note
-    Make sure the virtual environment is still activated (If you see its name prefixed your prompt, you're good to go).
+!!! warning
+    - Make sure the virtual environment is still activated (If you see its name prefixed your prompt, you're good to go).
+    - Make sure to add the above environment variables to the terminal so that the following commands run smoothly.
 
 Detect changes in the ``app_manager``.
 ```shell
@@ -334,105 +409,110 @@ Load default Cartoview Appstore data.
 python manage.py loaddata app_stores.json
 ```
 
-- **Test Development Server by running this Command**
+Collect static files.
+```shell
+python manage.py collectstatic --noinput
+```
+
+#### Test Development Server
+Check if Cartoview is working as expected.
 ```shell
 python manage.py runserver 0.0.0.0:8000
 ```
 
-At ``localhost:8000``, you should get:
+Open a browser and check if cartoview is running at [localhost:8000](http://localhost:8000/).
 
 ![Cartoview website](../img/installation/Ubuntu/cartoview.png "Cartoview")
 
-**Sign-in with:**
+You should be able to successfully log with the default admin user (admin / admin) and start using it right away.
+
+Now we have Cartoview up and running. The last thing we need to do, is to install and configure GeoServer.
+
+---
+
+## GeoServer Installation
+
+Cartoview comes with a pre-configured GeoServer available by GeoNode. So it can be installed with [Paver](https://pythonhosted.org/Paver/) commands.
+
+If you check the `pavement.py` file, you can see multiple created tasks like, `setup_geoserver`, `start_geoserver`, and `stop_geoserver`.
+
+### Install Java and OpenJDK
+As GeoServer is built with [Java](https://www.java.com/en/download/manual.jsp), we need to install it alongside [Java SE Development Kit 8u311](https://www.oracle.com/java/technologies/downloads/#java8-windows) the **jdk-8u311-windows-x64.exe**, specifically.
+
+After installing both, open Pycharm terminal and make sure they are installed.
+
+!!! note
+    You may need to restart Pycharm after installing Java.
+
 ```shell
-user: admin
-password: admin
+java -version
 ```
 
-Now we have Cartoview up and running, last thing we need to do, is to install and configure GeoServer to run with it.
+### Setup GeoServer
+!!! warning
+    - Make sure the virtual environment is still activated (If you see its name prefixed your prompt, you're good to go).
+    - Make sure to import `cartoview\pre_settings.py` to `pavement.py`.
 
-## GeoServer 2.16.2 Installation
 
-- **Install JRE**
-
-***
-
-Make sure you have a Java Runtime Environment (JRE) installed on your system. GeoServer requires a Java 8 environment. The Oracle JRE is preferred, but OpenJDK has been known to work adequately. You can download [JRE 8 from Oracle][5].
-
-[5]: https://www.oracle.com/java/technologies/javase-jre8-downloads.html
-
-- **Install Apache Tomcat 9**
-
-***
-
-Download the windows installer from [here][6].
-
-[6]: https://downloads.apache.org/tomcat/tomcat-9/v9.0.33/bin/apache-tomcat-9.0.33.exe
-
-While proceeding with the installer, make sure to check installing ``Host Manager``.
-![Tomcat installation](../img/installation/Windows/tomcat/tomcat1.png "Apache Tomcat")
-
-Configure Tomcat Web Management Interface by setting the admin credentials. We will set username to be ``admin`` and password to be ``cartoview``.
-![Tomcat installation](../img/installation/Windows/tomcat/tomcat2.png "Apache Tomcat")
+Run the task called `setup_geoserver` to download a customized version of GeoServer WAR file (provided by GeoNode) and setup [jetty](https://www.eclipse.org/jetty/).
 
 !!! note
-    Make sure the Roles field contains ``admin-gui``, ``manager-gui``.
-    
-Proceed with the installation untill you have Tomcat 9 up and running and you can check it in Windows Services.
+    - Jetty provides a web server and servlet container. It's used to host GeoServer.
+    - The file called `dev_config.yml` holds the download URL for GeoServer and Jetty.
 
-- **Download and install GeoServer war file**
+```shell
+paver setup_geoserver
+```
 
-***
+This will create two folders, the first one called `downloaded`, it contains the downloaded required files and `geoserver` which contains all the files related to GeoServer.
 
-Now we will download the latest stable version of GeoServer war file from [here][7].
+### Start GeoServer
+Run the task called `start_geoserver` to launch jetty on port `8080` and start GeoServer.
 
-[7]: https://build.geo-solutions.it/geonode/geoserver/latest/geoserver-2.16.2.war
+!!! warning
+    Make sure nothing is running on port `8080`.
 
-You should get a war file called ``geoserver-2.16.2.war``. For sake of simplicity, we will rename it to be ``geoserver.war`` instead of the previous.
+```shell
+paver start_geoserver
+```
 
-Copy the file and navigate to Tomcat installation directory and paste the war file inside ``webapps`` folder.
+![GeoServer Logs](../img/installation/Windows/start-geoserver.png "GeoServer Logs")
 
-!!! note
-    Usually, Tomcat directory is at this path ``C:\Program Files\Apache Software Foundation\Tomcat 9.0``.
-    
-In the search bar (beside windows icon), search for Services and run it. It should open to you all the running services on your windows machine.
-
-Navigate to a service called `Apache Tomcat 9.0` and restart it.
-
-This will cause Tomcat to serve GeoServer from the war file which we have put inside ``Tomcat 9.0/webapps``.
-
-!!! note
-    Make sure that GeoServer is running:
-    
-    - Navigate to ``localhost:8080`` to open Tomcat then click on Manager App.
-    
-    - Login with the credentials, you have entered during Tomcat installation.
-    
-    - You should find GeoServer under Applications section started already.
-
-![Tomcat Application Manager](../img/installation/Ubuntu/tomcat_manager.png "Tomcat Application Manager")
-    
-Now GeoServer is up and running at ``localhost:8080/geoserver``.
-
+GeoServer is now available and running at [http://localhost:8080/geoserver/](http://localhost:8080/geoserver/).
 ![GeoServer](../img/installation/Ubuntu/geoserver.png "GeoServer")
-**Sign-in with:**
+
+Make sure you're logged in with **admin/admin** in Cartoview at [http://localhost:8000/](http://localhost:8000/) then navigate to 
+[http://localhost:8080/geoserver/](http://localhost:8080/geoserver/) and click on the GeoNode button to use the pre-configured authentication between GeoNode and GeoServer.
+![GeoServer Login](../img/installation/Ubuntu/geoserver-login.png "GeoServer Login")
+
+!!! note
+    You can also log in with the default GeoServer credentials admin/geoserver, but using GeoNode button is easier.
+
+You can change the **admin** password by navigating to Security > Users, Groups, and Roles. Select `Users/Groups` tab, select `admin` user, and you can now update the password as you want. 
+![Change GeoServer Password](../img/installation/Ubuntu/geoserver-password.png "Change GeoServer Login")
+
+### Stop GeoServer
+GeoServer can be stopped by running the task `stop_geoserver`.
+
 ```shell
-user: admin
-password: geoserver
+paver stop_geoserver
 ```
 
-## Deployment Notes
+!!! note
+    When GeoServer is stopped, the jetty server got down also but all the uploaded data (e.g. layers) is saved in the folder called `geoserver` in cartoview directory.
 
-Once Cartoview is installed, it's expected to install all apps from the App Store automatically.
+---
 
-At the moment, Cartoview will fully support Apache server only. For Nginx deployments, Cartoview will be able to detect new apps and get the updates, however to apply them, a web server restart will be required to complete the process as Cartoview will not be able to restart Nginx when new apps are installed.
+## Post-Installation Notes
 
-After you install or update apps from the app manager page, you will need to restart Nginx manually until this issue is addressed in the future.
+Congratulations! Cartoview is now installed successfully.
 
-**Follow these steps to get the apps working on Nginx:**
+You can upload layers, create maps, and install Cartoview apps to visualize these maps.
 
-- Collect static files using the command, ``python manage.py collectstatic --noinput``.
+!!! note
+    If you got an error like the following message while uploading a layer, make sure to remove the **PROJ_LIB** environment variable from Windows system environment variables.
+    `RuntimeError: PROJ: proj_identify: C:\Program Files\PostgreSQL\13\share\contrib\postgis-3.1\proj\proj.db lacks DATABASE.LAYOUT.VERSION.MAJOR / DATABASE.LAYOUT.VERSION.MINOR metadata. It comes from another PROJ installation.`
 
-- Restart server now as you should after installing any app.
+Once Cartoview is installed, You can navigate to [http://localhost:8000/apps/](http://localhost:8000/apps/) to check and install all available apps from the [App Store](https://appstore.cartoview.net/).
 
-&nbsp;
+After installing any app, you may need to restart the running django server if you can't see your app in `/apps`.

@@ -1,185 +1,112 @@
 ![Cartoview Logo](../img/cartoview-logo.png)
-# Cartoview Installation | Docker
+# Cartoview Core Installation | Docker
 
 ## Introduction
-This document describes the installation of Cartoview using Docker on either [Ubuntu 18.04](#for-ubuntu-1804) or [Windows 10](#for-windows-10).
+This guide describes how to install and configure a fresh setup of Cartoview to run it in Production mode using Docker on [**Ubuntu 20.04**](#for-ubuntu-2004) or [**Windows 10**](#for-windows-10).
+
+This part of the documentation describes installation of **Cartoview-1.31.0** which comes with **GeoNode-3.1** and **GeoServer-2.17.2**.
+
+---
 
 ## Installation Requirements
 
-#### For Ubuntu 18.04:
+### For Ubuntu 20.04:
 
-- **Install Docker**
+#### Install Docker
 
-***
+In order to be able to run Cartoview with docker engine, Docker Compose should be installed, but because it relies on Docker Engine, we will install``docker`` first from [Docker official website](https://docs.docker.com/get-docker/).
 
-In order to be able to run Cartoview with docker engine, Docker Compose should be installed, but because it relies on Docker Engine, we will install ``docker`` first from [Docker official website][1].
+Install **Docker Engine**, follow [this guide](https://docs.docker.com/engine/install/ubuntu/). We recommend installing it using [docker repository](https://docs.docker.com/engine/install/ubuntu/#install-using-the-repository).
 
-1. Install **Docker Engine**, navigate to [this guide][2]. We recommend to install it using [docker repository][3].
-
-2. Install **Docker Compose**, navigate to [this guide][4].
-
-[1]: https://docs.docker.com/get-docker/
-[2]: https://docs.docker.com/engine/install/ubuntu/
-[3]: https://docs.docker.com/engine/install/ubuntu/#install-using-the-repository
-[4]: https://docs.docker.com/compose/install/
+Install **Docker Compose**, follow [this guide](https://docs.docker.com/compose/install/).
 
 !!! note
-    The Docker daemon needs to use root privileges, so we must prefix each docker command with ``sudo``, but if you want to run them without ``sudo``, check [How to manage Docker as a non-root user][5].
-    
-[5]: https://docs.docker.com/engine/install/linux-postinstall/#manage-docker-as-a-non-root-user
+    The Docker daemon needs to use root privileges, so we must prefix each docker command with ``sudo``, but if you want to run them without ``sudo``, check [How to manage Docker as a non-root user](https://docs.docker.com/engine/install/linux-postinstall/#manage-docker-as-a-non-root-user).
 
-**Validate Docker Installation**
-
-To make sure Docker is installed successfully, run the following command.
+Check if Docker is installed successfully.
 ```shell
 docker --version
-# Docker version 19.03.8, build afacb8b
+# Docker version 20.10.10, build b485636
+
 docker-compose --version
-# docker-compose version 1.25.4, build 8d51620a
+# docker-compose version 1.29.2, build 5becea4c
 ```
 
-- **Install Python2.7 and Django**
+### For Windows 10:
 
-***
+#### Install Docker Desktop
+Docker Desktop is an easy-to-install application for your Mac or Windows environment that enables you to build and share containerized applications and 
+microservices. Docker Desktop includes [Docker Engine](https://docs.docker.com/engine/), Docker CLI client, [Docker Compose](https://docs.docker.com/compose/), and many useful tools.
 
-In order to run Cartoview, we need to install python and django.
-
-```shell
-sudo apt-get update
-sudo apt-get install python-django
-```
-
-#### For Windows 10:
-
-- **Install Docker**
-
-***
-
-Docker has two applications, you can use one of them:
-
-&nbsp;&nbsp;&nbsp;&nbsp;1. **[Docker Desktop](#using-docker-desktop)** but it has [specific system requirements][6] that must be met.
-
-[6]: https://docs.docker.com/docker-for-windows/install/#system-requirements
-
-&nbsp;&nbsp;&nbsp;&nbsp;2. **[Docker Toolbox](#using-docker-toolbox)** which is used for systems that do not meet the requirements of Docker Desktop.
-
-###### Using Docker Desktop:
-
-Walk through this guide to download and install [Docker Desktop][7].
-
-[7]: https://docs.docker.com/docker-for-windows/install/
-
-!!! warning
-    Before installing Docker Desktop, please read carefully the [What to know before you install][8] section.
-    
-[8]: https://docs.docker.com/docker-for-windows/install/#what-to-know-before-you-install
+Walk through this guide to download and install [Docker Desktop](https://docs.docker.com/desktop/windows/install/).
 
 Proceed with installation and leave everything as default.
 
-After installing docker desktop, we need to start it. In the search-bar, search for **Docker**, and select **Docker Desktop** in the search results.
+Docker Desktop does not start automatically after installation. 
+To start Docker Desktop, Search for **Docker**, and select **Docker Desktop** in the search results.
 
-When the whale icon in the taskbar stays steady, **Docker Desktop** is up-and-running, and is accessible from any terminal window.
+When you see the Docker menu (A whale icon) in the taskbar stays steady, **Docker Desktop** is up-and-running, and is accessible from any terminal window.
 
 !!! note
     If you right-click on the whale icon, you can check multiple features like docker version, docker hub, dashboard, etc.
     
     ![Docker Whale](../img/installation/Docker/whale_icon.png)
     
-**Docker Dashboard** provides a useful interface to handle and control all the available containers easily. Please visit [Docker Desktop Dashboard][9] for more details.
+**Docker Dashboard** provides a useful interface to handle and control all the available containers easily. Please visit [Docker Desktop Dashboard](https://docs.docker.com/desktop/dashboard/) for more details.
 
-[9]: https://docs.docker.com/docker-for-windows/dashboard/
+#### Docker Configuration
 
-***
-**Optional | Configure Docker Resources**
+Make sure that **Use Docker Compose V2** option is **unchecked** to avoid potential issues.
 
-You may want to change the default resources given to Docker to speed up operations that will be done on the containers.
+![Docker Configuration](../img/installation/Docker/compose_v2.png)
 
-Right-click on the whale icon, select **Settings**, navigate to **Resources** tab and change the resources as you wish.
+---
 
-![Docker Resources](../img/installation/Docker/docker_resources.png)
-***
+## Cartoview Installation
 
-###### Using Docker Toolbox:
-
-Walk through this guide to download and install [Docker Toolbox][10] untill you got the terminal in which we will execute the following commands.
-
-[10]: https://docs.docker.com/toolbox/toolbox_install_windows/
-
-!!! note
-    **Docker Toolbox** by default, is configured to use IP address ``192.168.99.100`` so instead of using ``localhost`` we will use this IP address.
-    
-
-After installing one of the docker applications above, Validate Docker Installation by opening ``Windows PowerShell`` and execute the following command:
-
-**Validate Docker Installation**
-
-After installing one of the docker applications above, validate docker installation by checking its version.
-
-At any directory, ``right-click with left-Shift`` on the free space and select ``Open Windows PowerShell here``.
-
-This will open a terminal in which we will execute all the upcoming commands. Just copy-paste the commands and hit the Enter button.
+### Running Cartoview Docker Services
+Download **cartoview-1.31.0** by cloning the repository and using the tag **v1.31.0**.
 
 ```shell
-docker --version
-# Docker version 19.03.8, build afacb8b
-docker-compose --version
-# docker-compose version 1.25.4, build 8d51620a
+git clone -b v1.31.0 https://github.com/cartologic/cartoview.git
 ```
 
-The version should be something like what is after the ``#`` symbol.
+This will create a directory called ``cartoview``. Navigate inside it to install Cartoview with docker.
 
-- **Install Python2.7 and Django**
-
-***
-
-As explained in [Cartoview Installation | Windows](/installation/windows/#installation-requirements) section, download and install [Python2.7][11]. 
-
-[11]: https://www.python.org/ftp/python/2.7.17/python-2.7.17.amd64.msi
-
-Open ``Windows PowerShell`` and install django.
-
-```shell
-pip install django==1.11.11
+Open `docker-compose.yml` and navigate to **cartoview** docker service and update as the following:
+```yaml
+# Change the line
+image: cartologic/cartoview:latest
+# With:
+image: cartologic/cartoview:1.31.0
 ```
 
-## Cartoview Libraries Installation
-
-- **Download and Install Cartoview**
-
-***
-
-Download the latest version of cartoview by cloning the repository.
-
-```shell
-git clone https://github.com/cartologic/cartoview.git
-```
-
-This will create a directory called ``cartoview``.
-
-Navigate inside it to install Cartoview using docker.
-
-!!! warning
-    Before executing the command below, make sure that ``port 80`` is not used by any process as Cartoview will be running on it.
-    
 ```shell
 cd cartoview
 docker-compose up -d
 ```
 
-!!! warning
-    **For Ubuntu**, if you didn't configure docker to run without ``sudo``, make sure to prefix each docker command with it.
-    
-Get a cup of coffee and wait untill all the images are downloaded and installed successfully.
+!!! note
+    `-d` is used to start up the containers daemonized, which means they will be started in the background (and keep running if you log out from the server or close the shell). `docker-compose` will take care to restart the containers if necessary (e.g. after boot).
 
 !!! warning
-    **For Docker Desktop**, while installation, you may be prompted to accept whether to give permission for Docker to mount its containers on one of your hard-drives or to not. Accept this so that the containers can run probably.
+    For **Ubuntu**, if you didn't configure docker to run without ``sudo``, make sure to prefix each docker command with it.
+    
+Get a cup of coffee and wait until all the images are pulled and installed successfully.
+
+!!! warning
+    While installing using **Windows Docker Desktop**, you may be prompted to accept whether to give permission for Docker to mount its containers on one of your hard-drives or to not. Accept this so that the containers can run properly.
     
     If you didn't accept, you will get errors. Execute ``docker-compose up -d`` again and accept.
     
 After all images are downloaded, you can monitor the logs of initiating Cartoview with this command.
 
 ```shell
+# This will show the logs of each service in the docker-compose.yml
 docker-compose logs -f --tail=100
+
+# Show logs only for cartoview service
+docker-compose logs -f --tail=100 cartoview
 ```
 
 **For Windows Docker Desktop**
@@ -192,21 +119,38 @@ Also, you can see the logs by just ``double-click`` on ``cartoview``.
 
 ![Cartoview Logs](../img/installation/Docker/cartoview_logs.png)
 
-- **Migrate & Load default data**
+### Migrate & Load default data
+We need to execute post-installation commands (e.g. migrations, collect static files, etc.) to make `cartoview` work properly after it's up and running. So we will open a terminal inside this service to execute these commands.
 
-*** 
+#### Use Make
+If you have [Make](https://www.gnu.org/software/make/) installed on your machine, you can just use the Makefile available at [cartoview](https://github.com/cartologic/cartoview/blob/v1.31.0/Makefile).
 
-We need to execute some commands to the service after it's up and running. So we will open the terminal inside ``Cartoview`` container.
+!!! note
+    - For Windows, if you don't have Make, install it from [here](http://gnuwin32.sourceforge.net/packages/make.htm).
+    - Make sure to add `make.exe` path (e.g. C:\Program Files (x86)\GnuWin32\bin) to [PATH system variable](https://www.java.com/en/download/help/path.html). 
 
-**For Ubuntu:**
-
+!!! warning
+    For Windows:
+    - All the comments found at the **Makefile** should be removed to avoid any potential errors related to Make.
+    - Replace the Unix `sleep` command with Windows `timeout`.
 ```shell
-docker exec -it cartoview_cartoview_1 /bin/bash
+# This will go through the Makefile and execute the command called "run"
+make run
 ```
 
-**For Windows:**
+!!! note
+    The command `make run` will execute a chain of commands that are required to make things work properly. You can check these commands in the `Makefile` available inside cartoview directory.
 
-Open **Docker Dashboard** and for ``cartoview_cartoview_1`` container, click on the Cli button to open the terminal in which we will execute the below commands.
+
+If you have used the previous command then you can skip the following ones.
+
+#### For Ubuntu:
+```shell
+docker-compose exec cartoview bash
+```
+
+#### For Windows:
+Open **Docker Dashboard** and for ``cartoview_django`` container, click on the Cli button to open the terminal in which we will execute the below commands.
 
 ![Cartoview CLI](../img/installation/Docker/cartoview_cli.PNG)
 
@@ -235,12 +179,7 @@ python manage.py loaddata sample_admin.json
 
 Load default oauth apps so that you will be able to authenticate with defined external server.
 ```shell
-python manage.py loaddata default_oauth_apps.json
-```
-
-Load default Initial Data for Cartoivew.
-```shell
-python manage.py loaddata initial_data.json
+python manage.py loaddata default_oauth_apps_docker.json
 ```
 
 Load default Cartoview Appstore data.
@@ -248,153 +187,90 @@ Load default Cartoview Appstore data.
 python manage.py loaddata app_stores.json
 ```
 
+Load default Initial Data for Cartoview.
+```shell
+python manage.py loaddata initial_data.json
+```
+
 !!! note
     After executing the above commands, you can ``exit`` the container terminal by just typing exit then hit the ``Enter`` button.
     
-Restart the services running on docker so that the changes takes effect.
+Restart Cartoview services running on docker so that the changes takes effect.
 
 ```shell
 docker-compose restart
 ```
 
-- **Test the development server**
+#### Test Development Server
+Check if Cartoview is working as expected.
 
-***
+In the browser, navigate to [http://10.5.0.4/](http://10.5.0.4/).
+!!! note
+    Cartoview is running on **10.5.0.4** according to a pre-configured [external IP](https://github.com/cartologic/cartoview/blob/v1.31.0/docker-compose.yml#L111).
 
-In the browser navigate to ``localhost:80``. 
-
-**For Windows:**
-
-Open Docker Dashboard and for ``cartoview_nginx_1``container, click on ``Open in browser`` button to open Cartoview in the browser.
-
-![Cartoview open browser](../img/installation/Docker/cartoview_browser.PNG)
+!!! warning
+    Do Not run Cartoview on **localhost** as it's not configured to work on that.
 
 You should get:
 
 ![Cartoview on Browser](../img/installation/Ubuntu/cartoview.png)
 
-**Sign-in with:**
-```shell
-user: admin
-password: admin
-```
+You should be able to successfully log with the default admin user (admin / admin) and start using it right away.
 
-**For GeoServer:**
-Open ``localhost:80/geoserver``
+Open GeoServer available at [http://10.5.0.4/geoserver/](http://10.5.0.4/geoserver)
+![GeoServer](../img/installation/Docker/geoserver.png "GeoServer")
 
-![GeoServer](../img/installation/Ubuntu/geoserver.png "GeoServer")
-**Sign-in with:**
-```shell
-user: admin
-password: geoserver
-```
+Make sure you're logged in with **admin/admin** in Cartoview at [http://10.5.0.4/](http://10.5.0.4/) then navigate to [http://10.5.0.4/geoserver/](http://10.5.0.4/geoserver/) and click on the 
+GeoNode button to use the pre-configured authentication between GeoNode and GeoServer.
+![GeoServer Login](../img/installation/Ubuntu/geoserver-login.png "GeoServer Login")
+
+!!! note
+    You can also log in with the default GeoServer credentials admin/geoserver, but using GeoNode button is easier and quicker.
+
+---
 
 ## GeoServer Configuration
 
-- **Optional | Change default GeoServer admin Password**
+### Optional | Change default password
 
-***
+Login with GeoServer credentials that were mentioned above.
 
-1. Login with GeoServer credentials that were mentioned above.
+At the left-side menu, navigate to **Security** section and click on **Users, Groups, Rules**.
 
-2. At the left-side menu, navigate to **Security** section and click on **Users, Groups, Rules**.
+![GeoServer Configuration](../img/installation/Docker/geoserver_pass1.png "GeoServer Configuration")
 
-    ![GeoServer Configuration](../img/installation/Docker/geoserver_pass1.png "GeoServer Configuration")
+Click on **Users/Groups** then select **admin**.
 
-3. Click on **Users/Groups** then select **admin**.
+![GeoServer Configuration](../img/installation/Docker/geoserver_pass2.png "GeoServer Configuration")
 
-    ![GeoServer Configuration](../img/installation/Docker/geoserver_pass2.png "GeoServer Configuration")
+Set the password you wish then scroll to the end of the page and click **Save**.
+
+![GeoServer Configuration](../img/installation/Docker/geoserver_pass3.png "GeoServer Configuration")
     
-4. Set the password you wish then scroll to the end of the page and click **Save**.
+Now, you can log out and login again with the new password you have just entered.
 
-    ![GeoServer Configuration](../img/installation/Docker/geoserver_pass3.png "GeoServer Configuration")
-    
-Now, you can logout and login again with the new password you have just entered.
+---
 
-- **Configure GeoServer with Cartoview**
+## Post-Installation Notes
 
-***
+Congratulations! Cartoview is now installed successfully.
 
-In order for Cartoview to work properly, we need to authenticate GeoServer with it.
+You can upload layers, create maps, and install Cartoview apps to visualize these maps.
 
-1. Inside ``cartoview`` directory, navigate to ``env`` folder and open the file called **celery.env**.
+Once Cartoview is installed, You can navigate to [http://10.5.0.4/apps/](http://10.5.0.4/apps/) to check and install all available apps from the [App Store](https://appstore.cartoview.net/).
 
-    Edit the contents of the file as below:
-    
-    ``GEOSERVER_PUBLIC_LOCATION=http://localhost/geoserver/ instead of http://10.5.0.4/geoserver/.``
-    ``SITEURL=http://localhost/ instead of http://10.5.0.4/.``
-    
-2. Repeat step 1, but for another file which is **django.env**.
-
-!!! note
-    For **Docker Toolbox**, use docker IP address ``192.168.99.100`` instead of using ``localhost``.
-
-3. For GeoServer, at the left-side menu, navigate to **Security** section and click on **Authentication**.
-
-    ![GeoServer Configuration](../img/installation/Docker/geoserver_conf1.png "GeoServer Configuration")
-    
-    At the Authentication Filters, select **geonode-oauth2**.
-    
-    ![GeoServer Configuration](../img/installation/Docker/geoserver_conf2.png "GeoServer Configuration")
-    
-    Change the URLs inside the red square to the values in the image then click **Save**.
-    
-    ![GeoServer Configuration](../img/installation/Docker/geoserver_conf3.png "GeoServer Configuration")
-    
-4. At the left-side menu, navigate to **Security** section and click on **Users, Groups, Rules**.
-
-    Click on **geonode REST role service**. 
-    
-    Select **ROLE_ADMIN** for **Administrator role** and **Group administrator role**.
-    
-    Edit the **Base Server URL**
-    
-    ![GeoServer Configuration](../img/installation/Docker/geoserver_conf4.png "GeoServer Configuration")
-    
-5. At the left-side menu, navigate to **Settings** section and click on **Global**.
-
-    Edit the **Proxy Base URL**.
-
-    ![GeoServer Configuration](../img/installation/Docker/geoserver_conf5.png "GeoServer Configuration")
-
-6. Add **GeoServer OAuth2 Redirect URIs** accordingly.
-
-    Open ``Cartoview Admin Dashboard`` in the browser at ``localhost/admin``.
-    
-    Navigate to this directory, ``Home › Django OAuth Toolkit › Applications › GeoServer``.
-    
-    Make sure GeoServer URLs are like the image below then click **Save**.
-    
-    ![Cartoview Configuration](../img/installation/Docker/cartoview_admin.png "OAuth Configuration")
-
-**Verify the process of authentication between GeoServer and Cartoview**
-
-Sign out from GeoServer and navigate to Cartoview at ``localhost``.
-
-Login in Cartoview with the credentials:
+After installing any app, you may need to restart cartoview docker services in order to install the app properly.
 ```shell
-user: admin
-password: admin
+docker-compose restart
 ```
 
-Open GeoServer from the **admin dropdown**.
+Collect static files using the command:
+```shell
+docker-compose exec cartoview python manage.py collectstatic --noinput
+```
 
-![GeoServer Configuration](../img/installation/Docker/geoserver_admin.png "GeoServer Configuration")
-
-You should find that GeoServer user is logged in automatically, and the authentication process runs properly.
-
-
-## Deployment Notes
-
-Once Cartoview is installed it is expected to install all the Apps from the app store automatically, but Cartoview will not be able to restart Docker when new apps are installed. So, after installing any new app or app update, you will need to restart docker manually until this issue is addressed in the future.
-
-**Follow these steps to get the apps working on Nginx:**
-
-!!! note
-    We need to open the terminal inside Cartoview container as we did at **Migrate & load default data** section.
-
-- Collect static files using the command, ``python manage.py collectstatic --noinput``.
-
-- Restart docker to see the change's effect, ``docker-compose restart``.
-
-&nbsp;
+Or you can use the [Make](https://www.gnu.org/software/make/) tool to run pre-configured `collectstatic` command.
+```shell
+# This will go through the Makefile and execute the command called "collect_static"
+make collect_static
+```
