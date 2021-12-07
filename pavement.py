@@ -46,7 +46,7 @@ assert sys.version_info >= (2, 6), \
 TEST_DATA_URL = 'http://build.cartoview.net/cartoview_test_data.zip'
 dev_config = None
 with open("dev_config.yml", 'r') as f:
-    dev_config = yaml.load(f)
+    dev_config = yaml.load(f, Loader=yaml.Loader)
 APPS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "apps")
 
 
