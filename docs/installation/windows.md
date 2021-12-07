@@ -1,5 +1,5 @@
 ![Cartoview Logo](../img/cartoview-logo.png)
-# Cartoview Installation | Windows
+# Cartoview Core Installation | Windows
 
 ## Introduction
 
@@ -12,6 +12,8 @@ This part of the documentation describes installation of **Cartoview-1.32.0** wh
 
 !!! note
     The following steps will use shell commands that you must enter on a local terminal (e.g. CMD, Powershell, etc.).
+
+If you plan to customize Cartoview & GeoNode user interface components to your needs, it's recommended to use [Cartoview Windows Installer](https://cartoview.net/download/). Check the available Windows installer [guide](windows-installer.md).
 
 ## Installation Requirements
 
