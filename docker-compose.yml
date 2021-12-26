@@ -1,13 +1,13 @@
 version: "3"
 services:
   postgis:
-    image: kartoza/postgis:11.5-2.5
+    image: kartoza/postgis:13
     volumes:
       - postgis-data:/var/lib/postgresql
       # - dbbackups:/backups
     environment:
       # If you need to create multiple database you can add coma separated databases eg gis,data
-      - POSTGRES_DB=cartoview,cartoview_datastore
+      - POSTGRES_DB=cartoview,cartoview_datastore,cartoview_geodatabase
       - POSTGRES_USER=docker
       - POSTGRES_PASS=docker
       - ALLOW_IP_RANGE=0.0.0.0/0
@@ -38,14 +38,14 @@ services:
     networks:
       -cartoview-internal:
   data-dir-conf:
-    image: geonode/geoserver_data:2.18.2
+    image: geonode/geoserver_data:2.19.x
     restart: on-failure
     container_name: gsconf4cartoview
     command: /bin/true
     volumes:
       - geoserver-dir:/geoserver_data/data
   geoserver:
-    image: geonode/geoserver:2.18.2
+    image: geonode/geoserver:2.19.x
     depends_on:
       - postgis
       - data-dir-conf
