@@ -220,6 +220,7 @@ Navigate to ``cartoview`` directory and install cartoview dependencies.
 ```shell
 cd cartoview
 pip install -e .
+pip install pygdal=="`gdal-config --version`.*"
 ```
 
 !!! warning

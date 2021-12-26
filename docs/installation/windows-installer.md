@@ -4,7 +4,7 @@
 ## Introduction
 Cartoview has a Windows installer that gives you an up and running instance, having Cartoview, GeoNode, GeoServer, and PostgreSQL (PostGIS) installed on the fly.
 
-This guide describes the steps of installing and running Cartoview installer.
+This guide describes the steps of installing and running Cartoview installer **v1.31.0**.
 
 --- 
 
@@ -24,7 +24,7 @@ Download the installer on your Windows machine. You should get an executable fil
 Proceed with the steps to install and run Cartoview.
 
 !!! note
-    It's recommended to stick with the default configurations during this installation but feel free to make changes according to your needs.
+    It's optional whether to stick with the default configurations during this installation or make changes according to your needs.
 
 Specify whether you want to use a **domain name** (e.g. localhost, example.com) or an **IP** (e.g. 192.168.10.1). We will stick with the default **domain name** to run on localhost.
 
@@ -43,7 +43,7 @@ PostgreSQL Port: Database port.
 
 Specify whether to use the database with **Express** mode which installs and runs PostgreSQL on the fly or **Advanced** mode which uses a running instance of PostgreSQL.
 
-If you select the **Advanced** mode, you will be required to provide the installation directory of PostgreSQL on your machine, the credentials and databases names.
+If you select the **Advanced** mode, you will be required to provide the installation directory of PostgreSQL on your machine, the database server credentials (e.g. domain, port, username, and password) and databases names.
 
 We will stick with **Express** mode.
 
@@ -78,7 +78,7 @@ And the [Admin](http://localhost:4040/docs/admin.html) page.
 
 Congratulations! Cartoview is now installed successfully.
 
-You can upload layers, create maps, and install Cartoview apps to visualize these maps.
+You can upload layers, create maps, and install Cartoview apps to visualize and interact with these maps.
 
 ### Install Apps
 
@@ -100,12 +100,16 @@ You now have a control on the appearance of Cartoview as being able to add and c
 
 For more information regarding Cartoview & GeoNode theming, please follow [this guide](https://docs.geonode.org/en/master/basic/theme/index.html#geonode-themes) provided by GeoNode.
 
+### Quick Links
+
+![Admin Configuration](../img/installation/Installer/admin-configuration-1.png "Quick Links")
+
 ### Admin Configuration
 
 You can find at the [Admin Configuration](http://localhost:4040/docs/docs.html) page the details of each installed service (e.g. Default credentials, Windows service name, and installed version).
 
-![Admin Configuration](../img/installation/Installer/admin-configuration-1.png "Installed Services")
+![Admin Configuration](../img/installation/Installer/admin-configuration-2.png "Installed Services")
 
 And a guide about how to publish Cartoview on a Windows server.
 
-![Publish Cartoview on Windows server](../img/installation/Installer/admin-configuration-2.png "Publish Cartoview on Windows server")
+![Publish Cartoview on Windows server](../img/installation/Installer/admin-configuration-3.png "Publish Cartoview on Windows server")
