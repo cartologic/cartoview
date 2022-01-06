@@ -1,5 +1,5 @@
 {% extends "app_manager/app_install_base.html" %}
-{% load bootstrap_tags staticfiles cartoview_tags %}
+{% load bootstrap_tags staticfiles cartoview_tags base_tags %}
 {% load i18n %}
 
 {% block title %} {{ block.super }} - {% trans "Applications" %} {% endblock %}
@@ -138,11 +138,64 @@
                             </div>
                         </div>
                     {% endif %}
-                    {% empty %}
-                    <div class="text-center">
-                        <h1>{% trans "No Apps Installed" %}</h1>
-                    </div>
+{#                    {% empty %}#}
+{#                    <div class="text-center">#}
+{#                        <h1>{% trans "No Apps Installed" %}</h1>#}
+{#                    </div>#}
                 {% endfor %}
+                {% with facet_type='geoapps' %}
+                {% facets as facets %}
+                <div class="flex-item">
+                    <div class="thumbnail">
+                        <img src="{% static 'app_manager/images/geonode-dashboard.png' %}" class="app-img">
+                        <div class="fill-empty flex-row">
+                            <h4 class="text-center">{% trans 'Geonode Dashboard' %}</h4>
+                            <p class="text-center">
+                                {% trans "Geonode Dashboard" %}
+                            </p>
+                            <div class="fill-empty">
+                            </div>
+                            <div class="text-center" style="display:flex;flex-wrap:wrap">
+                                <div id="card-buttons">
+                                    <a href="{% url "apps_browse" %}?limit={{ CLIENT_RESULTS_LIMIT }}&app_type__in=Dashboard"
+                                       target="_parent" class="btn btn-sm btn-primary">{% trans "Explore" %} <span
+                                            class="badge">{{ facets.Dashboard }}</span></a>
+                                </div>
+                                <div id="card-buttons">
+                                    <a class="btn btn-sm btn-primary" href="{% url "new_geoapp" %}?appType=Dashboard">
+                                        {% trans "Create New" %}
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex-item">
+                    <div class="thumbnail">
+                        <img src="" class="app-img">
+                        <div class="fill-empty flex-row">
+                            <h4 class="text-center">{% trans 'GeoStory' %}</h4>
+                            <p class="text-center">
+                                {% trans "GeoStory" %}
+                            </p>
+                            <div class="fill-empty">
+                            </div>
+                            <div class="text-center" style="display:flex;flex-wrap:wrap">
+                                <div id="card-buttons">
+                                    <a href="{% url "apps_browse" %}?limit={{ CLIENT_RESULTS_LIMIT }}&app_type__in=GeoStory"
+                                       target="_parent" class="btn btn-sm btn-primary">{% trans "Explore" %} <span
+                                            class="badge">{{ facets.GeoStory }}</span></a>
+                                </div>
+                                <div id="card-buttons">
+                                    <a class="btn btn-sm btn-primary" href="{% url "new_geoapp" %}?appType=GeoStory">
+                                        {% trans "Create New" %}
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endwith %}
             </div>
         </div>
     </div>
