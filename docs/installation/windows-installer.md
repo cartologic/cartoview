@@ -121,3 +121,31 @@ You can find at the [Admin Configuration](http://localhost:4040/docs/docs.html) 
 And a guide about how to publish Cartoview on a Windows server.
 
 ![Publish Cartoview on Windows server](../img/installation/Installer/admin-configuration-2.png "Publish Cartoview on Windows server")
+
+---
+
+## Troubleshooting
+
+Sometimes, the installation of Cartoview Windows installer may fail due to different reasons. Here we will try to cover the potential errors and how to troubleshoot them.
+
+If you got an error like for instance, the site `http://localhost:4040/` can't be reached or failed to upload data to Cartoview or any other kind of errors, you will need to check the logs of Cartoview Windows services as the installer consists of three services, **Apache**, **PostgreSQL**, and **Tomcat**.
+
+![Cartoview Services](../img/installation/Installer/cartoview-services.png "Cartoview Services")
+
+These services must appear as **running** as shown above. If you find one that is not, you can try to start again.
+
+Right-click on a service and select start to start it again.
+
+![Restart Service](../img/installation/Installer/restart-service.png "Restart Service")
+
+Each service has its own log file and usually these logs should contain useful information for developers to acknowledge the current issue and may provide a fix.
+
+You can find each log file in the following directories.
+
+- **Apache**: `Cartoview/Apache24/logs/error.log`
+- **Tomcat**: `Cartoview/Tomcat 9.0/logs/catalina.out`
+
+!!! note
+    PostgreSQL doesn't have a log file by default. to enable it please check the PostgreSQL guide on [how to register event log on Windows](https://www.postgresql.org/docs/13/event-log-registration.html).
+
+If you got an error that you can't fix it on your own, please send the log files with a clear description about what happened exactly to [cartoview@cartologic.com](mailto:cartoview@cartologic.com).
