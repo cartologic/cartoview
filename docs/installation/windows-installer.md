@@ -4,7 +4,7 @@
 ## Introduction
 Cartoview has a Windows installer that gives you an up and running instance, having Cartoview, GeoNode, GeoServer, and PostgreSQL (PostGIS) installed on the fly.
 
-This guide describes the steps of installing and running Cartoview installer **v1.31.0**.
+This guide describes the steps of installing and running Cartoview installer **v1.33.0**.
 
 --- 
 
@@ -114,13 +114,13 @@ For more information regarding Cartoview & GeoNode theming, please follow [this 
 
 ### Quick Links
 
-![Admin Configuration](../img/installation/Installer/admin-configuration-1.png "Quick Links")
+![Admin Configuration](../img/installation/Installer/admin.png "Quick Links")
 
 ### Admin Configuration
 
 You can find at the [Admin Configuration](http://localhost:4040/docs/docs.html) page the details of each installed service (e.g. Default credentials, Windows service name, and installed version).
 
-![Admin Configuration](../img/installation/Installer/admin-configuration-2.png "Installed Services")
+![Admin Configuration](../img/installation/Installer/admin-configuration-1.png "Installed Services")
 
 And a guide about how to publish Cartoview on a Windows server.
 
