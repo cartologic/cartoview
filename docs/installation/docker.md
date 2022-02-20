@@ -4,7 +4,7 @@
 ## Introduction
 This guide describes how to install and configure a fresh setup of Cartoview to run it in Production mode using Docker on [**Ubuntu 20.04**](#for-ubuntu-2004) or [**Windows 10**](#for-windows-10).
 
-This part of the documentation describes installation of **Cartoview-1.31.0** which comes with **GeoNode-3.1** and **GeoServer-2.17.2**.
+This part of the documentation describes installation of **Cartoview-1.33.0** which comes with **GeoNode-3.3.0** and **GeoServer-2.19.x**.
 
 ---
 
@@ -65,24 +65,17 @@ Make sure that **Use Docker Compose V2** option is **unchecked** to avoid potent
 ## Cartoview Installation
 
 ### Running Cartoview Docker Services
-Download **cartoview-1.31.0** by cloning the repository and using the tag **v1.31.0**.
+Download **cartoview-1.33.0** by cloning the repository and using the tag **v1.33.0**.
 
 ```shell
-git clone -b v1.31.0 https://github.com/cartologic/cartoview.git
+git clone -b v1.33.0 https://github.com/cartologic/cartoview.git
 ```
 
-This will create a directory called ``cartoview``. Navigate inside it to install Cartoview with docker.
-
-Open `docker-compose.yml` and navigate to **cartoview** docker service and update as the following:
-```yaml
-# Change the line
-image: cartologic/cartoview:latest
-# With:
-image: cartologic/cartoview:1.31.0
-```
+This will create a directory called ``cartoview``. Navigate inside it to build and run Cartoview with docker.
 
 ```shell
 cd cartoview
+docker-compose build --no-cache
 docker-compose up -d
 ```
 
@@ -257,7 +250,7 @@ Congratulations! Cartoview is now installed successfully.
 
 You can upload layers, create maps, and install Cartoview apps to visualize these maps.
 
-Once Cartoview is installed, You can navigate to [http://10.5.0.4/apps/](http://10.5.0.4/apps/) to check and install all available apps from the [App Store](https://appstore.cartoview.net/).
+Once Cartoview is installed, You can navigate to the [apps](http://10.5.0.4/cv_apps/) page to check and install all available apps from the [App Store](https://appstore.cartoview.net/).
 
 After installing any app, you may need to restart cartoview docker services in order to install the app properly.
 ```shell
