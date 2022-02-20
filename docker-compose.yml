@@ -5,13 +5,8 @@ services:
     volumes:
       - postgis-data:/var/lib/postgresql
       # - dbbackups:/backups
-    environment:
-      # If you need to create multiple database you can add coma separated databases eg gis,data
-      - POSTGRES_DB=cartoview,cartoview_datastore,cartoview_geodatabase
-      - POSTGRES_USER=docker
-      - POSTGRES_PASS=docker
-      - ALLOW_IP_RANGE=0.0.0.0/0
-      - POSTGRES_MULTIPLE_EXTENSIONS=postgis
+    env_file:
+      - ./env/postgis.env
     expose:
       - "5432"
     restart: on-failure
@@ -61,7 +56,8 @@ services:
         ipv4_address: 10.5.0.2
       -cartoview-internal:
   cartoview:
-    image: cartologic/cartoview:latest
+    build: .
+    image: cartoview:latest
     container_name: cartoview_django
     command: bash -c "python manage.py cherry_server"
     restart: unless-stopped
@@ -81,7 +77,7 @@ services:
     expose:
       - "8000"
   celery:
-    image: cartologic/cartoview:latest    
+    image: cartoview:latest
     container_name: cartoview_celery
     command: bash -c "celery -A cartoview.celery:app worker -B -E --statedb=./worker.state -s ./celerybeat-schedule --loglevel=INFO --concurrency=10 -n worker1@%h -f /var/log/celery.log"
     restart: unless-stopped

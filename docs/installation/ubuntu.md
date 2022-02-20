@@ -4,7 +4,7 @@
 ## Introduction
 This guide describes how to install and configure a fresh setup of Cartoview to run it in DEBUG mode (also known as DEVELOPMENT mode) on **Ubuntu 20.04 LTS** 64-bit clean environment (Desktop or Server).
 
-This part of the documentation describes installation of **Cartoview-1.32.0** which comes with **GeoNode-3.2.1** and **GeoServer-2.18.2**.
+This part of the documentation describes installation of **Cartoview-1.33.0** which comes with **GeoNode-3.3.0** and **GeoServer-2.19.x**.
 
 !!! warning
     Those guides are not meant to be used on a production system. Instead, you can follow the [Docker](docker.md) guide.
@@ -206,10 +206,10 @@ mkvirtualenv --python=python3.8 cartoview_venv
 !!! warning
     Make sure you're inside ``cartoview_service`` directory and the ``cartoview_venv`` is still activated.
 
-Download the latest version of cartoview by cloning the repository.
+Download Cartoview 1.33.0 version by cloning the repository and checkout the release tag.
 
 ```shell
-git clone https://github.com/cartologic/cartoview.git
+git clone -b v1.33.0 https://github.com/cartologic/cartoview.git
 ```
 
 This will create a folder called ``cartoview`` inside ``cartoview_service`` directory.
@@ -386,6 +386,6 @@ Congratulations! Cartoview is now installed successfully.
 
 You can upload layers, create maps, and install Cartoview apps to visualize these maps.
 
-Once Cartoview is installed, You can navigate to [http://localhost:8000/apps/](http://localhost:8000/apps/) to check and install all available apps from the [App Store](https://appstore.cartoview.net/).
+Once Cartoview is installed, You can navigate to the [apps](http://localhost:8000/cv_apps/) to check and install all available apps from the [App Store](https://appstore.cartoview.net/).
 
 After installing any app, you may need to restart the running django server if you can't see your app in `/apps`.

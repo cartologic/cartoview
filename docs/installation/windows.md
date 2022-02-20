@@ -5,7 +5,7 @@
 
 This guide describes how to install and configure a fresh setup of Cartoview to run it in DEBUG mode (also known as DEVELOPMENT mode) on **Windows 10** 64-bit clean environment.
 
-This part of the documentation describes installation of **Cartoview-1.32.0** which comes with **GeoNode-3.2.1** and **GeoServer-2.18.2**.
+This part of the documentation describes installation of **Cartoview-1.33.0** which comes with **GeoNode-3.3.0** and **GeoServer-2.19.x**.
 
 !!! warning
     Those guides are not meant to be used on a production system. Instead, you can follow the [Docker](docker.md) guide.
@@ -253,10 +253,10 @@ As Cartoview is build on top of GeoNode, we need to install GeoNode first.
 
 Navigate inside ``cartoview_service`` directory and make sure ``cartoview_venv`` is still activated. 
 
-Clone [GeoNode-3.2.1](https://github.com/GeoNode/geonode/tree/3.2.1) from GitHub.
+Clone [GeoNode-3.3.0](https://github.com/GeoNode/geonode/tree/3.3.0) from GitHub.
 
 ```shell
-git clone -b 3.2.1 https://github.com/GeoNode/geonode.git
+git clone -b 3.3.0 https://github.com/GeoNode/geonode.git
 ```
 
 Edit `requirement.txt` and `setup.cfg` files commenting the **production** and **test** packages as they are not compatible with Windows environment.
@@ -269,9 +269,9 @@ pip install -e .
 
 ### Install Cartoview
 
-Download the latest version of cartoview by cloning the repository.
+Download Cartoview 1.33.0 version by cloning the repository and checkout the release tag.
 ```shell
-git clone -b v1.32.0 https://github.com/cartologic/cartoview.git
+git clone -b v1.33.0 https://github.com/cartologic/cartoview.git
 ```
 
 This will create a folder called ``cartoview`` inside ``cartoview_service``.
@@ -513,6 +513,6 @@ You can upload layers, create maps, and install Cartoview apps to visualize thes
     If you got an error like the following message while uploading a layer, make sure to remove the **PROJ_LIB** environment variable from Windows system environment variables.
     `RuntimeError: PROJ: proj_identify: C:\Program Files\PostgreSQL\13\share\contrib\postgis-3.1\proj\proj.db lacks DATABASE.LAYOUT.VERSION.MAJOR / DATABASE.LAYOUT.VERSION.MINOR metadata. It comes from another PROJ installation.`
 
-Once Cartoview is installed, You can navigate to [http://localhost:8000/apps/](http://localhost:8000/apps/) to check and install all available apps from the [App Store](https://appstore.cartoview.net/).
+Once Cartoview is installed, You can navigate to the [apps](http://localhost:8000/cv_apps/) page to check and install all available apps from the [App Store](https://appstore.cartoview.net/).
 
 After installing any app, you may need to restart the running django server if you can't see your app in `/apps`.

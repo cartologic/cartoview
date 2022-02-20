@@ -22,10 +22,10 @@ mkvirtualenv --python=python3.8 cartoview_project_venv
 pip install Django==3.2
 ```
 
-Clone [cartoview-project](https://github.com/cartologic/cartoview-project) and use the branch according to the version you want to. Here,  we will use [3.2.x](https://github.com/cartologic/cartoview-project/tree/3.2.x).
+Clone [cartoview-project](https://github.com/cartologic/cartoview-project) and use the branch according to the version you want to. Here,  we will use [3.3.x](https://github.com/cartologic/cartoview-project/tree/3.3.x).
 
 ```shell
-git clone https://github.com/GeoNode/cartoview-project.git -b 3.2.x
+git clone https://github.com/GeoNode/cartoview-project.git -b 3.3.x
 ```
 
 This will create a folder called `cartoview-project` from which the custom project will be generated.
