@@ -56,7 +56,8 @@ services:
         ipv4_address: 10.5.0.2
       -cartoview-internal:
   cartoview:
-    image: cartologic/cartoview:latest
+    build: .
+    image: cartoview:latest
     container_name: cartoview_django
     command: bash -c "python manage.py cherry_server"
     restart: unless-stopped
@@ -76,7 +77,7 @@ services:
     expose:
       - "8000"
   celery:
-    image: cartologic/cartoview:latest    
+    image: cartoview:latest
     container_name: cartoview_celery
     command: bash -c "celery -A cartoview.celery:app worker -B -E --statedb=./worker.state -s ./celerybeat-schedule --loglevel=INFO --concurrency=10 -n worker1@%h -f /var/log/celery.log"
     restart: unless-stopped
