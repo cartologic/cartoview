@@ -513,6 +513,6 @@ You can upload layers, create maps, and install Cartoview apps to visualize thes
     If you got an error like the following message while uploading a layer, make sure to remove the **PROJ_LIB** environment variable from Windows system environment variables.
     `RuntimeError: PROJ: proj_identify: C:\Program Files\PostgreSQL\13\share\contrib\postgis-3.1\proj\proj.db lacks DATABASE.LAYOUT.VERSION.MAJOR / DATABASE.LAYOUT.VERSION.MINOR metadata. It comes from another PROJ installation.`
 
-Once Cartoview is installed, You can navigate to [http://localhost:8000/apps/](http://localhost:8000/apps/) to check and install all available apps from the [App Store](https://appstore.cartoview.net/).
+Once Cartoview is installed, You can navigate to the [apps](http://localhost:8000/cv_apps/) page to check and install all available apps from the [App Store](https://appstore.cartoview.net/).
 
 After installing any app, you may need to restart the running django server if you can't see your app in `/apps`.

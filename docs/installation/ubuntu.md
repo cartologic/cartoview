@@ -386,6 +386,6 @@ Congratulations! Cartoview is now installed successfully.
 
 You can upload layers, create maps, and install Cartoview apps to visualize these maps.
 
-Once Cartoview is installed, You can navigate to [http://localhost:8000/apps/](http://localhost:8000/apps/) to check and install all available apps from the [App Store](https://appstore.cartoview.net/).
+Once Cartoview is installed, You can navigate to the [apps](http://localhost:8000/cv_apps/) to check and install all available apps from the [App Store](https://appstore.cartoview.net/).
 
 After installing any app, you may need to restart the running django server if you can't see your app in `/apps`.
