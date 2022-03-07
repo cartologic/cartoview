@@ -10,6 +10,12 @@ This guide describes the steps of installing and running Cartoview installer **v
 
 ## Installation
 
+## Install Java JDK
+Cartoview installer requires Java Development Kit to be installed. You can download the x64 installer from [here](https://www.oracle.com/java/technologies/downloads/).
+
+!!! note
+    For the current release, Cartoview supports Java [8](https://www.oracle.com/java/technologies/downloads/#java8-windows), [11](https://www.oracle.com/java/technologies/downloads/#java11-windows), and [17](https://www.oracle.com/java/technologies/downloads/#jdk17-windows).
+
 ### Request Cartoview Installer
 The installer can be requested and downloaded from [here](https://cartoview.net/download/). 
 
