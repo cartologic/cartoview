@@ -259,7 +259,7 @@ Clone [GeoNode-3.3.0](https://github.com/GeoNode/geonode/tree/3.3.0) from GitHub
 git clone -b 3.3.0 https://github.com/GeoNode/geonode.git
 ```
 
-Edit `requirement.txt` and `setup.cfg` files commenting the **production** and **test** packages as they are not compatible with Windows environment.
+Edit `requirement.txt` and `setup.cfg` files commenting the **production** and **test** packages alongside `pylibmc` and `sherlock` as they are not compatible with Windows environment.
 
 Install GeoNode packages.
 ```shell
