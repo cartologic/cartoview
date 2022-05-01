@@ -65,6 +65,10 @@ Make sure that **Use Docker Compose V2** option is **unchecked** to avoid potent
 ## Cartoview Installation
 
 ### Running Cartoview Docker Services
+Before cloning the repository you sould set `autocrlf` to `false` because scripts.sh should use Unix-style line endings instead of Windows:
+```shell
+git config --global core.autocrlf false
+```
 Download **cartoview-1.33.0** by cloning the repository and using the tag **v1.33.0**.
 
 ```shell
