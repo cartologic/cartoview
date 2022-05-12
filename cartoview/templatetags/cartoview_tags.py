@@ -14,7 +14,7 @@ from django.utils.html import mark_safe
 from future import standard_library
 from geonode.documents.models import Document
 from geonode.groups.models import GroupProfile
-from geonode.layers.models import Layer
+from geonode.layers.models import Dataset
 from geonode.maps.models import Map
 from guardian.shortcuts import get_objects_for_user
 
@@ -81,7 +81,7 @@ def facets(context):
 
     else:
 
-        layers = Layer.objects.filter(title__icontains=title_filter)
+        layers = Dataset.objects.filter(title__icontains=title_filter)
 
         if settings.RESOURCE_PUBLISHING:
             layers = layers.filter(is_published=True)

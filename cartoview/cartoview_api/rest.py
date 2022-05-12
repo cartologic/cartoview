@@ -7,7 +7,7 @@ from geonode.api.authorization import (GeonodeApiKeyAuthentication,
                                        GeoNodeAuthorization)
 from geonode.api.resourcebase_api import MapResource, ResourceBaseResource
 from geonode.base.models import ResourceBase
-from geonode.layers.models import Attribute, Layer
+from geonode.layers.models import Attribute, Dataset
 from geonode.maps.models import MapLayer
 from tastypie import fields
 from tastypie.authentication import MultiAuthentication, SessionAuthentication
@@ -202,7 +202,7 @@ class MapLayerResource(ModelResource):
         return filtered
 
     def get_layer(self, name):
-        layer = Layer.objects.filter(alternate=name)
+        layer = Dataset.objects.filter(alternate=name)
         if layer.count() > 0:
             return layer.first()
         return None
