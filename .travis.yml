@@ -17,7 +17,7 @@ addons:
 services:
   - postgresql
 python:
-  - '3.8'
+  - '3.10'
 env:
   global:
     - CARTOVIEW_TEST=True
