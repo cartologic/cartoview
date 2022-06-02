@@ -34,8 +34,8 @@ branches:
 before_install:
   - sudo apt-get autoremove sqlite3;
 #  - sudo sed -i 's/port = 5433/port = 5432/' /etc/postgresql/12/main/postgresql.conf;
-#  - sudo sed -i 's/peer/trust/' /etc/postgresql/12/main/pg_hba.conf;
-#  - sudo pg_ctlcluster 12 main restart;
+  - sudo sed -i 's/peer/trust/' /etc/postgresql/12/main/pg_hba.conf;
+  - sudo pg_ctlcluster 12 main restart;
 install:
   - sudo apt-get -qq -y update
   - sudo apt-get install -y gcc gettext python3-pip libpq-dev sqlite3 spatialite-bin libsqlite3-mod-spatialite libsqlite3-dev git gdal-bin lsof
