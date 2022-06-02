@@ -33,7 +33,7 @@ branches:
     - exchange-1.4.x
 before_install:
   - sudo apt-get autoremove sqlite3;
-#  - sudo sed -i 's/port = 5433/port = 5432/' /etc/postgresql/12/main/postgresql.conf;
+  - sudo sed -i 's/port = 5433/port = 5432/' /etc/postgresql/12/main/postgresql.conf;
   - sudo sed -i 's/peer/trust/' /etc/postgresql/12/main/pg_hba.conf;
   - sudo pg_ctlcluster 12 main restart;
 install:
