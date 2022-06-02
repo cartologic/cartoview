@@ -14,5 +14,5 @@ psql -U postgres -d template_postgis -c 'CREATE EXTENSION postgis;'
 psql -U postgres -d template_postgis -c 'GRANT ALL ON geometry_columns TO PUBLIC;'
 psql -U postgres -d template_postgis -c 'GRANT ALL ON spatial_ref_sys TO PUBLIC;'
 psql -U postgres -d template_postgis -c 'GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO cartoview;'
-psql -U postgres -c "create database cartoview cartoview template_postgis"
-psql -U postgres -c "create database cartoview_data cartoview template_postgis"
+psql -U postgres -c "create database cartoview OWNER cartoview TEMPLATE template_postgis"
+psql -U postgres -c "create database cartoview_data OWNER cartoview TEMPLATE template_postgis"
