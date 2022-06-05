@@ -21,6 +21,8 @@ python:
 env:
   global:
     - CARTOVIEW_TEST=True
+    - DATABASE_URL=postgis://cartoview:cartoview@localhost:5432/cartoview
+    - DATASTORE_DATABASE_URL=postgis://cartoview:cartoview@localhost:5432/cartoview_data
 virtualenv:
   system_site_packages: false
 branches:
