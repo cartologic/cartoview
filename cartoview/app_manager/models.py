@@ -287,7 +287,8 @@ def pre_save_appinstance(instance, sender, **kwargs):
 def pre_delete_appinstance(instance, sender, **kwargs):
     if not isinstance(instance, AppInstance):
         return
-    remove_object_permissions(instance.get_self_resource())
+    from geonode.resource.manager import resource_manager
+    resource_manager.remove_permissions(instance.uuid, instance)
 
 
 def appinstance_post_save(instance, *args, **kwargs):
