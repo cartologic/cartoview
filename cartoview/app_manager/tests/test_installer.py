@@ -1,6 +1,6 @@
 import threading
 
-from django.contrib.admin import ACTION_CHECKBOX_NAME
+from django.contrib.admin.helpers import ACTION_CHECKBOX_NAME
 from django.urls import reverse
 from django.test import TestCase
 from geonode.people.models import Profile
