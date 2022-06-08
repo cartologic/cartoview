@@ -30,8 +30,21 @@ import urllib
 import urllib as urllib2
 import zipfile
 from io import BytesIO
+import datetime
 from urllib.parse import urlparse
 from urllib.request import urlopen, Request
+import requests
+import math
+import psutil
+import pytz
+from dateutil.parser import parse as parsedate
+from tqdm import tqdm
+
+from cartoview.settings import (
+    on_travis,
+    INSTALLED_APPS,
+    OGC_SERVER
+)
 
 import yaml
 from paver.easy import cmdopts, info, needs, path, sh, task
@@ -45,57 +58,73 @@ assert sys.version_info >= (2, 6), \
     SystemError("Cartoview Build requires python 2.6 or better")
 TEST_DATA_URL = 'http://build.cartoview.net/cartoview_test_data.zip'
 dev_config = None
-with open("dev_config.yml", 'r') as f:
+with open("dev_config.yml") as f:
     dev_config = yaml.load(f, Loader=yaml.Loader)
 APPS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "apps")
 
+logger = logging.getLogger(__name__)
+
 
 def grab(src, dest, name):
-    download = True
-    if not dest.exists():
-        print('Downloading %s' % name)
+    src, dest, name = map(str, (src, dest, name))
+    logger.info(f" src, dest, name --> {src} {dest} {name}")
+
+    if not os.path.exists(dest):
+        logger.info(f"Downloading {name}")
     elif not zipfile.is_zipfile(dest):
-        print('Downloading %s (corrupt file)' % name)
-    else:
-        download = False
-    if download:
-        if str(src).startswith("file://"):
-            src2 = src[7:]
-            if not os.path.exists(src2):
-                print("Source location (%s) does not exist" % str(src2))
-            else:
-                print("Copying local file from %s" % str(src2))
-                shutil.copyfile(str(src2), str(dest))
+        logger.info(f"Downloading {name} (corrupt file)")
+    elif not src.startswith("file://"):
+        r = requests.head(src)
+        file_time = datetime.datetime.fromtimestamp(os.path.getmtime(dest))
+        url_time = file_time
+        for _k in ['last-modified', 'Date']:
+            if _k in r.headers:
+                url_time = r.headers[_k]
+        url_date = parsedate(url_time)
+        utc = pytz.utc
+        url_date = url_date.replace(tzinfo=utc)
+        file_time = file_time.replace(tzinfo=utc)
+        if url_date < file_time:
+            # Do not download if older than the local one
+            return
+        logger.info(f"Downloading updated {name}")
+
+    # Local file does not exist or remote one is newer
+    if src.startswith("file://"):
+        src2 = src.replace("file://", '')
+        if not os.path.exists(src2):
+            logger.info(f"Source location ({src2}) does not exist")
         else:
-            # urllib.urlretrieve(str(src), str(dest))
-            from tqdm import tqdm
-            import requests
-            import math
-            # Streaming, so we can iterate over the response.
-            r = requests.get(str(src), stream=True, timeout=10, verify=False)
-            # Total size in bytes.
-            total_size = int(r.headers.get('content-length', 0))
-            print("Requesting %s" % str(src))
-            block_size = 1024
-            wrote = 0
-            with open('output.bin', 'wb') as f:
-                for data in tqdm(
-                        r.iter_content(block_size),
-                        total=math.ceil(total_size // block_size),
-                        unit='KB',
-                        unit_scale=False):
-                    wrote = wrote + len(data)
-                    f.write(data)
-            print(" total_size [%d] / wrote [%d] " % (total_size, wrote))
-            if total_size != 0 and wrote != total_size:
-                print("ERROR, something went wrong")
-            else:
-                shutil.move('output.bin', str(dest))
-            try:
-                # Cleaning up
-                os.remove('output.bin')
-            except OSError:
-                pass
+            logger.info(f"Copying local file from {src2}")
+            shutil.copyfile(src2, dest)
+    else:
+        # urlretrieve(str(src), str(dest))
+        # Streaming, so we can iterate over the response.
+        r = requests.get(src, stream=True, timeout=10, verify=False)
+        # Total size in bytes.
+        total_size = int(r.headers.get('content-length', 0))
+        logger.info(f"Requesting {src}")
+        block_size = 1024
+        wrote = 0
+        with open("output.bin", 'wb') as f:
+            for data in tqdm(
+                    r.iter_content(block_size),
+                    total=math.ceil(total_size // block_size),
+                    unit='KB',
+                    unit_scale=False):
+                wrote += len(data)
+                f.write(data)
+        logger.info(f" total_size [{total_size}] / wrote [{wrote}] ")
+        if total_size != 0 and wrote != total_size:
+            logger.error(
+                f"ERROR, something went wrong. Data could not be written. Expected to write {wrote} but wrote {total_size} instead")
+        else:
+            shutil.move("output.bin", dest)
+        try:
+            # Cleaning up
+            os.remove("output.bin")
+        except OSError:
+            pass
 
 
 @task
@@ -111,9 +140,9 @@ def setup_apps(options):
         zip_ref.extractall(APPS_DIR)
         zip_ref.close()
     except urllib2.HTTPError as e:
-        print ("HTTP Error:", e.code)
+        print("HTTP Error:", e.code)
     except urllib2.URLError as e:
-        print ("URL Error:", e.reason)
+        print("URL Error:", e.reason)
 
 
 def cleanup():
@@ -227,69 +256,135 @@ def _install_data_dir():
 @cmdopts([
     ('geoserver=', 'g', 'The location of the geoserver build (.war file).'),
     ('jetty=', 'j', 'The location of the Jetty Runner (.jar file).'),
+    ('force_exec=', '', 'Force GeoServer Setup.')
 ])
 def setup_geoserver(options):
-    from geonode.settings import INSTALLED_APPS, OGC_SERVER
     """Prepare a testing instance of GeoServer."""
     # only start if using Geoserver backend
-    _backend = os.environ.get('BACKEND', OGC_SERVER['default']['BACKEND'])
-    if (_backend == 'geonode.qgis_server'
-            or 'geonode.geoserver' not in INSTALLED_APPS):
+    if 'geonode.geoserver' not in INSTALLED_APPS:
         return
+    if on_travis and not options.get('force_exec', False):
+        """Will make use of the docker container for the Integration Tests"""
+        return
+    else:
+        download_dir = path('downloaded')
+        if not download_dir.exists():
+            download_dir.makedirs()
+        geoserver_dir = path('geoserver')
+        geoserver_bin = download_dir / \
+                        os.path.basename(urlparse(dev_config['GEOSERVER_URL']).path)
+        jetty_runner = download_dir / \
+                       os.path.basename(urlparse(dev_config['JETTY_RUNNER_URL']).path)
+        geoserver_data = download_dir / \
+                         os.path.basename(urlparse(dev_config['DATA_DIR_URL']).path)
+        grab(
+            options.get(
+                'geoserver',
+                dev_config['GEOSERVER_URL']),
+            geoserver_bin,
+            "geoserver binary")
+        grab(
+            options.get(
+                'jetty',
+                dev_config['JETTY_RUNNER_URL']),
+            jetty_runner,
+            "jetty runner")
+        grab(
+            options.get(
+                'geoserver data',
+                dev_config['DATA_DIR_URL']),
+            geoserver_data,
+            "geoserver data-dir")
 
-    download_dir = path('downloaded')
-    if not download_dir.exists():
-        download_dir.makedirs()
+        if not geoserver_dir.exists():
+            geoserver_dir.makedirs()
 
-    geoserver_dir = path('geoserver')
+            webapp_dir = geoserver_dir / 'geoserver'
+            if not webapp_dir:
+                webapp_dir.makedirs()
 
-    geoserver_bin = download_dir / \
-                    os.path.basename(urlparse(dev_config['GEOSERVER_URL']).path)
-    jetty_runner = download_dir / \
-                   os.path.basename(urlparse(dev_config['JETTY_RUNNER_URL']).path)
+            logger.info("extracting geoserver")
+            z = zipfile.ZipFile(geoserver_bin, "r")
+            z.extractall(webapp_dir)
 
-    grab(
-        options.get('geoserver', dev_config['GEOSERVER_URL']), geoserver_bin,
-        "geoserver binary")
-    grab(
-        options.get('jetty', dev_config['JETTY_RUNNER_URL']), jetty_runner,
-        "jetty runner")
+            logger.info("extracting geoserver data dir")
+            z = zipfile.ZipFile(geoserver_data, "r")
+            z.extractall(geoserver_dir)
 
-    if not geoserver_dir.exists():
-        geoserver_dir.makedirs()
-
-        webapp_dir = geoserver_dir / 'geoserver'
-        if not webapp_dir:
-            webapp_dir.makedirs()
-
-        print ('extracting geoserver')
-        z = zipfile.ZipFile(geoserver_bin, "r")
-        z.extractall(webapp_dir)
-
-    _install_data_dir()
+        _configure_data_dir()
 
 
-@cmdopts([('java_path=', 'j', 'Full path to java install for Windows')])
+def _configure_data_dir():
+    try:
+        config = path(
+            'geoserver/data/global.xml')
+        with open(config) as f:
+            xml = f.read()
+            m = re.search('proxyBaseUrl>([^<]+)', xml)
+            xml = f"{xml[:m.start(1)]}http://localhost:8080/geoserver{xml[m.end(1):]}"
+            with open(config, 'w') as f:
+                f.write(xml)
+    except Exception as e:
+        print(e)
+
+    try:
+        config = path(
+            'geoserver/data/security/filter/geonode-oauth2/config.xml')
+        with open(config) as f:
+            xml = f.read()
+            m = re.search('accessTokenUri>([^<]+)', xml)
+            xml = f"{xml[:m.start(1)]}http://localhost:8000/o/token/{xml[m.end(1):]}"
+            m = re.search('userAuthorizationUri>([^<]+)', xml)
+            xml = f"{xml[:m.start(1)]}http://localhost:8000/o/authorize/{xml[m.end(1):]}"
+            m = re.search('redirectUri>([^<]+)', xml)
+            xml = f"{xml[:m.start(1)]}http://localhost:8080/geoserver/index.html{xml[m.end(1):]}"
+            m = re.search('checkTokenEndpointUrl>([^<]+)', xml)
+            xml = f"{xml[:m.start(1)]}http://localhost:8000/api/o/v4/tokeninfo/{xml[m.end(1):]}"
+            m = re.search('logoutUri>([^<]+)', xml)
+            xml = f"{xml[:m.start(1)]}http://localhost:8000/account/logout/{xml[m.end(1):]}"
+            with open(config, 'w') as f:
+                f.write(xml)
+    except Exception as e:
+        print(e)
+
+    try:
+        config = path(
+            'geoserver/data/security/role/geonode REST role service/config.xml')
+        with open(config) as f:
+            xml = f.read()
+            m = re.search('baseUrl>([^<]+)', xml)
+            xml = f"{xml[:m.start(1)]}http://localhost:8000{xml[m.end(1):]}"
+            with open(config, 'w') as f:
+                f.write(xml)
+    except Exception as e:
+        print(e)
+
+
 @task
+@cmdopts([
+    ('java_path=', 'j', 'Full path to java install for Windows'),
+    ('force_exec=', '', 'Force GeoServer Start.')
+])
 def start_geoserver(options):
     """
     Start GeoServer with GeoNode extensions
     """
-    from geonode.settings import INSTALLED_APPS, OGC_SERVER
+    # we use docker-compose for integration tests
+    if on_travis and not options.get('force_exec', False):
+        return
+
     # only start if using Geoserver backend
-    _backend = os.environ.get('BACKEND', OGC_SERVER['default']['BACKEND'])
-    if (_backend == 'geonode.qgis_server'
-            or 'geonode.geoserver' not in INSTALLED_APPS):
+    if 'geonode.geoserver' not in INSTALLED_APPS:
         return
 
     GEOSERVER_BASE_URL = OGC_SERVER['default']['LOCATION']
     url = GEOSERVER_BASE_URL
 
     if urlparse(GEOSERVER_BASE_URL).hostname != 'localhost':
-        print ("Warning: OGC_SERVER['default']['LOCATION'] hostname is not equal to 'localhost'")
+        logger.warning("Warning: OGC_SERVER['default']['LOCATION'] hostname is not equal to 'localhost'")
 
     if not GEOSERVER_BASE_URL.endswith('/'):
-        print ("Error: OGC_SERVER['default']['LOCATION'] does not end with a '/'")
+        logger.error("Error: OGC_SERVER['default']['LOCATION'] does not end with a '/'")
         sys.exit(1)
 
     download_dir = path('downloaded').abspath()
@@ -307,14 +402,13 @@ def start_geoserver(options):
     socket_free = True
     try:
         s.bind(("127.0.0.1", jetty_port))
-    except socket.error as e:
+    except OSError as e:
         socket_free = False
         if e.errno == 98:
-            info('Port %s is already in use' % jetty_port)
+            info(f'Port {jetty_port} is already in use')
         else:
             info(
-                'Something else raised the socket.error exception while checking port %s'
-                % jetty_port)
+                f'Something else raised the socket.error exception while checking port {jetty_port}')
             print(e)
     finally:
         s.close()
@@ -324,6 +418,17 @@ def start_geoserver(options):
         # prevents geonode security from initializing correctly otherwise
         with pushd(data_dir):
             javapath = "java"
+            if on_travis:
+                sh(
+                    'sudo apt install -y openjdk-8-jre openjdk-8-jdk;'
+                    ' sudo update-java-alternatives --set java-1.8.0-openjdk-amd64;'
+                    ' export JAVA_HOME=$(readlink -f /usr/bin/java | sed "s:bin/java::");'
+                    ' export PATH=$JAVA_HOME\'bin/java\':$PATH;'
+                )
+                # import subprocess
+                # result = subprocess.run(['update-alternatives', '--list', 'java'], stdout=subprocess.PIPE)
+                # javapath = result.stdout
+                javapath = "/usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java"
             loggernullpath = os.devnull
 
             # checking if our loggernullpath exists and if not, reset it to
@@ -331,59 +436,59 @@ def start_geoserver(options):
             if loggernullpath == "nul":
                 try:
                     open("../../downloaded/null.txt", 'w+').close()
-                except IOError as e:
-                    print ("Chances are that you have Geoserver currently running.  You \
-                            can either stop all servers with paver stop or start only \
-                            the django application with paver start_django.")
-
+                except OSError:
+                    print("Chances are that you have Geoserver currently running. You "
+                          "can either stop all servers with paver stop or start only "
+                          "the django application with paver start_django.")
                     sys.exit(1)
                 loggernullpath = "../../downloaded/null.txt"
 
             try:
-                sh(('java -version'))
-            except BaseException:
-                print ("Java was not found in your path.  Trying some other options: ")
+                sh('%(javapath)s -version' % locals())
+            except Exception:
+                logger.warning("Java was not found in your path.  Trying some other options: ")
                 javapath_opt = None
                 if os.environ.get('JAVA_HOME', None):
-                    print ("Using the JAVA_HOME environment variable")
-                    javapath_opt = os.path.join(
-                        os.path.abspath(os.environ['JAVA_HOME']), "bin",
-                        "java.exe")
+                    logger.info("Using the JAVA_HOME environment variable")
+                    javapath_opt = os.path.join(os.path.abspath(
+                        os.environ['JAVA_HOME']), "bin", "java.exe")
                 elif options.get('java_path'):
                     javapath_opt = options.get('java_path')
                 else:
-                    print ("Paver cannot find java in the Windows Environment.  \
-                    Please provide the --java_path flag with your full path to \
-                    java.exe e.g. --java_path=C:/path/to/java/bin/java.exe")
-
+                    logger.critical("Paver cannot find java in the Windows Environment. "
+                                    "Please provide the --java_path flag with your full path to "
+                                    "java.exe e.g. --java_path=C:/path/to/java/bin/java.exe")
                     sys.exit(1)
                 # if there are spaces
-                javapath = 'START /B "" "' + javapath_opt + '"'
+                javapath = f"START /B \"\" \"{javapath_opt}\""
 
-            sh((
-                    '%(javapath)s -Xms512m -Xmx1024m -server -XX:+UseConcMarkSweepGC -XX:MaxPermSize=512m'
-                    ' -DGEOSERVER_DATA_DIR=%(data_dir)s'
-                    ' -Dgeofence.dir=%(geofence_dir)s'
-                    # ' -Dgeofence-ovr=geofence-datasource-ovr.properties'
-                    # workaround for JAI sealed jar issue and jetty classloader
-                    # ' -Dorg.eclipse.jetty.server.webapp.parentLoaderPriority=true'
-                    ' -jar %(jetty_runner)s'
-                    ' --port %(jetty_port)i'
-                    ' --log %(log_file)s'
-                    ' %(config)s'
-                    ' > %(loggernullpath)s &' % locals()))
+            sh(
+                '%(javapath)s -Xms512m -Xmx2048m -server -XX:+UseConcMarkSweepGC -XX:MaxPermSize=512m'
+                ' -DGEOSERVER_DATA_DIR=%(data_dir)s'
+                ' -DGEOSERVER_CSRF_DISABLED=true'
+                ' -Dgeofence.dir=%(geofence_dir)s'
+                ' -Djava.awt.headless=true'
+                # ' -Dgeofence-ovr=geofence-datasource-ovr.properties'
+                # workaround for JAI sealed jar issue and jetty classloader
+                # ' -Dorg.eclipse.jetty.server.webapp.parentLoaderPriority=true'
+                ' -jar %(jetty_runner)s'
+                ' --port %(jetty_port)i'
+                ' --log %(log_file)s'
+                ' %(config)s'
+                ' > %(loggernullpath)s &' % locals()
+            )
 
-        info('Starting GeoServer on %s' % url)
+        info(f'Starting GeoServer on {url}')
 
     # wait for GeoServer to start
     started = waitfor(url)
-    info('The logs are available at %s' % log_file)
+    info(f'The logs are available at {log_file}')
 
     if not started:
         # If applications did not start in time we will give the user a chance
         # to inspect them and stop them manually.
-        info(('GeoServer never started properly or timed out.'
-              'It may still be running in the background.'))
+        info('GeoServer never started properly or timed out.'
+             'It may still be running in the background.')
         sys.exit(1)
 
 
@@ -411,7 +516,8 @@ def run_coverage(options):
 
 
 def kill(arg1, arg2):
-    """Stops a proces that contains arg1 and is filtered by arg2
+    """
+    Stops a proces that contains arg1 and is filtered by arg2
     """
     from subprocess import Popen, PIPE
 
@@ -423,75 +529,72 @@ def kill(arg1, arg2):
 
     while running and time.time() - t0 < time_out:
         if os.name == 'nt':
-            p = Popen(
-                'tasklist | find "%s"' % arg1,
-                shell=True,
-                stdin=PIPE,
-                stdout=PIPE,
-                stderr=PIPE,
-                close_fds=False)
+            p = Popen(f'tasklist | find "{arg1}"', shell=True,
+                      stdin=PIPE, stdout=PIPE, stderr=PIPE, close_fds=False)
         else:
-            p = Popen(
-                'ps aux | grep %s' % arg1,
-                shell=True,
-                stdin=PIPE,
-                stdout=PIPE,
-                stderr=PIPE,
-                close_fds=True)
+            p = Popen(f'ps aux | grep {arg1}', shell=True,
+                      stdin=PIPE, stdout=PIPE, stderr=PIPE, close_fds=True)
 
         lines = p.stdout.readlines()
 
         running = False
         for line in lines:
             # this kills all java.exe and python including self in windows
-            if ('%s' % arg2 in line) or (os.name == 'nt'
-                                         and '%s' % arg1 in line):
+            if (f'{arg2}' in str(line)) or (os.name == 'nt' and f'{arg1}' in str(line)):
                 running = True
 
                 # Get pid
                 fields = line.strip().split()
 
-                info('Stopping %s (process number %s)' % (arg1, fields[1]))
+                info(f'Stopping {arg1} (process number {int(fields[1])})')
                 if os.name == 'nt':
-                    kill = 'taskkill /F /PID "%s"' % fields[1]
+                    kill = f'taskkill /F /PID "{int(fields[1])}"'
                 else:
-                    kill = 'kill -9 %s 2> /dev/null' % fields[1]
+                    kill = f'kill -9 {int(fields[1])} 2> /dev/null'
                 os.system(kill)
 
         # Give it a little more time
         time.sleep(1)
-    else:
-        pass
 
     if running:
-        raise Exception('Could not stop %s: '
-                        'Running processes are\n%s' % (arg1, '\n'.join(
-            [l.strip() for l in lines])))
+        _procs = '\n'.join([str(_l).strip() for _l in lines])
+        raise Exception(f"Could not stop {arg1}: "
+                        f"Running processes are\n{_procs}")
 
 
 @task
-def stop_geoserver():
-    from cartoview.settings import INSTALLED_APPS, OGC_SERVER
+@cmdopts([
+    ('force_exec=', '', 'Force GeoServer Stop.')
+])
+def stop_geoserver(options):
+    """
+        Stop GeoServer
+        """
+    # we use docker-compose for integration tests
+    if on_travis and not options.get('force_exec', False):
+        return
 
     # only start if using Geoserver backend
-    _backend = os.environ.get('BACKEND', OGC_SERVER['default']['BACKEND'])
-    if _backend == 'geonode.qgis_server' or 'geonode.geoserver' not in INSTALLED_APPS:
+    if 'geonode.geoserver' not in INSTALLED_APPS:
         return
     kill('java', 'geoserver')
+
+    # Kill process.
     try:
+        # proc = subprocess.Popen("ps -ef | grep -i -e '[j]ava\|geoserver' |
+        # awk '{print $2}'",
         proc = subprocess.Popen(
             "ps -ef | grep -i -e 'geoserver' | awk '{print $2}'",
             shell=True,
             stdout=subprocess.PIPE)
-        for pid in proc.stdout:
-            info('Stopping geoserver (process number %s)' % int(pid))
-            os.kill(int(pid), signal.SIGKILL)
-            os.kill(int(pid), 9)
-            sh('sleep 30')
-            try:
-                os.kill(int(pid), 0)
-            except OSError as ex:
-                continue
+        for pid in map(int, proc.stdout):
+            info(f'Stopping geoserver (process number {pid})')
+            os.kill(pid, signal.SIGKILL)
+
+            # Check if the process that we killed is alive.
+            killed, alive = psutil.wait_procs([psutil.Process(pid=pid)], timeout=30)
+            for p in alive:
+                p.kill()
     except Exception as e:
         info(e)
 
