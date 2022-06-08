@@ -34,7 +34,7 @@ def cartoview_processor(request):
 
     defaults = {
         'apps': App.objects.all().order_by('order'),
-        'CARTOVIEW_VERSION': get_version(list(__version__)),
+        'CARTOVIEW_VERSION': get_version(__version__),
         'APPS_MENU': settings.APPS_MENU,
         'apps_instance_count': AppInstance.objects.all().count(),
         "cartoview_counters": cartoview_counters,
