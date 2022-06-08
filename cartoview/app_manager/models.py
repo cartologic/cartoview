@@ -14,7 +14,7 @@ from django.utils.encoding import python_2_unicode_compatible
 from future import standard_library
 from geonode.base.models import ResourceBase, resourcebase_post_save
 from geonode.maps.models import Map as GeonodeMap
-from geonode.security.models import remove_object_permissions
+from geonode.security.utils import ResourceManager
 from guardian.shortcuts import assign_perm
 from jsonfield import JSONField
 from taggit.managers import TaggableManager
@@ -253,11 +253,12 @@ class AppInstance(ResourceBase):
             logger.error(e)
             return None
 
-    def set_permissions(self, perm_spec):
-        remove_object_permissions(self)
+    def set_permissions(self, perm_spec, created=False):
+        ResourceManager.remove_permissions(self.uuid, instance=self)
         try:
-            from geonode.security.utils import (set_owner_permissions)
-            set_owner_permissions(self)
+            ResourceManager.set_permissions(
+                self.uuid, instance=self, owner=self.owner, permissions=perm_spec, created=created
+            )
         except BaseException:
             pass
         if 'users' in perm_spec and "AnonymousUser" in perm_spec['users']:
@@ -292,7 +293,7 @@ def pre_save_appinstance(instance, sender, **kwargs):
 def pre_delete_appinstance(instance, sender, **kwargs):
     if not isinstance(instance, AppInstance):
         return
-    remove_object_permissions(instance.get_self_resource())
+    ResourceManager.remove_permissions(instance.uuid, instance)
 
 
 def appinstance_post_save(instance, *args, **kwargs):
