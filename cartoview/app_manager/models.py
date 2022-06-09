@@ -5,7 +5,6 @@ import json
 from datetime import datetime
 
 from django.conf import settings as geonode_settings
-from django.contrib.auth.models import Group
 from django.contrib.gis.db import models
 from django.urls import reverse
 from django.db.models import signals, JSONField
@@ -13,9 +12,8 @@ from django.template.defaultfilters import slugify
 from future import standard_library
 from geonode.base.models import ResourceBase
 from geonode.maps.models import Map as GeonodeMap
-# from geonode.security.models import remove_object_permissions
 from geonode.resource.utils import resourcebase_post_save
-from guardian.shortcuts import assign_perm
+
 from taggit.managers import TaggableManager
 
 from cartoview.apps_handler.config import CartoviewApp
