@@ -248,24 +248,6 @@ class AppInstance(ResourceBase):
             logger.error(e)
             return None
 
-    def set_permissions(self, perm_spec):
-        remove_object_permissions(self)
-        try:
-            from geonode.security.utils import (set_owner_permissions)
-            set_owner_permissions(self)
-        except BaseException:
-            pass
-        if 'users' in perm_spec and "AnonymousUser" in perm_spec['users']:
-            anonymous_group = Group.objects.get(name='anonymous')
-            for perm in perm_spec['users']['AnonymousUser']:
-                assign_perm(perm, anonymous_group, self.get_self_resource())
-
-        if 'groups' in perm_spec:
-            for group, perms in perm_spec['groups'].items():
-                group = Group.objects.get(name=group)
-                for perm in perms:
-                    assign_perm(perm, group, self.get_self_resource())
-
     @property
     def launch_url(self):
         return reverse("%s.view" % self.app.name, args=[self.pk])
