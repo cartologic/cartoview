@@ -67,6 +67,7 @@ before_script:
   - psql -U postgres -c "create extension postgis"
   - chmod +x scripts/database/setup.sh
   - scripts/database/setup.sh
+  - python manage.py collectstatic --no-input
 script:
   - flake8
   - paver run_cartoview_test
