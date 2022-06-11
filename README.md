@@ -30,7 +30,7 @@ Cartoview can be setup and installed in different ways, flavors and plattforms. 
 - [Windows](https://cartoview.readthedocs.io/en/latest/installation/windows/)
 - [Docker](https://cartoview.readthedocs.io/en/latest/installation/docker/)
 
-Cartoview also has a Windows installer which doesn't require any knowledge regarding programming and can be requested and downloaded from [here](https://cartoview.net/download/).
+Cartoview also has a Windows installer which doesn't require any knowledge regarding programming and can be requested and downloaded from [here](https://cartoview.net/).
 
 ## Customizing Cartoview
 
@@ -40,7 +40,7 @@ It's recommended to set up and install a [Cartoview Project Template](https://gi
 
 ## Support
 
-If you have any inquiry regarding Cartoview, feel free to contact us by filling out the form [here](https://cartoview.net/#support) or sending an e-mail to [cartoview@cartologic.com](mailto:cartoview@cartologic.com)
+If you have any inquiry regarding Cartoview, feel free to contact us by filling out the form [here](https://cartoview.net/#Contact) or sending an e-mail to [cartoview@cartologic.com](mailto:cartoview@cartologic.com).
 
 ## Most useful links
 
