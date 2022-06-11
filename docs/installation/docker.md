@@ -4,7 +4,7 @@
 ## Introduction
 This guide describes how to install and configure a fresh setup of Cartoview to run it in Production mode using Docker on [**Ubuntu 20.04**](#for-ubuntu-2004) or [**Windows 10**](#for-windows-10).
 
-This part of the documentation describes installation of **Cartoview-1.33.0** which comes with **GeoNode-3.3.0** and **GeoServer-2.19.x**.
+This part of the documentation describes installation of **Cartoview-1.33.2** which comes with **GeoNode-3.3.2.post1** and **GeoServer-2.19.6**.
 
 ---
 
@@ -65,10 +65,10 @@ Make sure that **Use Docker Compose V2** option is **unchecked** to avoid potent
 ## Cartoview Installation
 
 ### Running Cartoview Docker Services
-Download **cartoview-1.33.0** by cloning the repository and using the tag **v1.33.0**.
+Download **cartoview-1.33.2** by cloning the repository and using the tag **v1.33.2**.
 
 ```shell
-git clone -b v1.33.0 https://github.com/cartologic/cartoview.git
+git clone -b v1.33.2 https://github.com/cartologic/cartoview.git
 ```
 
 This will create a directory called ``cartoview``. Navigate inside it to build and run Cartoview with docker.
@@ -149,20 +149,10 @@ Open **Docker Dashboard** and for ``cartoview_django`` container, click on the C
 
 This will open a shell inside the container in which we will execute the following commands.
 
-Detect changes in the ``app_manager``.
-```shell
-python manage.py makemigrations app_manager
-```
-
 Migrate the data.
 ```shell
 python manage.py makemigrations
 python manage.py migrate
-```
-
-Create accounts table.
-```shell
-python manage.py migrate account
 ```
 
 Load default User.
@@ -183,6 +173,11 @@ python manage.py loaddata app_stores.json
 Load default Initial Data for Cartoview.
 ```shell
 python manage.py loaddata initial_data.json
+```
+
+In order to make the ArcGIS Importer app work properly, generate API keys.
+```shell
+python manage.py backfill_api_keys
 ```
 
 !!! note

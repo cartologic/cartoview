@@ -5,7 +5,7 @@
 
 This guide describes how to install and configure a fresh setup of Cartoview to run it in DEBUG mode (also known as DEVELOPMENT mode) on **Windows 10** 64-bit clean environment.
 
-This part of the documentation describes installation of **Cartoview-1.33.0** which comes with **GeoNode-3.3.0** and **GeoServer-2.19.x**.
+This part of the documentation describes installation of **Cartoview-1.33.2** which comes with **GeoNode-3.3.2.post1** and **GeoServer-2.19.6**.
 
 !!! warning
     Those guides are not meant to be used on a production system. Instead, you can follow the [Docker](docker.md) guide.
@@ -253,10 +253,10 @@ As Cartoview is build on top of GeoNode, we need to install GeoNode first.
 
 Navigate inside ``cartoview_service`` directory and make sure ``cartoview_venv`` is still activated. 
 
-Clone [GeoNode-3.3.0](https://github.com/GeoNode/geonode/tree/3.3.0) from GitHub.
+Clone [GeoNode-3.3.2.post1](https://github.com/GeoNode/geonode/tree/3.3.2.post1) from GitHub.
 
 ```shell
-git clone -b 3.3.0 https://github.com/GeoNode/geonode.git
+git clone -b 3.3.2.post1 https://github.com/GeoNode/geonode.git
 ```
 
 Edit `requirement.txt` and `setup.cfg` files commenting the **production** and **test** packages alongside `pylibmc` and `sherlock` as they are not compatible with Windows environment.
@@ -271,9 +271,9 @@ pip install -e .
 
 Navigate inside ``cartoview_service`` directory and make sure ``cartoview_venv`` is still activated.
 
-Download Cartoview 1.33.0 version by cloning the repository and checkout the release tag.
+Download Cartoview 1.33.2 version by cloning the repository and checkout the release tag.
 ```shell
-git clone -b v1.33.0 https://github.com/cartologic/cartoview.git
+git clone -b v1.33.2 https://github.com/cartologic/cartoview.git
 ```
 
 This will create a folder called ``cartoview`` inside ``cartoview_service``.
@@ -349,7 +349,7 @@ from geonode.settings import *  # noqa
 
 Import it also in `cartoview\pavement.py`.
 
-As Django-2.2.20 [doesn't support GDAL >= 3.0](https://github.com/django/django/blob/2.2.20/docs/ref/contrib/gis/install/geolibs.txt#L13), we need to add the installed GDAL version inside django.
+As Django-2.2.24 [doesn't support GDAL >= 3.0](https://github.com/django/django/blob/2.2.24/docs/ref/contrib/gis/install/geolibs.txt#L13), we need to add the installed GDAL version inside django.
 
 Navigate to django package in the virtual environment `site-packages` and modify the Django GDAL package python file **libgdal.py** available at `\path\to\cartoview_service\Lib\site-packages\django\contrib\gis\gdal\libgdal.py` according to the following.
 ```python
@@ -375,20 +375,10 @@ Inside ``cartoview`` folder, run the below commands to migrate and load Cartovie
     - Make sure the virtual environment is still activated (If you see its name prefixed your prompt, you're good to go).
     - Make sure to add the above environment variables to the terminal so that the following commands run smoothly.
 
-Detect changes in the ``app_manager``.
-```shell
-python manage.py makemigrations app_manager
-```
-
 Migrate the data.
 ```shell
 python manage.py makemigrations
 python manage.py migrate
-```
-
-Create accounts table.
-```shell
-python manage.py migrate account
 ```
 
 Load default User.
@@ -414,6 +404,11 @@ python manage.py loaddata app_stores.json
 Collect static files.
 ```shell
 python manage.py collectstatic --noinput
+```
+
+In order to make the ArcGIS Importer app work properly, generate API keys.
+```shell
+python manage.py backfill_api_keys
 ```
 
 #### Test Development Server
@@ -517,4 +512,4 @@ You can upload layers, create maps, and install Cartoview apps to visualize thes
 
 Once Cartoview is installed, You can navigate to the [apps](http://localhost:8000/cv_apps/) page to check and install all available apps from the [App Store](https://appstore.cartoview.net/).
 
-After installing any app, you may need to restart the running django server if you can't see your app in `/apps`.
+After installing any app, you may need to restart the running django server if you can't see your app in `/cv_apps`.

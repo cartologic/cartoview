@@ -6,6 +6,9 @@ Cartoview has a Windows installer that gives you an up and running instance, hav
 
 This guide describes the steps of installing and running Cartoview installer **v1.33.0**.
 
+!!! note
+    The process explained here is the same for any newer versions.
+
 --- 
 
 ## Installation
@@ -17,7 +20,7 @@ Cartoview installer requires Java Development Kit to be installed. You can downl
     For the current release, Cartoview supports Java [8](https://www.oracle.com/java/technologies/downloads/#java8-windows), [11](https://www.oracle.com/java/technologies/downloads/#java11-windows), and [17](https://www.oracle.com/java/technologies/downloads/#jdk17-windows).
 
 ### Request Cartoview Installer
-The installer can be requested and downloaded from [here](https://cartoview.net/download/). 
+The installer can be requested and downloaded from [here](https://cartoview.net/). 
 
 You just need to provide your information, select a version of Cartoview to download, and you should get an e-mail with the installer download link.
 
