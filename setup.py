@@ -25,7 +25,7 @@ setup(
     ],
     license="BSD",
     install_requires=[
-        'future', 'geonode==3.3.1.post1',
+        'future', 'geonode==4.0.0rc0',
         'Faker>=0.8.4',
         'cherrypy==18.6.1',
         'portalocker==1.3.0'

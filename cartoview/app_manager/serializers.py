@@ -5,9 +5,9 @@ from __future__ import (absolute_import, division, print_function,
 import json
 
 from django.template.loader import render_to_string
-from django.utils import six
 from django.utils.encoding import force_text
 from future import standard_library
+from six import binary_type
 from tastypie.exceptions import UnsupportedFormat
 from tastypie.serializers import Serializer
 
@@ -65,7 +65,7 @@ class MultipartFormSerializer(HTMLSerializer):
                 format)
 
         if isinstance(content,
-                      six.binary_type) and desired_format != 'file_upload':
+                      binary_type) and desired_format != 'file_upload':
             content = force_text(content)
 
         deserialized = getattr(self, "from_%s" % desired_format)(content, {

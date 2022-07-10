@@ -2,8 +2,8 @@
 import requests
 from django.shortcuts import HttpResponse
 from geonode.geoserver.helpers import ogc_server_settings
-from geonode.layers.views import (_PERMISSION_MSG_MODIFY, _resolve_layer,
-                                  layer_detail)
+from geonode.layers.views import (_PERMISSION_MSG_MODIFY, _resolve_dataset,
+                                  dataset_detail)
 from requests.auth import HTTPBasicAuth
 
 from cartoview.log_handler import get_logger
@@ -30,7 +30,7 @@ def get_geoserver_credintials():
 
 
 def layer_config_json(request, layername):
-    layer_details = layer_detail(
+    layer_details = dataset_detail(
         request, layername)
     viewer = layer_details.context_data['viewer']
     layer = layer_details.context_data['resource']
@@ -65,7 +65,7 @@ def get_featureType(workspace, store, lyr_name):
 
 
 def update_extent(request, typename):
-    lyr = _resolve_layer(
+    lyr = _resolve_dataset(
         request,
         typename,
         'base.change_resourcebase',

@@ -1,6 +1,6 @@
 from django.core.management import call_command
 from django.test import TestCase
-from django.utils.six import StringIO
+from six import StringIO
 
 from cartoview.app_manager.models import (App, AppStore)
 

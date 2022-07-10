@@ -5,7 +5,7 @@ from __future__ import (absolute_import, division, print_function,
 from django.conf import settings
 from future import standard_library
 from geonode.groups.models import Group
-from geonode.maps.models import Layer, Map
+from geonode.maps.models import Dataset, Map
 from geonode.people.models import Profile
 from geonode.version import get_version
 from guardian.shortcuts import get_objects_for_user
@@ -27,7 +27,7 @@ def cartoview_processor(request):
         "apps": App.objects.count(),
         "app_instances": AppInstance.objects.filter(id__in=permitted).count(),
         "maps": Map.objects.filter(id__in=permitted).count(),
-        "layers": Layer.objects.filter(id__in=permitted).count(),
+        "layers": Dataset.objects.filter(id__in=permitted).count(),
         "users": Profile.objects.exclude(username="AnonymousUser").count(),
         "groups": Group.objects.exclude(name="anonymous").count()
     }

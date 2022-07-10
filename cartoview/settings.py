@@ -66,13 +66,13 @@ if DATASTORE_DATABASE_URL:
 CARTOVIEW_TEST = 'test' in sys.argv or ast.literal_eval(
     os.getenv('CARTOVIEW_TEST', "False")) or 'run_cartoview_test' in sys.argv
 
-if CARTOVIEW_TEST:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.contrib.gis.db.backends.spatialite',
-            'NAME': os.path.join(BASE_DIR, 'test.db')
-        }
-    }
+# if CARTOVIEW_TEST:
+#     DATABASES = {
+#         'default': {
+#             'ENGINE': 'django.contrib.gis.db.backends.spatialite',
+#             'NAME': os.path.join(BASE_DIR, 'test.db')
+#         }
+#     }
 if 'datastore' in DATABASES:
     OGC_SERVER['default']['DATASTORE'] = 'datastore'
 

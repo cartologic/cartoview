@@ -6,19 +6,19 @@ import json
 from pinax.ratings.models import Rating
 from django import template
 from django.conf import settings
-from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.models import ContentType
 from django.urls import reverse
-from django.db.models import Count
+from django.db.models import Count, Q
 from django.utils.html import mark_safe
 from future import standard_library
-from geonode.documents.models import Document
-from geonode.groups.models import GroupProfile
-from geonode.layers.models import Layer
-from geonode.maps.models import Map
+
+from geonode.base.models import HierarchicalKeyword
 from guardian.shortcuts import get_objects_for_user
 
-from cartoview.app_manager.models import App, AppInstance
+from geonode.base.templatetags.base_tags import facets as gn_facets
+
+from cartoview.app_manager.models import AppInstance
+from geonode.security.utils import get_visible_resources
 
 standard_library.install_aliases()
 register = template.Library()
@@ -41,88 +41,62 @@ def num_ratings(obj):
 def facets(context):
     request = context['request']
     title_filter = request.GET.get('title__icontains', '')
+    keywords_filter = request.GET.getlist('keywords__slug__in', None)
+    owner_filter = request.GET.getlist('owner__username__in', None)
+    date_gte_filter = request.GET.get('date__gte', None)
+    date_lte_filter = request.GET.get('date__lte', None)
+    date_range_filter = request.GET.get('date__range', None)
 
-    facet_type = context['facet_type'] if 'facet_type' in context else 'all'
+    facet_type = context.get('facet_type', 'all')
 
     if not settings.SKIP_PERMS_FILTER:
-        authorized = get_objects_for_user(
-            request.user, 'base.view_resourcebase').values('id')
+        authorized = []
+        try:
+            authorized = get_objects_for_user(
+                request.user, 'base.view_resourcebase').values('id')
+        except Exception:
+            pass
 
-    if facet_type == 'documents':
+    if facet_type == 'appinstances':
+        appinstances = AppInstance.objects.filter(title__icontains=title_filter)
+        if owner_filter:
+            appinstances = appinstances.filter(owner__username__in=owner_filter)
+        if date_gte_filter:
+            appinstances = appinstances.filter(date__gte=date_gte_filter)
+        if date_lte_filter:
+            appinstances = appinstances.filter(date__lte=date_lte_filter)
+        if date_range_filter:
+            appinstances = appinstances.filter(date__range=date_range_filter.split(','))
 
-        documents = Document.objects.filter(title__icontains=title_filter)
+        appinstances = get_visible_resources(
+            appinstances,
+            request.user if request else None,
+            admin_approval_required=settings.ADMIN_MODERATE_UPLOADS,
+            unpublished_not_visible=settings.RESOURCE_PUBLISHING,
+            private_groups_not_visibile=settings.GROUP_PRIVATE_RESOURCES)
 
-        if settings.RESOURCE_PUBLISHING:
-            documents = documents.filter(is_published=True)
+        if keywords_filter:
+            treeqs = HierarchicalKeyword.objects.none()
+            for keyword in keywords_filter:
+                try:
+                    kws = HierarchicalKeyword.objects.filter(name__iexact=keyword)
+                    for kw in kws:
+                        treeqs = treeqs | HierarchicalKeyword.get_tree(kw)
+                except Exception:
+                    # Ignore keywords not actually used?
+                    pass
 
-        if not settings.SKIP_PERMS_FILTER:
-            documents = documents.filter(id__in=authorized)
-
-        counts = documents.values('doc_type').annotate(count=Count('doc_type'))
-        facets = dict([(count['doc_type'], count['count'])
-                       for count in counts])
-
-        return facets
-
-    elif facet_type == 'appinstances':
-        appinstances = AppInstance.objects.filter(
-            title__icontains=title_filter)
-        if settings.RESOURCE_PUBLISHING:
-            appinstances = appinstances.filter(is_published=True)
+            appinstances = appinstances.filter(Q(keywords__in=treeqs))
 
         if not settings.SKIP_PERMS_FILTER:
             appinstances = appinstances.filter(id__in=authorized)
 
-        counts = appinstances.values('app__title').annotate(
-            count=Count('app__name'))
-        facets = dict([(count['app__title'], count['count'])
-                       for count in counts])
+        counts = appinstances.values('subtype').annotate(count=Count('subtype'))
+        facets = {count['subtype']: count['count'] for count in counts}
+
         return facets
-
     else:
-
-        layers = Layer.objects.filter(title__icontains=title_filter)
-
-        if settings.RESOURCE_PUBLISHING:
-            layers = layers.filter(is_published=True)
-
-        if not settings.SKIP_PERMS_FILTER:
-            layers = layers.filter(id__in=authorized)
-
-        counts = layers.values('storeType').annotate(count=Count('storeType'))
-        count_dict = dict([(count['storeType'], count['count'])
-                           for count in counts])
-
-        facets = {
-            'raster': count_dict.get('coverageStore', 0),
-            'vector': count_dict.get('dataStore', 0),
-            'remote': count_dict.get('remoteStore', 0),
-        }
-
-        # Break early if only_layers is set.
-        if facet_type == 'layers':
-            return facets
-
-        maps = Map.objects.filter(title__icontains=title_filter)
-        documents = Document.objects.filter(title__icontains=title_filter)
-
-        if not settings.SKIP_PERMS_FILTER:
-            maps = maps.filter(id__in=authorized)
-            documents = documents.filter(id__in=authorized)
-
-        facets['map'] = maps.count()
-        facets['document'] = documents.count()
-        if facet_type == 'home':
-            facets['user'] = get_user_model().objects.exclude(
-                username='AnonymousUser').count()
-            facets['app'] = App.objects.count()
-            facets['group'] = GroupProfile.objects.exclude(
-                access="private").count()
-
-            facets['layer'] = facets['raster'] + \
-            facets['vector'] + facets['remote']
-
-    return facets
+        return gn_facets(context)
 
 
 @register.filter(name='objects_count')

@@ -4,10 +4,7 @@
 {% block extra_head %}
     {{ block.super }}
 {% endblock %}
-{% block tabs %}
-<li><a href="{% url 'app_manager_base_url' %}">{% trans "Apps" %}</a></li>
-{{block.super}}
-{% endblock %}
+
 {% block footer %}
 {% include 'cartoview/footer.html' %}
 {% endblock %}

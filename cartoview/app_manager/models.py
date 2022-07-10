@@ -5,18 +5,15 @@ import json
 from datetime import datetime
 
 from django.conf import settings as geonode_settings
-from django.contrib.auth.models import Group
 from django.contrib.gis.db import models
 from django.urls import reverse
-from django.db.models import signals
+from django.db.models import signals, JSONField
 from django.template.defaultfilters import slugify
-from django.utils.encoding import python_2_unicode_compatible
 from future import standard_library
-from geonode.base.models import ResourceBase, resourcebase_post_save
+from geonode.base.models import ResourceBase
 from geonode.maps.models import Map as GeonodeMap
-from geonode.security.models import remove_object_permissions
-from guardian.shortcuts import assign_perm
-from jsonfield import JSONField
+from geonode.resource.utils import resourcebase_post_save
+
 from taggit.managers import TaggableManager
 
 from cartoview.apps_handler.config import CartoviewApp
@@ -32,7 +29,6 @@ class AppTypeManager(models.Manager):
         return super(AppTypeManager, self).get_queryset().distinct('apps')
 
 
-@python_2_unicode_compatible
 class AppType(models.Model):
     name = models.CharField(max_length=200, unique=True)
     objects = AppTypeManager()
@@ -41,7 +37,6 @@ class AppType(models.Model):
         return self.name
 
 
-@python_2_unicode_compatible
 class AppStore(models.Model):
     """
     to store links for cartoview appstores
@@ -61,7 +56,6 @@ class AppStore(models.Model):
         return self.name
 
 
-@python_2_unicode_compatible
 class App(models.Model):
     name = models.CharField(max_length=200, null=True, blank=True)
     title = models.CharField(max_length=200, null=True, blank=True)
@@ -198,7 +192,6 @@ def get_app_logo_path(instance, filename):
     ])
 
 
-@python_2_unicode_compatible
 class AppInstance(ResourceBase):
     """
     An App Instance  is any kind of App Instance that can be created
@@ -253,24 +246,6 @@ class AppInstance(ResourceBase):
             logger.error(e)
             return None
 
-    def set_permissions(self, perm_spec):
-        remove_object_permissions(self)
-        try:
-            from geonode.security.utils import (set_owner_permissions)
-            set_owner_permissions(self)
-        except BaseException:
-            pass
-        if 'users' in perm_spec and "AnonymousUser" in perm_spec['users']:
-            anonymous_group = Group.objects.get(name='anonymous')
-            for perm in perm_spec['users']['AnonymousUser']:
-                assign_perm(perm, anonymous_group, self.get_self_resource())
-
-        if 'groups' in perm_spec:
-            for group, perms in perm_spec['groups'].items():
-                group = Group.objects.get(name=group)
-                for perm in perms:
-                    assign_perm(perm, group, self.get_self_resource())
-
     @property
     def launch_url(self):
         return reverse("%s.view" % self.app.name, args=[self.pk])
@@ -292,7 +267,8 @@ def pre_save_appinstance(instance, sender, **kwargs):
 def pre_delete_appinstance(instance, sender, **kwargs):
     if not isinstance(instance, AppInstance):
         return
-    remove_object_permissions(instance.get_self_resource())
+    from geonode.resource.manager import resource_manager
+    resource_manager.remove_permissions(instance.uuid, instance)
 
 
 def appinstance_post_save(instance, *args, **kwargs):

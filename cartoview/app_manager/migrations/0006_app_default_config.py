@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-import jsonfield.fields
+#import jsonfield.fields
 from django.db import migrations
+from django.db.models import JSONField
 
 
 class Migration(migrations.Migration):
@@ -14,6 +15,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='app',
             name='default_config',
-            field=jsonfield.fields.JSONField(default={}),
+            field=JSONField(default={}),
         ),
     ]
