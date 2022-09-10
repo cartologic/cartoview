@@ -434,9 +434,13 @@ Cartoview comes with a pre-configured GeoServer available by GeoNode. So it can 
 If you check the `pavement.py` file, you can see multiple created tasks like, `setup_geoserver`, `start_geoserver`, and `stop_geoserver`.
 
 ### Install Java and OpenJDK
-As GeoServer is built with [Java](https://www.java.com/en/download/manual.jsp), we need to install it alongside [Java SE Development Kit 8u311](https://www.oracle.com/java/technologies/downloads/#java8-windows) the **jdk-8u311-windows-x64.exe**, specifically.
+As GeoServer is built with [Java](https://docs.geoserver.org/latest/en/user/production/java.html#production-java), make sure you have a Java Runtime Environment (JRE) installed on your system. GeoServer requires a Java 8 or Java 11 environment, as provided by [Adoptium](https://adoptium.net/temurin/releases?version=11) Windows installers. The current version is `jdk-11.0.16.1+1`.
 
-After installing both, open Pycharm terminal and make sure they are installed.
+During the JRE setup, make sure that **Add to PATH** and **Set JAVA_HOME variable** are selected.
+
+![Java JRE Configuiration](../img/installation/Windows/java-config.png)
+
+After installing, close pycharm's terminal and re-open it.
 
 !!! note
     You may need to restart Pycharm after installing Java.
@@ -444,6 +448,8 @@ After installing both, open Pycharm terminal and make sure they are installed.
 ```shell
 java -version
 ```
+
+![Java JRE Configuiration](../img/installation/Windows/java-version.png)
 
 ### Setup GeoServer
 !!! warning
